@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace TeamWebApplication.Models
+namespace MyWebApplication.Models
 {
     //Simple course model for testing
     public class Course

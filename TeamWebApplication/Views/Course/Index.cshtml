@@ -1,0 +1,22 @@
+﻿@model IEnumerable<Course>
+@{
+    ViewData["Title"] = "Index";
+}
+
+<link rel="stylesheet" href="~/css/CourseDisplay.css" asp-append-version="true" />
+
+<h1>Courses Information</h1>
+
+<!--Add/ Delete / Edit courses-->
+<!--Add links to courses-->
+<section class="course-grid">
+    @foreach(var obj in Model)
+    {
+        <div class="course-preview">
+            <div class="course-info">
+                <p class="course-name">@obj.Name</p>
+            </div>
+        </div>
+    }
+</section>
+
