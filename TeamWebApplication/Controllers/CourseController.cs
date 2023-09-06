@@ -35,5 +35,30 @@ namespace MyWebApplication.Controllers
             }
             return View(objCourse);
         }
+
+        public IActionResult Edit(int? id)
+        {
+            if (id == null || id == 0)
+                return NotFound();
+
+            var courseFromDatabase = _db.Courses.Find(id);
+            if (courseFromDatabase == null)
+                return NotFound();
+
+            return View(courseFromDatabase);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(Course objCourse)
+        {
+            if (ModelState.IsValid)
+            {
+                _db.Courses.Update(objCourse);
+                _db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            return View(objCourse);
+        }
     }
 }

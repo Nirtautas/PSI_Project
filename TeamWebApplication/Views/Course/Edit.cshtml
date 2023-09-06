@@ -1,0 +1,30 @@
+﻿@model Course
+
+<form method="post" asp-action="Edit">
+    <div>
+        <div>
+            <h2>Edit Course</h2>
+        </div>
+        <div>
+            <label asp-for="Name">Name</label>
+            <input asp-for="Name">
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div>
+            <label asp-for="IsVisible">Visibility</label>
+            <select asp-for="IsVisible">
+                <option value="true">Visible</option>
+                <option value="false">Hidden</option>
+            </select>
+            <span asp-validation-for="IsVisible" class="text-danger"></span>
+        </div>
+        <button type="submit">Update</button>
+        <a asp-controller="Course" asp-action="Index">Back To List</a>
+    </div>
+</form>
+
+@section Scripts {
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+}
