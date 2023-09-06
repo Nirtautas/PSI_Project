@@ -18,5 +18,22 @@ namespace MyWebApplication.Controllers
             IEnumerable<Course> objCourseList = _db.Courses;
             return View(objCourseList);
         }
+
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Create(Course objCourse)
+        {
+            if (ModelState.IsValid) {
+                _db.Courses.Add(objCourse);
+                _db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            return View(objCourse);
+        }
     }
 }

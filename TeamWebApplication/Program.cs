@@ -8,6 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 //Established connection with PostgreSQL database
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(connectionString));
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
