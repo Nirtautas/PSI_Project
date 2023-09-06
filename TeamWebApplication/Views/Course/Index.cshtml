@@ -5,16 +5,30 @@
 
 <link rel="stylesheet" href="~/css/CourseDisplay.css" asp-append-version="true" />
 
-<h1>Courses Information</h1>
-
 <!--Add/ Delete / Edit courses-->
 <!--Add links to courses-->
+<section class="container">
+    <div class="row">
+        <div class="col-6">
+            <h2>Courses Information</h2>
+        </div>
+        <div class="col-6">
+            <a asp-controller="Course" asp-action="Create">Create Category</a>
+        </div>
+    </div>
+</section>
+
 <section class="course-grid">
     @foreach(var obj in Model)
     {
         <div class="course-preview">
-            <div class="course-info">
-                <p class="course-name">@obj.Name</p>
+            <div>
+                <a asp-controller="CourseEnvironment" asp-action="Index">
+                    <p class="course-name">@obj.Name</p>
+                </a>
+            </div>
+            <div>
+                <a asp-controller="Course" asp-action="Edit" asp-route-id="@obj.Id">Edit</a>
             </div>
         </div>
     }

@@ -10,6 +10,8 @@ namespace MyWebApplication.Models
         [Required]
         public string Name { get; set; }
         public DateTime CreationDate { get; set; } = DateTime.Now;
+        [Required]
+        public bool IsVisible { get; set; }
         public Course() {
         
         }
