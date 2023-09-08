@@ -1,0 +1,3 @@
+100;Computer Architecture;09/08/2023 09:29:02;Course for computer architecture;true
+101;Functional Programming;03/07/2022 15:48:05;Course for functional programming;false
+102;Database systems;12/31/2023 21:12:21;Course for database systems;true

@@ -3,18 +3,20 @@ using MyWebApplication.Models;
 
 namespace MyWebApplication.Models
 {
-    public class User
+    public abstract class User
     {
+        //These variables are fetched from files
         public int UserId { get; set; }
         public string Name { get; set; }
         public string Surname { get; set; }
-        public string Password { get; set; }
+        public DateTime BirthDate { get; set; }
         public string Email { get; set; }
+        public string Password { get; set; }
         public Role Role { get; set; }
         public Faculty Faculty { get; set; }
         public Specialization Specialization { get; set; }
-
-        public IEnumerable<Course> CourseUsers { get; set; }
+        //These variables are not yet implemented
+        public IEnumerable<Course> CoursesUserTakes { get; set; }
         public User()
         {
 
@@ -28,13 +30,20 @@ namespace MyWebApplication.Models
     }
     public enum Faculty
     {
-        Filology,
         MathematicsAndInformatics,
-        Medicine
+        ChemistryAndGeosciences,
+        Physics,
+        Filology
     }
     public enum Specialization
     {
         ProgramSystems,
-        Informatics
+        Informatics,
+        Chemistry,
+        Geology,
+        QuantumPhysics,
+        FluidPhysics,
+        EnglishFilology,
+        LithuanianFilology,
     }
 }
