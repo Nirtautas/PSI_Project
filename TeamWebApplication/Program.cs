@@ -1,8 +1,7 @@
 using Microsoft.EntityFrameworkCore;
+using TeamWebApplication.Data;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
 
 //Established connection with PostgreSQL database
 builder.Services.AddControllersWithViews();
@@ -27,5 +26,8 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+LocalDataContainer.fetchCourses();
+LocalDataContainer.printLocalData();
 
 app.Run();
