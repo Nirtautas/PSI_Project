@@ -1,10 +1,19 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using MyWebApplication.Models;
 
+/*
+ *  TODO:
+ *  Think of a better way to fetch User data
+ *  (It's easy to fetch data to User class, but what about fields in child classes Student and Lecturer?)
+ *  Maybe implement some data checking to prevent errors when data is incorrect or incomplete.
+ */
+
 namespace TeamWebApplication.Data
 {
-    public static class LocalDataContainer
+    public sealed class LocalDataContainer
     {
+        private static LocalDataContainer instance = null;
+
         public static ICollection<Course> CourseList { get; set; } = new List<Course>();
         public static ICollection<User> UserList { get; set; } = new List<User>();
 
@@ -12,19 +21,32 @@ namespace TeamWebApplication.Data
         private static string? readString;
         private static string[]? splitString;
 
-        public static void fetchLocalData() {
+        //Singleton design pattern to prevent 2 or more local databases to be created
+        public static LocalDataContainer Instance
+        {
+            get
+            {
+                if (instance == null)
+                    instance = new LocalDataContainer();
+                return instance;
+            }
+        }
+
+        public void fetchLocalData()
+        {
             fetchCourses();
             fetchUsers();
         }
 
-        public static void printLocalData()
+        public void printLocalData()
         {
             printCourseList();
             System.Diagnostics.Debug.WriteLine("");
             printUserList();
         }
 
-        public static void fetchCourses() {
+        public void fetchCourses()
+        {
             reader = new StreamReader("./TextData/CourseData.txt");
             while ((readString = reader.ReadLine()) != null) {
                 splitString = readString.Split(';');
@@ -39,7 +61,8 @@ namespace TeamWebApplication.Data
             }
         }
 
-        public static void fetchUsers() {
+        public void fetchUsers()
+        {
             reader = new StreamReader("./TextData/UserData.txt");
             while ((readString = reader.ReadLine()) != null) {
                 splitString = readString.Split(';');
@@ -79,7 +102,8 @@ namespace TeamWebApplication.Data
             }
         }
 
-        public static void printCourseList() {
+        public void printCourseList()
+        {
             foreach (var course in CourseList)
             {
                 System.Diagnostics.Debug.WriteLine(
@@ -92,7 +116,14 @@ namespace TeamWebApplication.Data
             }
         }
 
-        public static void printUserList()
+        public void printUserList()
+        {
+            printLecturerList();
+            System.Diagnostics.Debug.WriteLine("");
+            printStudentList();
+        }
+
+        public void printLecturerList()
         {
             foreach (Lecturer lecturer in UserList.OfType<Lecturer>())
             {
@@ -109,7 +140,10 @@ namespace TeamWebApplication.Data
                     lecturer.Title.ToString()
                 );
             }
-            System.Diagnostics.Debug.WriteLine("");
+        }
+
+        public void printStudentList()
+        {
             foreach (Student student in UserList.OfType<Student>())
             {
                 System.Diagnostics.Debug.WriteLine(
