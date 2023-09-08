@@ -27,7 +27,7 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
-LocalDataContainer LocalDatabase = new LocalDataContainer();
+LocalDataContainer LocalDatabase = LocalDataContainer.Instance;
 LocalDatabase.fetchLocalData();
 LocalDatabase.printLocalData();
 
