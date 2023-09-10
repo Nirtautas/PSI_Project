@@ -18,6 +18,7 @@ namespace TeamWebApplication.Data
         public static ICollection<Course> courseList { get; set; } = new List<Course>();
         public static int userIdCounter;
         public static ICollection<User> userList { get; set; } = new List<User>();
+        //Relation data is held in one list in format [0] Course, [1] User, [2] Course, ...
         public static IList<int> relationData { get; set; } = new List<int>();
 
         private static StreamReader? reader;
@@ -134,17 +135,21 @@ namespace TeamWebApplication.Data
 
         private void applyRelationData()
         {
+            //For each course in courseList
             foreach (var course in courseList) {
+                //Go through course id's in relationData
                 for (int x = 0 ; x < (relationData.Count() / 2) ; ++x)
                 {
+                    //If course id == to course id's in relationData
                     if (relationData[x * 2] == course.Id) {
+                        //Add user id from relationData to course
                         course.UsersInCourseId.Add(relationData[x * 2 + 1]);
+                        //Then for each user in userList
                         foreach (var user in userList)
                         {
+                            //Check if user id == to course id
                             if (relationData[x * 2 + 1] == user.UserId)
-                            {
                                 user.CoursesUserTakesId.Add(relationData[x * 2]);
-                            }
                         }
                     }
                         
