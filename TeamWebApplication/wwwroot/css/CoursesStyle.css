@@ -1,4 +1,4 @@
-﻿/* --text: #f5eff5;
+/* --text: #f5eff5;
 --background: #0d080c;
 --primary: #714770;
 --secondary: #51314e;
@@ -6,11 +6,38 @@
 
 body {
     background-color: #0d080c;
-}
-
-.text-style {
     font-family: Arial;
     color: #f5eff5;
+}
+
+.ribbon {
+    background-color: #714770;
+    height: 50px;
+    display: flex;
+}
+
+.login-button {
+    width: 60px;
+    background-color: #714770;
+    /* 	border: 1px solid black; */
+    /* 	border-radius: 10px; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: 0.5s;
+}
+
+    .login-button:hover {
+        background-color: #51314e;
+    }
+
+
+.Name {
+    align-items: center;
+    display: flex;
+    font-size: 30px;
+    margin-right: 70vw;
+    margin-left: 20px;
 }
 
 .courses-header {
@@ -51,18 +78,14 @@ body {
     transition: 0.2s;
 }
 
-p {
-    margin-bottom: 0;
-}
+    .create-course-button:hover {
+        background-color: #51314e;
+        cursor: pointer;
+    }
 
-.create-course-button:hover {
-    background-color: #51314e;
-    cursor: pointer;
-}
-
-.create-course-button:active {
-    background-color: #8b568a;
-}
+    .create-course-button:active {
+        background-color: #8b568a;
+    }
 
 .course-navigation-array input {
     float: left;
@@ -76,7 +99,7 @@ p {
     border-style: solid;
 }
 
-.card-container {
+.container {
     background-color: #201f20;
     display: flex;
     margin: 15px;
@@ -91,20 +114,15 @@ p {
     text-align: left;
 }
 
-    .card-group .card {
-        flex: 1;
-        margin: 15px;
-        box-sizing: border-box;
-        box-shadow: 0px 4px 10px 0px #51314e;
-        min-width: 300px;
-        position: relative;
-        background-color: #201f20;
-        transition: 0.5s;
-    }
-
-        .card-group .card:not(:first-child) {
-            margin-left: 15px;
-        }
+.card {
+    flex-basis: calc(33.333% - 30px);
+    margin: 15px;
+    box-sizing: border-box;
+    box-shadow: 0px 4px 10px 0px #51314e;
+    min-width: 200px;
+    position: relative;
+    transition: 0.5s;
+}
 
 .invisible-box {
     height: 110px;
@@ -166,16 +184,8 @@ p {
     overflow: hidden;
 }
 
-.course-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    column-gap: 16px;
-    row-gap: 40px;
-}
-
-
 @media screen and (max-width: 1000px) {
     .card-group .card {
-        flex: 1;
+        flex-basis: calc(50% - 30px);
     }
 }

@@ -1,5 +1,5 @@
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Courses";
 }
 
 <!DOCTYPE html>
@@ -8,40 +8,31 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
     <title>Courses</title>
-    <link rel="stylesheet" href="~/css/CourseDisplay.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/CoursesStyle.css" asp-append-version="true" />
 </head>
-<body>
 
+<body>
+    <div class="ribbon">
+        <div class="Name">
+            <a>Mudli</a>
+        </div>
+        <!-- <div class="link-button">
+            <a>Link button add if needed</a>
+        </div> -->
+    </div>
     <div class="courses-header">
-        <p class="text-style">Courses</p>
+        <a>Courses</a>
     </div>
     <div>
         <div class="course-navigation-array">
             <input placeholder="Search course...">
             <button class="create-course-button">
-                <p class="text-style">Create course</p>
+                <a>Create course</a>
             </button>
         </div>
 
-        <div class="card-container">
+        <div class="container">
             <div class="card-group">
-                <!-- Card template start -->
-                <div class="card">
-                    <div class="card-image">
-                        <img
-                            src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8d3JpdGluZyUyMGElMjBib29rfGVufDB8fDB8fHww&w=1000&q=80">
-                    </div>
-                    <div class="invisible-box"></div>
-                    <div class="card-body">
-                        <div class="course-title-holder">
-                            <h3 class="text-style">Course title</h3>
-                        </div>
-                        <div class="course-description-holder">
-                            <p class="text-style">This is the description of the course.</p>
-                        </div>
-                    </div>
-                </div>
-                <!-- Card template end -->
                 <div class="card">
                     <div class="card-image">
                         <img src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8d3JpdGluZyUyMGElMjBib29rfGVufDB8fDB8fHww&w=1000&q=80">
@@ -49,10 +40,10 @@
                     <div class="invisible-box"></div>
                     <div class="card-body">
                         <div class="course-title-holder">
-                            <h3 class="text-style">Course title</h3>
+                            <h3>Course title</h3>
                         </div>
                         <div class="course-description-holder">
-                            <p class="text-style">This is the description of the course.</p>
+                            <p>This is the description of the course.</p>
                         </div>
                     </div>
                 </div>
@@ -63,10 +54,10 @@
                     <div class="invisible-box"></div>
                     <div class="card-body">
                         <div class="course-title-holder">
-                            <h3 class="text-style">Course title</h3>
+                            <h3>Course title</h3>
                         </div>
                         <div class="course-description-holder">
-                            <p class="text-style">This is the description of the course.</p>
+                            <p>This is the description of the course.</p>
                         </div>
                     </div>
                 </div>
@@ -77,10 +68,10 @@
                     <div class="invisible-box"></div>
                     <div class="card-body">
                         <div class="course-title-holder">
-                            <h3 class="text-style">Course title</h3>
+                            <h3>Course title</h3>
                         </div>
                         <div class="course-description-holder">
-                            <p class="text-style">This is the description of the course.</p>
+                            <p>This is the description of the course.</p>
                         </div>
                     </div>
                 </div>
@@ -91,13 +82,29 @@
                     <div class="invisible-box"></div>
                     <div class="card-body">
                         <div class="course-title-holder">
-                            <h3 class="text-style">Course title</h3>
+                            <h3>Course title</h3>
                         </div>
                         <div class="course-description-holder">
-                            <p class="text-style">This is the description of the course.</p>
+                            <p>This is the description of the course.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-image">
+                        <img src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8d3JpdGluZyUyMGElMjBib29rfGVufDB8fDB8fHww&w=1000&q=80">
+                    </div>
+                    <div class="invisible-box"></div>
+                    <div class="card-body">
+                        <div class="course-title-holder">
+                            <h3>Course title</h3>
+                        </div>
+                        <div class="course-description-holder">
+                            <p>This is the description of the course.</p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        <div class="ribbon"></div>
+
 </body>
