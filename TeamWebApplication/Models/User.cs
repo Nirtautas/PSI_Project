@@ -15,7 +15,6 @@ namespace MyWebApplication.Models
         public Role Role { get; set; }
         public Faculty Faculty { get; set; }
         public Specialization Specialization { get; set; }
-        //These variables are not yet implemented
         public IList<int> CoursesUserTakesId { get; set; }
 
         public User()

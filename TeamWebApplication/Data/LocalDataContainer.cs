@@ -152,106 +152,35 @@ namespace TeamWebApplication.Data
             }
         }
 
-
-
         public void printRelationData()
         {
             for (int x = 0 ; x < (relationData.Count() / 2) ; ++x)
                 System.Diagnostics.Debug.WriteLine(relationData[x * 2] + " ; " + relationData[x * 2 + 1]);
         }
 
-        public void printCourse(Course course)
-        {
-            System.Diagnostics.Debug.WriteLine(
-                    course.Id + " / " +
-                    course.Name + " / " +
-                    course.CreationDate.ToString() + " / " +
-                    course.Description + " / " +
-                    course.IsVisible.ToString()
-                );
-        }
-
         public void printCourseList()
         {
             foreach (var course in courseList)
-                printCourse(course);
+                System.Diagnostics.Debug.WriteLine(course.ToString());
         }
 
         public void printUserList()
         {
-            printLecturerList();
-            System.Diagnostics.Debug.WriteLine("");
-            printStudentList();
-        }
-
-        public void printStudent(Student student)
-        {
-            System.Diagnostics.Debug.WriteLine(
-                student.UserId + " / " +
-                student.Name + " / " +
-                student.Surname + " / " +
-                student.BirthDate.ToString() + " / " +
-                student.Email + " / " +
-                student.Password + " / " +
-                student.Role.ToString() + " / " +
-                student.Faculty.ToString() + " / " +
-                student.Specialization.ToString() + " / " +
-                student.AcademicDegree.ToString() + " / " +
-                student.YearIn
-            );
-        }
-
-        public void printStudentList()
-        {
-            foreach (Student student in userList.OfType<Student>())
-                printStudent(student);
-        }
-
-        public void printLecturer(Lecturer lecturer)
-        {
-            System.Diagnostics.Debug.WriteLine(
-                lecturer.UserId + " / " +
-                lecturer.Name + " / " +
-                lecturer.Surname + " / " +
-                lecturer.BirthDate.ToString() + " / " +
-                lecturer.Email + " / " +
-                lecturer.Password + " / " +
-                lecturer.Role.ToString() + " / " +
-                lecturer.Faculty.ToString() + " / " +
-                lecturer.Specialization.ToString() + " / " +
-                lecturer.Title.ToString()
-            );
-        }
-
-        public void printLecturerList()
-        {
-            foreach (Lecturer lecturer in userList.OfType<Lecturer>())
-                printLecturer(lecturer);
+            foreach(var user in userList)
+                System.Diagnostics.Debug.WriteLine(user.ToString());
         }
 
         public void printRelationalList()
         {
             foreach (var course in courseList)
             {
-                printCourse(course);
+                System.Diagnostics.Debug.WriteLine(course.ToString());
                 for (int x = 0; x < course.UsersInCourseId.Count(); ++x)
                 {
                     foreach (var user in userList)
                     {
                         if (course.UsersInCourseId[x] == user.UserId)
-                        {
-                            System.Diagnostics.Debug.WriteLine( "\t" +
-                                user.UserId + " / " +
-                                user.Name + " / " +
-                                user.Surname + " / " +
-                                user.BirthDate.ToString() + " / " +
-                                user.Email + " / " +
-                                user.Password + " / " +
-                                user.Role.ToString() + " / " +
-                                user.Faculty.ToString() + " / " +
-                                user.Specialization.ToString()
-                            );
-                        }
+                            System.Diagnostics.Debug.WriteLine("\t" + user.ToString());
                     }
                 }
                 System.Diagnostics.Debug.WriteLine("");
