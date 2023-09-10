@@ -39,6 +39,7 @@ namespace MyWebApplication.Models
             Specialization = specialization;
             AcademicDegree = academicDegree;
             YearIn = yearIn;
+            CoursesUserTakesId = new List<int>();
         }
     }
     public enum AcademicDegree

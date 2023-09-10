@@ -32,6 +32,7 @@ namespace MyWebApplication.Models
             Faculty = faculty;
             Specialization = specialization;
             Title = title;
+            CoursesUserTakesId = new List<int>();
         }
     }
     public enum Title

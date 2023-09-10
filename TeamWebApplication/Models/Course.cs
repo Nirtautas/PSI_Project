@@ -13,7 +13,7 @@ namespace MyWebApplication.Models
         public bool IsVisible { get; set; }
         //These variables are not yet implemented
         public string UploadedFiles { get; set; }
-        public IEnumerable<User> UsersInCourse { get; set; }
+        public IList<int> UsersInCourseId { get; set; }
 
         public Course() { 
         
@@ -24,6 +24,7 @@ namespace MyWebApplication.Models
             this.CreationDate = creationDate;
             this.Description = description;
             this.IsVisible = isVisible;
+            UsersInCourseId = new List<int>();
         }
     }
 }

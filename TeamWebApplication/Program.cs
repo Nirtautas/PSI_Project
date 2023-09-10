@@ -29,6 +29,6 @@ app.MapControllerRoute(
 
 LocalDataContainer LocalDatabase = LocalDataContainer.Instance;
 LocalDatabase.fetchLocalData();
-LocalDatabase.printLocalData();
+LocalDatabase.printRelationalList();
 
 app.Run();
