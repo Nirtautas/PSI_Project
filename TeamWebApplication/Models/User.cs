@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using MyWebApplication.Models;
+using TeamWebApplication.Models;
 
-namespace MyWebApplication.Models
+namespace TeamWebApplication.Models
 {
     public class User
     {
@@ -9,7 +9,10 @@ namespace MyWebApplication.Models
         public string Name { get; set; }
         public string Surname { get; set; }
         public string Password { get; set; }
+
+        [EmailAddress(ErrorMessage = "Invalid email address")]
         public string Email { get; set; }
+
         public Role Role { get; set; }
         public Faculty Faculty { get; set; }
         public Specialization Specialization { get; set; }
@@ -21,6 +24,7 @@ namespace MyWebApplication.Models
         }
 
     }
+  
     public enum Role
     {
         Student,
@@ -28,13 +32,22 @@ namespace MyWebApplication.Models
     }
     public enum Faculty
     {
-        Filology,
+
+        [Display(Name = "Mathematics and Informatics")]
         MathematicsAndInformatics,
-        Medicine
+
+        [Display(Name = "Medicine")]
+        Medicine,
     }
+
+
     public enum Specialization
     {
         ProgramSystems,
-        Informatics
+        Informatics,
+        Bioinformatics,
+        Pharmacy,
+        Odontology,
+        Medicine
     }
 }

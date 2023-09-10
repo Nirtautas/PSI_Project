@@ -1,0 +1,105 @@
+﻿@model TeamWebApplication.Models.User
+@{
+    ViewData["Title"] = "Registration";
+    ViewData["Faculties"] = new string[]
+        {
+    "Mathematics and Informatics",
+    "Medicine"
+        };
+}
+<link rel="stylesheet" href="~/css/RegistrationStyle.css" asp-append-version="true" />
+
+@*	<header class="ribbon">
+			<div class="Name">
+				<a class="mudli">Mudli</a>
+			</div>
+			<a href="#" class="contactUs-button">Contact us</a>
+		</header>
+*@
+<form method="post" asp-action="Test" class="registration-form">
+    <header class="form-container">
+        <h2>Create an Account</h2>
+    </header>
+    <!-- User Information -->
+    <label for="Input.Name">Name:</label>
+    <input type="text" id="Input.Name" name="name" class="form-control" value="@Model.Name" required />
+    <label for="Input.Surname">Surname:</label>
+    <input type="text" id="Input.Surname" name="surname" class="form-control" value="@Model.Surname" required />
+    <label for="Input.Email">Email:</label>
+    <input type="email" id="Input.Email" name="email" class="form-control" value="@Model.Email" required />
+    <label for="Input.Password">Password:</label>
+    <input type="password" id="Input.Password" name="password" class="form-control" value="@Model.Password" required />
+    <label for="faculty" class="form-group1">Faculty:</label>
+    @*.Gets this element*@
+    <select id="faculty" name="faculty" class="form-group1" required>
+        <option value="" disabled selected>Select Faculty</option>
+        @foreach (var faculty in ViewData["Faculties"] as string[])
+        {
+            <option>@faculty</option>
+        }
+        <!-- Add options based on selected faculty -->
+    </select>
+    <label for="specialization" class="form-group1">Specialization:</label>
+    <select id="specialization" name="specialization" class="form-group1" required>
+        <option value="" disabled selected>Select Specialization</option>
+        <!-- Add options based on selected faculty -->
+    </select>
+
+    <!-- Radio buttons for user type -->
+    <div class="radio-buttons">
+        <label for="Input.Student" class="radio-label">
+            Student
+            <input type="radio" id="Input.Student" name="Role" value="Student" class="radio-input" required />
+        </label>
+        <label for="Input.Lecturer" class="radio-label">
+            Lecturer
+            <input type="radio" id="Input.Lecturer" name="Role" value="Lecturer" class="radio-input" required />
+        </label>
+    </div>
+
+    <button type="submit" class="btn-primary">Register</button>
+    <p style="margin-top: 10px;">
+        <a href="#" class="login-link">
+            <span style="color: #f5eff5;">Already have an account? </span>
+            <b>Log in here...</b>
+        </a>
+    </p>
+</form>
+
+<script>
+    //.
+    document.getElementById('faculty').addEventListener('change', function () {
+        var firstDropdown = document.getElementById('faculty');
+        var secondDropdown = document.getElementById('specialization');
+        var selectedValue = firstDropdown.value;
+
+        // Clear existing options in the second dropdown
+        secondDropdown.innerHTML = '';
+        defaultOption = document.createElement('option');
+        defaultOption.value = "Select specialization";
+        defaultOption.textContent = "Select specialization";
+        defaultOption.selected = true;
+        defaultOption.disabled = true;
+        secondDropdown.appendChild(defaultOption);
+        // Populate the second dropdown based on the selected option
+        if (selectedValue === 'Mathematics and Informatics') {
+            //all specialities for option1
+            var options = ['Program systems', 'Informatics', 'Bioinformatics'];
+            //create and add all options to selection element
+            options.forEach(function (option) {
+                var optionElement = document.createElement('option');
+                optionElement.value = option;
+                optionElement.textContent = option;
+                secondDropdown.appendChild(optionElement);
+            });
+        } else if (selectedValue === 'Medicine') {
+            var options = ['Medicine', 'Pharmacy', 'Odontology'];
+            options.forEach(function (option) {
+                var optionElement = document.createElement('option');
+                optionElement.value = option;
+                optionElement.textContent = option;
+                secondDropdown.appendChild(optionElement);
+            });
+        }
+    });
+</script>
