@@ -32,6 +32,22 @@ namespace MyWebApplication.Models
             Faculty = faculty;
             Specialization = specialization;
             Title = title;
+            CoursesUserTakesId = new List<int>();
+        }
+
+        public override string ToString()
+        {
+            return
+                UserId.ToString() + " / " +
+                Name + " / " +
+                Surname + " / " +
+                BirthDate.ToString() + " / " +
+                Email + " / " +
+                Password + " / " +
+                Role.ToString() + " / " +
+                Faculty.ToString() + " / " +
+                Specialization.ToString() + " / " +
+                Title.ToString();
         }
     }
     public enum Title

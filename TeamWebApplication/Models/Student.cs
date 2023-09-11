@@ -7,7 +7,6 @@ namespace MyWebApplication.Models
         //These variables are fetched from files
         public AcademicDegree AcademicDegree { get; set; }
         public int YearIn { get; set; }
-        //These variables are not yet implemented
         public List<string> UploadedFiles { get; set; }
         
         public Student()
@@ -39,6 +38,22 @@ namespace MyWebApplication.Models
             Specialization = specialization;
             AcademicDegree = academicDegree;
             YearIn = yearIn;
+            CoursesUserTakesId = new List<int>();
+        }
+
+        public override string ToString()
+        {
+            return
+                UserId.ToString() + " / " +
+                Name + " / " +
+                Surname + " / " +
+                BirthDate.ToString() + " / " +
+                Email + " / " +
+                Password + " / " +
+                Role.ToString() + " / " +
+                Faculty.ToString() + " / " +
+                Specialization.ToString() + " / " +
+                YearIn.ToString();
         }
     }
     public enum AcademicDegree

@@ -18,7 +18,10 @@
 
   <ItemGroup>
     <Folder Include="Migrations\" />
-    <Folder Include="TextData\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="C:\Users\nirta\Desktop\CourseData.txt" Link="CourseData.txt" />
   </ItemGroup>
 
 </Project>

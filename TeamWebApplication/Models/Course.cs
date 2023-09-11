@@ -11,9 +11,9 @@ namespace MyWebApplication.Models
         public DateTime CreationDate { get; set; }
         public string Description { get; set; }
         public bool IsVisible { get; set; }
+        public IList<int> UsersInCourseId { get; set; }
         //These variables are not yet implemented
         public string UploadedFiles { get; set; }
-        public IEnumerable<User> UsersInCourse { get; set; }
 
         public Course() { 
         
@@ -24,6 +24,16 @@ namespace MyWebApplication.Models
             this.CreationDate = creationDate;
             this.Description = description;
             this.IsVisible = isVisible;
+            UsersInCourseId = new List<int>();
+        }
+
+        public override string ToString()
+        {
+            return
+                Id.ToString() + " / " +
+                Name + " / " +
+                CreationDate.ToString() + " / " +
+                IsVisible;
         }
     }
 }

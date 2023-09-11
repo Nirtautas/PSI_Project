@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
-using MyWebApplication.Models;
+﻿using MyWebApplication.Models;
+using System.Globalization;
 
 /*
  *  TODO:
@@ -14,12 +14,17 @@ namespace TeamWebApplication.Data
     {
         private static LocalDataContainer instance = null;
 
-        public static ICollection<Course> CourseList { get; set; } = new List<Course>();
-        public static ICollection<User> UserList { get; set; } = new List<User>();
+        public static int courseIdCounter;
+        public static ICollection<Course> courseList { get; set; } = new List<Course>();
+        public static int userIdCounter;
+        public static ICollection<User> userList { get; set; } = new List<User>();
+        //Relation data is held in one list in format [0] Course, [1] User, [2] Course, ...
+        public static IList<int> relationData { get; set; } = new List<int>();
 
         private static StreamReader? reader;
         private static string? readString;
         private static string[]? splitString;
+        private static bool IsDataFetched = false;
 
         //Singleton design pattern to prevent 2 or more local databases to be created
         public static LocalDataContainer Instance
@@ -34,131 +39,156 @@ namespace TeamWebApplication.Data
 
         public void fetchLocalData()
         {
+            fetchRelationData();
             fetchCourses();
             fetchUsers();
+            applyRelationData();
+            IsDataFetched = true;
         }
 
         public void printLocalData()
         {
-            printCourseList();
-            System.Diagnostics.Debug.WriteLine("");
-            printUserList();
-        }
-
-        public void fetchCourses()
-        {
-            reader = new StreamReader("./TextData/CourseData.txt");
-            while ((readString = reader.ReadLine()) != null) {
-                splitString = readString.Split(';');
-                Course course = new Course(
-                    Int32.Parse(splitString[0]),    //id
-                    splitString[1],                 //name
-                    DateTime.Parse(splitString[2]), //creationDate
-                    splitString[3],                 //description
-                    Boolean.Parse(splitString[4])   //isVisible
-                );
-                CourseList.Add(course);
+            if (IsDataFetched)
+            {
+                printCourseList();
+                System.Diagnostics.Debug.WriteLine("");
+                printUserList();
+                System.Diagnostics.Debug.WriteLine("");
+                printRelationData();
             }
         }
 
-        public void fetchUsers()
+        private void fetchCourses()
+        {
+            reader = new StreamReader("./TextData/CourseData.txt");
+            if ((readString = reader.ReadLine()) != null)
+                courseIdCounter = Int32.Parse(readString);
+
+            while ((readString = reader.ReadLine()) != null) {
+                splitString = readString.Split(';');
+                Course course = new Course(
+                    Int32.Parse(splitString[0]),                                                              //id
+                    splitString[1],                                                                           //name
+                    DateTime.ParseExact(splitString[2], "dd-MM-yyyy HH:mm:ss", CultureInfo.InvariantCulture), //creationDate
+                    splitString[3],                                                                           //description
+                    Boolean.Parse(splitString[4])                                                             //isVisible
+                );
+                courseList.Add(course);
+            }
+        }
+
+        private void fetchUsers()
         {
             reader = new StreamReader("./TextData/UserData.txt");
+            if ((readString = reader.ReadLine()) != null)
+                userIdCounter = Int32.Parse(readString);
+
             while ((readString = reader.ReadLine()) != null) {
                 splitString = readString.Split(';');
                 switch (splitString[6]) {
                     case "Student":
                         Student student = new Student(
-                            Int32.Parse(splitString[0]),                                            //UserId
-                            splitString[1],                                                         //Name
-                            splitString[2],                                                         //Surname
-                            DateTime.Parse(splitString[3]),                                         //Birth Date
-                            splitString[4],                                                         //Email
-                            splitString[5],                                                         //Password
-                            (Role)Enum.Parse(typeof(Role), splitString[6]),                         //Role
-                            (Faculty)Enum.Parse(typeof(Faculty), splitString[7]),                   //Faculty
-                            (Specialization)Enum.Parse(typeof(Specialization), splitString[8]),     //Specialization
-                            (AcademicDegree)Enum.Parse(typeof(AcademicDegree), splitString[9]),     //Academic Degree
-                            Int32.Parse(splitString[10])                                            //YearIn
+                            Int32.Parse(splitString[0]),                                                     //UserId
+                            splitString[1],                                                                  //Name
+                            splitString[2],                                                                  //Surname
+                            DateTime.ParseExact(splitString[3], "dd-MM-yyyy", CultureInfo.InvariantCulture), //Birth Date
+                            splitString[4],                                                                  //Email
+                            splitString[5],                                                                  //Password
+                            (Role)Enum.Parse(typeof(Role), splitString[6]),                                  //Role
+                            (Faculty)Enum.Parse(typeof(Faculty), splitString[7]),                            //Faculty
+                            (Specialization)Enum.Parse(typeof(Specialization), splitString[8]),              //Specialization
+                            (AcademicDegree)Enum.Parse(typeof(AcademicDegree), splitString[9]),              //Academic Degree
+                            Int32.Parse(splitString[10])                                                     //YearIn
                         );
-                        UserList.Add(student);
+                        userList.Add(student);
                         break;
                     case "Lecturer":
                         Lecturer lecturer = new Lecturer(
-                            Int32.Parse(splitString[0]),                                            //UserId
-                            splitString[1],                                                         //Name
-                            splitString[2],                                                         //Surname
-                            DateTime.Parse(splitString[3]),                                         //Birth Date
-                            splitString[4],                                                         //Email
-                            splitString[5],                                                         //Password
-                            (Role)Enum.Parse(typeof(Role), splitString[6]),                         //Role
-                            (Faculty)Enum.Parse(typeof(Faculty), splitString[7]),                   //Faculty
-                            (Specialization)Enum.Parse(typeof(Specialization), splitString[8]),     //Specialization
-                            (Title)Enum.Parse(typeof(Title), splitString[9])                        //Title
+                            Int32.Parse(splitString[0]),                                                     //UserId
+                            splitString[1],                                                                  //Name
+                            splitString[2],                                                                  //Surname
+                            DateTime.ParseExact(splitString[3], "dd-MM-yyyy", CultureInfo.InvariantCulture), //Birth Date
+                            splitString[4],                                                                  //Email
+                            splitString[5],                                                                  //Password
+                            (Role)Enum.Parse(typeof(Role), splitString[6]),                                  //Role
+                            (Faculty)Enum.Parse(typeof(Faculty), splitString[7]),                            //Faculty
+                            (Specialization)Enum.Parse(typeof(Specialization), splitString[8]),              //Specialization
+                            (Title)Enum.Parse(typeof(Title), splitString[9])                                 //Title
                         );    
-                        UserList.Add(lecturer);
+                        userList.Add(lecturer);
                         break;
                 }
             }
         }
 
+        private void fetchRelationData()
+        {
+            reader = new StreamReader("./TextData/UserCourseRelation.txt");
+            //Could use format without ';' but then data would be hard to read
+            while ((readString = reader.ReadLine()) != null)
+            {
+                splitString = readString.Split(';');
+                relationData.Add(Int32.Parse(splitString[0]));
+                relationData.Add(Int32.Parse(splitString[1]));
+            }
+        }
+
+        private void applyRelationData()
+        {
+            //For each course in courseList
+            foreach (var course in courseList) {
+                //Go through course id's in relationData
+                for (int x = 0 ; x < (relationData.Count() / 2) ; ++x)
+                {
+                    //If course id == to course id's in relationData
+                    if (relationData[x * 2] == course.Id) {
+                        //Add user id from relationData to course
+                        course.UsersInCourseId.Add(relationData[x * 2 + 1]);
+                        //Then for each user in userList
+                        foreach (var user in userList)
+                        {
+                            //Check if user id == to course id
+                            if (relationData[x * 2 + 1] == user.UserId)
+                                user.CoursesUserTakesId.Add(relationData[x * 2]);
+                        }
+                    }
+                        
+                }
+            }
+        }
+
+        public void printRelationData()
+        {
+            for (int x = 0 ; x < (relationData.Count() / 2) ; ++x)
+                System.Diagnostics.Debug.WriteLine(relationData[x * 2] + " ; " + relationData[x * 2 + 1]);
+        }
+
         public void printCourseList()
         {
-            foreach (var course in CourseList)
-            {
-                System.Diagnostics.Debug.WriteLine(
-                    course.Id + " / " +
-                    course.Name + " / " +
-                    course.CreationDate.ToString() + " / " +
-                    course.Description + " / " +
-                    course.IsVisible.ToString()
-                );
-            }
+            foreach (var course in courseList)
+                System.Diagnostics.Debug.WriteLine(course.ToString());
         }
 
         public void printUserList()
         {
-            printLecturerList();
-            System.Diagnostics.Debug.WriteLine("");
-            printStudentList();
+            foreach(var user in userList)
+                System.Diagnostics.Debug.WriteLine(user.ToString());
         }
 
-        public void printLecturerList()
+        public void printRelationalList()
         {
-            foreach (Lecturer lecturer in UserList.OfType<Lecturer>())
+            foreach (var course in courseList)
             {
-                System.Diagnostics.Debug.WriteLine(
-                    lecturer.UserId + " / " +
-                    lecturer.Name + " / " +
-                    lecturer.Surname + " / " +
-                    lecturer.BirthDate.ToString() + " / " +
-                    lecturer.Email + " / " +
-                    lecturer.Password + " / " +
-                    lecturer.Role.ToString() + " / " +
-                    lecturer.Faculty.ToString() + " / " +
-                    lecturer.Specialization.ToString() + " / " +
-                    lecturer.Title.ToString()
-                );
-            }
-        }
-
-        public void printStudentList()
-        {
-            foreach (Student student in UserList.OfType<Student>())
-            {
-                System.Diagnostics.Debug.WriteLine(
-                    student.UserId + " / " +
-                    student.Name + " / " +
-                    student.Surname + " / " +
-                    student.BirthDate.ToString() + " / " +
-                    student.Email + " / " +
-                    student.Password + " / " +
-                    student.Role.ToString() + " / " +
-                    student.Faculty.ToString() + " / " +
-                    student.Specialization.ToString() + " / " +
-                    student.AcademicDegree.ToString() + " / " +
-                    student.YearIn
-                );
+                System.Diagnostics.Debug.WriteLine(course.ToString());
+                for (int x = 0; x < course.UsersInCourseId.Count(); ++x)
+                {
+                    foreach (var user in userList)
+                    {
+                        if (course.UsersInCourseId[x] == user.UserId)
+                            System.Diagnostics.Debug.WriteLine("\t" + user.ToString());
+                    }
+                }
+                System.Diagnostics.Debug.WriteLine("");
             }
         }
     }
