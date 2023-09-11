@@ -5,7 +5,7 @@ namespace MyWebApplication.Controllers
 {
     public class CourseController : Controller
     {
-        public IActionResult Course()
+        public IActionResult Index()
         {
             return View();
         }
