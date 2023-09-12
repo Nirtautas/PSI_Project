@@ -11,7 +11,7 @@ namespace TeamWebApplication.Models
         public DateTime CreationDate { get; set; }
         public string Description { get; set; }
         public bool IsVisible { get; set; }
-        public IList<int> UsersInCourseId { get; set; }
+        public ICollection<int> UsersInCourseId { get; set; }
         //These variables are not yet implemented
         public string UploadedFiles { get; set; }
 
@@ -30,9 +30,10 @@ namespace TeamWebApplication.Models
         public override string ToString()
         {
             return
-                Id.ToString() + " / " +
-                Name + " / " +
-                CreationDate.ToString() + " / " +
+                Id.ToString() + ";" +
+                Name + ";" +
+                CreationDate.ToString() + ";" +
+                Description + ";" +
                 IsVisible;
         }
     }
