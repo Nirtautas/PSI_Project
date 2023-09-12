@@ -4,66 +4,66 @@
 --secondary: #51314e;
 --accent: #a168a0; */
 
-body{
+body {
 	background-color: #0d080c;
 	font-family: Arial;
 	color: #f5eff5;
 }
 
-.ribbon{
+.ribbon {
 	background-color: #714770;
 	height: 50px;
-  margin-top: 50px;
+	margin-top: 50px;
 	display: flex;
+	justify-content: space-between;
 }
 
-.login-button{
+.login-button {
 	width: 60px;
 	background-color: #714770;
-/* 	border: 1px solid black; */
-/* 	border-radius: 10px; */
 	display: flex;
 	justify-content: center;
+	padding-right: 20px;
 	align-items: center;
 	transition: 0.5s;
 }
 
-.login-button:hover{
-	background-color: #51314e;
-}
+	.login-button:hover {
+		background-color: #51314e;
+	}
 
-.Name{
-  align-items: center;
-  display: flex;
+.Name {
+	align-items: center;
+	display: flex;
 	font-size: 30px;
 	margin-right: 70vw;
 	margin-left: 20px;
 }
 
-.bg-picture{
-  height: 500px;
-  background-blend-mode: darken;
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center;
-  background-color: rgba(0, 0, 0, .6) ;
-  /* border: 4px solid #a168a0; */
-  background-image: url('https://images.pexels.com/photos/1438081/pexels-photo-1438081.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');
-  justify-content: center;
-  align-items: center;
-  display: flex;
+.bg-picture {
+	height: 500px;
+	background-blend-mode: darken;
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: center;
+	background-color: rgba(0, 0, 0, .6);
+	/* border: 4px solid #a168a0; */
+	background-image: url('https://images.pexels.com/photos/1438081/pexels-photo-1438081.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');
+	justify-content: center;
+	align-items: center;
+	display: flex;
 }
 
-.welcome-text{
+.welcome-text {
 	font-size: 50px;
 	color: #f5eff598;
 }
 
-.centered-text{
+.centered-text {
 	text-align: center;
 }
 
-.about-us-columns{
+.about-us-columns {
 	font-size: 15px;
 	display: inline-block;
 	display: flex;
@@ -73,8 +73,8 @@ body{
 	/* border: 1px solid #f5eff5; */
 	display: flex;
 	flex: 1;
-  flex-direction: column;
-  overflow-y: auto;
-  margin-left: 20px;
-  margin-right: 20px;
+	flex-direction: column;
+	overflow-y: auto;
+	margin-left: 20px;
+	margin-right: 20px;
 }
