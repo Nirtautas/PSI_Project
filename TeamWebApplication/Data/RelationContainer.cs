@@ -1,4 +1,4 @@
-﻿using MyWebApplication.Models;
+﻿using TeamWebApplication.Models;
 namespace TeamWebApplication.Data
 {
     public struct Relation
