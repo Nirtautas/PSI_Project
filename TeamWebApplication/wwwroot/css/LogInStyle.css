@@ -1,4 +1,4 @@
-:root {
+﻿:root {
     --text: #f5eff5;
     --background: #0d080c;
     --primary: #714770;
@@ -22,7 +22,7 @@ body {
 }
 
 .text-style {
-    color: #f5eff5;
+    color: #ffffff;
     text-decoration: none;
     padding: 10px;
     border-radius: 5px;
@@ -66,7 +66,36 @@ body {
 .ribbon a {
     color: var(--text);
     text-decoration: none;
+    display: flex;
+    justify-content: space-between;
 }
+
+.login-button {
+    width: 60px;
+    background-color: #714770;
+<<<<<<< HEAD
+    display: flex;
+    justify-content: space-between;
+    justify-content: flex-end;
+    margin-right: 20px;
+    align-items: center;
+    transition: 0.5s;
+}
+
+    .login-button:hover {
+=======
+    align-items: center;
+    display: flex;
+    justify-content: flex-end; 
+    margin-right: 20px;
+    padding-right: 20px;
+    transition: 0.5s;
+}
+
+ .login-button:hover {
+>>>>>>> Brigita
+        background-color: #51314e;
+    }
 
 form {
     background-color: #201f20;
@@ -233,7 +262,7 @@ form .form-group.focus-with-glow::after {
         bottom: 0;
         border: 2px solid #0d080c;
         border-radius: 5px;
-        box-shadow: 0 0 5px #0d080c; /* Add a glow effect with the specified shade */
+        box-shadow: 0 0 5px #0d080c; /* Adds a glow effect with the specified shade */
         pointer-events: none;
         transition: border-color 0.3s, box-shadow 0.3s;
     }
@@ -261,7 +290,6 @@ form .form-group.focus-with-glow::after {
     transition: 0.5s;
     border: 2px solid #714770;
     box-shadow: 0 0 10px #714770;
-    text-align: center;
 }
 
 /* Button styles */
@@ -284,13 +312,30 @@ form .btn-primary {
         background-color: #51314e;
     }
 
-.login-link {
+.registration-link {
     color: #714770;
     text-decoration: none;
     font-size: 14px;
     cursor: pointer;
+    margin-top: 5px;
 }
 
-    .login-link:hover {
+    .registration-link:hover {
+        text-decoration: underline;
+    }
+
+.forgot-password-link {
+    color: #714770;
+    text-decoration: none;
+    font-size: 14px;
+    cursor: pointer;
+    margin-top: 3px;
+    margin-bottom: 3px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+    .forgot-password-link:hover {
         text-decoration: underline;
     }

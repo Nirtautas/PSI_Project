@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MyWebApplication.Models;
+using TeamWebApplication.Models;
 
-namespace MyWebApplication.Controllers
+namespace TeamWebApplication.Controllers
 {
     public class CourseController : Controller
     {
