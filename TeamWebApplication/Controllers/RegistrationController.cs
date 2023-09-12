@@ -8,21 +8,22 @@ namespace TeamWebApplication.Controllers
     {
         public IActionResult Index()
         {
-            var user = new User();
+            var user = new Student();
             return View(user);
         }
 
         [HttpPost]
-        public IActionResult Test(User user)
+        public IActionResult Login(Student user)
         {
-            Debug.WriteLine(user.Name);
-            Debug.WriteLine(user.Surname);
-            Debug.WriteLine(user.Email);
-            Debug.WriteLine(user.Password);
-            Debug.WriteLine(user.Faculty);
-            Debug.WriteLine(user.Specialization);
-            Debug.WriteLine(user.Role);
-            return View();
+            //User.ToString();
+            //Debug.WriteLine(user.Name);
+            //Debug.WriteLine(user.Surname);
+            //Debug.WriteLine(user.Email);
+            //Debug.WriteLine(user.Password);
+            //Debug.WriteLine(user.Faculty);
+            //Debug.WriteLine(user.Specialization);
+            //Debug.WriteLine(user.Role);
+            return RedirectToAction("Index", "Login");
         }
 
     }
