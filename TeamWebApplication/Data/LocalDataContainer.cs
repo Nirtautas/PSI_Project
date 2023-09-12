@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-﻿using MyWebApplication.Models;
-=======
 ﻿using TeamWebApplication.Models;
->>>>>>> Brigita
 using System.Globalization;
 
 /*

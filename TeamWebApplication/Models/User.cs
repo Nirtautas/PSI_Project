@@ -30,13 +30,9 @@ namespace TeamWebApplication.Models
     }
     public enum Faculty
     {
-<<<<<<< HEAD
-        MathematicsAndInformatics,
-=======
         [Display(Name = "Mathematics and Informatics")]
         MathematicsAndInformatics,
         [Display(Name = "Chemistry and Geosciences")]
->>>>>>> Brigita
         ChemistryAndGeosciences,
         Physics,
         Filology
@@ -48,11 +44,6 @@ namespace TeamWebApplication.Models
         Informatics,
         Chemistry,
         Geology,
-<<<<<<< HEAD
-        QuantumPhysics,
-        FluidPhysics,
-        EnglishFilology,
-=======
         [Display(Name = "Quantum physics")]
         QuantumPhysics,
         [Display(Name = "Fluid physics")]
@@ -60,7 +51,6 @@ namespace TeamWebApplication.Models
         [Display(Name = "English filology")]
         EnglishFilology,
         [Display(Name = "Lithuanian filology")]
->>>>>>> Brigita
         LithuanianFilology,
     }
 }
