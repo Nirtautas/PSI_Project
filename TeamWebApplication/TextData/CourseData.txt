@@ -1,4 +1,4 @@
 10003
-10000;Computer Architecture;09-08-2023 21:06:12;Course for computer architecture;true
-10001;Functional Programming;03-07-2022 15:48:05;Course for functional programming;false
-10002;Database systems;29-12-2023 21:12:21;Course for database systems;true
+10000;Computer Architecture;2023-08-09 21:06:12;Course for computer architecture;True
+10001;Functional Programming;2022-07-03 15:48:05;Course for functional programming;False
+10002;Database systems;2023-12-29 21:12:21;Course for database systems;True

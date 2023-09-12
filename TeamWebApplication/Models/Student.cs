@@ -1,4 +1,5 @@
 ﻿using MyWebApplication.Models;
+using System.Globalization;
 
 namespace MyWebApplication.Models
 {
@@ -44,15 +45,16 @@ namespace MyWebApplication.Models
         public override string ToString()
         {
             return
-                UserId.ToString() + " / " +
-                Name + " / " +
-                Surname + " / " +
-                BirthDate.ToString() + " / " +
-                Email + " / " +
-                Password + " / " +
-                Role.ToString() + " / " +
-                Faculty.ToString() + " / " +
-                Specialization.ToString() + " / " +
+                UserId.ToString() + ";" +
+                Name + ";" +
+                Surname + ";" +
+                BirthDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture) + ";" +
+                Email + ";" +
+                Password + ";" +
+                Role.ToString() + ";" +
+                Faculty.ToString() + ";" +
+                Specialization.ToString() + ";" +
+                AcademicDegree.ToString() + ";" +
                 YearIn.ToString();
         }
     }
