@@ -4,24 +4,28 @@
 }
 
 <link rel="stylesheet" href="~/css/LogInStyle.css" asp-append-version="true" />
-
-     <form method="post" asp-action="Login" class="registration-form">
-    <header class="form-container">
-        <h2>Welcome back!</h2>
-    </header>
-    <!-- User Information -->
-    <label for="Input.ID">ID:</label>
-    <input type="text" id="Input.ID" name="UserId" value="" class="form-control" required />
-    <label for="Input.Password">Password:</label>
-    <input type="password" id="Input.Password" name="Password" value="@Model.Password" class="form-control" required />
-<!-- Apply the "forgot-password-link" class to the "Forgot password?" link -->
-        <a href="#" class="forgot-password-link">
-            <span style="color: #714770;">Forgot password? </span>
-        </a>
-    <button type="submit" class="btn-primary">Sign in</button>
-    <!-- Use a fieldset to group related form elements -->
-        <a  class="registration-link" asp-action="Index" asp-controller="Registration">
-            <span style="color: #f5eff5;">Don't have an account? </span>
-            <b>Register here...</b>
-        </a>
+<div class="ribbon">
+	<div class="Name">
+		<a>Mudli</a>
+	</div>
+</div>
+<form method="post" asp-action="Login" class="registration-form">
+	<header class="form-container">
+		<h2>Welcome back!</h2>
+	</header>
+	<!-- User Information -->
+	<label for="Input.ID">ID:</label>
+	<input type="text" id="Input.ID" name="UserId" value="" class="form-control" required />
+	<label for="Input.Password">Password:</label>
+	<input type="password" id="Input.Password" name="Password" value="@Model.Password" class="form-control" required />
+	<!-- Apply the "forgot-password-link" class to the "Forgot password?" link -->
+	<a href="#" class="forgot-password-link">
+		<span style="color: #714770;">Forgot password? </span>
+	</a>
+	<button type="submit" class="btn-primary">Sign in</button>
+	<!-- Use a fieldset to group related form elements -->
+	<a class="registration-link" asp-action="Index" asp-controller="Registration">
+		<span style="color: #f5eff5;">Don't have an account? </span>
+		<b>Register here...</b>
+	</a>
 </form>

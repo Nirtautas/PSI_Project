@@ -16,11 +16,10 @@ body {
 
 .ribbon {
     background-color: #714770;
-   justify-content: space-between;
     height: 50px;
     display: flex;
+    justify-content: space-between;
 }
-
 
 .text-style {
   color: #f5eff5;
@@ -57,10 +56,11 @@ body {
 }
 
 .Name {
-  align-items: center;
-  display: flex;
-  margin-right: 70vw;
-  margin-left: 20px;
+    align-items: center;
+    display: flex;
+    font-size: 30px;
+    margin-right: 70vw;
+    margin-left: 20px;
 }
 
 .ribbon a {
