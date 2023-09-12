@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using MyWebApplication.Models;
+using TeamWebApplication.Models;
 
-namespace MyWebApplication.Models
+namespace TeamWebApplication.Models
 {
     public abstract class User
     {
@@ -30,20 +30,37 @@ namespace MyWebApplication.Models
     }
     public enum Faculty
     {
+<<<<<<< HEAD
         MathematicsAndInformatics,
+=======
+        [Display(Name = "Mathematics and Informatics")]
+        MathematicsAndInformatics,
+        [Display(Name = "Chemistry and Geosciences")]
+>>>>>>> Brigita
         ChemistryAndGeosciences,
         Physics,
         Filology
     }
     public enum Specialization
     {
+        [Display(Name = "Program systems")]
         ProgramSystems,
         Informatics,
         Chemistry,
         Geology,
+<<<<<<< HEAD
         QuantumPhysics,
         FluidPhysics,
         EnglishFilology,
+=======
+        [Display(Name = "Quantum physics")]
+        QuantumPhysics,
+        [Display(Name = "Fluid physics")]
+        FluidPhysics,
+        [Display(Name = "English filology")]
+        EnglishFilology,
+        [Display(Name = "Lithuanian filology")]
+>>>>>>> Brigita
         LithuanianFilology,
     }
 }

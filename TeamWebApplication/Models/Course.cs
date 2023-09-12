@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using MyWebApplication.Models;
+using TeamWebApplication.Models;
 
-namespace MyWebApplication.Models
+namespace TeamWebApplication.Models
 {
     public class Course
     {
