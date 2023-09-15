@@ -3,25 +3,6 @@ using System.Globalization;
 
 namespace TeamWebApplication.Data
 {
-<<<<<<< HEAD
-    public class UserContainer
-    {
-        private static UserContainer instance = null;
-        private int userIdCounter;
-        public readonly ICollection<User> _userList = new List<User>();
-
-        public static UserContainer Instance
-        {
-            get
-            {
-                if (instance == null)
-                    instance = new UserContainer();
-                return instance;
-            }
-        }
-
-        public void fetchUsers()
-=======
     public class UserContainer : IUserContainer
     {
         private static UserContainer instance = null;
@@ -37,16 +18,10 @@ namespace TeamWebApplication.Data
 
 
         public void FetchUsers()
->>>>>>> main
         {
             string? readString;
             string[]? splitString;
-
-<<<<<<< HEAD
-            using (StreamReader? reader = new StreamReader("./TextData/UserData.txt")) 
-=======
             using (StreamReader? reader = new StreamReader("./TextData/UserData.txt"))
->>>>>>> main
             {
                 if ((readString = reader.ReadLine()) != null)
                     userIdCounter = Int32.Parse(readString);
@@ -91,12 +66,7 @@ namespace TeamWebApplication.Data
                 }
             }
         }
-
-<<<<<<< HEAD
-        public void writeUsers()
-=======
         public void WriteUsers()
->>>>>>> main
         {
             using (StreamWriter? writer = new StreamWriter("./TextData/UserData.txt"))
             {
@@ -105,19 +75,10 @@ namespace TeamWebApplication.Data
                     writer.WriteLine(user.ToString());
             }
         }
-
-<<<<<<< HEAD
-        public void printUserList()
-=======
         public void PrintUserList()
->>>>>>> main
         {
             foreach (var user in _userList)
                 System.Diagnostics.Debug.WriteLine(user.ToString());
         }
     }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> main
