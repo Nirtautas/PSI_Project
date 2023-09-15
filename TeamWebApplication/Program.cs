@@ -5,7 +5,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 //Established connection with PostgreSQL database
 builder.Services.AddControllersWithViews();
-
+builder.Services.AddSingleton<IUserContainer, UserContainer>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -27,12 +27,8 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
-RelationContainer relationContainer = RelationContainer.Instance;
-CourseContainer courseContainer = CourseContainer.Instance;
-UserContainer userContainer = UserContainer.Instance;
-
-ContainerHelper.fetchLocalData(relationContainer, courseContainer, userContainer);
-ContainerHelper.printRelationalList(courseContainer, userContainer);
-ContainerHelper.writeLocalData(relationContainer, courseContainer, userContainer);
+LocalDataContainer LocalDatabase = LocalDataContainer.Instance;
+LocalDatabase.fetchLocalData();
+LocalDatabase.printRelationalList();
 
 app.Run();
