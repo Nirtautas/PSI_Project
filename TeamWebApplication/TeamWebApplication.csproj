@@ -14,14 +14,10 @@
   </ItemGroup>
 
   <ItemGroup>
-<<<<<<< HEAD
-
-=======
     <None Include="Views\Course\Create.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
->>>>>>> ee3f1aced4d147c0facef12d85f00e914c66aeed
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.21" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.21">
       <PrivateAssets>all</PrivateAssets>
@@ -31,8 +27,4 @@
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.8" />
   </ItemGroup>
 
-<<<<<<< HEAD
 </Project>
-=======
-</Project>
->>>>>>> ee3f1aced4d147c0facef12d85f00e914c66aeed

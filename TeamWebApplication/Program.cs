@@ -31,8 +31,8 @@ RelationContainer relationContainer = RelationContainer.Instance;
 CourseContainer courseContainer = CourseContainer.Instance;
 UserContainer userContainer = UserContainer.Instance;
 
-ContainerHelper.fetchLocalData(relationContainer, courseContainer, userContainer);
-ContainerHelper.printRelationalList(courseContainer, userContainer);
-ContainerHelper.writeLocalData(relationContainer, courseContainer, userContainer);
+ContainerHelper.FetchLocalData(relationContainer, courseContainer, userContainer);
+ContainerHelper.PrintRelationalList(courseContainer, userContainer);
+ContainerHelper.WriteLocalData(relationContainer, courseContainer, userContainer);
 
 app.Run();
