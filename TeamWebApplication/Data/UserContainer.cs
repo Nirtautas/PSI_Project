@@ -3,28 +3,25 @@ using System.Globalization;
 
 namespace TeamWebApplication.Data
 {
-    public class UserContainer
+    public class UserContainer : IUserContainer
     {
         private static UserContainer instance = null;
         private int userIdCounter;
-        public readonly ICollection<User> _userList = new List<User>();
+        public readonly ICollection<User> _userList = new List<User>();//properties, reiks
 
-        public static UserContainer Instance
+        public UserContainer FetchUsers(UserContainer instance)//idet I IUserContainer;void FetchUsers()
         {
-            get
-            {
-                if (instance == null)
-                    instance = new UserContainer();
-                return instance;
-            }
+            if (instance == null)
+                instance = new UserContainer();
+            return instance;
         }
 
-        public void fetchUsers()
+
+        public void FetchUsers()
         {
             string? readString;
             string[]? splitString;
-
-            using (StreamReader? reader = new StreamReader("./TextData/UserData.txt")) 
+            using (StreamReader? reader = new StreamReader("./TextData/UserData.txt"))
             {
                 if ((readString = reader.ReadLine()) != null)
                     userIdCounter = Int32.Parse(readString);
@@ -69,8 +66,7 @@ namespace TeamWebApplication.Data
                 }
             }
         }
-
-        public void writeUsers()
+        public void WriteUsers()
         {
             using (StreamWriter? writer = new StreamWriter("./TextData/UserData.txt"))
             {
@@ -79,8 +75,7 @@ namespace TeamWebApplication.Data
                     writer.WriteLine(user.ToString());
             }
         }
-
-        public void printUserList()
+        public void PrintUserList()
         {
             foreach (var user in _userList)
                 System.Diagnostics.Debug.WriteLine(user.ToString());

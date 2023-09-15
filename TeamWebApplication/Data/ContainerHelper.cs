@@ -2,31 +2,31 @@
 {
     public static class ContainerHelper
     {
-        public static void fetchLocalData(RelationContainer relationContainer, CourseContainer courseContainer, UserContainer userContainer)
+        public static void FetchLocalData(RelationContainer relationContainer, CourseContainer courseContainer, UserContainer userContainer)
         {
-            relationContainer.fetchRelationData();
-            courseContainer.fetchCourses();
-            userContainer.fetchUsers();
-            relationContainer.applyRelationData(courseContainer._courseList, userContainer._userList);
+            relationContainer.FetchRelationData();
+            courseContainer.FetchCourses();
+            userContainer.FetchUsers();
+            relationContainer.ApplyRelationData(courseContainer._courseList, userContainer._userList);
         }
 
-        public static void writeLocalData(RelationContainer relationContainer, CourseContainer courseContainer, UserContainer userContainer)
+        public static void WriteLocalData(RelationContainer relationContainer, CourseContainer courseContainer, UserContainer userContainer)
         {
-            courseContainer.writeCourses();
-            userContainer.writeUsers();
-            relationContainer.writeRelationData();
+            courseContainer.WriteCourses();
+            userContainer.WriteUsers();
+            relationContainer.WriteRelationData();
         }
 
-        public static void printLocalData(RelationContainer relationContainer, CourseContainer courseContainer, UserContainer userContainer)
+        public static void PrintLocalData(RelationContainer relationContainer, CourseContainer courseContainer, UserContainer userContainer)
         {
-            courseContainer.printCourseList();
+            courseContainer.PrintCourseList();
             System.Diagnostics.Debug.WriteLine("");
-            userContainer.printUserList();
+            userContainer.PrintUserList();
             System.Diagnostics.Debug.WriteLine("");
-            relationContainer.printRelationData();
+            relationContainer.PrintRelationData();
         }
 
-        public static void printRelationalList(CourseContainer courseContainer, UserContainer userContainer)
+        public static void PrintRelationalList(CourseContainer courseContainer, UserContainer userContainer)
         {
             foreach (var course in courseContainer._courseList)
             {
