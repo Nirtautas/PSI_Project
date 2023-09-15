@@ -28,7 +28,11 @@ namespace TeamWebApplication.Data
             }
         }
 
+<<<<<<< HEAD
         public void fetchRelationData()
+=======
+        public void FetchRelationData()
+>>>>>>> main
         {
             string? readString;
             string[]? splitString;
@@ -44,7 +48,11 @@ namespace TeamWebApplication.Data
             }
         }
 
+<<<<<<< HEAD
         public void writeRelationData()
+=======
+        public void WriteRelationData()
+>>>>>>> main
         {
             using (StreamWriter? writer = new StreamWriter("./TextData/UserCourseRelation.txt"))
             {
@@ -53,7 +61,11 @@ namespace TeamWebApplication.Data
             }
         }
 
+<<<<<<< HEAD
         public void applyRelationData(ICollection<Course> courseList, ICollection<User> userList)
+=======
+        public void ApplyRelationData(ICollection<Course> courseList, ICollection<User> userList)
+>>>>>>> main
         {
             foreach (Relation relation in _relationData)
             {
@@ -72,7 +84,11 @@ namespace TeamWebApplication.Data
             }
         }
 
+<<<<<<< HEAD
         public void printRelationData()
+=======
+        public void PrintRelationData()
+>>>>>>> main
         {
             foreach (var relation in _relationData)
                 System.Diagnostics.Debug.WriteLine(relation.courseId + " ; " + relation.userId);

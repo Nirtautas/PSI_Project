@@ -1,0 +1,227 @@
+:root {
+    --text: #f5eff5;
+    --background: #0d080c;
+    --primary: #714770;
+    --secondary: #51314e;
+    --accent: #a168a0;
+}
+
+body {
+    background-color: var(--background);
+    font-family: Arial;
+    color: var(--text);
+    margin: 0;
+    padding: 0;
+}
+
+.ribbon {
+    background-color: #714770;
+    height: 50px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.text-style {
+    color: #f5eff5;
+    text-decoration: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.5s, color 0.5s;
+}
+
+    .text-style:hover {
+        background-color: #51314e;
+    }
+
+.mudli {
+    font-size: 30px !important;
+}
+
+.contactUs-button {
+    background-color: transparent;
+    color: #f5eff5;
+    text-decoration: none;
+    padding: 10px;
+    font-size: 16px;
+    align-items: center;
+    display: flex;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.5s, color 0.5s;
+}
+
+    .contactUs-button:hover {
+        background-color: #51314e;
+    }
+
+.Name {
+    align-items: center;
+    display: flex;
+    font-size: 30px;
+    margin-right: 70vw;
+    margin-left: 20px;
+}
+
+.ribbon a {
+    color: var(--text);
+    text-decoration: none;
+}
+
+form {
+    background-color: #201f20;
+    padding: 40px;
+    align-items: center;
+    justify-content: center;
+    margin: 100px auto;
+    border-radius: 10px;
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+}
+
+    form h2 {
+        color: var(--text);
+        text-align: center;
+        margin-bottom: 10px;
+        margin-top: 10px;
+    }
+
+.form-info-container{
+    width: 92%;
+}
+
+.form-container {
+    background-color: #0d080c;
+    margin-top: 0;
+    padding: 10px;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 15px;
+    border-radius: 10px;
+    width: 92%;
+    display: flex;
+    flex-direction: column;
+    border: 2px solid #714770;
+    box-shadow: 0 0 10px #714770;
+}
+
+/* Form group common styles */
+form .form-group {
+    width: 65%;
+    position: relative;
+}
+
+/* Style the radio input container (remove border and add margin) */
+.radio-buttons {
+    display: flex;
+    align-items: center;
+    margin-top: 7px;
+    width: 55%;
+}
+
+/* Style the custom radio input */
+.radio-label {
+    color: var(--text);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    margin-left: 10px;
+    margin-right: 8px; /* Add spacing between labels */
+}
+
+    .radio-label input[type="radio"] {
+        margin-right: 12px;
+    }
+
+        /* Style the custom radio input when selected */
+        .radio-label input[type="radio"]:checked + .radio-input {
+            background-color: var(--primary);
+            border: none; /* Remove the border */
+        }
+
+/* Form field styles */
+.form-info-container input[type="text"],
+.form-info-container textarea,
+.form-info-container select {
+    margin-top: 7px;
+    margin-bottom: 7px;
+    width: 100%;
+    padding: 10px;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid var(--text);
+    border-radius: 5px;
+    background-color: transparent;
+    color: var(--text);
+    box-shadow: 0 0 5px #0d080c;
+    transition: background-color 0.3s, border 0.3s, box-shadow 0.3s;
+    box-sizing: border-box
+}
+
+form textarea{
+    height: 200px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+form label {
+    font-weight: bold;
+    color: var(--text);
+    display: block;
+    width: 57%;
+    margin-top: 7px;
+    margin-bottom: 7px;
+}
+
+
+/* Form group focus with glow effect styles */
+form .form-group.focus-with-glow::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border: 2px solid #0d080c;
+    border-radius: 5px;
+    box-shadow: 0 0 5px #0d080c;
+    pointer-events: none;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+/* Button styles */
+.btn-primary {
+    background-color: #0d080c;
+    color: #f5eff5;
+    padding: 10px;
+    font-size: 18px;
+    border-radius: 5px;
+    margin-top: 20px;
+    margin-bottom: 7px;
+    cursor: pointer;
+    width: 65%;
+    transition: 0.5s;
+    border: 2px solid #714770;
+    box-shadow: 0 0 10px #714770;
+    text-align: center;
+}
+
+/* Button styles */
+form .btn-primary {
+    background-color: #0d080c;
+    color: #f5eff5;
+    padding: 10px;
+    font-size: 18px;
+    border-radius: 5px;
+    margin-top: 20px;
+    margin-bottom: 7px;
+    cursor: pointer;
+    width: 58%;
+    transition: 0.5s;
+    border: 2px solid #714770;
+    box-shadow: 0 0 10px #714770;
+}
+
+    form .btn-primary:hover {
+        background-color: #51314e;
+    }

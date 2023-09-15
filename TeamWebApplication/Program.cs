@@ -27,8 +27,12 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
-LocalDataContainer LocalDatabase = LocalDataContainer.Instance;
-LocalDatabase.fetchLocalData();
-LocalDatabase.printRelationalList();
+RelationContainer relationContainer = RelationContainer.Instance;
+CourseContainer courseContainer = CourseContainer.Instance;
+UserContainer userContainer = UserContainer.Instance;
+
+ContainerHelper.FetchLocalData(relationContainer, courseContainer, userContainer);
+ContainerHelper.PrintRelationalList(courseContainer, userContainer);
+ContainerHelper.WriteLocalData(relationContainer, courseContainer, userContainer);
 
 app.Run();

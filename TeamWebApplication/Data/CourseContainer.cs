@@ -19,7 +19,11 @@ namespace TeamWebApplication.Data
             }
         }
 
+<<<<<<< HEAD
         public void fetchCourses()
+=======
+        public void FetchCourses()
+>>>>>>> main
         {
             string? readString;
             string[]? splitString;
@@ -43,7 +47,11 @@ namespace TeamWebApplication.Data
             }
         }
 
+<<<<<<< HEAD
         public void writeCourses()
+=======
+        public void WriteCourses()
+>>>>>>> main
         {
             using (StreamWriter? writer = new StreamWriter("./TextData/CourseData.txt"))
             {
@@ -53,7 +61,11 @@ namespace TeamWebApplication.Data
             }
         }
 
+<<<<<<< HEAD
         public void printCourseList()
+=======
+        public void PrintCourseList()
+>>>>>>> main
         {
             foreach (var course in _courseList)
                 System.Diagnostics.Debug.WriteLine(course.ToString());
