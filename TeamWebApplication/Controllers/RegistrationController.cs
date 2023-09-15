@@ -12,7 +12,7 @@ namespace TeamWebApplication.Controllers
             return View(user);
         }
 
-        [HttpPost]
+        [HttpPost]// tells the routing engine to send any POST requests to that action method to the one method over the other
         public IActionResult Login(Student user)
         {
             //User.ToString();

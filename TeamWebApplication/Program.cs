@@ -5,7 +5,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 //Established connection with PostgreSQL database
 builder.Services.AddControllersWithViews();
-
+builder.Services.AddSingleton<IUserContainer, UserContainer>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
