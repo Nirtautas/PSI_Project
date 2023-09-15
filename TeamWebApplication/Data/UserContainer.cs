@@ -3,12 +3,32 @@ using System.Globalization;
 
 namespace TeamWebApplication.Data
 {
+<<<<<<< HEAD
     public class UserContainer : IUserContainer
     {
         private int userIdCounter;
         public readonly ICollection<User> _userList = new List<User>();//properties, reiks
 
         public void FetchUsers()//idet I IUserContainer;void FetchUsers();pasidomet
+=======
+    public class UserContainer
+    {
+        private static UserContainer instance = null;
+        private int userIdCounter;
+        public readonly ICollection<User> _userList = new List<User>();
+
+        public static UserContainer Instance
+        {
+            get
+            {
+                if (instance == null)
+                    instance = new UserContainer();
+                return instance;
+            }
+        }
+
+        public void fetchUsers()
+>>>>>>> ee3f1aced4d147c0facef12d85f00e914c66aeed
         {
             string? readString;
             string[]? splitString;
@@ -59,7 +79,11 @@ namespace TeamWebApplication.Data
             }
         }
 
+<<<<<<< HEAD
         public void WriteUsers()
+=======
+        public void writeUsers()
+>>>>>>> ee3f1aced4d147c0facef12d85f00e914c66aeed
         {
             using (StreamWriter? writer = new StreamWriter("./TextData/UserData.txt"))
             {
@@ -69,7 +93,11 @@ namespace TeamWebApplication.Data
             }
         }
 
+<<<<<<< HEAD
         public void PrintUserList()
+=======
+        public void printUserList()
+>>>>>>> ee3f1aced4d147c0facef12d85f00e914c66aeed
         {
             foreach (var user in _userList)
                 System.Diagnostics.Debug.WriteLine(user.ToString());
