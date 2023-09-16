@@ -3,19 +3,25 @@ using System.Globalization;
 
 namespace TeamWebApplication.Data
 {
+    public interface IUserContainer
+    {
+        void FetchUsers();
+        void PrintUserList();
+        void WriteUsers();
+
+		ICollection<User> userList { get; }
+    }
+
     public class UserContainer : IUserContainer
     {
-        private static UserContainer instance = null;
         private int userIdCounter;
-        public readonly ICollection<User> _userList = new List<User>();//properties, reiks
+        public ICollection<User> userList { get; }
 
-        public UserContainer FetchUsers(UserContainer instance)//idet I IUserContainer;void FetchUsers()
+        public UserContainer()
         {
-            if (instance == null)
-                instance = new UserContainer();
-            return instance;
+            userList = new List<User>();
+            FetchUsers();
         }
-
 
         public void FetchUsers()
         {
@@ -45,7 +51,7 @@ namespace TeamWebApplication.Data
                                 (AcademicDegree)Enum.Parse(typeof(AcademicDegree), splitString[9]),              //Academic Degree
                                 Int32.Parse(splitString[10])                                                     //YearIn
                             );
-                            _userList.Add(student);
+                            userList.Add(student);
                             break;
                         case "Lecturer":
                             Lecturer lecturer = new Lecturer(
@@ -60,7 +66,7 @@ namespace TeamWebApplication.Data
                                 (Specialization)Enum.Parse(typeof(Specialization), splitString[8]),              //Specialization
                                 (Title)Enum.Parse(typeof(Title), splitString[9])                                 //Title
                             );
-                            _userList.Add(lecturer);
+                            userList.Add(lecturer);
                             break;
                     }
                 }
@@ -71,13 +77,13 @@ namespace TeamWebApplication.Data
             using (StreamWriter? writer = new StreamWriter("./TextData/UserData.txt"))
             {
                 writer.WriteLine(userIdCounter);
-                foreach (var user in _userList)
+                foreach (var user in userList)
                     writer.WriteLine(user.ToString());
             }
         }
         public void PrintUserList()
         {
-            foreach (var user in _userList)
+            foreach (var user in userList)
                 System.Diagnostics.Debug.WriteLine(user.ToString());
         }
     }

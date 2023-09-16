@@ -7,12 +7,13 @@ namespace TeamWebApplication.Controllers
 {
     public class LogInController : Controller
     {
-        private readonly UserContainer _userContainer;//readonly - constant
+        private readonly IUserContainer _userContainer;//readonly - constant
 
         public LogInController(IUserContainer userContainer)
         {
-            _userContainer = userContainer;//dependency injection
-        }
+            _userContainer = userContainer;
+		}
+
         public IActionResult Index()
         {
 
@@ -26,14 +27,14 @@ namespace TeamWebApplication.Controllers
             return RedirectToAction("Index", "Registration");
 
         }
+
+        [HttpPost]
         public IActionResult Login(LoginDetails login)//login details from frontend
         {
-            var user = _userContainer._userList.Where(user => user.Password == login.Password && user.UserId == login.UserId);
-            if (!user.Any())
-            {
+            var user = _userContainer.userList.Where(user => user.Password == login.Password && user.UserId == login.UserId);
+			if (!user.Any())
                 return RedirectToAction("Index", "Login", null); ;//user not found}
-            }
-            return RedirectToAction("Index", "Course", user);//Index - action, Course - controller, user - object (user that signed in)
+			return RedirectToAction("Index", "Course", user);//Index - action, Course - controller, user - object (user that signed in)
         }
     }
 }

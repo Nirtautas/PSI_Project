@@ -68,7 +68,6 @@
 </form>
 
 <script>
-	//.
 	document.getElementById('faculty').addEventListener('change', function () {
 		var firstDropdown = document.getElementById('faculty');
 		var secondDropdown = document.getElementById('specialization');
@@ -82,43 +81,27 @@
 		defaultOption.selected = true;
 		defaultOption.disabled = true;
 		secondDropdown.appendChild(defaultOption);
-		// Populate the second dropdown based on the selected option
-		if (selectedValue === 'Mathematics and Informatics') {
-			//all specialities for option1
-			var options = ['Program systems', 'Informatics'];
-			//create and add all options to selection element
-			options.forEach(function (option) {
-				var optionElement = document.createElement('option');
-				optionElement.value = option;
-				optionElement.textContent = option;
-				secondDropdown.appendChild(optionElement);
-			});
-		} else if (selectedValue === 'Chemistry and Geosciences') {
-			var options = ['Chemistry', 'Geology'];
-			options.forEach(function (option) {
-				var optionElement = document.createElement('option');
-				optionElement.value = option;
-				optionElement.textContent = option;
-				secondDropdown.appendChild(optionElement);
-			});
+
+		//I love switch cases <3
+		switch (selectedValue) {
+			case 'Mathematics and Informatics':
+				var options = ['Program systems', 'Informatics'];
+				break;
+			case 'Chemistry and Geosciences':
+				var options = ['Chemistry', 'Geology'];
+				break;
+			case 'Physics':
+				var options = ['Chemistry', 'Geology'];
+				break;
+			case 'Filology':
+				var options = ['English filology', 'Lithuanian filology'];
+				break;
 		}
-		else if (selectedValue === 'Physics') {
-			var options = ['Quantum physics', 'Fluid physics'];
-			options.forEach(function (option) {
-				var optionElement = document.createElement('option');
-				optionElement.value = option;
-				optionElement.textContent = option;
-				secondDropdown.appendChild(optionElement);
-			});
-		}
-		else if (selectedValue === 'Filology') {
-			var options = ['English filology', 'Lithuanian filology'];
-			options.forEach(function (option) {
-				var optionElement = document.createElement('option');
-				optionElement.value = option;
-				optionElement.textContent = option;
-				secondDropdown.appendChild(optionElement);
-			});
-		}
+		options.forEach(function (option) {
+			var optionElement = document.createElement('option');
+			optionElement.value = option;
+			optionElement.textContent = option;
+			secondDropdown.appendChild(optionElement);
+		});
 	});
 </script>
