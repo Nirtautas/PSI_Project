@@ -1,6 +1,16 @@
 ﻿using TeamWebApplication.Models;
 namespace TeamWebApplication.Data
 {
+    public interface IRelationContainer
+    {
+        void ApplyRelationData(ICollection<Course> courseList, ICollection<User> userList);
+        void FetchRelationData();
+        void PrintRelationData();
+        void WriteRelationData();
+
+        ICollection<Relation> relationData { get; }
+    }
+
     public struct Relation
     {
         public int courseId;
@@ -13,20 +23,16 @@ namespace TeamWebApplication.Data
         }
     }
 
-    public class RelationContainer
+    public class RelationContainer : IRelationContainer
     {
-        private static RelationContainer instance = null;
-        public readonly ICollection<Relation> _relationData = new List<Relation>();
+        public ICollection<Relation> relationData { get; }
 
-        public static RelationContainer Instance
+        public RelationContainer()
         {
-            get
-            {
-                if (instance == null)
-                    instance = new RelationContainer();
-                return instance;
-            }
+            relationData = new List<Relation>();
+            FetchRelationData();
         }
+
         public void FetchRelationData()
         {
             string? readString;
@@ -38,7 +44,7 @@ namespace TeamWebApplication.Data
                 while ((readString = reader.ReadLine()) != null)
                 {
                     splitString = readString.Split(';');
-                    _relationData.Add(new Relation(Int32.Parse(splitString[0]), Int32.Parse(splitString[1])));
+                    relationData.Add(new Relation(Int32.Parse(splitString[0]), Int32.Parse(splitString[1])));
                 }
             }
         }
@@ -46,13 +52,13 @@ namespace TeamWebApplication.Data
         {
             using (StreamWriter? writer = new StreamWriter("./TextData/UserCourseRelation.txt"))
             {
-                foreach (var relation in _relationData)
+                foreach (var relation in relationData)
                     writer.WriteLine(relation.courseId + ";" + relation.userId);
             }
         }
         public void ApplyRelationData(ICollection<Course> courseList, ICollection<User> userList)
         {
-            foreach (Relation relation in _relationData)
+            foreach (Relation relation in relationData)
             {
                 foreach (var course in courseList)
                 {
@@ -62,7 +68,7 @@ namespace TeamWebApplication.Data
                         foreach (var user in userList)
                         {
                             if (relation.userId == user.UserId)
-                               user.CoursesUserTakesId.Add(relation.courseId);
+                                user.CoursesUserTakesId.Add(relation.courseId);
                         }
                     }
                 }
@@ -70,7 +76,7 @@ namespace TeamWebApplication.Data
         }
         public void PrintRelationData()
         {
-            foreach (var relation in _relationData)
+            foreach (var relation in relationData)
                 System.Diagnostics.Debug.WriteLine(relation.courseId + " ; " + relation.userId);
         }
     }

@@ -7,7 +7,7 @@
             relationContainer.FetchRelationData();
             courseContainer.FetchCourses();
             userContainer.FetchUsers();
-            relationContainer.ApplyRelationData(courseContainer._courseList, userContainer._userList);
+            relationContainer.ApplyRelationData(courseContainer.courseList, userContainer.userList);
         }
 
         public static void WriteLocalData(RelationContainer relationContainer, CourseContainer courseContainer, UserContainer userContainer)
@@ -28,12 +28,12 @@
 
         public static void PrintRelationalList(CourseContainer courseContainer, UserContainer userContainer)
         {
-            foreach (var course in courseContainer._courseList)
+            foreach (var course in courseContainer.courseList)
             {
                 System.Diagnostics.Debug.WriteLine(course.ToString());
                 foreach (var inUser in course.UsersInCourseId)
                 {
-                    foreach (var user in userContainer._userList)
+                    foreach (var user in userContainer.userList)
                     {
                        if (inUser == user.UserId)
                            System.Diagnostics.Debug.WriteLine("\t" + user.ToString());

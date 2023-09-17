@@ -1,11 +1,17 @@
 using Microsoft.EntityFrameworkCore;
 using TeamWebApplication.Data;
 
+CourseContainer courseContainer = new CourseContainer();
+UserContainer userContainer = new UserContainer();
+RelationContainer relationContainer = new RelationContainer();
+relationContainer.ApplyRelationData(courseContainer.courseList, userContainer.userList);
+
 var builder = WebApplication.CreateBuilder(args);
 
-//Established connection with PostgreSQL database
 builder.Services.AddControllersWithViews();
+builder.Services.AddSingleton<ICourseContainer, CourseContainer>();
 builder.Services.AddSingleton<IUserContainer, UserContainer>();
+builder.Services.AddSingleton<IRelationContainer, RelationContainer>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -26,13 +32,5 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-
-RelationContainer relationContainer = RelationContainer.Instance;
-CourseContainer courseContainer = CourseContainer.Instance;
-UserContainer userContainer = UserContainer.Instance;
-
-ContainerHelper.FetchLocalData(relationContainer, courseContainer, userContainer);
-ContainerHelper.PrintRelationalList(courseContainer, userContainer);
-ContainerHelper.WriteLocalData(relationContainer, courseContainer, userContainer);
 
 app.Run();
