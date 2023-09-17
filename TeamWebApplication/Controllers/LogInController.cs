@@ -12,7 +12,7 @@ namespace TeamWebApplication.Controllers
         public LogInController(IUserContainer userContainer)
         {
             _userContainer = userContainer;
-		}
+        }
 
         public IActionResult Index()
         {
@@ -31,10 +31,11 @@ namespace TeamWebApplication.Controllers
         [HttpPost]
         public IActionResult Login(LoginDetails login)//login details from frontend
         {
-            var user = _userContainer.userList.Where(user => user.Password == login.Password && user.UserId == login.UserId);
-			if (!user.Any())
-                return RedirectToAction("Index", "Login", null); ;//user not found}
-			return RedirectToAction("Index", "Course", user);//Index - action, Course - controller, user - object (user that signed in)
+            var user = _userContainer.userList.SingleOrDefault(user => user.Password == login.Password && user.UserId == login.UserId);
+			if (user == null)
+                return RedirectToAction("Index", "Login"); ;//user not found}
+            _userContainer.loggedInUserId = user.UserId;
+			return RedirectToAction("Index", "Course");//Index - action, Course - controller, user - object (user that signed in)
         }
     }
 }
