@@ -3,23 +3,26 @@ using System.Globalization;
 
 namespace TeamWebApplication.Data
 {
-    public sealed class CourseContainer
+    public interface ICourseContainer
     {
-        private static CourseContainer instance = null;
-        private int courseIdCounter;
-        public readonly ICollection<Course> _courseList = new List<Course>();
+        void FetchCourses();
+        void PrintCourseList();
+        void WriteCourses();
+        ICollection<Course> courseList { get; }
+    }
 
-        public static CourseContainer Instance
+    public sealed class CourseContainer : ICourseContainer
+    {
+        private int courseIdCounter;
+        public ICollection<Course> courseList { get; }
+
+        public CourseContainer()
         {
-            get
-            {
-                if (instance == null)
-                    instance = new CourseContainer();
-                return instance;
-            }
+            courseList = new List<Course>();
+            FetchCourses();
         }
 
-        public void FetchCourses()
+		public void FetchCourses()
         {
             string? readString;
             string[]? splitString;
@@ -38,7 +41,7 @@ namespace TeamWebApplication.Data
                         splitString[3],                                                                           //description
                         Boolean.Parse(splitString[4])                                                             //isVisible
                     );
-                    _courseList.Add(course);
+                    courseList.Add(course);
                 }
             }
         }
@@ -47,14 +50,14 @@ namespace TeamWebApplication.Data
             using (StreamWriter? writer = new StreamWriter("./TextData/CourseData.txt"))
             {
                 writer.WriteLine(courseIdCounter);
-                foreach (var course in _courseList)
+                foreach (var course in courseList)
                     writer.WriteLine(course.ToString());
             }
         }
 
         public void PrintCourseList()
         {
-            foreach (var course in _courseList)
+            foreach (var course in courseList)
                 System.Diagnostics.Debug.WriteLine(course.ToString());
         }
     }
