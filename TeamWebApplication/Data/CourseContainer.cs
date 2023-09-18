@@ -22,7 +22,6 @@ namespace TeamWebApplication.Data
 
         public CourseContainer(IRelationContainer relationContainer)
         {
-            System.Diagnostics.Debug.WriteLine("CourseContainer");
             courseList = new List<Course>();
             FetchCourses(relationContainer);
         }
@@ -30,7 +29,6 @@ namespace TeamWebApplication.Data
 
 		public void FetchCourses(IRelationContainer relationContainer)
         {
-            System.Diagnostics.Debug.WriteLine("FetchCourses");
             string? readString;
             string[]? splitString;
             using (StreamReader? reader = new StreamReader("./TextData/CourseData.txt"))

@@ -11,7 +11,6 @@ namespace TeamWebApplication.Controllers
 
 		public CourseController(IUserContainer userContainer, ICourseContainer courseContainer)
 		{
-            System.Diagnostics.Debug.WriteLine("CourseController");
             _userContainer = userContainer;
             _courseContainer = courseContainer;
 		}

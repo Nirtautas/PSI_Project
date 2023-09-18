@@ -8,7 +8,6 @@ namespace TeamWebApplication.Models
         //These variables are fetched from files
         public int Id { get; set; }
         public string Name { get; set; }
-        public string Faculty { get; set; }
         public DateTime CreationDate { get; set; }
         public string Description { get; set; }
         public bool IsVisible { get; set; }
