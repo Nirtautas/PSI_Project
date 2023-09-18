@@ -14,6 +14,7 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>Create Course</title>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/CreateCourseStyle.css" asp-append-version="true" />
 </head>
 
@@ -43,7 +44,10 @@
             <textarea type="text" id="" name="CourseDecription" value="" class="form-control"></textarea>
         </div>
 
-        <button type="submit" class="btn-primary">Create course</button>
+        <button style="width: 400px" type="submit" class="btn-primary">Create course</button>
+        <a style="width: 375px" class="btn-primary" asp-action="Index" asp-controller="Course">
+            Go back
+        </a>
     </form>
 </body>
 </html>

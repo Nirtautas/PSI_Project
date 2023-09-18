@@ -2,22 +2,15 @@
 {
     public static class ContainerHelper
     {
-        public static void FetchLocalData(RelationContainer relationContainer, CourseContainer courseContainer, UserContainer userContainer)
-        {
-            relationContainer.FetchRelationData();
-            courseContainer.FetchCourses();
-            userContainer.FetchUsers();
-            relationContainer.ApplyRelationData(courseContainer.courseList, userContainer.userList);
-        }
 
-        public static void WriteLocalData(RelationContainer relationContainer, CourseContainer courseContainer, UserContainer userContainer)
+        public static void WriteLocalData(IRelationContainer relationContainer, ICourseContainer courseContainer, IUserContainer userContainer)
         {
             courseContainer.WriteCourses();
             userContainer.WriteUsers();
             relationContainer.WriteRelationData();
         }
 
-        public static void PrintLocalData(RelationContainer relationContainer, CourseContainer courseContainer, UserContainer userContainer)
+        public static void PrintLocalData(IRelationContainer relationContainer, ICourseContainer courseContainer, IUserContainer userContainer)
         {
             courseContainer.PrintCourseList();
             System.Diagnostics.Debug.WriteLine("");
@@ -26,7 +19,7 @@
             relationContainer.PrintRelationData();
         }
 
-        public static void PrintRelationalList(CourseContainer courseContainer, UserContainer userContainer)
+        public static void PrintRelationalList(ICourseContainer courseContainer, IUserContainer userContainer)
         {
             foreach (var course in courseContainer.courseList)
             {

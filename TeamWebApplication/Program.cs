@@ -1,10 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using TeamWebApplication.Data;
 
-CourseContainer courseContainer = new CourseContainer();
-UserContainer userContainer = new UserContainer();
 RelationContainer relationContainer = new RelationContainer();
-relationContainer.ApplyRelationData(courseContainer.courseList, userContainer.userList);
+CourseContainer courseContainer = new CourseContainer(relationContainer);
+UserContainer userContainer = new UserContainer(relationContainer);
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,3 +33,4 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
+

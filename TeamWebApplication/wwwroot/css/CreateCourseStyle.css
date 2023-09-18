@@ -51,9 +51,9 @@ body {
     transition: background-color 0.5s, color 0.5s;
 }
 
-    .contactUs-button:hover {
-        background-color: #51314e;
-    }
+.contactUs-button:hover {
+    background-color: #51314e;
+}
 
 .Name {
     align-items: center;
@@ -80,12 +80,12 @@ form {
     flex-direction: column;
 }
 
-    form h2 {
-        color: var(--text);
-        text-align: center;
-        margin-bottom: 10px;
-        margin-top: 10px;
-    }
+form h2 {
+    color: var(--text);
+    text-align: center;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
 
 .form-info-container{
     width: 92%;
@@ -130,15 +130,15 @@ form .form-group {
     margin-right: 8px; /* Add spacing between labels */
 }
 
-    .radio-label input[type="radio"] {
-        margin-right: 12px;
-    }
+.radio-label input[type="radio"] {
+    margin-right: 12px;
+}
 
-        /* Style the custom radio input when selected */
-        .radio-label input[type="radio"]:checked + .radio-input {
-            background-color: var(--primary);
-            border: none; /* Remove the border */
-        }
+/* Style the custom radio input when selected */
+.radio-label input[type="radio"]:checked + .radio-input {
+    background-color: var(--primary);
+    border: none; /* Remove the border */
+}
 
 /* Form field styles */
 .form-info-container input[type="text"],
