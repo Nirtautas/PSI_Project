@@ -23,9 +23,7 @@ namespace TeamWebApplication.Controllers
 
         public IActionResult Registration()
         {
-
             return RedirectToAction("Index", "Registration");
-
         }
 
         [HttpPost]

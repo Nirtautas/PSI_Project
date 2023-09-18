@@ -24,3 +24,27 @@ body {
     margin: 0 0;
     padding: 0 0;
 }
+
+.logout-button {
+    width: 60px;
+    background-color: #714770;
+    display: flex;
+    justify-content: space-between;
+    justify-content: flex-end;
+    margin-right: 20px;
+    align-items: center;
+    transition: 0.5s;
+}
+
+.logout-button:hover {
+    align-items: center;
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 20px;
+    padding-right: 20px;
+    transition: 0.5s;
+}
+
+.logout-button:hover {
+    background-color: #51314e;
+}

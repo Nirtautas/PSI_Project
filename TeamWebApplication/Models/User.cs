@@ -15,12 +15,7 @@ namespace TeamWebApplication.Models
         public Role Role { get; set; }
         public Faculty Faculty { get; set; }
         public Specialization Specialization { get; set; }
-        public ICollection<int> CoursesUserTakesId { get; set; }
-
-        public User()
-        {
-
-        }
+        public ICollection<int>? CoursesUserTakesId { get; set; }
     }
 
     public enum Role

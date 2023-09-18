@@ -8,7 +8,6 @@ namespace TeamWebApplication.Models
         //These variables are fetched from files
         public AcademicDegree AcademicDegree { get; set; }
         public int YearIn { get; set; }
-        public List<string> UploadedFiles { get; set; }
         
         public Student()
         {

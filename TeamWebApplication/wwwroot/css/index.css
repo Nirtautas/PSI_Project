@@ -28,9 +28,9 @@ body {
 	transition: 0.5s;
 }
 
-	.login-button:hover {
-		background-color: #51314e;
-	}
+.login-button:hover {
+	background-color: #51314e;
+}
 
 .Name {
 	align-items: center;
@@ -78,11 +78,6 @@ body {
 	margin-left: 20px;
 	margin-right: 20px;
 }
-=======
-    background-color: #0d080c;
-    font-family: Arial;
-    color: #f5eff5;
-}
 
 .ribbon {
     background-color: #714770;
@@ -102,9 +97,9 @@ body {
     transition: 0.5s;
 }
 
-    .login-button:hover {
-        background-color: #51314e;
-    }
+.login-button:hover {
+    background-color: #51314e;
+}
 
 .Name {
     align-items: center;
@@ -152,4 +147,3 @@ body {
     margin-left: 20px;
     margin-right: 20px;
 }
->>>>>>> Brigita

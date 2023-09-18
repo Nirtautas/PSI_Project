@@ -8,17 +8,18 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>Courses</title>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/CoursesStyle.css" asp-append-version="true" />
 </head>
 
 <body>
     <div class="ribbon">
         <div class="Name">
-            <a>Mudli</a>
+            <a class="text-style">Mudli</a>
         </div>
-        <!-- <div class="link-button">
-            <a>Link button add if needed</a>
-        </div> -->
+        <div class="logout-button">
+            <a asp-action="Index" asp-controller="Home" class="text-style" style="text-decoration: none; color: #ffffff;">Log out</a>
+        </div>
     </div>
     <div class="courses-header">
         <a>Courses</a>
