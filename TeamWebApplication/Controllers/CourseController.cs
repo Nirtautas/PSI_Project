@@ -11,7 +11,8 @@ namespace TeamWebApplication.Controllers
 
 		public CourseController(IUserContainer userContainer, ICourseContainer courseContainer)
 		{
-			_userContainer = userContainer;
+            System.Diagnostics.Debug.WriteLine("CourseController");
+            _userContainer = userContainer;
             _courseContainer = courseContainer;
 		}
 
@@ -27,9 +28,16 @@ namespace TeamWebApplication.Controllers
 			return View(coursesTaken);
         }
 
-        public IActionResult Create()
+		public IActionResult Create()
+		{
+			return View();
+		}
+
+		[HttpPost]
+        public IActionResult Create(Course course)
         {
-            return View();
+			_courseContainer.CreateCourse(course);
+            return RedirectToAction("Index");
         }
     }
 }

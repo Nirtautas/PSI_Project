@@ -8,23 +8,29 @@ namespace TeamWebApplication.Data
         void FetchCourses(IRelationContainer relationContainer);
         void PrintCourseList();
         void WriteCourses();
+        void CreateCourse(Course course);
         public void PrintRelation();
         ICollection<Course> courseList { get; }
+
+        public int courseIdCounter { get; set; }
     }
 
     public sealed class CourseContainer : ICourseContainer
     {
-        private int courseIdCounter;
+        public int courseIdCounter { get; set; }
         public ICollection<Course> courseList { get; }
 
         public CourseContainer(IRelationContainer relationContainer)
         {
+            System.Diagnostics.Debug.WriteLine("CourseContainer");
             courseList = new List<Course>();
             FetchCourses(relationContainer);
         }
 
+
 		public void FetchCourses(IRelationContainer relationContainer)
         {
+            System.Diagnostics.Debug.WriteLine("FetchCourses");
             string? readString;
             string[]? splitString;
             using (StreamReader? reader = new StreamReader("./TextData/CourseData.txt"))
@@ -59,6 +65,15 @@ namespace TeamWebApplication.Data
                 foreach (var course in courseList)
                     writer.WriteLine(course.ToString());
             }
+        }
+
+        public void CreateCourse(Course course)
+        {
+            course.Id = courseIdCounter;
+            courseIdCounter++;
+            course.CreationDate = DateTime.Now;
+            courseList.Add(course);
+            WriteCourses();
         }
 
         public void PrintCourseList()
