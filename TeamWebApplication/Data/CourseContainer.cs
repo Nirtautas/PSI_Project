@@ -8,16 +8,14 @@ namespace TeamWebApplication.Data
         void FetchCourses(IRelationContainer relationContainer);
         void PrintCourseList();
         void WriteCourses();
-        void CreateCourse(Course course);
+        int CreateCourse(Course course, int loggedInUserId);
         public void PrintRelation();
         ICollection<Course> courseList { get; }
-
-        public int courseIdCounter { get; set; }
     }
 
     public sealed class CourseContainer : ICourseContainer
     {
-        public int courseIdCounter { get; set; }
+        private int courseIdCounter;
         public ICollection<Course> courseList { get; }
 
         public CourseContainer(IRelationContainer relationContainer)
@@ -55,6 +53,18 @@ namespace TeamWebApplication.Data
                 }
             }
         }
+
+        public int CreateCourse(Course course, int loggedInUserId)
+        {
+            course.Id = courseIdCounter;
+            courseIdCounter++;
+            course.CreationDate = DateTime.Now;
+            course.UsersInCourseId.Add(loggedInUserId);
+            courseList.Add(course);
+            WriteCourses();
+            return course.Id;
+        }
+
         public void WriteCourses()
         {
             using (StreamWriter? writer = new StreamWriter("./TextData/CourseData.txt"))
@@ -63,15 +73,6 @@ namespace TeamWebApplication.Data
                 foreach (var course in courseList)
                     writer.WriteLine(course.ToString());
             }
-        }
-
-        public void CreateCourse(Course course)
-        {
-            course.Id = courseIdCounter;
-            courseIdCounter++;
-            course.CreationDate = DateTime.Now;
-            courseList.Add(course);
-            WriteCourses();
         }
 
         public void PrintCourseList()
