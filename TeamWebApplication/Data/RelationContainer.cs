@@ -6,7 +6,7 @@ namespace TeamWebApplication.Data
         void FetchRelationData();
         void PrintRelationData();
         void WriteRelationData();
-
+        public void AddRelationData(int courseId, int userId);
         ICollection<Relation> relationData { get; }
     }
 
@@ -47,6 +47,13 @@ namespace TeamWebApplication.Data
                 }
             }
         }
+
+        public void AddRelationData(int courseId, int userId)
+        {
+            relationData.Add(new Relation(courseId, userId));
+            WriteRelationData();
+        }
+
         public void WriteRelationData()
         {
             using (StreamWriter? writer = new StreamWriter("./TextData/UserCourseRelation.txt"))

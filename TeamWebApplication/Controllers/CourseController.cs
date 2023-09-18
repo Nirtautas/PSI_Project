@@ -8,11 +8,13 @@ namespace TeamWebApplication.Controllers
     {
 		private readonly IUserContainer _userContainer;//readonly - constant
         private readonly ICourseContainer _courseContainer;
+        private readonly IRelationContainer _relationContainer;
 
-		public CourseController(IUserContainer userContainer, ICourseContainer courseContainer)
+        public CourseController(IUserContainer userContainer, ICourseContainer courseContainer, IRelationContainer relationContainer)
 		{
             _userContainer = userContainer;
             _courseContainer = courseContainer;
+			_relationContainer = relationContainer;
 		}
 
 		public IActionResult Index()
@@ -35,7 +37,9 @@ namespace TeamWebApplication.Controllers
 		[HttpPost]
         public IActionResult Create(Course course)
         {
-			_courseContainer.CreateCourse(course);
+			int createdCourseId = _courseContainer.CreateCourse(course, _userContainer.loggedInUserId);
+			_userContainer.AddRelation(_userContainer.loggedInUserId, createdCourseId);
+            _relationContainer.AddRelationData(createdCourseId, _userContainer.loggedInUserId);
             return RedirectToAction("Index");
         }
     }
