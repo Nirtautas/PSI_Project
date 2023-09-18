@@ -18,6 +18,7 @@ namespace TeamWebApplication.Models
         public Course() { 
         
         }
+
         public Course(int id, string name, DateTime creationDate, string description, bool isVisible) {
             this.Id = id;
             this.Name = name;
