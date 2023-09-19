@@ -11,10 +11,12 @@ namespace TeamWebApplication.Data
         int CreateCourse(Course course, int loggedInUserId);
         public void PrintRelation();
         ICollection<Course> courseList { get; }
+        public int currentCourseId { get; set; }
     }
 
     public sealed class CourseContainer : ICourseContainer
     {
+        public int currentCourseId { get; set; } = 0;
         private int courseIdCounter;
         public ICollection<Course> courseList { get; }
 
