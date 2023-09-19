@@ -1,0 +1,4 @@
+﻿40003
+40000;10000;Jonas;Paguzinskas;2023-09-18 17:27:40;Sus course
+40001;10000;Armandas;Jarasunas;2023-09-18 17:27:40;Decent course
+40002;10002;Alita;Stuknaite;2023-09-18 17:27:40;Good course
