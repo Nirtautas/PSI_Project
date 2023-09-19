@@ -2,14 +2,33 @@
 {
     public class TextPost : Post
     {
-        public string TextContent { get; set; }
-        public TextPost(int id, string name, DateTime creationDate, bool isVisible, string textContent)
+        public string textContent { get; set; }
+        public TextPost(int id, int courseId, string name, DateTime creationDate, bool isVisible, PostType postType, string textContent)
         {
-            Id = id;
-            Name = name;
-            CreationDate = creationDate;
-            IsVisible = isVisible;
-            TextContent = textContent;
+            base.id = id;
+            base.courseId = courseId;
+            base.name = name;
+            base.creationDate = creationDate;
+            base.isVisible = isVisible;
+            base.postType = postType;
+            this.textContent = textContent;
+        }
+
+        public override string ToString()
+        {
+            return
+                id.ToString() + ";" +
+                courseId.ToString() + ";" +
+                name + ";" +
+                creationDate.ToString() + ";" +
+                isVisible + ";" +
+                postType.ToString() + ';' +
+                textContent;
+        }
+
+        public override string DataToString()
+        {
+            return textContent;
         }
     }
 }
