@@ -3,11 +3,10 @@ namespace TeamWebApplication.Data
 {
     public interface IRelationContainer
     {
-        void ApplyRelationData(ICollection<Course> courseList, ICollection<User> userList);
         void FetchRelationData();
         void PrintRelationData();
         void WriteRelationData();
-
+        public void AddRelationData(int courseId, int userId);
         ICollection<Relation> relationData { get; }
     }
 
@@ -48,6 +47,13 @@ namespace TeamWebApplication.Data
                 }
             }
         }
+
+        public void AddRelationData(int courseId, int userId)
+        {
+            relationData.Add(new Relation(courseId, userId));
+            WriteRelationData();
+        }
+
         public void WriteRelationData()
         {
             using (StreamWriter? writer = new StreamWriter("./TextData/UserCourseRelation.txt"))
@@ -56,24 +62,7 @@ namespace TeamWebApplication.Data
                     writer.WriteLine(relation.courseId + ";" + relation.userId);
             }
         }
-        public void ApplyRelationData(ICollection<Course> courseList, ICollection<User> userList)
-        {
-            foreach (Relation relation in relationData)
-            {
-                foreach (var course in courseList)
-                {
-                    if (relation.courseId == course.Id)
-                    {
-                        course.UsersInCourseId.Add(relation.userId);
-                        foreach (var user in userList)
-                        {
-                            if (relation.userId == user.UserId)
-                                user.CoursesUserTakesId.Add(relation.courseId);
-                        }
-                    }
-                }
-            }
-        }
+
         public void PrintRelationData()
         {
             foreach (var relation in relationData)

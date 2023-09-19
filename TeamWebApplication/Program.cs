@@ -1,10 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using TeamWebApplication.Data;
 
-CourseContainer courseContainer = new CourseContainer();
-UserContainer userContainer = new UserContainer();
 RelationContainer relationContainer = new RelationContainer();
-relationContainer.ApplyRelationData(courseContainer.courseList, userContainer.userList);
+CourseContainer courseContainer = new CourseContainer(relationContainer);
+UserContainer userContainer = new UserContainer(relationContainer);
+PostContainer postContainer = new PostContainer();
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +12,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddSingleton<ICourseContainer, CourseContainer>();
 builder.Services.AddSingleton<IUserContainer, UserContainer>();
 builder.Services.AddSingleton<IRelationContainer, RelationContainer>();
+builder.Services.AddSingleton<IPostContainer, PostContainer>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -34,3 +35,4 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
+

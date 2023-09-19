@@ -30,9 +30,9 @@ body {
     transition: background-color 0.5s, color 0.5s;
 }
 
-    .text-style:hover {
-        background-color: #51314e;
-    }
+.text-style:hover {
+    background-color: #51314e;
+}
 
 .mudli {
     font-size: 30px !important;
@@ -51,9 +51,9 @@ body {
     transition: background-color 0.5s, color 0.5s;
 }
 
-    .contactUs-button:hover {
-        background-color: #51314e;
-    }
+.contactUs-button:hover {
+    background-color: #51314e;
+}
 
 .Name {
     align-items: center;
@@ -81,7 +81,7 @@ body {
     transition: 0.5s;
 }
 
-    .login-button:hover {
+.login-button:hover {
     align-items: center;
     display: flex;
     justify-content: flex-end; 
@@ -90,9 +90,9 @@ body {
     transition: 0.5s;
 }
 
- .login-button:hover {
-        background-color: #51314e;
-    }
+.login-button:hover {
+    background-color: #51314e;
+}
 
 form {
     background-color: #201f20;
@@ -106,12 +106,12 @@ form {
     flex-direction: column;
 }
 
-    form h2 {
-        color: var(--text);
-        text-align: center;
-        margin-bottom: 10px;
-        margin-top: 10px;
-    }
+form h2 {
+    color: var(--text);
+    text-align: center;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
 
 .form-container {
     background-color: #0d080c;
@@ -152,15 +152,15 @@ form .form-group {
     margin-right: 8px; /* Add spacing between labels */
 }
 
-    .radio-label input[type="radio"] {
-        margin-right: 12px;
-    }
+.radio-label input[type="radio"] {
+    margin-right: 12px;
+}
 
-        /* Style the custom radio input when selected */
-        .radio-label input[type="radio"]:checked + .radio-input {
-            background-color: var(--primary);
-            border: none; /* Remove the border */
-        }
+/* Style the custom radio input when selected */
+.radio-label input[type="radio"]:checked + .radio-input {
+    background-color: var(--primary);
+    border: none; /* Remove the border */
+}
 
 /* Form field styles */
 form input[type="text"],
@@ -223,55 +223,55 @@ form .form-group.focus-with-glow::after {
     width: 58%;
 }
 
-    .form-group1 label {
-        font-weight: bold;
-        color: var(--text);
-        width: 65%;
-        margin-top: 7px;
-        margin-bottom: 7px;
-    }
+.form-group1 label {
+    font-weight: bold;
+    color: var(--text);
+    width: 65%;
+    margin-top: 7px;
+    margin-bottom: 7px;
+}
 
-    .form-group1 input[type="text"],
-    .form-group1 input[type="password"],
-    .form-group1 input[type="email"],
-    .form-group1 select,
-    .form-group1 input[type="radio"],
-    .form-group1 select {
-        width: 65%;
-        padding: 10px;
-        margin-top: 7px;
-        margin-bottom: 7px;
-        border: 1px solid var(--text);
-        border-radius: 5px;
-        background-color: transparent;
-        color: var(--text);
-        box-shadow: 0 0 5px #0d080c; /* Adds dark glow effect with the specified color */
-        transition: background-color 0.3s, border 0.3s, box-shadow 0.3s;
-        position: relative;
-    }
+.form-group1 input[type="text"],
+.form-group1 input[type="password"],
+.form-group1 input[type="email"],
+.form-group1 select,
+.form-group1 input[type="radio"],
+.form-group1 select {
+    width: 65%;
+    padding: 10px;
+    margin-top: 7px;
+    margin-bottom: 7px;
+    border: 1px solid var(--text);
+    border-radius: 5px;
+    background-color: transparent;
+    color: var(--text);
+    box-shadow: 0 0 5px #0d080c; /* Adds dark glow effect with the specified color */
+    transition: background-color 0.3s, border 0.3s, box-shadow 0.3s;
+    position: relative;
+}
 
-    .form-group1.focus-with-glow::after {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        border: 2px solid #0d080c;
-        border-radius: 5px;
-        box-shadow: 0 0 5px #0d080c; /* Adds a glow effect with the specified shade */
-        pointer-events: none;
-        transition: border-color 0.3s, box-shadow 0.3s;
-    }
+.form-group1.focus-with-glow::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border: 2px solid #0d080c;
+    border-radius: 5px;
+    box-shadow: 0 0 5px #0d080c; /* Adds a glow effect with the specified shade */
+    pointer-events: none;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
 
-    .form-group1 input[type="text"]:focus,
-    .form-group1 input[type="password"]:focus,
-    .form-group1 input[type="email"]:focus,
-    .form-group1 select:focus,
-    .form-group1 input[type="radio"]:focus,
-    .form-group1 select:focus {
-        background-color: #714770;
-    }
+.form-group1 input[type="text"]:focus,
+.form-group1 input[type="password"]:focus,
+.form-group1 input[type="email"]:focus,
+.form-group1 select:focus,
+.form-group1 input[type="radio"]:focus,
+.form-group1 select:focus {
+    background-color: #714770;
+}
 
 /* Button styles */
 .btn-primary {
@@ -305,9 +305,9 @@ form .btn-primary {
     box-shadow: 0 0 10px #714770;
 }
 
-    form .btn-primary:hover {
-        background-color: #51314e;
-    }
+form .btn-primary:hover {
+    background-color: #51314e;
+}
 
 .registration-link {
     color: #714770;
@@ -317,9 +317,9 @@ form .btn-primary {
     margin-top: 5px;
 }
 
-    .registration-link:hover {
-        text-decoration: underline;
-    }
+.registration-link:hover {
+    text-decoration: underline;
+}
 
 .forgot-password-link {
     color: #714770;
@@ -333,6 +333,6 @@ form .btn-primary {
     align-items: center;
 }
 
-    .forgot-password-link:hover {
-        text-decoration: underline;
-    }
+.forgot-password-link:hover {
+    text-decoration: underline;
+}
