@@ -15,9 +15,11 @@ namespace TeamWebApplication.Models
         //These variables are not yet implemented
         public ICollection<int>? PostsInCourseId { get; set; }
 
-        public Course() { 
-        
+        public Course() {
+            UsersInCourseId = new List<int>();
+            PostsInCourseId = new List<int>();
         }
+
         public Course(int id, string name, DateTime creationDate, string description, bool isVisible) {
             this.Id = id;
             this.Name = name;

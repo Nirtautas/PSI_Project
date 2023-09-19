@@ -1,3 +1,4 @@
+@model Course
 @{
 	ViewData["Title"] = "Create Course";
     ViewData["Faculties"] = new string[]
@@ -14,7 +15,6 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>Create Course</title>
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/CreateCourseStyle.css" asp-append-version="true" />
 </head>
 
@@ -25,29 +25,31 @@
             <a>Mudli</a>
         </div>
     </div>
-    <form method="post" asp-action="Login" class="registration-form">
+    <form method="post" asp-controller="Course" asp-action="Create" class="registration-form">
         <header class="form-container">
             <h2>Create Course</h2>
         </header>
         <div class="form-info-container">
-            <label for="">Course name:</label>
-            <input type="text" id="" name="CourseName" value="" class="form-control" required />
-            <label for="">Faculty:</label>
-            <select id="faculty" name="faculty" class="form-group1" required>
+            <label for="Name">Course name:</label>
+            <input type="text" id="Name" name="Name" asp-for="Name" class="form-control" required />
+            <span class="text-danger"></span>
+
+            <label for="Faculty">Faculty:</label>
+            <select id="Faculty" name="Faculty" class="form-group1" required>
                 <option value="" disabled selected>Select Faculty</option>
                 @foreach (var faculty in ViewData["Faculties"] as string[])
                 {
-                <option>@faculty</option>
+                    <option>@faculty</option>
                 }
             </select>
-            <label for="">Course decription:</label>
-            <textarea type="text" id="" name="CourseDecription" value="" class="form-control"></textarea>
+            <span class="text-danger"></span>
+
+            <label for="Description">Course description:</label>
+            <textarea id="Description" name="Description" asp-for="Description" class="form-control"></textarea>
+            <span class="text-danger"></span>
         </div>
 
-        <button style="width: 400px" type="submit" class="btn-primary">Create course</button>
-        <a style="width: 375px" class="btn-primary" asp-action="Index" asp-controller="Course">
-            Go back
-        </a>
+        <button type="submit" class="btn-primary">Create course</button>
     </form>
 </body>
 </html>

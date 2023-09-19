@@ -27,7 +27,7 @@ namespace TeamWebApplication.Data
         }
 
 
-        public void FetchCourses(IRelationContainer relationContainer)
+		public void FetchCourses(IRelationContainer relationContainer)
         {
             string? readString;
             string[]? splitString;
