@@ -1,0 +1,117 @@
+﻿/* Global styles */
+:root {
+    --text: #f5eff5;
+    --background: #0d080c;
+    --primary: #714770;
+    --secondary: #51314e;
+    --accent: #a168a0;
+}
+
+body {
+    background-color: var(--background);
+    font-family: Arial, sans-serif;
+    color: var(--text);
+    margin: 0;
+    padding: 0;
+}
+
+/* Comment section styles */
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+h2 {
+    font-size: 24px;
+    color: var(--primary);
+}
+
+.comment {
+    background-color: var(--background);
+    border: 2px solid var(--primary);
+    border-radius: 10px;
+    margin: 10px 0;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 0 10px var(--primary);
+}
+
+.comment-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.comment-header-left {
+    font-weight: bold;
+    color: var(--text);
+}
+
+.comment-header-right {
+    color: var(--text);
+    font-size: 12px;
+}
+
+.comment-header,
+.comment-footer {
+    display: none; /* Hides the header and footer by default */
+}
+
+.comment-body {
+    color: var(--text);
+}
+
+.comment-form {
+    margin-top: 20px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--text);
+    border-radius: 5px;
+    background-color: transparent;
+    color: var(--text);
+    box-shadow: 0 0 5px var(--background);
+}
+
+.button {
+    background-color: var(--primary);
+    color: var(--text);
+    padding: 15px 20px; /* Increase padding to make the button bigger */
+    font-size: 18px;
+    border-radius: 5px;
+    cursor: pointer;
+    border: none; /* Remove the border */
+    box-shadow: 0 0 10px var(--primary);
+    transition: background-color 0.3s; /* Add a transition effect for hover */
+}
+
+    .button:hover {
+        background-color: var(--secondary);
+    }
+
+.comment-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.comments-label {
+    font-size: 24px;
+    color: var(--primary);
+    margin: 0; /* Remove default margin */
+}
+
+.add-comment-button {
+    display: flex;
+    align-items: center;
+}
