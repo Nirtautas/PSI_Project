@@ -4,6 +4,7 @@ using TeamWebApplication.Data;
 RelationContainer relationContainer = new RelationContainer();
 CourseContainer courseContainer = new CourseContainer(relationContainer);
 UserContainer userContainer = new UserContainer(relationContainer);
+CommentContainer commentContainer = new CommentContainer();
 PostContainer postContainer = new PostContainer();
 CommentContainer commentContainer = new CommentContainer();
 
@@ -13,6 +14,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddSingleton<ICourseContainer, CourseContainer>();
 builder.Services.AddSingleton<IUserContainer, UserContainer>();
 builder.Services.AddSingleton<IRelationContainer, RelationContainer>();
+builder.Services.AddSingleton<ICommentContainer, CommentContainer>();
 builder.Services.AddSingleton<IPostContainer, PostContainer>();
 builder.Services.AddSingleton<ICommentContainer, CommentContainer>();
 var app = builder.Build();

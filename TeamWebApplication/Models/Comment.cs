@@ -11,6 +11,7 @@ namespace TeamWebApplication.Models
         public string UserComment { get; set; }
         public DateTime CommentCreationTime { get; set; } = DateTime.Now;
 
+<<<<<<< HEAD
         public Comment()
         {
         }
@@ -22,6 +23,15 @@ namespace TeamWebApplication.Models
             string usersSurnameThatCommented,
             DateTime commentCreationTime,
             string userComment)
+=======
+        public Comment(
+        int commentId,
+        int courseId,
+        string usersNameThatCommented,
+        string usersSurnameThatCommented,
+        DateTime commentCreationTime,
+        string userComment)
+>>>>>>> Main
         {
             CommentId = commentId;
             CourseId = courseId;
@@ -38,7 +48,11 @@ namespace TeamWebApplication.Models
                 CourseId.ToString() + ";" +
                 UsersNameThatCommented + ";" +
                 UsersSurnameThatCommented + ";" +
+<<<<<<< HEAD
                 CommentCreationTime.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture) + ";" +
+=======
+                CommentCreationTime.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture) + ";" +
+>>>>>>> Main
                 UserComment;
         }
     }

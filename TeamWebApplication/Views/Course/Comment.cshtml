@@ -1,0 +1,57 @@
+﻿@model IEnumerable<TeamWebApplication.Models.Comment>
+@{
+    ViewData["Title"] = "Comment";
+}
+
+<link rel="stylesheet" href="~/css/Comment.css" asp-append-version="true" />
+
+
+<link rel="stylesheet" href="~/css/Comment.css" asp-append-version="true" />
+
+<!-- Display Existing Comments -->
+<div class="container">
+    <div class="comment-header">
+        <h2 class="comments-label">Comments</h2>
+        <div class="add-comment-button">
+            <button id="show-comment-form" class="button">Comment</button>
+        </div>
+    </div>
+
+    <div class="comment-section">
+        @foreach (var comment in Model)
+        {
+            <div class="comment">
+                <div class="comment-header">
+                    <div class="comment-header-left">@comment.UsersNameThatCommented</div>
+                    <div class="comment-header-right">@comment.CommentCreationTime.ToString("yyyy-MM-dd HH:mm:ss")</div>
+                </div>
+                <div class="comment-body">@comment.UserComment</div>
+            </div>
+        }
+    </div>
+
+    <!-- Comment Form -->
+    <div id="comment-form" class="comment-form" style="display: none;">
+        <form method="post" action="@Url.Action("AddComment", "CommentController")">
+            <div class="form-group">
+                <textarea name="UserComment" rows="3" cols="50" placeholder="Write your comment here"></textarea>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="button">Submit Comment</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Include jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- JavaScript/jQuery to toggle the comment form -->
+<script>
+    $(document).ready(function () {
+        $("#show-comment-form").click(function (e) {
+            e.preventDefault(); // Prevent the default form submission
+            $("#comment-form").toggle();
+        });
+    });
+</script>
