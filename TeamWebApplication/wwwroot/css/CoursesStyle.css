@@ -188,3 +188,20 @@ body {
         flex-basis: calc(50% - 30px);
     }
 }
+
+/* Global styles */
+:root {
+    --text: #f5eff5;
+    --background: #0d080c;
+    --primary: #714770;
+    --secondary: #51314e;
+    --accent: #a168a0;
+}
+
+body {
+    background-color: var(--background);
+    font-family: Arial, sans-serif;
+    color: var(--text);
+    margin: 0;
+    padding: 0;
+}

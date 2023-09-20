@@ -1,10 +1,7 @@
-﻿@model IEnumerable<Post>
+﻿@model TeamWebApplication.Models.CourseAndComment
 @{
     ViewData["Title"] = "Course Environment";
 }
-
-<!DOCTYPE html>
-<html>
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>Courses</title>
@@ -12,23 +9,65 @@
     <link rel="stylesheet" href="~/css/CoursesStyle.css" asp-append-version="true" />
 </head>
 
-<body>
-    <div class="ribbon">
-        <div class="Name">
-            <a class="text-style">Mudli</a>
-        </div>
-        <div class="logout-button">
-            <a asp-action="Index" asp-controller="Home" class="text-style" style="text-decoration: none; color: #ffffff;">Log out</a>
+<div class="ribbon">
+    <div class="Name">
+        <a class="text-style">Mudli</a>
+    </div>
+    <div class="logout-button">
+        <a asp-action="Index" asp-controller="Home" class="text-style" style="text-decoration: none; color: #ffffff;">Log out</a>
+    </div>
+</div>
+@foreach (Post post in Model.PostData)
+{
+    @switch (post.postType)
+    {
+        case PostType.Text:
+            <p>@post.DataToString()</p>
+            break;
+    }
+}
+<link rel="stylesheet" href="~/css/CommentStyle.css" asp-append-version="true" />
+<!-- Displaying existing comments -->
+<div class="comment-container">
+    <div class="comment-header">
+        <h2 class="comments-label">Comments</h2>
+        <div class="add-comment-button">
+            <button id="show-comment-form" class="button">Comment</button>
         </div>
     </div>
-    @foreach (Post post in Model)
-    {
-        @switch (post.postType)
+
+    <div class="comment-section">
+        @foreach (var comment in Model.CommentData)
         {
-            case PostType.Text:
-                <p>@post.DataToString()</p>
-                break;
+            <div class="comment">
+                <div class="comment-header">
+                    <div class="comment-header-left">@comment.UsersNameThatCommented</div>
+                    <div class="comment-header-right">@comment.CommentCreationTime.ToString("yyyy-MM-dd HH:mm:ss")</div>
+                </div>
+                <div class="comment-body">@comment.UserComment</div>
+            </div>
         }
-    }
-</body>
-</html>
+    </div>
+
+    <div id="comment-form" class="comment-form" style="display: none;">
+        <form asp-action="AddComment" asp-route-courseId="@Model.comment.CourseId" asp-controller="CourseEnvironment" method="post">
+            <div class="form-group">
+                <textarea  name="comment.UserComment" id="@Model.comment.UserComment" rows="3" cols="50" placeholder="Write your comment here"></textarea>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="button">Submit Comment</button>
+            </div>
+        </form>
+    </div>
+
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#show-comment-form").click(function (e) {
+            e.preventDefault(); // Prevent the default form submission
+            $("#comment-form").toggle();
+        });
+    });
+</script>
