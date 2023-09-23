@@ -4,6 +4,7 @@ using TeamWebApplication.Data;
 RelationContainer relationContainer = new RelationContainer();
 CourseContainer courseContainer = new CourseContainer(relationContainer);
 UserContainer userContainer = new UserContainer(relationContainer);
+CommentContainer commentContainer = new CommentContainer();
 PostContainer postContainer = new PostContainer();
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,6 +13,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddSingleton<ICourseContainer, CourseContainer>();
 builder.Services.AddSingleton<IUserContainer, UserContainer>();
 builder.Services.AddSingleton<IRelationContainer, RelationContainer>();
+builder.Services.AddSingleton<ICommentContainer, CommentContainer>();
 builder.Services.AddSingleton<IPostContainer, PostContainer>();
 var app = builder.Build();
 
@@ -30,9 +32,21 @@ app.UseRouting();
 
 app.UseAuthorization();
 
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+app.UseEndpoints(endpoints =>
+{
+//    endpoints.MapControllerRoute(
+//        name: "CourseEnvironment",
+//        pattern: "CourseEnvironment/{courseId}",
+//        defaults: new { controller = "CourseEnvironment", action = "Index" }
+//    );
+
+    endpoints.MapControllerRoute(
+        name: "default",
+        pattern: "{controller=Home}/{action=Index}/{id?}"
+    );
+
+});
+
+
 
 app.Run();
-
