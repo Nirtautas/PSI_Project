@@ -1,13 +1,46 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MyWebApplication.Models;
+using TeamWebApplication.Data;
+using TeamWebApplication.Models;
 
-namespace MyWebApplication.Controllers
+namespace TeamWebApplication.Controllers
 {
     public class CourseController : Controller
     {
-        public IActionResult Index()
+		private readonly IUserContainer _userContainer;//readonly - constant
+        private readonly ICourseContainer _courseContainer;
+        private readonly IRelationContainer _relationContainer;
+
+        public CourseController(IUserContainer userContainer, ICourseContainer courseContainer, IRelationContainer relationContainer)
+		{
+            _userContainer = userContainer;
+            _courseContainer = courseContainer;
+			_relationContainer = relationContainer;
+		}
+
+		public IActionResult Index()
         {
-            return View();
+			IEnumerable<Course> coursesTaken = (
+				from user in _userContainer.userList
+				where user.UserId == _userContainer.loggedInUserId
+				from courseId in user.CoursesUserTakesId
+				join course in _courseContainer.courseList on courseId equals course.Id
+				select course
+			).ToList();
+			return View(coursesTaken);
+        }
+
+		public IActionResult Create()
+		{
+			return View();
+		}
+
+		[HttpPost]
+        public IActionResult Create(Course course)
+        {
+			int createdCourseId = _courseContainer.CreateCourse(course, _userContainer.loggedInUserId);
+			_userContainer.AddRelation(_userContainer.loggedInUserId, createdCourseId);
+            _relationContainer.AddRelationData(createdCourseId, _userContainer.loggedInUserId);
+            return RedirectToAction("Index");
         }
     }
 }

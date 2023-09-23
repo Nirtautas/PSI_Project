@@ -27,9 +27,9 @@ body {
     transition: 0.5s;
 }
 
-.login-button:hover {
-    background-color: #51314e;
-}
+    .login-button:hover {
+        background-color: #51314e;
+    }
 
 
 .Name {
@@ -51,10 +51,9 @@ body {
     margin: 15px;
     margin-bottom: 5px;
     height: 58px;
-    display: flex; /* Add flex display */
-    align-items: center; /* Vertically center the content */
+    display: flex;
+    align-items: center;
 }
-
 .course-navigation-array input {
     float: left;
     color: #f5eff5;
@@ -94,15 +93,15 @@ body {
     font-size: 17px;
     padding: 10px;
     overflow: hidden;
-    margin-top:1px;
+    margin-top: 1px;
     background-color: #0d080c;
     border-style: solid;
-
 }
 
 .container {
     background-color: #201f20;
     display: flex;
+    margin: 15px;
     margin-top: 0;
 }
 
@@ -119,7 +118,6 @@ body {
     margin: 15px;
     box-sizing: border-box;
     box-shadow: 0px 4px 10px 0px #51314e;
-
     min-width: 200px;
     position: relative;
     transition: 0.5s;
@@ -136,10 +134,6 @@ body {
     left: 0;
     right: 0;
     bottom: 0;
-}
-
-.card-body {
-    background: #0d080c;
 }
 
 .card-image img {

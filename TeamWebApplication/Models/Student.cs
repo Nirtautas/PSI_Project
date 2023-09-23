@@ -1,14 +1,13 @@
-﻿using MyWebApplication.Models;
+﻿using TeamWebApplication.Models;
+using System.Globalization;
 
-namespace MyWebApplication.Models
+namespace TeamWebApplication.Models
 {
     public class Student : User
     {
         //These variables are fetched from files
         public AcademicDegree AcademicDegree { get; set; }
         public int YearIn { get; set; }
-        //These variables are not yet implemented
-        public List<string> UploadedFiles { get; set; }
         
         public Student()
         {
@@ -39,6 +38,23 @@ namespace MyWebApplication.Models
             Specialization = specialization;
             AcademicDegree = academicDegree;
             YearIn = yearIn;
+            CoursesUserTakesId = new List<int>();
+        }
+
+        public override string ToString()
+        {
+            return
+                UserId.ToString() + ";" +
+                Name + ";" +
+                Surname + ";" +
+                BirthDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture) + ";" +
+                Email + ";" +
+                Password + ";" +
+                Role.ToString() + ";" +
+                Faculty.ToString() + ";" +
+                Specialization.ToString() + ";" +
+                AcademicDegree.ToString() + ";" +
+                YearIn.ToString();
         }
     }
     public enum AcademicDegree

@@ -117,7 +117,9 @@ body::before {
 
 /* Button styles */
 .btn-primary {
+
     background-color: var(--primary);
+
     color: #f5eff5;
     padding: 10px;
     font-size: 18px;

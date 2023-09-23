@@ -1,0 +1,55 @@
+@model Course
+@{
+	ViewData["Title"] = "Create Course";
+    ViewData["Faculties"] = new string[]
+	{
+	"Mathematics and Informatics",
+	"Chemistry and Geosciences",
+	"Physics",
+	"Filology"
+	};
+}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Create Course</title>
+    <link rel="stylesheet" href="~/css/CreateCourseStyle.css" asp-append-version="true" />
+</head>
+
+<body>
+
+    <div class="ribbon">
+        <div class="Name">
+            <a>Mudli</a>
+        </div>
+    </div>
+    <form method="post" asp-controller="Course" asp-action="Create" class="registration-form">
+        <header class="form-container">
+            <h2>Create Course</h2>
+        </header>
+        <div class="form-info-container">
+            <label for="Name">Course name:</label>
+            <input type="text" id="Name" name="Name" asp-for="Name" class="form-control" required />
+            <span class="text-danger"></span>
+
+            <label for="Faculty">Faculty:</label>
+            <select id="Faculty" name="Faculty" class="form-group1" required>
+                <option value="" disabled selected>Select Faculty</option>
+                @foreach (var faculty in ViewData["Faculties"] as string[])
+                {
+                    <option>@faculty</option>
+                }
+            </select>
+            <span class="text-danger"></span>
+
+            <label for="Description">Course description:</label>
+            <textarea id="Description" name="Description" asp-for="Description" class="form-control"></textarea>
+            <span class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="btn-primary">Create course</button>
+    </form>
+</body>
+</html>

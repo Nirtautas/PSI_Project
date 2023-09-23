@@ -1,6 +1,7 @@
-﻿using MyWebApplication.Models;
+﻿using TeamWebApplication.Models;
+using System.Globalization;
 
-namespace MyWebApplication.Models
+namespace TeamWebApplication.Models
 {
     public class Lecturer : User
     {
@@ -32,6 +33,22 @@ namespace MyWebApplication.Models
             Faculty = faculty;
             Specialization = specialization;
             Title = title;
+            CoursesUserTakesId = new List<int>();
+        }
+
+        public override string ToString()
+        {
+            return
+                UserId.ToString() + ";" +
+                Name + ";" +
+                Surname + ";" +
+                BirthDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture) + ";" +
+                Email + ";" +
+                Password + ";" +
+                Role.ToString() + ";" +
+                Faculty.ToString() + ";" +
+                Specialization.ToString() + ";" +
+                Title.ToString();
         }
     }
     public enum Title

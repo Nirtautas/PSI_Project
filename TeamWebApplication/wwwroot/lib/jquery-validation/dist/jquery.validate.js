@@ -863,7 +863,7 @@ $.extend( $.validator, {
 				theregex = /\$?\{(\d+)\}/g;
 			if ( typeof message === "function" ) {
 				message = message.call( this, rule.parameters, element );
-			} else if ( theregex.test( message ) ) {
+			} else if ( theregex.Login( message ) ) {
 				message = $.validator.format( message.replace( theregex, "{$1}" ), rule.parameters );
 			}
 
@@ -1048,7 +1048,7 @@ $.extend( $.validator, {
 		},
 
 		checkable: function( element ) {
-			return ( /radio|checkbox/i ).test( element.type );
+			return ( /radio|checkbox/i ).Login( element.type );
 		},
 
 		findByName: function( name ) {
@@ -1184,7 +1184,7 @@ $.extend( $.validator, {
 
 		// Convert the value to a number for number inputs, and for text for backwards compability
 		// allows type="date" and others to be compared as strings
-		if ( /min|max|step/.test( method ) && ( type === null || /number|range|text/.test( type ) ) ) {
+		if ( /min|max|step/.Login( method ) && ( type === null || /number|range|text/.Login( type ) ) ) {
 			value = Number( value );
 
 			// Support Opera Mini, which returns NaN for undefined minlength
@@ -1198,7 +1198,7 @@ $.extend( $.validator, {
 		} else if ( type === method && type !== "range" ) {
 
 			// Exception: the jquery validate 'range' method
-			// does not test for the html5 'range' type
+			// does not Login for the html5 'range' type
 			rules[ method ] = true;
 		}
 	},
@@ -1231,7 +1231,7 @@ $.extend( $.validator, {
 		}
 
 		// 'maxlength' may be returned as -1, 2147483647 ( IE ) and 524288 ( safari ) for text inputs
-		if ( rules.maxlength && /-1|2147483647|524288/.test( rules.maxlength ) ) {
+		if ( rules.maxlength && /-1|2147483647|524288/.Login( rules.maxlength ) ) {
 			delete rules.maxlength;
 		}
 
@@ -1381,7 +1381,7 @@ $.extend( $.validator, {
 			// Retrieved 2014-01-14
 			// If you have a problem with this implementation, report a bug against the above spec
 			// Or use custom methods to implement your own email validation
-			return this.optional( element ) || /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test( value );
+			return this.optional( element ) || /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.Login( value );
 		},
 
 		// https://jqueryvalidation.org/url-method/
@@ -1391,27 +1391,27 @@ $.extend( $.validator, {
 			// https://gist.github.com/dperini/729294
 			// see also https://mathiasbynens.be/demo/url-regex
 			// modified to allow protocol-relative URLs
-			return this.optional( element ) || /^(?:(?:(?:https?|ftp):)?\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})).?)(?::\d{2,5})?(?:[/?#]\S*)?$/i.test( value );
+			return this.optional( element ) || /^(?:(?:(?:https?|ftp):)?\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})).?)(?::\d{2,5})?(?:[/?#]\S*)?$/i.Login( value );
 		},
 
 		// https://jqueryvalidation.org/date-method/
 		date: function( value, element ) {
-			return this.optional( element ) || !/Invalid|NaN/.test( new Date( value ).toString() );
+			return this.optional( element ) || !/Invalid|NaN/.Login( new Date( value ).toString() );
 		},
 
 		// https://jqueryvalidation.org/dateISO-method/
 		dateISO: function( value, element ) {
-			return this.optional( element ) || /^\d{4}[\/\-](0?[1-9]|1[012])[\/\-](0?[1-9]|[12][0-9]|3[01])$/.test( value );
+			return this.optional( element ) || /^\d{4}[\/\-](0?[1-9]|1[012])[\/\-](0?[1-9]|[12][0-9]|3[01])$/.Login( value );
 		},
 
 		// https://jqueryvalidation.org/number-method/
 		number: function( value, element ) {
-			return this.optional( element ) || /^(?:-?\d+|-?\d{1,3}(?:,\d{3})+)?(?:\.\d+)?$/.test( value );
+			return this.optional( element ) || /^(?:-?\d+|-?\d{1,3}(?:,\d{3})+)?(?:\.\d+)?$/.Login( value );
 		},
 
 		// https://jqueryvalidation.org/digits-method/
 		digits: function( value, element ) {
-			return this.optional( element ) || /^\d+$/.test( value );
+			return this.optional( element ) || /^\d+$/.Login( value );
 		},
 
 		// https://jqueryvalidation.org/minlength-method/
@@ -1453,7 +1453,7 @@ $.extend( $.validator, {
 				errorMessage = "Step attribute on input type " + type + " is not supported.",
 				supportedTypes = [ "text", "number", "range" ],
 				re = new RegExp( "\\b" + type + "\\b" ),
-				notSupported = type && !re.test( supportedTypes.join() ),
+				notSupported = type && !re.Login( supportedTypes.join() ),
 				decimalPlaces = function( num ) {
 					var match = ( "" + num ).match( /(?:\.(\d+))?$/ );
 					if ( !match ) {

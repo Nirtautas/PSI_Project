@@ -51,9 +51,9 @@ body {
     transition: background-color 0.5s, color 0.5s;
 }
 
-    .contactUs-button:hover {
-        background-color: #51314e;
-    }
+.contactUs-button:hover {
+    background-color: #51314e;
+}
 
 .Name {
     align-items: center;
@@ -70,22 +70,26 @@ body {
 
 form {
     background-color: #201f20;
-    padding: 20px;
+    padding: 40px;
     align-items: center;
     justify-content: center;
-    margin: 15px auto;
+    margin: 100px auto;
     border-radius: 10px;
-    width: 40%;
+    width: 80%;
     display: flex;
     flex-direction: column;
 }
 
-    form h2 {
-        color: var(--text);
-        text-align: center;
-        margin-bottom: 10px;
-        margin-top: 10px;
-    }
+form h2 {
+    color: var(--text);
+    text-align: center;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+.form-info-container{
+    width: 92%;
+}
 
 .form-container {
     background-color: #0d080c;
@@ -126,26 +130,23 @@ form .form-group {
     margin-right: 8px; /* Add spacing between labels */
 }
 
-    .radio-label input[type="radio"] {
-        margin-right: 12px;
-    }
+.radio-label input[type="radio"] {
+    margin-right: 12px;
+}
 
-        /* Style the custom radio input when selected */
-        .radio-label input[type="radio"]:checked + .radio-input {
-            background-color: var(--primary);
-            border: none; /* Remove the border */
-        }
+/* Style the custom radio input when selected */
+.radio-label input[type="radio"]:checked + .radio-input {
+    background-color: var(--primary);
+    border: none; /* Remove the border */
+}
 
 /* Form field styles */
-form input[type="text"],
-form input[type="password"],
-form input[type="email"],
-form select,
-form input[type="radio"],
-form select {
+.form-info-container input[type="text"],
+.form-info-container textarea,
+.form-info-container select {
     margin-top: 7px;
     margin-bottom: 7px;
-    width: 53%;
+    width: 100%;
     padding: 10px;
     justify-content: space-between;
     align-items: center;
@@ -155,6 +156,12 @@ form select {
     color: var(--text);
     box-shadow: 0 0 5px #0d080c;
     transition: background-color 0.3s, border 0.3s, box-shadow 0.3s;
+    box-sizing: border-box
+}
+
+form textarea{
+    height: 200px;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 form label {
@@ -166,15 +173,6 @@ form label {
     margin-bottom: 7px;
 }
 
-/* Form field focus styles */
-form input[type="text"]:focus,
-form input[type="password"]:focus,
-form input[type="email"]:focus,
-form select:focus,
-form input[type="radio"]:focus,
-form select:focus {
-    background-color: #714770;
-}
 
 /* Form group focus with glow effect styles */
 form .form-group.focus-with-glow::after {
@@ -190,62 +188,6 @@ form .form-group.focus-with-glow::after {
     pointer-events: none;
     transition: border-color 0.3s, box-shadow 0.3s;
 }
-
-.form-group1 {
-    display: flex;
-    flex-direction: column;
-    width: 58%;
-}
-
-    .form-group1 label {
-        font-weight: bold;
-        color: var(--text);
-        width: 65%;
-        margin-top: 7px;
-        margin-bottom: 7px;
-    }
-
-    .form-group1 input[type="text"],
-    .form-group1 input[type="password"],
-    .form-group1 input[type="email"],
-    .form-group1 select,
-    .form-group1 input[type="radio"],
-    .form-group1 select {
-        width: 65%;
-        padding: 10px;
-        margin-top: 7px;
-        margin-bottom: 7px;
-        border: 1px solid var(--text);
-        border-radius: 5px;
-        background-color: transparent;
-        color: var(--text);
-        box-shadow: 0 0 5px #0d080c; /* Adds dark glow effect with the specified color */
-        transition: background-color 0.3s, border 0.3s, box-shadow 0.3s;
-        position: relative;
-    }
-
-    .form-group1.focus-with-glow::after {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        border: 2px solid #0d080c;
-        border-radius: 5px;
-        box-shadow: 0 0 5px #0d080c; /* Add a glow effect with the specified shade */
-        pointer-events: none;
-        transition: border-color 0.3s, box-shadow 0.3s;
-    }
-
-    .form-group1 input[type="text"]:focus,
-    .form-group1 input[type="password"]:focus,
-    .form-group1 input[type="email"]:focus,
-    .form-group1 select:focus,
-    .form-group1 input[type="radio"]:focus,
-    .form-group1 select:focus {
-        background-color: #714770;
-    }
 
 /* Button styles */
 .btn-primary {
@@ -282,15 +224,4 @@ form .btn-primary {
 
     form .btn-primary:hover {
         background-color: #51314e;
-    }
-
-.login-link {
-    color: #714770;
-    text-decoration: none;
-    font-size: 14px;
-    cursor: pointer;
-}
-
-    .login-link:hover {
-        text-decoration: underline;
     }

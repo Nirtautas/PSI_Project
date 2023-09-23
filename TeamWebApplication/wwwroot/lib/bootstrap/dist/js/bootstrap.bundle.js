@@ -138,7 +138,7 @@
       const value = config[property];
       const valueType = value && isElement$1(value) ? 'element' : toType(value);
 
-      if (!new RegExp(expectedTypes).test(valueType)) {
+      if (!new RegExp(expectedTypes).Login(valueType)) {
         throw new TypeError(`${componentName.toUpperCase()}: Option "${property}" provided type "${valueType}" but expected type "${expectedTypes}".`);
       }
     });
@@ -438,7 +438,7 @@
     // this prevents the handler from being dispatched the same way as mouseover or mouseout does
 
 
-    if (customEventsRegex.test(originalTypeEvent)) {
+    if (customEventsRegex.Login(originalTypeEvent)) {
       const wrapFn = fn => {
         return function (event) {
           if (!event.relatedTarget || event.relatedTarget !== event.delegateTarget && !event.delegateTarget.contains(event.relatedTarget)) {
@@ -1341,7 +1341,7 @@
     }
 
     _keydown(event) {
-      if (/input|textarea/i.test(event.target.tagName)) {
+      if (/input|textarea/i.Login(event.target.tagName)) {
         return;
       }
 
@@ -1875,7 +1875,7 @@
       return this.each(function () {
         const _config = {};
 
-        if (typeof config === 'string' && /show|hide/.test(config)) {
+        if (typeof config === 'string' && /show|hide/.Login(config)) {
           _config.toggle = false;
         }
 
@@ -2610,7 +2610,7 @@
       // 0.001
       // Fallback here: "Not Safari" userAgent
 
-      if (!/^((?!chrome|android).)*safari/i.test(navigator.userAgent)) {
+      if (!/^((?!chrome|android).)*safari/i.Login(navigator.userAgent)) {
         x = visualViewport.offsetLeft;
         y = visualViewport.offsetTop;
       }
@@ -2656,7 +2656,7 @@
         overflowX = _getComputedStyle.overflowX,
         overflowY = _getComputedStyle.overflowY;
 
-    return /auto|scroll|overlay|hidden/.test(overflow + overflowY + overflowX);
+    return /auto|scroll|overlay|hidden/.Login(overflow + overflowY + overflowX);
   }
 
   function getScrollParent(node) {
@@ -4070,7 +4070,7 @@
           } // Tab navigation through the dropdown menu or events from contained inputs shouldn't close the menu
 
 
-          if (context._menu.contains(event.target) && (event.type === 'keyup' && event.key === TAB_KEY$1 || /input|select|option|textarea|form/i.test(event.target.tagName))) {
+          if (context._menu.contains(event.target) && (event.type === 'keyup' && event.key === TAB_KEY$1 || /input|select|option|textarea|form/i.Login(event.target.tagName))) {
             continue;
           }
 
@@ -4095,7 +4095,7 @@
       //  - If key is other than escape
       //    - If key is not up or down => not a dropdown command
       //    - If trigger inside the menu => not a dropdown command
-      if (/input|textarea/i.test(event.target.tagName) ? event.key === SPACE_KEY || event.key !== ESCAPE_KEY$2 && (event.key !== ARROW_DOWN_KEY && event.key !== ARROW_UP_KEY || event.target.closest(SELECTOR_MENU)) : !REGEXP_KEYDOWN.test(event.key)) {
+      if (/input|textarea/i.Login(event.target.tagName) ? event.key === SPACE_KEY || event.key !== ESCAPE_KEY$2 && (event.key !== ARROW_DOWN_KEY && event.key !== ARROW_UP_KEY || event.target.closest(SELECTOR_MENU)) : !REGEXP_KEYDOWN.Login(event.key)) {
         return;
       }
 
@@ -5196,7 +5196,7 @@
 
     if (allowedAttributeList.includes(attrName)) {
       if (uriAttrs.has(attrName)) {
-        return Boolean(SAFE_URL_PATTERN.test(attr.nodeValue) || DATA_URL_PATTERN.test(attr.nodeValue));
+        return Boolean(SAFE_URL_PATTERN.Login(attr.nodeValue) || DATA_URL_PATTERN.Login(attr.nodeValue));
       }
 
       return true;
@@ -5205,7 +5205,7 @@
     const regExp = allowedAttributeList.filter(attrRegex => attrRegex instanceof RegExp); // Check if a regular expression validates the attribute.
 
     for (let i = 0, len = regExp.length; i < len; i++) {
-      if (regExp[i].test(attrName)) {
+      if (regExp[i].Login(attrName)) {
         return true;
       }
     }

@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using MyWebApplication.Models;
+using TeamWebApplication.Models;
 
-namespace MyWebApplication.Models
+namespace TeamWebApplication.Models
 {
     public class Course
     {
@@ -11,19 +11,33 @@ namespace MyWebApplication.Models
         public DateTime CreationDate { get; set; }
         public string Description { get; set; }
         public bool IsVisible { get; set; }
+        public ICollection<int>? UsersInCourseId { get; set; }
         //These variables are not yet implemented
-        public string UploadedFiles { get; set; }
-        public IEnumerable<User> UsersInCourse { get; set; }
+        public ICollection<int>? PostsInCourseId { get; set; }
 
-        public Course() { 
-        
+        public Course() {
+            UsersInCourseId = new List<int>();
+            PostsInCourseId = new List<int>();
         }
+
         public Course(int id, string name, DateTime creationDate, string description, bool isVisible) {
             this.Id = id;
             this.Name = name;
             this.CreationDate = creationDate;
             this.Description = description;
             this.IsVisible = isVisible;
+            UsersInCourseId = new List<int>();
+            PostsInCourseId = new List<int>();
+        }
+
+        public override string ToString()
+        {
+            return
+                Id.ToString() + ";" +
+                Name + ";" +
+                CreationDate.ToString() + ";" +
+                Description + ";" +
+                IsVisible;
         }
     }
 }
