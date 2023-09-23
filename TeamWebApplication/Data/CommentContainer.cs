@@ -8,10 +8,7 @@ namespace TeamWebApplication.Data
         void FetchComments();
         void PrintComments();
         void WriteComments();
-<<<<<<< HEAD
         void CreateComment(Comment comment, int currentCourseId, int loggedInUserId, IUserContainer _userContainer);
-=======
->>>>>>> Main
         ICollection<Comment> CommentList { get; }
     }
 
@@ -49,30 +46,26 @@ namespace TeamWebApplication.Data
                 }
             }
         }
-<<<<<<< HEAD
         public void CreateComment(Comment comment, int currentCourseId, int loggedInUserId, IUserContainer _userContainer)
         {
             comment.CommentId = commentIdCounter;
             commentIdCounter++;
             comment.CourseId = currentCourseId;
-=======
+        }
         public int CreateComment(Comment comment, int loggedInUserId, ICourseContainer _courseContainer, IUserContainer _userContainer)
         {
             comment.CommentId = commentIdCounter;
             commentIdCounter++;
             comment.CourseId = _courseContainer.currentCourseId;
->>>>>>> Main
             var user = _userContainer.userList.SingleOrDefault(user => user.UserId == loggedInUserId);
             comment.UsersNameThatCommented = user.Name;
             comment.UsersSurnameThatCommented = user.Surname;
             comment.CommentCreationTime = DateTime.Now;
             CommentList.Add(comment);
             WriteComments();
-<<<<<<< HEAD
-=======
             return comment.CommentId;
->>>>>>> Main
         }
+
         public void PrintComments()
         {
             foreach (Comment comment in CommentList)

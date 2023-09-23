@@ -34,13 +34,13 @@ namespace TeamWebApplication.Controllers
             return View();
         }
 
-        //[HttpPost]
-        //public IActionResult Create(Course course)
-        //{
-        //    int createdCourseId = _courseContainer.CreateCourse(course, _userContainer.loggedInUserId);
-        //    _userContainer.AddRelation(_userContainer.loggedInUserId, createdCourseId);
-        //    _relationContainer.AddRelationData(createdCourseId, _userContainer.loggedInUserId);
-        //    return RedirectToAction("Index");
-        //}
+        [HttpPost]
+        public IActionResult Create(Course course)
+        {
+            int createdCourseId = _courseContainer.CreateCourse(course, _userContainer.loggedInUserId);
+            _userContainer.AddRelation(_userContainer.loggedInUserId, createdCourseId);
+            _relationContainer.AddRelationData(createdCourseId, _userContainer.loggedInUserId);
+            return RedirectToAction("Index");
+        }
     }
 }

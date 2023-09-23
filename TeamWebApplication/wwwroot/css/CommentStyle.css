@@ -16,11 +16,8 @@ body {
 }
 
 /* Comment section styles */
-<<<<<<< HEAD
-.comment-container {
-=======
+.comment-container,
 .container {
->>>>>>> Main
     max-width: 800px;
     margin: 0 auto;
     padding: 20px;
@@ -93,11 +90,7 @@ textarea {
     font-size: 18px;
     border-radius: 5px;
     cursor: pointer;
-<<<<<<< HEAD
     border: none;
-=======
-    border: none; /* Remove the border */
->>>>>>> Main
     box-shadow: 0 0 10px var(--primary);
     transition: background-color 0.3s; /* Add a transition effect for hover */
 }
@@ -116,11 +109,7 @@ textarea {
 .comments-label {
     font-size: 24px;
     color: var(--primary);
-<<<<<<< HEAD
-    margin: 0;
-=======
     margin: 0; /* Remove default margin */
->>>>>>> Main
 }
 
 .add-comment-button {
