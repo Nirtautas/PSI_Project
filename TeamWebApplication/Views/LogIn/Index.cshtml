@@ -1,0 +1,40 @@
+﻿@model TeamWebApplication.Models.LoginDetails
+@{
+	ViewData["Title"] = "Log in";
+}
+
+<link rel="stylesheet" href="~/css/LogInStyle.css" asp-append-version="true" />
+<body>
+	<div class="ribbon">
+		<a class="Name">Mudli</a>
+	</div>
+	<div class="form-align">
+		<div class="registration-form">
+			<div class="welcome-outline">
+				<h2>Welcome back!</h2>
+			</div>
+			<div class="form-container">
+				<form method="post" asp-action="Login">
+					<div class="form-group">
+						<label for="Input.ID">ID:</label>
+						<input type="text" id="Input.ID" name="UserId" value="@Model.UserId" class="form-control" required />
+					</div>
+					<div class="form-group">
+						<label for="Input.Password">Password:</label>
+						<input type="password" id="Input.Password" name="Password" value="@Model.Password" class="form-control" required />
+					</div>
+					<div class="forgot-password-link-div">
+						<a href="#" class="forgot-password-link">Forgot password?</a>
+					</div>
+					<button type="submit" class="btn-primary">Sign in</button>
+				</form>
+				<div class="text-align-center">
+					<a>Don't have an account? </a>
+					<a class="registration-link" asp-action="Index" asp-controller="Registration">
+						<b>Register here...</b>
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
