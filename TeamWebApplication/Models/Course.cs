@@ -28,7 +28,7 @@ namespace TeamWebApplication.Models
             this.CreationDate = creationDate;
             this.Description = description;
             this.IsVisible = isVisible;
-            this.IsPublic = IsPublic;
+            this.IsPublic = isPublic;
             UsersInCourseId = new List<int>();
             PostsInCourseId = new List<int>();
         }
