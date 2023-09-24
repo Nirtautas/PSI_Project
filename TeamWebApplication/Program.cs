@@ -36,7 +36,7 @@ app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllerRoute(
         name: "CourseEnvironment",
-        pattern: "CourseEnvironment/{course.Id}",
+        pattern: "CourseEnvironment/{courseId}",
         defaults: new { controller = "CourseEnvironment", action = "Index" }
     );
 
