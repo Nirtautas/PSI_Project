@@ -33,7 +33,8 @@ namespace TeamWebApplication.Data
                         splitString[1],                                                                           //name
                         DateTime.ParseExact(splitString[2], "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture), //creationDate
                         splitString[3],                                                                           //description
-                        Boolean.Parse(splitString[4])                                                             //isVisible
+                        Boolean.Parse(splitString[4]),                                                            //isVisible
+                        Boolean.Parse(splitString[5])                                                             //isPublic
                     );
                     foreach (Relation relation in relationContainer.relationData)
                     {
