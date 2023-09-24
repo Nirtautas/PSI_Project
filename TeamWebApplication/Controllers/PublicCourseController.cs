@@ -22,5 +22,15 @@ namespace TeamWebApplication.Controllers
             ).ToList();
             return View(publicCourses);
         }
+
+        public IActionResult TeacherIndex()
+        {
+            IEnumerable<Course> publicCourses = (
+                from course in _courseContainer.courseList
+                where course.IsPublic == true
+                select course
+            ).ToList();
+            return View(publicCourses);
+        }
     }
 }

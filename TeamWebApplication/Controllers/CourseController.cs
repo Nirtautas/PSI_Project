@@ -29,6 +29,18 @@ namespace TeamWebApplication.Controllers
             return View(coursesTaken);
         }
 
+        public IActionResult TeacherIndex()
+        {
+            IEnumerable<Course> coursesTaken = (
+                from user in _userContainer.userList
+                where user.UserId == _userContainer.loggedInUserId
+                from courseId in user.CoursesUserTakesId
+                join course in _courseContainer.courseList on courseId equals course.Id
+                select course
+            ).ToList();
+            return View(coursesTaken);
+        }
+
         public IActionResult Create()
         {
             Course course = new Course();
@@ -42,7 +54,7 @@ namespace TeamWebApplication.Controllers
             _userContainer.AddRelation(_userContainer.loggedInUserId, createdCourseId);
             _relationContainer.AddRelationData(createdCourseId, _userContainer.loggedInUserId);
             _courseContainer.WriteCourses();
-            return RedirectToAction("Index");
+            return RedirectToAction("TeacherIndex");
         }
 
         public IActionResult Edit(int courseId)
@@ -60,7 +72,7 @@ namespace TeamWebApplication.Controllers
             originalCourse.IsVisible = course.IsVisible;
             originalCourse.Description = course.Description;
             _courseContainer.WriteCourses();
-            return RedirectToAction("Index");
+            return RedirectToAction("TeacherIndex");
         }
     }
 }

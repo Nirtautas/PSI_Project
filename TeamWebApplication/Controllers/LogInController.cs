@@ -33,7 +33,9 @@ namespace TeamWebApplication.Controllers
 			if (user == null)
                 return RedirectToAction("Index", "Login");//user not found}
             _userContainer.loggedInUserId = user.UserId;
-			return RedirectToAction("Index", "Course");//Index - action, Course - controller, user - object (user that signed in)
+            if (user.Role == Role.Student)
+			    return RedirectToAction("Index", "Course");//Index - action, Course - controller, user - object (user that signed in)
+            return RedirectToAction("TeacherIndex", "Course");
         }
     }
 }
