@@ -1,6 +1,6 @@
 10005
 10000;Computer Architecture;2023-09-18 17:27:40;Course for computer architecture;True;False
 10001;Functional Programming;2023-09-18 17:27:40;Course for functional programming;False;False
-10002;Database Systems;2023-09-18 17:27:40;Course for database systems;True;False
+10002;Database Systems;2023-09-18 17:27:40;Course for database systems;False;False
 10003;English C1;2023-09-18 21:23:11;Course for English C1;False;False
 10004;C# Begginer Course;2023-09-18 21:23:11;Course for C# begginers;True;True

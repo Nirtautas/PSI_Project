@@ -31,7 +31,8 @@ namespace TeamWebApplication.Controllers
 
         public IActionResult Create()
         {
-            return View();
+            Course course = new Course();
+            return View(course);
         }
 
         [HttpPost]
@@ -53,10 +54,10 @@ namespace TeamWebApplication.Controllers
         [HttpPost]
         public IActionResult Edit(Course course)
         {
-            System.Diagnostics.Debug.WriteLine(course.Id);
             Course originalCourse = _courseContainer.courseList.SingleOrDefault(originalCourse => originalCourse.Id == course.Id);
             originalCourse.Name = course.Name;
             //So we ask to select faculty, but we do not store it in the course model???
+            originalCourse.IsVisible = course.IsVisible;
             originalCourse.Description = course.Description;
             _courseContainer.WriteCourses();
             return RedirectToAction("Index");

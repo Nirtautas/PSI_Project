@@ -47,6 +47,14 @@
             <label for="Description">Course description:</label>
             <textarea id="Description" name="Description" asp-for="Description" class="form-control"></textarea>
             <span class="text-danger"></span>
+
+            <div>
+                <label for="Visibility" class="radio-label">
+                    Is course visible?
+                    <input type="checkbox" id="Visibility" asp-for="IsVisible"/>
+                </label>
+            </div>
+            <span class="text-danger"></span>
         </div>
 
         <button type="submit" class="btn-primary">Create course</button>
