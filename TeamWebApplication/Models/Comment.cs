@@ -39,7 +39,6 @@ namespace TeamWebApplication.Models
                 UsersNameThatCommented + ";" +
                 UsersSurnameThatCommented + ";" +
                 CommentCreationTime.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture) + ";" +
-                CommentCreationTime.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture) + ";" +
                 UserComment;
         }
     }

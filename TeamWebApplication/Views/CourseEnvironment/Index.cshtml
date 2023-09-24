@@ -32,9 +32,6 @@
 <div class="comment-container">
     <div class="comment-header">
         <h2 class="comments-label">Comments</h2>
-        <div class="add-comment-button">
-            <button id="show-comment-form" class="button">Comment</button>
-        </div>
     </div>
 
     <div class="comment-section">
@@ -49,26 +46,16 @@
             </div>
         }
     </div>
-
-    <div id="comment-form" class="comment-form" style="display: none;">
-        <form asp-action="AddComment" asp-route-courseId="@Model.comment.CourseId" asp-controller="CourseEnvironment" method="post">
-            <div class="form-group">
-                <textarea  name="comment.UserComment" id="@Model.comment.UserComment" rows="3" cols="50" placeholder="Write your comment here"></textarea>
-            </div>
-            <div class="form-group">
-                <button type="submit" class="button">Submit Comment</button>
-            </div>
-        </form>
-    </div>
-
 </div>
 
+<div id="comment-form" class="comment-form" style="display: block;">
+    <form asp-action="AddComment" asp-route-courseId="@Model.comment.CourseId" asp-controller="CourseEnvironment" method="post">
+        <div class="form-group">
+            <div class="textarea-container">
+                <textarea name="comment.UserComment" id="@Model.comment.UserComment" rows="3" cols="50" placeholder="Write your comment here"></textarea>
+                <button type="submit" class="button">Submit</button>
+            </div>
+        </div>
+    </form>
+</div>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    $(document).ready(function () {
-        $("#show-comment-form").click(function (e) {
-            e.preventDefault(); // Prevent the default form submission
-            $("#comment-form").toggle();
-        });
-    });
-</script>
