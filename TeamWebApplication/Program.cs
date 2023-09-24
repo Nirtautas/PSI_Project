@@ -34,11 +34,11 @@ app.UseAuthorization();
 
 app.UseEndpoints(endpoints =>
 {
-//    endpoints.MapControllerRoute(
-//        name: "CourseEnvironment",
-//        pattern: "CourseEnvironment/{courseId}",
-//        defaults: new { controller = "CourseEnvironment", action = "Index" }
-//    );
+    endpoints.MapControllerRoute(
+        name: "CourseEnvironment",
+        pattern: "CourseEnvironment/{course.Id}",
+        defaults: new { controller = "CourseEnvironment", action = "Index" }
+    );
 
     endpoints.MapControllerRoute(
         name: "default",

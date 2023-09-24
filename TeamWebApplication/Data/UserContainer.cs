@@ -4,17 +4,6 @@ using System.Collections.Generic;
 
 namespace TeamWebApplication.Data
 {
-    public interface IUserContainer
-    {
-        void FetchUsers(IRelationContainer relationContainer);
-        void PrintUserList();
-        void WriteUsers();
-        public void AddRelation(int userId, int courseId);
-
-        ICollection<User> userList { get; }
-        int loggedInUserId { get; set; }
-    }
-    
     public class UserContainer : IUserContainer
     {
 		public int loggedInUserId { get; set; } = 0;

@@ -3,17 +3,6 @@ using System.Globalization;
 
 namespace TeamWebApplication.Data
 {
-    public interface ICourseContainer
-    {
-        void FetchCourses(IRelationContainer relationContainer);
-        void PrintCourseList();
-        void WriteCourses();
-        int CreateCourse(Course course, int loggedInUserId);
-        public void PrintRelation();
-        ICollection<Course> courseList { get; }
-        public int currentCourseId { get; set; }
-    }
-
     public sealed class CourseContainer : ICourseContainer
     {
         public int currentCourseId { get; set; } = 0;
