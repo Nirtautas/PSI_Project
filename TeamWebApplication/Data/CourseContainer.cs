@@ -52,7 +52,6 @@ namespace TeamWebApplication.Data
             course.CreationDate = DateTime.Now;
             course.UsersInCourseId.Add(loggedInUserId);
             courseList.Add(course);
-            WriteCourses();
             return course.Id;
         }
 

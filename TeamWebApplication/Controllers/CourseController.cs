@@ -40,6 +40,25 @@ namespace TeamWebApplication.Controllers
             int createdCourseId = _courseContainer.CreateCourse(course, _userContainer.loggedInUserId);
             _userContainer.AddRelation(_userContainer.loggedInUserId, createdCourseId);
             _relationContainer.AddRelationData(createdCourseId, _userContainer.loggedInUserId);
+            _courseContainer.WriteCourses();
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult Edit(int courseId)
+        {
+            Course course = _courseContainer.courseList.SingleOrDefault(course => course.Id == courseId);
+            return View(course);
+        }
+
+        [HttpPost]
+        public IActionResult Edit(Course course)
+        {
+            System.Diagnostics.Debug.WriteLine(course.Id);
+            Course originalCourse = _courseContainer.courseList.SingleOrDefault(originalCourse => originalCourse.Id == course.Id);
+            originalCourse.Name = course.Name;
+            //So we ask to select faculty, but we do not store it in the course model???
+            originalCourse.Description = course.Description;
+            _courseContainer.WriteCourses();
             return RedirectToAction("Index");
         }
     }
