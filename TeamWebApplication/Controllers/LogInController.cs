@@ -31,9 +31,11 @@ namespace TeamWebApplication.Controllers
         {
             var user = _userContainer.userList.SingleOrDefault(user => user.Password == login.Password && user.UserId == login.UserId);
 			if (user == null)
-                return RedirectToAction("Index", "Login"); ;//user not found}
+                return RedirectToAction("Index", "Login");//user not found}
             _userContainer.loggedInUserId = user.UserId;
-			return RedirectToAction("Index", "Course");//Index - action, Course - controller, user - object (user that signed in)
+            if (user.Role == Role.Student)
+			    return RedirectToAction("Index", "Course");//Index - action, Course - controller, user - object (user that signed in)
+            return RedirectToAction("TeacherIndex", "Course");
         }
     }
 }

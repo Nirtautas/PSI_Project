@@ -1,4 +1,4 @@
-@model IEnumerable<Course>
+﻿@model IEnumerable<Course>
 @{
     ViewData["Title"] = "Courses";
 }
@@ -18,10 +18,10 @@
             <a class="text-style">Mudli</a>
         </div>
         <div class="logout-button">
-            <a asp-action="Index" asp-controller="PublicCourse" class="text-style" style="text-decoration: none; color: #ffffff;">Public courses</a>
+            <a asp-action="TeacherIndex" asp-controller="PublicCourse" class="text-style" style="text-decoration: none; color: #ffffff;">Public courses</a>
         </div>
         <div class="logout-button">
-            <a asp-action="Index" asp-controller="Course" class="text-style" style="text-decoration: none; color: #ffffff;">My Courses</a>
+            <a asp-action="TeacherIndex" asp-controller="Course" class="text-style" style="text-decoration: none; color: #ffffff;">My Courses</a>
         </div>
         <div class="logout-button">
             <a asp-action="Index" asp-controller="Home" class="text-style" style="text-decoration: none; color: #ffffff;">Log out</a>
@@ -33,13 +33,16 @@
     <div>
         <div class="course-navigation-array">
             <input placeholder="Search course...">
+            <button class="create-course-button">
+                <a asp-action="Create" asp-controller="Course">Create Course</a>
+            </button>
         </div>
 
         <div class="container">
             <div class="card-group">
-                @foreach(Course course in Model)
+                @foreach (Course course in Model)
                 {
-                    @if (!course.IsPublic && course.IsVisible)
+                    @if (!course.IsPublic)
                     {
                         <a asp-action="Index" asp-controller="CourseEnvironment" asp-route-courseId="@course.Id" style="text-decoration: none; color: #ffffff;">
                             <div class="card">
@@ -54,6 +57,9 @@
                                     <div class="course-description-holder">
                                         <p>@course.Description</p>
                                     </div>
+                                    <div class="course-edit">
+                                        <a asp-action="Edit" asp-controller="Course" asp-route-courseId="@course.Id">Edit</a>
+                                    </div>
                                 </div>
                             </div>
                         </a>
@@ -62,6 +68,6 @@
             </div>
         </div>
     </div>
-        <div class="ribbon"></div>
+    <div class="ribbon"></div>
 </body>
 </html>

@@ -16,6 +16,7 @@
 
     public enum PostType
     {
-        Text
+        Text,
+        Link
     }
 }

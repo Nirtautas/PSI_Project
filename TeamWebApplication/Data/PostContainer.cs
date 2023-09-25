@@ -3,13 +3,6 @@ using TeamWebApplication.Models;
 
 namespace TeamWebApplication.Data
 {
-    public interface IPostContainer
-    {
-        void FetchPosts();
-        void PrintPostList();
-        void WritePosts();
-        ICollection<Post> postList { get; }
-    }
     public class PostContainer : IPostContainer
     {
         private int postIdCounter;
@@ -46,6 +39,18 @@ namespace TeamWebApplication.Data
                                 splitString[6]                                                                            //Text Data
                             );
                             postList.Add(textPost);
+                            break;
+                        case "Link":
+                            LinkPost linkPost = new LinkPost(
+                                Int32.Parse(splitString[0]),                                                              //PostId
+                                Int32.Parse(splitString[1]),                                                              //CourseId
+                                splitString[2],                                                                           //Name
+                                DateTime.ParseExact(splitString[3], "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture), //creationDate
+                                Boolean.Parse(splitString[4]),                                                            //Is Visible?
+                                (PostType)Enum.Parse(typeof(PostType), splitString[5]),                                   //Type
+                                splitString[6]                                                                            //Link Data
+                            );
+                            postList.Add(linkPost);
                             break;
                     }
                 }

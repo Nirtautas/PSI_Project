@@ -19,13 +19,13 @@ namespace TeamWebApplication.Controllers
 
         public IActionResult Index(int courseId)
         {
-            Comment comment1 = new();
             IEnumerable<Post> coursePosts = (
                 from post in _postContainer.postList
                 where post.courseId == courseId
                 select post
             ).ToList();
 
+            Comment comment1 = new();
             IEnumerable<Comment> courseComments = (
                 from comment in _commentContainer.CommentList
                 where comment.CourseId == courseId

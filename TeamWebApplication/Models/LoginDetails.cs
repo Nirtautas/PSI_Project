@@ -2,15 +2,11 @@
 
 namespace TeamWebApplication.Models
 {
-    public class LoginDetails
+    public record LoginDetails
     {
         [Required]
-        public int? UserId { get; set; } = null;
+        public int? UserId { get; init; } = null;
         [Required]
-        public string Password { get; set; }
-        public LoginDetails()
-        {
-
-        }
+        public string Password { get; init; }
     }
 }

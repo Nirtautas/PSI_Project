@@ -3,18 +3,6 @@ using System.Globalization;
 
 namespace TeamWebApplication.Data
 {
-    public interface ICourseContainer
-    {
-        void FetchCourses(IRelationContainer relationContainer);
-        void PrintCourseList();
-        void WriteCourses();
-        int CreateCourse(Course course, int loggedInUserId);
-        public int DeleteCourse(Course courseToRemove);
-        public void PrintRelation();
-        ICollection<Course> courseList { get; }
-        public int currentCourseId { get; set; }
-    }
-
     public sealed class CourseContainer : ICourseContainer
     {
         public int currentCourseId { get; set; } = 0;
@@ -45,7 +33,8 @@ namespace TeamWebApplication.Data
                         splitString[1],                                                                           //name
                         DateTime.ParseExact(splitString[2], "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture), //creationDate
                         splitString[3],                                                                           //description
-                        Boolean.Parse(splitString[4])                                                             //isVisible
+                        Boolean.Parse(splitString[4]),                                                            //isVisible
+                        Boolean.Parse(splitString[5])                                                             //isPublic
                     );
                     foreach (Relation relation in relationContainer.relationData)
                     {
@@ -64,7 +53,6 @@ namespace TeamWebApplication.Data
             course.CreationDate = DateTime.Now;
             course.UsersInCourseId.Add(loggedInUserId);
             courseList.Add(course);
-            WriteCourses();
             return course.Id;
         }
 

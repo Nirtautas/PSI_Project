@@ -26,6 +26,9 @@
         case PostType.Text:
             <p>@post.DataToString()</p>
             break;
+        case PostType.Link:
+            <a href="@post.DataToString() target="_blank"">@post.DataToString()</a>
+            break;
     }
 }
 
