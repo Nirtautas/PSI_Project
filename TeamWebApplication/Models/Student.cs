@@ -30,7 +30,7 @@ namespace TeamWebApplication.Models
             UserId = userId;
             Name = name;
             Surname = surname;
-            BirthDate = birthDate;
+            // BirthDate = birthDate;
             Email = email;
             Password = password;
             Role = role;
@@ -47,7 +47,7 @@ namespace TeamWebApplication.Models
                 UserId.ToString() + ";" +
                 Name + ";" +
                 Surname + ";" +
-                BirthDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture) + ";" +
+                // BirthDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture) + ";" +
                 Email + ";" +
                 Password + ";" +
                 Role.ToString() + ";" +

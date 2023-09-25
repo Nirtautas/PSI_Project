@@ -1,4 +1,4 @@
 20003
-20000;Jonas;Paguzinskas;2002-08-16;j.paguzinskas@mif.stud.vu.lt;qweryty1;Student;MathematicsAndInformatics;ProgramSystems;Bachelor;2
-20001;Armandas;Jarasunas;2003-03-29;a.jarasunas@mif.stud.lt;aludaris17;Student;Physics;QuantumPhysics;Master;1
-20002;Alita;Stuknaite;1986-01-05;a.stuknyte@mif.lekt.lt;metupataikau695;Lecturer;MathematicsAndInformatics;ProgramSystems;Professor
+20000;Jonas;Paguzinskas;j.paguzinskas@mif.stud.vu.lt;qweryty1;Student;MathematicsAndInformatics;ProgramSystems
+20001;Armandas;Jarasunas;a.jarasunas@mif.stud.lt;aludaris17;Student;Physics;QuantumPhysics
+20002;Alita;Stuknaite;a.stuknyte@mif.lekt.lt;metupataikau695;Lecturer;MathematicsAndInformatics;ProgramSystems
