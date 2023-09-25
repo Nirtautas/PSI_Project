@@ -13,7 +13,6 @@ namespace TeamWebApplication.Data
 
         public UserContainer(IRelationContainer relationContainer)
         {
-            Debug.WriteLine("user container");
             userList = new List<User>();
             FetchUsers(relationContainer);
         }
@@ -118,6 +117,12 @@ namespace TeamWebApplication.Data
             user.UserId = userIdCounter;
             userIdCounter++;
             userList.Add(user);
+        }
+
+        public void DeleteRelation(int userId, int courseId)
+        {
+            User user = userList.SingleOrDefault(user => user.UserId == userId);
+            user.CoursesUserTakesId.Remove(courseId);
         }
 
         public void WriteUsers()

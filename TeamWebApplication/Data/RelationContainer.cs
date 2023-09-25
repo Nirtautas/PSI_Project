@@ -45,6 +45,13 @@ namespace TeamWebApplication.Data
             WriteRelationData();
         }
 
+        public void DeleteRelationData(int courseId, int userId)
+        {
+            var relationToRemove = relationData.FirstOrDefault(relation => relation.courseId == courseId && relation.userId == userId);
+            relationData.Remove(relationToRemove);
+            WriteRelationData();
+        }
+
         public void WriteRelationData()
         {
             using (StreamWriter? writer = new StreamWriter("./TextData/UserCourseRelation.txt"))

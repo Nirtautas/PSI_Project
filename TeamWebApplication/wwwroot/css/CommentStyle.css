@@ -16,26 +16,27 @@ body {
 }
 
 /* Comment section styles */
-.comment-container,
-.container {
-    max-width: 800px;
-    margin: 0 auto;
+.comment-container {
+    margin-top: 160px;
+    height: 13.33%;
     padding: 20px;
+    margin-bottom: 60px;
 }
 
 h2 {
+    margin: 10px 120px;
     font-size: 24px;
     color: var(--primary);
 }
 
 .comment {
+    display: flex;
+    flex-direction: column;
     background-color: var(--background);
     border: 2px solid var(--primary);
     border-radius: 10px;
-    margin: 10px 0;
+    margin: 10px 120px;
     padding: 10px;
-    display: flex;
-    flex-direction: column;
     box-shadow: 0 0 10px var(--primary);
 }
 
@@ -43,76 +44,71 @@ h2 {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 10px;
 }
 
 .comment-header-left {
     font-weight: bold;
     color: var(--text);
+    margin-bottom: 7px;
 }
 
 .comment-header-right {
     color: var(--text);
     font-size: 12px;
-}
-
-.comment-header,
-.comment-footer {
-    display: none; /* Hides the header and footer by default */
+    margin-bottom: 10px;
 }
 
 .comment-body {
     color: var(--text);
+    margin-right: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .comment-form {
-    margin-top: 20px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    max-width: none;
+    margin: 0px;
+    background-color: var(--background);
+    padding: 5px;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
 }
 
-.form-group {
-    margin-bottom: 15px;
+.textarea-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 5px;
+    margin-left: 134px;
+    margin-right: 148px;
 }
 
 textarea {
-    width: 100%;
+    flex: 1;
     padding: 10px;
     border: 1px solid var(--text);
     border-radius: 5px;
     background-color: transparent;
     color: var(--text);
     box-shadow: 0 0 5px var(--background);
+    margin-right: 10px;
 }
 
 .button {
+    padding: 10px;
     background-color: var(--primary);
     color: var(--text);
-    padding: 15px 20px; /* Increase padding to make the button bigger */
     font-size: 18px;
     border-radius: 5px;
     cursor: pointer;
     border: none;
     box-shadow: 0 0 10px var(--primary);
-    transition: background-color 0.3s; /* Add a transition effect for hover */
+    transition: background-color 0.3s;
 }
 
     .button:hover {
-        background-color: var(--secondary);
+        background-color: #51314e;
     }
-
-.comment-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
-}
-
-.comments-label {
-    font-size: 24px;
-    color: var(--primary);
-    margin: 0; /* Remove default margin */
-}
-
-.add-comment-button {
-    display: flex;
-    align-items: center;
-}
