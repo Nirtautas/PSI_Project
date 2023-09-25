@@ -3,6 +3,8 @@ using System.Globalization;
 
 namespace TeamWebApplication.Models
 {
+    // THIS FILE IS NOT SUPPOSED TO BE USED.
+    // EVERYTHING GOES THROUGH User.cs
     public class Lecturer : User
     {
         //These variables are fetched from files
