@@ -82,6 +82,12 @@ namespace TeamWebApplication.Data
             user.CoursesUserTakesId.Add(courseId);
         }
 
+        public void DeleteRelation(int userId, int courseId)
+        {
+            User user = userList.SingleOrDefault(user => user.UserId == userId);
+            user.CoursesUserTakesId.Remove(courseId);
+        }
+
         public void WriteUsers()
         {
             using (StreamWriter? writer = new StreamWriter("./TextData/UserData.txt"))

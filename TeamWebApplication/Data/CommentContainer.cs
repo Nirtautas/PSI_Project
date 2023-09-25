@@ -34,7 +34,7 @@ namespace TeamWebApplication.Data
                         splitString[5]    //comment                                                        
                     );
                     CommentList.Add(comment);
-                }
+                }//repository class - kai duombazei
             }
         }
         public void CreateComment(Comment comment, int currentCourseId, int loggedInUserId, IUserContainer _userContainer)
@@ -42,19 +42,18 @@ namespace TeamWebApplication.Data
             comment.CommentId = commentIdCounter;
             commentIdCounter++;
             comment.CourseId = currentCourseId;
-        }
-        public int CreateComment(Comment comment, int loggedInUserId, ICourseContainer _courseContainer, IUserContainer _userContainer)
-        {
-            comment.CommentId = commentIdCounter;
-            commentIdCounter++;
-            comment.CourseId = _courseContainer.currentCourseId;
             var user = _userContainer.userList.SingleOrDefault(user => user.UserId == loggedInUserId);
             comment.UsersNameThatCommented = user.Name;
             comment.UsersSurnameThatCommented = user.Surname;
             comment.CommentCreationTime = DateTime.Now;
             CommentList.Add(comment);
             WriteComments();
-            return comment.CommentId;
+        }
+
+        public void DeleteComment(Comment comment)
+        {
+            CommentList.Remove(comment);
+            WriteComments();
         }
 
         public void PrintComments()
