@@ -1,6 +1,6 @@
-@model IEnumerable<Course>
+﻿@model IEnumerable<Course>
 @{
-    ViewData["Title"] = "Courses";
+    ViewData["Title"] = "Public Courses";
 }
 
 <!DOCTYPE html>
@@ -37,31 +37,28 @@
 
         <div class="container">
             <div class="card-group">
-                @foreach(Course course in Model)
+                @foreach (Course course in Model)
                 {
-                    @if (!course.IsPublic && course.IsVisible)
-                    {
-                        <a asp-action="Index" asp-controller="CourseEnvironment" asp-route-courseId="@course.Id" style="text-decoration: none; color: #ffffff;">
-                            <div class="card">
-                                <div class="card-image">
-                                    <img src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8d3JpdGluZyUyMGElMjBib29rfGVufDB8fDB8fHww&w=1000&q=80">
+                    <a asp-action="Index" asp-controller="CourseEnvironment" asp-route-courseId="@course.Id" style="text-decoration: none; color: #ffffff;">
+                        <div class="card">
+                            <div class="card-image">
+                                <img src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8d3JpdGluZyUyMGElMjBib29rfGVufDB8fDB8fHww&w=1000&q=80">
+                            </div>
+                            <div class="invisible-box"></div>
+                            <div class="card-body">
+                                <div class="course-title-holder">
+                                    <h3>@course.Name</h3>
                                 </div>
-                                <div class="invisible-box"></div>
-                                <div class="card-body">
-                                    <div class="course-title-holder">
-                                        <h3>@course.Name</h3>
-                                    </div>
-                                    <div class="course-description-holder">
-                                        <p>@course.Description</p>
-                                    </div>
+                                <div class="course-description-holder">
+                                    <p>@course.Description</p>
                                 </div>
                             </div>
-                        </a>
-                    }
+                        </div>
+                    </a>
                 }
             </div>
         </div>
     </div>
-        <div class="ribbon"></div>
+    <div class="ribbon"></div>
 </body>
 </html>

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Security.Policy;
 using TeamWebApplication.Models;
 
 namespace TeamWebApplication.Models
@@ -11,6 +12,7 @@ namespace TeamWebApplication.Models
         public DateTime CreationDate { get; set; }
         public string Description { get; set; }
         public bool IsVisible { get; set; }
+        public bool IsPublic { get; set; }
         public ICollection<int>? UsersInCourseId { get; set; }
         //These variables are not yet implemented
         public ICollection<int>? PostsInCourseId { get; set; }
@@ -20,12 +22,13 @@ namespace TeamWebApplication.Models
             PostsInCourseId = new List<int>();
         }
 
-        public Course(int id, string name, DateTime creationDate, string description, bool isVisible) {
+        public Course(int id, string name, DateTime creationDate, string description, bool isVisible, bool isPublic) {
             this.Id = id;
             this.Name = name;
             this.CreationDate = creationDate;
             this.Description = description;
             this.IsVisible = isVisible;
+            this.IsPublic = isPublic;
             UsersInCourseId = new List<int>();
             PostsInCourseId = new List<int>();
         }
@@ -37,7 +40,8 @@ namespace TeamWebApplication.Models
                 Name + ";" +
                 CreationDate.ToString() + ";" +
                 Description + ";" +
-                IsVisible;
+                IsVisible + ";" +
+                IsPublic;
         }
     }
 }
