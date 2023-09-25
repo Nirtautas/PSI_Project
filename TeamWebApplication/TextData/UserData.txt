@@ -1,4 +1,6 @@
-20003
+20005
 20000;Jonas;Paguzinskas;j.paguzinskas@mif.stud.vu.lt;qweryty1;Student;MathematicsAndInformatics;ProgramSystems
 20001;Armandas;Jarasunas;a.jarasunas@mif.stud.lt;aludaris17;Student;Physics;QuantumPhysics
 20002;Alita;Stuknaite;a.stuknyte@mif.lekt.lt;metupataikau695;Lecturer;MathematicsAndInformatics;ProgramSystems
+20003;jonas;Jonaitiss;jonas.jietas@mail.com;password1;Lecturer;MathematicsAndInformatics;Chemistry
+20004;Alantė;Ėlina;almante@gmail.com;password;Student;Physics;Chemistry

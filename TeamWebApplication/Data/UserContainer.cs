@@ -39,6 +39,11 @@ namespace TeamWebApplication.Data
                         (Faculty)Enum.Parse(typeof(Faculty), splitString[6]),                            //Faculty
                         (Specialization)Enum.Parse(typeof(Specialization), splitString[7])               //Specialization
                         );
+                    foreach (Relation relation in relationContainer.relationData)
+                    {
+                        if (Int32.Parse(splitString[0]) == relation.userId)
+                            user.CoursesUserTakesId.Add(relation.courseId);
+                    }
                     userList.Add(user);
                 }
             }

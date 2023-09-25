@@ -21,7 +21,7 @@ namespace TeamWebApplication.Models
 
         public User()
         {
-
+            CoursesUserTakesId = new List<int>();
         }
 
         public User(int id, string name, string surname, string email, string password, Role role, Faculty faculty, Specialization specialization)
@@ -34,6 +34,7 @@ namespace TeamWebApplication.Models
             this.Role = role;
             this.Faculty = faculty;
             this.Specialization = specialization;
+            CoursesUserTakesId = new List<int>();
         }
 
         public override string ToString()
