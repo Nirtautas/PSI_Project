@@ -9,6 +9,7 @@ namespace TeamWebApplication.Data
         void PrintComments();
         void WriteComments();
         void CreateComment(Comment comment, int currentCourseId, int loggedInUserId, IUserContainer _userContainer);
+        void DeleteComment(Comment comment);
         ICollection<Comment> CommentList { get; }
     }//atskirai
 
@@ -58,6 +59,13 @@ namespace TeamWebApplication.Data
             CommentList.Add(comment);
             WriteComments();
         }
+
+        public void DeleteComment(Comment comment)
+        {
+            CommentList.Remove(comment);
+            WriteComments();
+        }
+
         public void PrintComments()
         {
             foreach (Comment comment in CommentList)

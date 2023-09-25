@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/CoursesStyle.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/CommentStyle.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/DeleteButtonStyle.css" asp-append-version="true" />
 </head>
 
 <div class="ribbon">
@@ -42,7 +43,13 @@
                     <div class="comment-header-left">@comment.UsersNameThatCommented</div>
                     <div class="comment-header-right">@comment.CommentCreationTime.ToString("yyyy-MM-dd HH:mm:ss")</div>
                 </div>
-                <div class="comment-body">@comment.UserComment</div>
+
+                <div class="comment-body">
+                    @comment.UserComment
+                    <button asp-action="DeleteComment" asp-route-courseId="@Model.comment.CourseId" asp-controller="CourseEnvironment" method="post" class="delete-button">
+                        <img class="delete-button" src="https://static.vecteezy.com/system/resources/previews/009/921/243/large_2x/trash-glyph-round-corner-free-vector.jpg" alt="Image" />
+                    </button>
+                </div>
             </div>
         }
     </div>
@@ -52,7 +59,7 @@
     <form asp-action="AddComment" asp-route-courseId="@Model.comment.CourseId" asp-controller="CourseEnvironment" method="post">
         <div class="form-group">
             <div class="textarea-container">
-                <textarea name="comment.UserComment" id="@Model.comment.UserComment" rows="3" cols="50" placeholder="Write your comment here"></textarea>
+                <textarea name="comment.UserComment" id="@Model.comment.UserComment" rows="3" cols="50" placeholder="Write your comment here" required></textarea>
                 <button type="submit" class="button">Submit</button>
             </div>
         </div>

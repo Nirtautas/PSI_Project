@@ -7,6 +7,7 @@ namespace TeamWebApplication.Data
         void PrintRelationData();
         void WriteRelationData();
         public void AddRelationData(int courseId, int userId);
+        public void DeleteRelationData(int courseId, int userId);
         ICollection<Relation> relationData { get; }
     }
 
@@ -51,6 +52,13 @@ namespace TeamWebApplication.Data
         public void AddRelationData(int courseId, int userId)
         {
             relationData.Add(new Relation(courseId, userId));
+            WriteRelationData();
+        }
+
+        public void DeleteRelationData(int courseId, int userId)
+        {
+            var relationToRemove = relationData.FirstOrDefault(relation => relation.courseId == courseId && relation.userId == userId);
+            relationData.Remove(relationToRemove);
             WriteRelationData();
         }
 

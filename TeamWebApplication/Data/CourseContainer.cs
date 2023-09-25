@@ -9,6 +9,7 @@ namespace TeamWebApplication.Data
         void PrintCourseList();
         void WriteCourses();
         int CreateCourse(Course course, int loggedInUserId);
+        public int DeleteCourse(Course courseToRemove);
         public void PrintRelation();
         ICollection<Course> courseList { get; }
         public int currentCourseId { get; set; }
@@ -90,6 +91,22 @@ namespace TeamWebApplication.Data
                 foreach (var relation in course.UsersInCourseId)
                     System.Diagnostics.Debug.WriteLine(relation);
             }
+        }
+        public int DeleteCourse(Course courseToRemove)
+        {
+                courseList.Remove(courseToRemove);
+                //courseToRemove.Course();
+                //foreach (var userId in courseToRemove.UsersInCourseId.ToList())
+                //{
+                //    var relationToRemove = relationContainer.relationData.FirstOrDefault(relation => relation.courseId == Id && relation.userId == userId);
+
+                //    if (relationToRemove != null)
+                //    {
+                //        relationContainer.relationData.Remove(relationToRemove);
+                //    }
+                //}
+                WriteCourses(); 
+            return courseToRemove.Id;
         }
     }
 }

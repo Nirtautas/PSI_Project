@@ -30,14 +30,13 @@ h2 {
 }
 
 .comment {
-    height: 33.33%;
+    display: flex;
+    flex-direction: column;
     background-color: var(--background);
     border: 2px solid var(--primary);
     border-radius: 10px;
     margin: 10px 120px;
     padding: 10px;
-    display: flex;
-    flex-direction: column;
     box-shadow: 0 0 10px var(--primary);
 }
 
@@ -45,21 +44,26 @@ h2 {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 10px;
 }
 
 .comment-header-left {
     font-weight: bold;
     color: var(--text);
+    margin-bottom: 7px;
 }
 
 .comment-header-right {
     color: var(--text);
     font-size: 12px;
+    margin-bottom: 10px;
 }
 
 .comment-body {
     color: var(--text);
+    margin-right: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .comment-form {
@@ -77,9 +81,9 @@ h2 {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin: 5px; 
-    margin-left:134px;
-    margin-right:148px;
+    margin: 5px;
+    margin-left: 134px;
+    margin-right: 148px;
 }
 
 textarea {
@@ -104,3 +108,7 @@ textarea {
     box-shadow: 0 0 10px var(--primary);
     transition: background-color 0.3s;
 }
+
+    .button:hover {
+        background-color: #51314e;
+    }

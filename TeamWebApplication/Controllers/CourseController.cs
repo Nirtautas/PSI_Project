@@ -42,5 +42,19 @@ namespace TeamWebApplication.Controllers
             _relationContainer.AddRelationData(createdCourseId, _userContainer.loggedInUserId);
             return RedirectToAction("Index");
         }
+
+        public IActionResult Delete()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Delete(Course course)
+        {
+            int deletedCourseId = _courseContainer.DeleteCourse(course);
+            _userContainer.DeleteRelation(_userContainer.loggedInUserId, deletedCourseId);
+            _relationContainer.DeleteRelationData(deletedCourseId, _userContainer.loggedInUserId);
+            return RedirectToAction("Index");
+        }
     }
 }

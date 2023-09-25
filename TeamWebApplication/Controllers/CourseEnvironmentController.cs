@@ -19,7 +19,6 @@ namespace TeamWebApplication.Controllers
 
         public IActionResult Index(int courseId)
         {
-            //_courseContainer.currentCourseId = courseId;
             Comment comment1 = new();
             IEnumerable<Post> coursePosts = (
                 from post in _postContainer.postList
@@ -47,8 +46,17 @@ namespace TeamWebApplication.Controllers
         [HttpPost]
         public IActionResult AddComment(int courseId,Comment comment)
         {
+            Console.WriteLine("oką");
             _commentContainer.CreateComment(comment,courseId, _userContainer.loggedInUserId, _userContainer);
 
+            return RedirectToAction("Index", new { courseId });
+        }
+
+        [HttpPost]
+        public IActionResult DeleteComment(int courseId, Comment comment)
+        {
+            Console.WriteLine("ok");
+            _commentContainer.DeleteComment(comment);
             return RedirectToAction("Index", new { courseId });
         }
     }
