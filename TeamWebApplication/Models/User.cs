@@ -3,20 +3,54 @@ using TeamWebApplication.Models;
 
 namespace TeamWebApplication.Models
 {
-    public abstract class User
+    public class User
     {
         //These variables are fetched from files
         public int UserId { get; set; }
         public string Name { get; set; }
         public string Surname { get; set; }
-        public DateTime BirthDate { get; set; }
+
+        // BirthDate not implemented yet in the frontend
+        // public string BirthDate { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
         public Role Role { get; set; }
         public Faculty Faculty { get; set; }
         public Specialization Specialization { get; set; }
         public ICollection<int>? CoursesUserTakesId { get; set; }
+
+        public User()
+        {
+            CoursesUserTakesId = new List<int>();
+        }
+
+        public User(int id, string name, string surname, string email, string password, Role role, Faculty faculty, Specialization specialization)
+        {
+            this.UserId = id;
+            this.Name = name;
+            this.Surname = surname;
+            this.Email = email;
+            this.Password = password;
+            this.Role = role;
+            this.Faculty = faculty;
+            this.Specialization = specialization;
+            CoursesUserTakesId = new List<int>();
+        }
+
+        public override string ToString()
+        {
+            return
+                UserId.ToString() + ";" +
+                Name + ";" +
+                Surname + ";" +
+                Email + ";" +
+                Password + ";" +
+                Role.ToString() + ";" +
+                Faculty.ToString() + ";" +
+                Specialization.ToString();
+        }
     }
+
 
     public enum Role
     {

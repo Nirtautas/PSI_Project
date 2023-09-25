@@ -8,6 +8,8 @@ namespace TeamWebApplication.Data
         void PrintUserList();
         void WriteUsers();
         public void AddRelation(int userId, int courseId);
+        public void DeleteRelation (int userId, int courseId);
+        public void CreateUser(User user);
 
         ICollection<User> userList { get; }
         int loggedInUserId { get; set; }

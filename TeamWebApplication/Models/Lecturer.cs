@@ -3,6 +3,8 @@ using System.Globalization;
 
 namespace TeamWebApplication.Models
 {
+    // THIS FILE IS NOT SUPPOSED TO BE USED.
+    // EVERYTHING GOES THROUGH User.cs
     public class Lecturer : User
     {
         //These variables are fetched from files
@@ -26,7 +28,7 @@ namespace TeamWebApplication.Models
             UserId = userId;
             Name = name;
             Surname = surname;
-            BirthDate = birthDate;
+            // BirthDate = birthDate;
             Email = email;
             Password = password;
             Role = role;
@@ -42,7 +44,7 @@ namespace TeamWebApplication.Models
                 UserId.ToString() + ";" +
                 Name + ";" +
                 Surname + ";" +
-                BirthDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture) + ";" +
+                // BirthDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture) + ";" +
                 Email + ";" +
                 Password + ";" +
                 Role.ToString() + ";" +
