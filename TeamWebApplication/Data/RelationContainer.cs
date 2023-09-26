@@ -1,25 +1,13 @@
 ﻿using TeamWebApplication.Models;
 namespace TeamWebApplication.Data
 {
-    public struct Relation
-    {
-        public int courseId;
-        public int userId;
-
-        public Relation(int courseId, int userId)
-        {
-            this.courseId = courseId;
-            this.userId = userId;
-        }
-    }
-
     public class RelationContainer : IRelationContainer
     {
-        public ICollection<Relation> relationData { get; }
+        public ICollection<Relation<int>> relationData { get; }
 
         public RelationContainer()
         {
-            relationData = new List<Relation>();
+            relationData = new List<Relation<int>>();
             FetchRelationData();
         }
 
@@ -30,27 +18,26 @@ namespace TeamWebApplication.Data
 
             using (StreamReader? reader = new StreamReader("./TextData/UserCourseRelation.txt"))
             {
-                //Could use format without ';' but then data would be hard to read
                 while ((readString = reader.ReadLine()) != null)
                 {
                     splitString = readString.Split(';');
-                    relationData.Add(new Relation(Int32.Parse(splitString[0]), Int32.Parse(splitString[1])));
+                    relationData.Add(new Relation<int>(Int32.Parse(splitString[0]), Int32.Parse(splitString[1]))); //Course, User
                 }
             }
         }
 
         public void AddRelationData(int courseId, int userId)
-        {
-            if (!relationData.Any(item => item.courseId == courseId && item.userId == userId))
+        { 
+            if (!relationData.Any(item => item.value1 == courseId && item.value2 == userId)) //Course, User
             {
-                relationData.Add(new Relation(courseId, userId));
+                relationData.Add(new Relation<int>(courseId, userId));
                 WriteRelationData();
             }
         }
 
         public void DeleteRelationData(int courseId, int userId)
         {
-            var relationToRemove = relationData.FirstOrDefault(relation => relation.courseId == courseId && relation.userId == userId);
+            var relationToRemove = relationData.FirstOrDefault(relation => relation.value1 == courseId && relation.value2 == userId); //Course, User
             relationData.Remove(relationToRemove);
             WriteRelationData();
         }
@@ -60,14 +47,14 @@ namespace TeamWebApplication.Data
             using (StreamWriter? writer = new StreamWriter("./TextData/UserCourseRelation.txt"))
             {
                 foreach (var relation in relationData)
-                    writer.WriteLine(relation.courseId + ";" + relation.userId);
+                    writer.WriteLine(relation.ToString());
             }
         }
 
         public void PrintRelationData()
         {
             foreach (var relation in relationData)
-                System.Diagnostics.Debug.WriteLine(relation.courseId + " ; " + relation.userId);
+                System.Diagnostics.Debug.WriteLine(relation.ToString());
         }
     }
 }

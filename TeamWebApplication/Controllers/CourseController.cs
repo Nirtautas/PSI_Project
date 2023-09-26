@@ -104,12 +104,11 @@ namespace TeamWebApplication.Controllers
                 if (Int32.TryParse(word, out int userId) != false && currentCourse != null)
                 {
                     User? user;
-                    if ((user = _userContainer.GetUser(userId)) != null)
+                    if ((user = _userContainer.GetUser(userId)) != null && userId != _userContainer.loggedInUserId)
                     {
                         _relationContainer.AddRelationData(_courseContainer.currentCourseId, userId);
                         currentCourse.UsersInCourseId.Add(userId);
                         user.CoursesUserTakesId.Add(_courseContainer.currentCourseId);
-                        System.Diagnostics.Debug.WriteLine("Added relation " + userId + " " + _courseContainer.currentCourseId);
                     }
                 }
             }

@@ -36,10 +36,10 @@ namespace TeamWebApplication.Data
                         Boolean.Parse(splitString[4]),                                                            //isVisible
                         Boolean.Parse(splitString[5])                                                             //isPublic
                     );
-                    foreach (Relation relation in relationContainer.relationData)
+                    foreach (Relation<int> relation in relationContainer.relationData)
                     {
-                        if (Int32.Parse(splitString[0]) == relation.courseId)
-                            course.UsersInCourseId.Add(relation.userId);
+                        if (Int32.Parse(splitString[0]) == relation.value1) //Course
+                            course.UsersInCourseId.Add(relation.value2); //User
                     }
                     courseList.Add(course);
                 }
