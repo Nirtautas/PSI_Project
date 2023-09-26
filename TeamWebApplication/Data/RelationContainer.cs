@@ -41,8 +41,11 @@ namespace TeamWebApplication.Data
 
         public void AddRelationData(int courseId, int userId)
         {
-            relationData.Add(new Relation(courseId, userId));
-            WriteRelationData();
+            if (!relationData.Any(item => item.courseId == courseId && item.userId == userId))
+            {
+                relationData.Add(new Relation(courseId, userId));
+                WriteRelationData();
+            }
         }
 
         public void DeleteRelationData(int courseId, int userId)

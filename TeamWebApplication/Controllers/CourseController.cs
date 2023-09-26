@@ -59,14 +59,14 @@ namespace TeamWebApplication.Controllers
 
         public IActionResult Edit(int courseId)
         {
-            Course course = _courseContainer.courseList.SingleOrDefault(course => course.Id == courseId);
+            Course? course = _courseContainer.GetCourse(courseId);
             return View(course);
         }
 
         [HttpPost]
         public IActionResult Edit(Course course)
         {
-            Course originalCourse = _courseContainer.courseList.SingleOrDefault(originalCourse => originalCourse.Id == course.Id);
+            Course? originalCourse = _courseContainer.GetCourse(course.Id);
             originalCourse.Name = course.Name;
             //So we ask to select faculty, but we do not store it in the course model???
             originalCourse.IsVisible = course.IsVisible;
@@ -87,6 +87,33 @@ namespace TeamWebApplication.Controllers
             _userContainer.DeleteRelation(_userContainer.loggedInUserId, deletedCourseId);
             _relationContainer.DeleteRelationData(deletedCourseId, _userContainer.loggedInUserId);
             return RedirectToAction("Index");
+        }
+
+        public IActionResult AddUser(int courseId)
+        {
+            _courseContainer.currentCourseId = courseId;
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult AddUser(String userIdString)
+        {
+            String[] userIdList = userIdString.Split(';');
+            Course? currentCourse = _courseContainer.GetCourse(_courseContainer.currentCourseId);
+            foreach (var word in userIdList) {
+                if (Int32.TryParse(word, out int userId) != false && currentCourse != null)
+                {
+                    User? user;
+                    if ((user = _userContainer.GetUser(userId)) != null)
+                    {
+                        _relationContainer.AddRelationData(_courseContainer.currentCourseId, userId);
+                        currentCourse.UsersInCourseId.Add(userId);
+                        user.CoursesUserTakesId.Add(_courseContainer.currentCourseId);
+                        System.Diagnostics.Debug.WriteLine("Added relation " + userId + " " + _courseContainer.currentCourseId);
+                    }
+                }
+            }
+            return RedirectToAction("TeacherIndex");
         }
     }
 }

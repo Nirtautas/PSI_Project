@@ -47,6 +47,12 @@ app.UseEndpoints(endpoints =>
     );
 
     endpoints.MapControllerRoute(
+        name: "AddUser",
+        pattern: "AddUser/{courseId}",
+        defaults: new { controller = "Course", action = "AddUser" }
+    );
+
+    endpoints.MapControllerRoute(
         name: "default",
         pattern: "{controller=Home}/{action=Index}/{id?}"
     );

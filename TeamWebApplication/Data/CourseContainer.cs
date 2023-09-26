@@ -46,6 +46,12 @@ namespace TeamWebApplication.Data
             }
         }
 
+        public Course? GetCourse(int courseId)
+        {
+            Course? course = courseList.SingleOrDefault(course => course.Id == courseId);
+            return course;
+        }
+
         public int CreateCourse(Course course, int loggedInUserId)
         {
             course.Id = courseIdCounter;
