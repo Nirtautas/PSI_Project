@@ -1,0 +1,34 @@
+﻿@{
+    ViewData["Title"] = "Add User";
+}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Create Course</title>
+    <link rel="stylesheet" href="~/css/CreateCourseStyle.css" asp-append-version="true" />
+</head>
+
+<body>
+
+    <div class="ribbon">
+        <div class="Name">
+            <a>Mudli</a>
+        </div>
+    </div>
+    <form method="post" asp-controller="Course" asp-action="AddUser" class="registration-form">
+        <header class="form-container">
+            <h2>Add Users</h2>
+        </header>
+        <div class="form-info-container">
+            <label for="userIdString">String of user ID's: 20000;20002;20003...</label>
+            <input type="text" id="userIdString" name="userIdString" class="form-control" required />
+            <span class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="btn-primary">Add Users</button>
+        <a asp-action="TeacherIndex" asp-controller="Course" class="text-style" style="text-decoration: none; color: #ffffff;">Back</a>
+    </form>
+</body>
+</html>
