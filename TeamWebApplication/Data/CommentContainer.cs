@@ -27,11 +27,12 @@ namespace TeamWebApplication.Data
                     splitString = readString.Split(';');
                     Comment comment = new Comment(
                         Int32.Parse(splitString[0]),     //commentId                                                         
-                        Int32.Parse(splitString[1]),     //courseId                                                                
-                        splitString[2],                  //user name
-                        splitString[3],                  //user surname
-                        DateTime.ParseExact(splitString[4], "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture), //creation date                                                                         //description
-                        splitString[5]    //comment                                                        
+                        Int32.Parse(splitString[1]),     //courseId
+                        Int32.Parse(splitString[2]),     //userId                                     
+                        splitString[3],                  //user name
+                        splitString[4],                  //user surname
+                        DateTime.ParseExact(splitString[5], "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture), //creation date                                                                         //description
+                        splitString[6]    //comment                                                        
                     );
                     CommentList.Add(comment);
                 }//repository class - kai duombazei
@@ -43,6 +44,7 @@ namespace TeamWebApplication.Data
             commentIdCounter++;
             comment.CourseId = currentCourseId;
             var user = _userContainer.userList.SingleOrDefault(user => user.UserId == loggedInUserId);
+            comment.UserId = user.UserId;
             comment.UsersNameThatCommented = user.Name;
             comment.UsersSurnameThatCommented = user.Surname;
             comment.CommentCreationTime = DateTime.Now;

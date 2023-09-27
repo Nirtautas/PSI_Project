@@ -33,29 +33,43 @@ namespace TeamWebApplication.Controllers
                 select comment
             ).ToList();
             comment1.CourseId = courseId;
+            int loggedInUser = _userContainer.loggedInUserId;
+
             var viewModel = new CourseAndComment
             {
                 PostData = coursePosts,
                 CommentData = courseComments,
-                comment = comment1
+                comment = comment1,
+                LoggedInUser = loggedInUser
             };
             return View(viewModel);
         }
 
 
         [HttpPost]
-        public IActionResult AddComment(int courseId,Comment comment)
+        public IActionResult AddComment(int courseId, Comment comment)
         {
-            Console.WriteLine("oką");
-            _commentContainer.CreateComment(comment,courseId, _userContainer.loggedInUserId, _userContainer);
-
+            _commentContainer.CreateComment(comment, courseId, _userContainer.loggedInUserId, _userContainer);
             return RedirectToAction("Index", new { courseId });
         }
 
         [HttpPost]
-        public IActionResult DeleteComment(int courseId, Comment comment)
+        public IActionResult EditComment(int courseId, int commentId, String userComment)
         {
-            Console.WriteLine("ok");
+            Console.WriteLine(courseId);
+            Console.WriteLine(commentId);
+            Console.WriteLine(userComment);
+            Comment originalComment = _commentContainer.CommentList.SingleOrDefault(comment => comment.CommentId == commentId);
+            originalComment.UserComment = userComment;
+            originalComment.CommentCreationTime = DateTime.Now;
+            _commentContainer.WriteComments();
+            return RedirectToAction("Index", new { courseId });
+        }
+
+        [HttpPost]
+        public IActionResult Delete(int courseId, int commentId)
+        {
+            Comment comment = _commentContainer.CommentList.SingleOrDefault(comment => comment.CommentId == commentId);
             _commentContainer.DeleteComment(comment);
             return RedirectToAction("Index", new { courseId });
         }

@@ -6,6 +6,7 @@ namespace TeamWebApplication.Models
     {
         public int CommentId { get; set; }
         public int CourseId { get; set; }
+        public int UserId { get; set; }
         public string UsersNameThatCommented { get; set; }
         public string UsersSurnameThatCommented { get; set; }
         public string UserComment { get; set; }
@@ -18,6 +19,7 @@ namespace TeamWebApplication.Models
         public Comment(
         int commentId,
         int courseId,
+        int userId,
         string usersNameThatCommented,
         string usersSurnameThatCommented,
         DateTime commentCreationTime,
@@ -25,6 +27,7 @@ namespace TeamWebApplication.Models
         {
             CommentId = commentId;
             CourseId = courseId;
+            UserId = userId;
             UsersNameThatCommented = usersNameThatCommented;
             UsersSurnameThatCommented = usersSurnameThatCommented;
             CommentCreationTime = commentCreationTime;
@@ -36,6 +39,7 @@ namespace TeamWebApplication.Models
             return
                 CommentId.ToString() + ";" +
                 CourseId.ToString() + ";" +
+                UserId.ToString() + ";" +
                 UsersNameThatCommented + ";" +
                 UsersSurnameThatCommented + ";" +
                 CommentCreationTime.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture) + ";" +

@@ -27,7 +27,7 @@
             <p>@post.DataToString()</p>
             break;
         case PostType.Link:
-            <a href="@post.DataToString() target="_blank"">@post.DataToString()</a>
+            <a href="@post.DataToString() target=" _blank"">@post.DataToString()</a>
             break;
     }
 }
@@ -46,12 +46,33 @@
                     <div class="comment-header-left">@comment.UsersNameThatCommented</div>
                     <div class="comment-header-right">@comment.CommentCreationTime.ToString("yyyy-MM-dd HH:mm:ss")</div>
                 </div>
-
                 <div class="comment-body">
+                     <div style="display: block;" id="@comment.CommentId">
                     @comment.UserComment
-                    <button asp-action="DeleteComment" asp-route-courseId="@Model.comment.CourseId" asp-controller="CourseEnvironment" method="post" class="delete-button">
-                        <img class="delete-button" src="https://static.vecteezy.com/system/resources/previews/009/921/243/large_2x/trash-glyph-round-corner-free-vector.jpg" alt="Image" />
-                    </button>
+                    </div>
+                    @if (Model.LoggedInUser == comment.UserId)
+                    {
+                        <button class="delete-button" onclick="toggleTextareaVisibility(@comment.CommentId)"> <img class="delete-button" src="https://th.bing.com/th/id/OIP.4_sgSrCdA_8Jmfp8w9JUjAAAAA?pid=ImgDet&rs=1" alt="Image" /></button>
+                        <div style="display: none;" class="comment-form1" id="@comment.CommentId">
+                            <form method="post" asp-action="EditComment" asp-route-courseId="@Model.comment.CourseId" asp-controller="CourseEnvironment">
+                            <input type="hidden" id="CourseId" name="CourseId" asp-for="@Model.comment.CourseId" value="@Model.comment.CourseId" />
+                            <input type="hidden" id="CommentId" name="CommentId" asp-for="@Model.comment.CommentId" value="@comment.CommentId" />
+                            <textarea name="UserComment" id="UserComment" rows="3" cols="50">@comment.UserComment</textarea>
+                            <button type="submit" class="delete-button">
+                                @*<button type="submit" class="delete-button" onclick="storeScrollPosition(@comment.CommentId)">*@
+                                    <img class="delete-button" src="https://th.bing.com/th/id/OIP.rXCLqHg2p4SkI0mkJfrw6gHaHa?pid=ImgDet&rs=1" alt="Image" />
+                            </button>
+                        </form>
+                        </div>
+
+                            <form method="post" asp-action="Delete" asp-route-courseId="@Model.comment.CourseId" asp-controller="CourseEnvironment">
+                                <input type="hidden" id="CourseId" name="CourseId" asp-for="@Model.comment.CourseId" value="@Model.comment.CourseId" />
+                                <input type="hidden" id="CommentId" name="CommentId" asp-for="@Model.comment.CommentId" value="@comment.CommentId" />
+                                <button type="submit" class="delete-button" onclick="storeScrollPosition(@comment.CommentId)">
+                                    <img class="delete-button" src="https://static.vecteezy.com/system/resources/previews/009/921/243/large_2x/trash-glyph-round-corner-free-vector.jpg" alt="Image" />
+                                </button>
+                            </form>
+                        }
                 </div>
             </div>
         }
@@ -59,13 +80,43 @@
 </div>
 
 <div id="comment-form" class="comment-form" style="display: block;">
-    <form asp-action="AddComment" asp-route-courseId="@Model.comment.CourseId" asp-controller="CourseEnvironment" method="post">
+    <form asp-action="AddComment" asp-controller="CourseEnvironment" method="post">
+        <input type="hidden" id="CourseId" name="CourseId" asp-for="@Model.comment.CourseId" value="@Model.comment.CourseId" />
+        <input type="hidden" id="CommentId" name="CommentId" asp-for="@Model.comment.CommentId" value="@Model.comment.CommentId" />
         <div class="form-group">
             <div class="textarea-container">
-                <textarea name="comment.UserComment" id="@Model.comment.UserComment" rows="3" cols="50" placeholder="Write your comment here" required></textarea>
+                <textarea name="UserComment" id="UserComment" asp-for="@Model.comment.UserComment" rows="3" cols="50" placeholder="Write your comment here" required></textarea>
                 <button type="submit" class="button">Submit</button>
             </div>
         </div>
     </form>
 </div>
+<script>
+    function toggleTextareaVisibility(commentId) {
+        var elements = document.querySelectorAll(`[id="${commentId}"]`); // Update the textarea id
+        console.log(elements)
+        elements.forEach(element => {
+            if (element.style.display === "none") {
+                element.style.display = "block";
+            } else {
+                element.style.display = "none";
+            }
+        }
+        )
+    }
+</script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+@*<script>
+    //after reloading page user should be brought back to the previous place that user scrolled to
+        document.addEventListener('DOMContentLoaded', function () {
+            console.log('DOMContentLoaded event fired.');
+            var scrollPosition = localStorage.getItem('scrollPosition_' + @comment.CommentId); // Use a unique key
+            console.log('Retrieved scroll position:', scrollPosition);
+            if (scrollPosition !== null) {
+                console.log('Restoring scroll position to:', scrollPosition);
+                // Scroll the page to the stored position
+                window.scrollTo(0, scrollPosition);
+            }
+        });
+</script>*@
+
