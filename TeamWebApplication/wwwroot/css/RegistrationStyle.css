@@ -7,11 +7,23 @@
 }
 
 body {
-    background-color: var(--background);
-    font-family: Arial;
+    background-image: url('https://images.unsplash.com/photo-1524334228333-0f6db392f8a1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8ZGFyayUyMHNwYWNlfGVufDB8fDB8fHww&w=1000&q=80');
+    font-family: Arial, sans-serif;
     color: var(--text);
-    margin: 0;
-    padding: 0;
+    background-repeat: no-repeat;
+    background-size: cover;
+    overflow: hidden;
+}
+
+body::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.8);
+    z-index: -1;
 }
 
 .ribbon {
@@ -30,9 +42,9 @@ body {
     transition: background-color 0.5s, color 0.5s;
 }
 
-    .text-style:hover {
-        background-color: #51314e;
-    }
+.text-style:hover {
+    background-color: #51314e;
+}
 
 .mudli {
     font-size: 30px !important;
@@ -68,111 +80,96 @@ body {
     text-decoration: none;
 }
 
-form {
-    background-color: #201f20;
+.registration-form {
+    background-color: var(--background);
     padding: 20px;
-    align-items: center;
-    justify-content: center;
-    margin: 15px auto;
+    padding-bottom: 0;
     border-radius: 10px;
-    width: 40%;
+    width: 30%;
     display: flex;
     flex-direction: column;
+    align-items: center;
 }
 
-    form h2 {
-        color: var(--text);
-        text-align: center;
-        margin-bottom: 10px;
-        margin-top: 10px;
-    }
-
-.form-container {
-    background-color: #0d080c;
-    margin-top: 0;
+.welcome-outline {
+    background-color: var(--primary);
     padding: 10px;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 15px;
     border-radius: 10px;
-    width: 92%;
+    width: 95%;
+    margin-bottom: 15px;
+    border: 2px solid var(--accent);
+    box-shadow: 0 0 10px var(--accent);
+}
+
+.registration-form h2 {
+    margin: 10px;
+    color: var(--text);
+    text-align: center;
+}
+
+.form-align {
     display: flex;
     flex-direction: column;
-    border: 2px solid #714770;
-    box-shadow: 0 0 10px #714770;
+    justify-content: center;
+    align-items: center;
+    height: 90vh;
+}
+
+.form-container {
+    padding: 10px;
+    border-radius: 10px;
+    width: 100%;
 }
 
 /* Form group common styles */
-form .form-group {
-    width: 65%;
-    position: relative;
-}
-
-/* Style the radio input container (remove border and add margin) */
-.radio-buttons {
+.form-container .form-group {
     display: flex;
     align-items: center;
-    margin-top: 7px;
-    width: 55%;
+    margin-bottom: 10px;
 }
 
-/* Style the custom radio input */
-.radio-label {
+.form-container label {
+    flex: 1;
+    font-weight: bold;
     color: var(--text);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    margin-left: 10px;
-    margin-right: 8px; /* Add spacing between labels */
+    margin-right: 10px;
+    text-align: center;
 }
 
-    .radio-label input[type="radio"] {
-        margin-right: 12px;
-    }
+.radio-label input[type="radio"] {
+    margin-right: 12px;
+}
 
-        /* Style the custom radio input when selected */
-        .radio-label input[type="radio"]:checked + .radio-input {
-            background-color: var(--primary);
-            border: none; /* Remove the border */
-        }
+/* Style the custom radio input when selected */
+.radio-label input[type="radio"]:checked + .radio-input {
+    background-color: var(--primary);
+    border: none; /* Remove the border */
+}
 
 /* Form field styles */
-form input[type="text"],
-form input[type="password"],
-form input[type="email"],
-form select,
-form input[type="radio"],
-form select {
+.form-container input[type="text"],
+.form-container input[type="password"],
+.form-container input[type="email"],
+.form-group1{
+    flex: 2;
+    padding: 10px;
     margin-top: 7px;
     margin-bottom: 7px;
-    width: 53%;
-    padding: 10px;
-    justify-content: space-between;
-    align-items: center;
-    border: 1px solid var(--text);
     border-radius: 5px;
     background-color: transparent;
     color: var(--text);
-    box-shadow: 0 0 5px #0d080c;
-    transition: background-color 0.3s, border 0.3s, box-shadow 0.3s;
-}
-
-form label {
-    font-weight: bold;
-    color: var(--text);
-    display: block;
-    width: 57%;
-    margin-top: 7px;
-    margin-bottom: 7px;
+    border: 1px solid var(--accent);
+    box-shadow: 0 0 5px var(--accent);
+    transition: 0.3s;
 }
 
 /* Form field focus styles */
-form input[type="text"]:focus,
-form input[type="password"]:focus,
-form input[type="email"]:focus,
-form select:focus,
-form input[type="radio"]:focus,
-form select:focus {
+.form-container input[type="text"]:focus,
+.form-container input[type="password"]:focus,
+.form-container input[type="email"]:focus,
+.form-container select:focus,
+.form-container input[type="radio"]:focus,
+.form-container select:focus {
     background-color: #714770;
 }
 
@@ -194,62 +191,82 @@ form .form-group.focus-with-glow::after {
 .form-group1 {
     display: flex;
     flex-direction: column;
-    width: 58%;
 }
 
-    .form-group1 label {
-        font-weight: bold;
-        color: var(--text);
-        width: 65%;
-        margin-top: 7px;
-        margin-bottom: 7px;
-    }
+.form-group1 label {
+    font-weight: bold;
+    color: var(--text);
+    border: 1px solid var(--accent);
+    box-shadow: 0 0 5px var(--accent);
+    transition: border-color 0.3s, box-shadow 0.3s;
+    margin-top: 7px;
+    margin-bottom: 7px;
+}
 
-    .form-group1 input[type="text"],
-    .form-group1 input[type="password"],
-    .form-group1 input[type="email"],
-    .form-group1 select,
-    .form-group1 input[type="radio"],
-    .form-group1 select {
-        width: 65%;
-        padding: 10px;
-        margin-top: 7px;
-        margin-bottom: 7px;
-        border: 1px solid var(--text);
-        border-radius: 5px;
-        background-color: transparent;
-        color: var(--text);
-        box-shadow: 0 0 5px #0d080c; /* Adds dark glow effect with the specified color */
-        transition: background-color 0.3s, border 0.3s, box-shadow 0.3s;
-        position: relative;
-    }
+.form-group1 input[type="text"],
+.form-group1 input[type="password"],
+.form-group1 input[type="email"],
+.form-group1 select,
+.form-group1 input[type="radio"],
+.form-group1 select {
+    width: 65%;
+    padding: 10px;
+    margin-top: 7px;
+    margin-bottom: 7px;
+    border: 1px solid var(--text);
+    border-radius: 5px;
+    background-color: transparent;
+    color: var(--text);
+    box-shadow: 0 0 5px #0d080c; /* Adds dark glow effect with the specified color */
+    transition: background-color 0.3s, border 0.3s, box-shadow 0.3s;
+    position: relative;
+}
 
-    .form-group1.focus-with-glow::after {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        border: 2px solid #0d080c;
-        border-radius: 5px;
-        box-shadow: 0 0 5px #0d080c; /* Add a glow effect with the specified shade */
-        pointer-events: none;
-        transition: border-color 0.3s, box-shadow 0.3s;
-    }
+.form-group1.focus-with-glow::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border: 2px solid #0d080c;
+    border-radius: 5px;
+    box-shadow: 0 0 5px #0d080c; /* Add a glow effect with the specified shade */
+    pointer-events: none;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
 
-    .form-group1 input[type="text"]:focus,
-    .form-group1 input[type="password"]:focus,
-    .form-group1 input[type="email"]:focus,
-    .form-group1 select:focus,
-    .form-group1 input[type="radio"]:focus,
-    .form-group1 select:focus {
-        background-color: #714770;
-    }
+.form-group1 input[type="text"]:focus,
+.form-group1 input[type="password"]:focus,
+.form-group1 input[type="email"]:focus,
+.form-group1 select:focus,
+.form-group1 input[type="radio"]:focus,
+.form-group1 select:focus {
+    background-color: #714770;
+}
+
+.radio-buttons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10px;
+    margin-inline: 9%;
+}
+
+/* Style the custom radio input */
+.radio-label {
+    color: var(--text);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 10px;
+    margin-right: 10px;
+}
 
 /* Button styles */
 .btn-primary {
-    background-color: #0d080c;
+    background-color: var(--primary);
     color: #f5eff5;
     padding: 10px;
     font-size: 18px;
@@ -257,40 +274,30 @@ form .form-group.focus-with-glow::after {
     margin-top: 20px;
     margin-bottom: 7px;
     cursor: pointer;
-    width: 65%;
+    width: 100%;
     transition: 0.5s;
-    border: 2px solid #714770;
-    box-shadow: 0 0 10px #714770;
-    text-align: center;
+    border: 2px solid var(--accent);
+    box-shadow: 0 0 10px var(--accent);
 }
 
 /* Button styles */
-form .btn-primary {
-    background-color: #0d080c;
-    color: #f5eff5;
-    padding: 10px;
-    font-size: 18px;
-    border-radius: 5px;
-    margin-top: 20px;
-    margin-bottom: 7px;
-    cursor: pointer;
-    width: 58%;
-    transition: 0.5s;
-    border: 2px solid #714770;
-    box-shadow: 0 0 10px #714770;
+.btn-primary:hover {
+    background-color: #51314e;
 }
-
-    form .btn-primary:hover {
-        background-color: #51314e;
-    }
 
 .login-link {
     color: #714770;
     text-decoration: none;
     font-size: 14px;
     cursor: pointer;
+    margin-top: 10px;
 }
 
-    .login-link:hover {
-        text-decoration: underline;
-    }
+.login-link:hover {
+    text-decoration: underline;
+}
+
+.text-align-center {
+    text-align: center;
+    justify-content: center;
+}
