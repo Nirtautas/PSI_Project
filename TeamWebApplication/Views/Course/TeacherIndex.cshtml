@@ -57,23 +57,16 @@
                                     <div class="course-description-holder">
                                         <p>@course.Description</p>
                                     </div>
-                                    <span class="course-edit">
-                                        <a asp-action="AddUser" asp-controller="Course" asp-route-courseId="@course.Id">Add User</a>
+                                    <button class="showButtons">
+                                        <img src="~/dots.png">
+                                    </button>
+                                    <span class="hidden-buttons">
+                                        <button class="hidden-button" asp-action="AddUser" asp-controller="Course" asp-route-courseId="@course.Id">Add User</button>
+                                        <button class="hidden-button" asp-action="RemoveUser" asp-controller="Course" asp-route-courseId="@course.Id">Remove User</button>
+                                        <button class="hidden-button" asp-action="CheckUsers" asp-controller="Course" asp-route-courseId="@course.Id">Check Users</button>
+                                        <button class="hidden-button" asp-action="Edit" asp-controller="Course" asp-route-courseId="@course.Id">Edit</button>
+                                        <button class="hidden-button" asp-action="Delete" asp-controller="Course" asp-route-courseId="@course.Id">Delete</button>
                                     </span>
-                                    <span class="course-edit">
-                                        <a asp-action="RemoveUser" asp-controller="Course" asp-route-courseId="@course.Id">Remove User</a>
-                                    </span>
-                                    <span class="course-edit">
-                                        <a asp-action="CheckUsers" asp-controller="Course" asp-route-courseId="@course.Id">Check Users</a>
-                                    </span>
-                                    <span class="course-edit">
-                                        <a asp-action="Edit" asp-controller="Course" asp-route-courseId="@course.Id">Edit</a>
-                                    </span>
-                                             <div class="course-delete">
-                                        <a asp-action="Delete" asp-controller="Course" asp-route-courseId="@course.Id">
-                                            <i class="bi bi-trash3">Delete</i>
-                                        </a>
-                                        </div>
                                 </div>
                             </div>
                         </a>
@@ -84,4 +77,19 @@
     </div>
     <div class="ribbon"></div>
 </body>
-</html>
+<script>
+
+    // shows hidden buttons
+    var showButtons = document.querySelectorAll(".showButtons");
+    showButtons.forEach(function (button) {
+        button.addEventListener("click", function (event) {
+            event.preventDefault(); // Prevent the default behavior of the anchor tag
+            var hiddenButtons = button.nextElementSibling;
+            if (hiddenButtons.style.display === "none" || hiddenButtons.style.display === "") {
+                hiddenButtons.style.display = "flex";
+            } else {
+                hiddenButtons.style.display = "none";
+            }
+        });
+    });
+</script>
