@@ -42,6 +42,13 @@ app.UseEndpoints(endpoints =>
     );
 
     endpoints.MapControllerRoute(
+        name: "CourseEnvironmentTeacherIndex",
+        pattern: "CourseEnvironment/TeacherIndex/{courseId}",
+        defaults: new { controller = "CourseEnvironment", action = "TeacherIndex" }
+    );
+
+
+    endpoints.MapControllerRoute(
         name: "CourseEnvironmentAddComment",
         pattern: "CourseEnvironment/AddComment/{courseId}",
         defaults: new { controller = "CourseEnvironment", action = "AddComment" }

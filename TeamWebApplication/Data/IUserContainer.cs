@@ -14,5 +14,6 @@ namespace TeamWebApplication.Data
 
         ICollection<User> userList { get; }
         int loggedInUserId { get; set; }
+        Role? loggedInUserRole { get; set; }
     }
 }
