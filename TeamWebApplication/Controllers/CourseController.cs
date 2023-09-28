@@ -121,5 +121,32 @@ namespace TeamWebApplication.Controllers
             }
             return RedirectToAction("TeacherIndex");
         }
+
+        public IActionResult RemoveUser(int courseId)
+        {
+            _courseContainer.currentCourseId = courseId;
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult RemoveUser(String userIdString)
+        {
+            String[] userIdList = userIdString.Split(';');
+            Course? currentCourse = _courseContainer.GetCourse(_courseContainer.currentCourseId);
+            foreach (var word in userIdList)
+            {
+                if (Int32.TryParse(word, out int userId) != false && currentCourse != null)
+                {
+                    User? user;
+                    if ((user = _userContainer.GetUser(userId)) != null && userId != _userContainer.loggedInUserId)
+                    {
+                        _relationContainer.RemoveRelationData(_courseContainer.currentCourseId, userId);
+                        currentCourse.UsersInCourseId.Remove(userId);
+                        user.CoursesUserTakesId.Remove(_courseContainer.currentCourseId);
+                    }
+                }
+            }
+            return RedirectToAction("TeacherIndex");
+        }
     }
 }

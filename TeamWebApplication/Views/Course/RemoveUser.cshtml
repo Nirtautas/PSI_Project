@@ -1,12 +1,12 @@
 ﻿@{
-    ViewData["Title"] = "Add User";
+    ViewData["Title"] = "Remove User";
 }
 <!DOCTYPE html>
 <html>
 
 <head>
     <meta name="viewport" content="width=device-width" />
-    <title>Add User</title>
+    <title>Remove User</title>
     <link rel="stylesheet" href="~/css/CreateCourseStyle.css" asp-append-version="true" />
 </head>
 
@@ -17,9 +17,9 @@
             <a>Mudli</a>
         </div>
     </div>
-    <form method="post" asp-controller="Course" asp-action="AddUser" class="registration-form">
+    <form method="post" asp-controller="Course" asp-action="RemoveUser" class="registration-form">
         <header class="form-container">
-            <h2>Add Users</h2>
+            <h2>Remove Users</h2>
         </header>
         <div class="form-info-container">
             <label for="userIdString">String of user ID's: 20000;20001;20002...</label>
@@ -27,7 +27,7 @@
             <span class="text-danger"></span>
         </div>
 
-        <button type="submit" class="btn-primary">Add Users</button>
+        <button type="submit" class="btn-primary">Remove Users</button>
         <a asp-action="TeacherIndex" asp-controller="Course" class="text-style" style="text-decoration: none; color: #ffffff;">Back</a>
     </form>
 </body>
