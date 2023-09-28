@@ -148,5 +148,17 @@ namespace TeamWebApplication.Controllers
             }
             return RedirectToAction("TeacherIndex");
         }
+
+        public IActionResult CheckUsers(int courseId)
+        {
+            _courseContainer.currentCourseId = courseId;
+            Course? currentCourse = _courseContainer.GetCourse(_courseContainer.currentCourseId);
+            ICollection<User> userInCourseList = (
+                from user in _userContainer.userList
+                where currentCourse.UsersInCourseId.Contains(user.UserId)
+                select user
+            ).ToList();
+            return View(userInCourseList);
+        }
     }
 }
