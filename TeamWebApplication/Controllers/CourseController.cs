@@ -75,18 +75,25 @@ namespace TeamWebApplication.Controllers
             return RedirectToAction("TeacherIndex");
         }
 
-        public IActionResult Delete()
+        public IActionResult Delete(int courseId)
         {
-            return View();
+            Course course = _courseContainer.courseList.SingleOrDefault(course => course.Id == courseId);
+            return View(course);
         }
 
-        [HttpPost]
-        public IActionResult Delete(Course course)
+        [HttpPost, ActionName("Delete")]
+        public IActionResult DeleteCourse(int courseId)
         {
-            int deletedCourseId = _courseContainer.DeleteCourse(course);
-            _userContainer.DeleteRelation(_userContainer.loggedInUserId, deletedCourseId);
-            _relationContainer.DeleteRelationData(deletedCourseId, _userContainer.loggedInUserId);
-            return RedirectToAction("Index");
+            Course course = _courseContainer.courseList.SingleOrDefault(course => course.Id == courseId);
+            if (course == null)
+            {
+                return NotFound();
+            }
+            _courseContainer.DeleteCourse(course);
+            _userContainer.DeleteRelation(_userContainer.loggedInUserId, courseId);
+            _relationContainer.DeleteRelationData(courseId, _userContainer.loggedInUserId);
+            _courseContainer.WriteCourses();
+            return RedirectToAction("TeacherIndex");
         }
 
         public IActionResult AddUser(int courseId)

@@ -6,6 +6,7 @@
         public IEnumerable<Comment> CommentData { get; set; }
         public ICollection<Course> CourseData { get; set; }
         public ICollection<User> UserData { get; set; }
+        public int LoggedInUser { get; set; }
         public Comment comment { get; set; }
     }
 }
