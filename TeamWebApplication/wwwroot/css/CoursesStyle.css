@@ -139,6 +139,8 @@ body {
     flex: 1;
     overflow: hidden;
     height: 110px;
+    text-decoration: none;
+    color: var(--text);
 }
 
     .card-image img {
@@ -146,6 +148,11 @@ body {
         height: 100%;
         object-fit: cover;
     }
+
+.card-body {
+    text-decoration: none;
+    color: var(--text);
+}
 
 .image-container {
     flex: 1;
@@ -178,6 +185,7 @@ body {
 .course-description-holder {
     margin-left: 5px;
     margin-right: 5px;
+    margin-bottom: 5px;
     overflow: hidden;
 }
 
@@ -241,8 +249,8 @@ body {
 
     /* Style for the buttons */
     .hidden-buttons button {
-        width: 100%; /* Make buttons expand to full width of the container */
-        text-align: center; /* Align text to the left within buttons */
+        width: 100%; 
+        text-align: center; 
         background-color: transparent;
         border: 1px solid #201f20;
         border-radius: 1px;
