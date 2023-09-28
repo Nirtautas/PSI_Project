@@ -34,11 +34,19 @@ app.UseAuthorization();
 
 app.UseEndpoints(endpoints =>
 {
+    //Course Environment
     endpoints.MapControllerRoute(
         name: "CourseEnvironmentIndex",
         pattern: "CourseEnvironment/Index/{courseId}",
         defaults: new { controller = "CourseEnvironment", action = "Index" }
     );
+
+    endpoints.MapControllerRoute(
+        name: "CourseEnvironmentTeacherIndex",
+        pattern: "CourseEnvironment/TeacherIndex/{courseId}",
+        defaults: new { controller = "CourseEnvironment", action = "TeacherIndex" }
+    );
+
 
     endpoints.MapControllerRoute(
         name: "CourseEnvironmentAddComment",
@@ -56,13 +64,19 @@ app.UseEndpoints(endpoints =>
        name: "CourseEnvironment",
        pattern: "CourseEnvironment/EditComment/{courseId}",
        defaults: new { controller = "CourseEnvironment", action = "EditComment" }
-   );
+    );
 
-
+    //Course
     endpoints.MapControllerRoute(
         name: "CourseEdit",
         pattern: "CourseEdit/{courseId}",
         defaults: new { controller = "Course", action = "Edit" }
+    );
+
+    endpoints.MapControllerRoute(
+        name: "CourseDelete",
+        pattern: "CourseDelete/{courseId}",
+        defaults: new { controller = "Course", action = "Delete" }
     );
 
     endpoints.MapControllerRoute(
@@ -72,11 +86,12 @@ app.UseEndpoints(endpoints =>
     );
 
     endpoints.MapControllerRoute(
-     name: "CourseDelete",
-     pattern: "CourseDelete/{courseId}",
-     defaults: new { controller = "Course", action = "Delete" }
- );
+        name: "RemoveUser",
+        pattern: "RemoveUser/{courseId}",
+        defaults: new { controller = "Course", action = "RemoveUser" }
+    );
 
+    //Default
     endpoints.MapControllerRoute(
         name: "default",
         pattern: "{controller=Home}/{action=Index}/{id?}"

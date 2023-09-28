@@ -35,6 +35,14 @@ namespace TeamWebApplication.Data
             }
         }
 
+        public void RemoveRelationData(int courseId, int userId)
+        {
+            //Please review! I don't know if this is ok...
+            //You can't remove it in a foreach, and you can't remove it with LINQ T_T
+            relationData.Remove(new Relation<int>(courseId, userId));
+            WriteRelationData();
+        }
+
         public void DeleteRelationData(int courseId, int userId)
         {
             var relationToRemove = relationData.FirstOrDefault(relation => relation.value1 == courseId && relation.value2 == userId); //Course, User

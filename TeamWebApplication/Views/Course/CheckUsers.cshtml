@@ -1,0 +1,84 @@
+﻿@model ICollection<User>
+@{
+    ViewData["Title"] = "Check Users";
+}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Add User</title>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/CoursesStyle.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/CreateCourseStyle.css" asp-append-version="true" />
+</head>
+
+<body>
+
+    <div class="ribbon">
+        <div class="Name">
+            <a>Mudli</a>
+        </div>
+    </div>
+    <div class="courses-header">
+        <a>Posts</a>
+    </div>
+
+    <div>
+        <div class="course-navigation-array"></div>
+
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>
+                        Id
+                    </th>
+                    <th>
+                        Name
+                    </th>
+                    <th>
+                        Email
+                    </th>
+                    <th>
+                        Role
+                    </th>
+                    <th>
+                        Faculty
+                    </th>
+                    <th>
+                        Specialization
+                    </th>
+                    <th>
+                        Actions
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (User user in Model)
+                {
+                    <tr>
+                        <td>
+                            @user.UserId
+                        </td>
+                        <td>
+                            @(user.Name + " " + user.Surname)
+                        </td>
+                        <td>
+                            @user.Email
+                        </td>
+                        <td>
+                            @user.Role.ToString()
+                        </td>
+                        <td>
+                            @user.Faculty.ToString()
+                        </td>
+                        <td>
+                            @user.Specialization.ToString()
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
