@@ -76,6 +76,7 @@ body {
     margin-left: auto;
     margin-right: 15px;
     transition: 0.2s;
+    text-decoration: none;
 }
 
     .create-course-button:hover {
@@ -149,11 +150,6 @@ body {
         object-fit: cover;
     }
 
-.card-body {
-    text-decoration: none;
-    color: var(--text);
-}
-
 .image-container {
     flex: 1;
 }
@@ -161,6 +157,11 @@ body {
 .card-description {
     margin: 5px;
     overflow: hidden;
+}
+
+.card-body {
+    text-decoration: none;
+    color: var(--text);
 }
 
 .card-title {
@@ -233,7 +234,7 @@ body {
             cursor: pointer;
         }
 
-/* Hide the initially hidden buttons */
+
 .hidden-buttons {
     display: none;
     position: absolute;
@@ -244,19 +245,24 @@ body {
     padding: 3px;
     z-index: 1;
     flex-direction: column;
-    width: auto;
+    width: 100px;
+    left: 25px;
+    top: 240px;
 }
 
-    /* Style for the buttons */
-    .hidden-buttons button {
-        width: 100%; 
-        text-align: center; 
+
+    .hidden-buttons a {
+        width: 85%;
+        text-align: center;
         background-color: transparent;
         border: 1px solid #201f20;
         border-radius: 1px;
         color: var(--text);
         padding: 6px;
         margin-left: 0;
+        text-decoration: none;
+        font-size: small;
+        color: var(--text);
     }
 
 .hidden-button:hover {
