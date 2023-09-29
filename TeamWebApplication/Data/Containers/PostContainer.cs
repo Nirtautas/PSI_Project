@@ -6,11 +6,11 @@ namespace TeamWebApplication.Data
     public class PostContainer : IPostContainer
     {
         private int postIdCounter;
-        public ICollection<Post> postList { get; }
+        public ICollection<Post> PostList { get; }
 
         public PostContainer()
         {
-            postList = new List<Post>();
+            PostList = new List<Post>();
             FetchPosts();
         }
 
@@ -31,35 +31,46 @@ namespace TeamWebApplication.Data
                         case "Text":
                             TextPost textPost = new TextPost(
                                 Int32.Parse(splitString[0]),                                                              //PostId
-                                Int32.Parse(splitString[1]),                                                              //CourseId
+                                Int32.Parse(splitString[1]),                                                              //postId
                                 splitString[2],                                                                           //Name
                                 DateTime.ParseExact(splitString[3], "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture), //creationDate
                                 Boolean.Parse(splitString[4]),                                                            //Is Visible?
                                 (PostType)Enum.Parse(typeof(PostType), splitString[5]),                                   //Type
                                 splitString[6]                                                                            //Text Data
                             );
-                            postList.Add(textPost);
+                            PostList.Add(textPost);
                             break;
                         case "Link":
                             LinkPost linkPost = new LinkPost(
                                 Int32.Parse(splitString[0]),                                                              //PostId
-                                Int32.Parse(splitString[1]),                                                              //CourseId
+                                Int32.Parse(splitString[1]),                                                              //postId
                                 splitString[2],                                                                           //Name
                                 DateTime.ParseExact(splitString[3], "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture), //creationDate
                                 Boolean.Parse(splitString[4]),                                                            //Is Visible?
                                 (PostType)Enum.Parse(typeof(PostType), splitString[5]),                                   //Type
                                 splitString[6]                                                                            //Link Data
                             );
-                            postList.Add(linkPost);
+                            PostList.Add(linkPost);
                             break;
                     }
                 }
             }
         }
 
+        public LinkPost? GetLinkPost(int postId)
+        {
+            LinkPost? post = (LinkPost)PostList.SingleOrDefault(post => post.PostId == postId);
+            return post;
+        }
+        public TextPost? GetTextPost(int postId)
+        {
+            TextPost? post = (TextPost)PostList.SingleOrDefault(post => post.PostId == postId);
+            return post;
+        }
+
         public void PrintPostList()
         {
-            foreach (Post post in postList)
+            foreach (Post post in PostList)
                 System.Diagnostics.Debug.WriteLine(post.ToString());
         }
 
@@ -68,9 +79,38 @@ namespace TeamWebApplication.Data
             using (StreamWriter? writer = new StreamWriter("./TextData/PostData.txt"))
             {
                 writer.WriteLine(postIdCounter);
-                foreach (Post post in postList)
+                foreach (Post post in PostList)
                     writer.WriteLine(post.ToString());
             }
+        }
+    
+        public int CreatePost(LinkPost linkPost)
+        {
+            linkPost.PostId = postIdCounter;
+            postIdCounter++;
+            linkPost.CreationDate = DateTime.Now;
+            PostList.Add(linkPost);
+            return linkPost.PostId;
+        }
+        public int CreatePost(TextPost textPost)
+        {
+            textPost.PostId = postIdCounter;
+            postIdCounter++;
+            textPost.CreationDate = DateTime.Now;
+            PostList.Add(textPost);
+            return textPost.PostId;
+        }
+        public int DeletePost(TextPost postToRemove)
+        {
+            PostList.Remove(postToRemove);
+            WritePosts();
+            return postToRemove.PostId;
+        }
+        public int DeletePost(LinkPost postToRemove)
+        {
+            PostList.Remove(postToRemove);
+            WritePosts();
+            return postToRemove.PostId;
         }
     }
 }
