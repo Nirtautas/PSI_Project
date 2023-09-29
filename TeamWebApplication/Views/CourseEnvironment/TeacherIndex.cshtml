@@ -33,13 +33,13 @@
 <div>
     <div class="course-navigation-array">
         <button class="create-course-button">
-            <a asp-action="Create" asp-controller="CourseEnvironment">Create Post</a>
+            <a asp-action="CreatePost" asp-controller="CourseEnvironment">Create Post</a>
         </button>
     </div>
 
     @foreach (Post post in Model.PostData)
     {
-        @switch (post.postType)
+        @switch (post.PostType)
         {
             case PostType.Text:
                 <p>@post.DataToString()</p>

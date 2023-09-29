@@ -1,0 +1,56 @@
+@model AllPosts
+@{
+	ViewData["Title"] = "Create Post";
+}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Create Post</title>
+    <link rel="stylesheet" href="~/css/CreateCourseStyle.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/RegistrationStyle.css" asp-append-version="true" />
+</head>
+
+<body>
+
+    <div class="ribbon">
+        <div class="Name">
+            <a>Mudli</a>
+        </div>
+    </div>
+    <form method="post" asp-controller="CourseEnvironment" asp-action="CreatePost" class="registration-form">
+        <header class="form-container">
+            <h2>Create TextPost</h2>
+        </header>
+        <div class="form-info-container">
+            <label for="Name">Post name:</label>
+            <input type="text" id="Name" name="Name" asp-for="@Model.TextPost.Name" class="form-control" required />
+            <span class="text-danger"></span>
+            <label for="PostType">Post type:</label>
+            <div class="radio-buttons">
+                <label for="Input.Student" class="radio-label">
+                    Text
+                    <input type="radio" id="Input.TextPost" name="PostType" value="TextPost" class="radio-input" required />
+                </label>
+                <label for="Input.Lecturer" class="radio-label">
+                    Link
+                    <input type="radio" id="Input.LinkPost" name="PostType" value="LinkPost" class="radio-input" required />
+                </label>
+            </div>
+            <span class="text-danger"></span>
+
+            <div>
+                <label for="Visibility" class="radio-label">
+                    Is post visible?
+                    <input type="checkbox" id="Visibility" asp-for="@Model.TextPost.IsVisible"/>
+                </label>
+            </div>
+            <span class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="btn-primary">Create Post</button>
+        <a asp-action="TeacherIndex" asp-controller="Post" class="text-style" style="text-decoration: none; color: #ffffff;">Back</a>
+    </form>
+</body>
+</html>

@@ -36,7 +36,7 @@
 
     @foreach (Post post in Model.PostData)
     {
-        @switch (post.postType)
+        @switch (post.PostType)
         {
             case PostType.Text:
                 <p>@post.DataToString()</p>

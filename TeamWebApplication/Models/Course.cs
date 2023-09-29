@@ -22,12 +22,12 @@ namespace TeamWebApplication.Models
             PostsInCourseId = new List<int>();
         }
 
-        public Course(int id, string name, DateTime creationDate, string description, bool isVisible, bool isPublic) {
+        public Course(int id, string name, DateTime creationDate, string description, bool IsVisible, bool isPublic) {
             this.Id = id;
             this.Name = name;
             this.CreationDate = creationDate;
             this.Description = description;
-            this.IsVisible = isVisible;
+            this.IsVisible = IsVisible;
             this.IsPublic = isPublic;
             UsersInCourseId = new List<int>();
             PostsInCourseId = new List<int>();

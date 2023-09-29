@@ -91,6 +91,23 @@ app.UseEndpoints(endpoints =>
         defaults: new { controller = "Course", action = "RemoveUser" }
     );
 
+    endpoints.MapControllerRoute(
+       name: "CreatePost",
+       pattern: "CourseEnvironment/TeacherIndex/CreatePost/{courseId}",
+       defaults: new { controller = "TeacherIndex", action = "CreatePost" }
+   );
+
+    endpoints.MapControllerRoute(
+      name: "EditPost",
+      pattern: "CourseEnvironment/TeacherIndex/EditPost/{courseId}",
+      defaults: new { controller = "TeacherIndex", action = "EditPost" }
+  );
+
+    endpoints.MapControllerRoute(
+     name: "DeletePost",
+     pattern: "CourseEnvironment/TeacherIndex/DeletePost/{courseId}",
+     defaults: new { controller = "TeacherIndex", action = "DeletePost" }
+ );
     //Default
     endpoints.MapControllerRoute(
         name: "default",
