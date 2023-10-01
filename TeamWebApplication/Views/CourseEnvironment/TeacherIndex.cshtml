@@ -46,7 +46,20 @@
 
         @foreach (Post post in Model.PostData)
         {
-            @Html.Raw(@post.DataToHtml());
+            <div>
+                @Html.Raw(@post.DataToHtml())
+                @switch(post.PostType)
+                {
+                    case PostType.Text:
+                        <a class="hidden-button" asp-action="EditTextPost" asp-controller="CourseEnvironment" asp-route-postId="@post.PostId">Edit Post</a>
+                        <a class="hidden-button" asp-action="DeleteTextPost" asp-controller="CourseEnvironment" asp-route-postId="@post.PostId">Delete Post</a>
+                        break;
+                    case PostType.Link:
+                        <a class="hidden-button" asp-action="EditLinkPost" asp-controller="CourseEnvironment" asp-route-postId="@post.PostId">Edit Post</a>
+                        <a class="hidden-button" asp-action="DeleteLinkPost" asp-controller="CourseEnvironment" asp-route-postId="@post.PostId">Delete Post</a>
+                        break;
+                }
+            </div>
         }
     </div>
 

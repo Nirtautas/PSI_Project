@@ -54,9 +54,21 @@ app.UseEndpoints(endpoints =>
     );
 
     endpoints.MapControllerRoute(
-    name: "CourseEnvironmentCreateLinkPost",
-    pattern: "CourseEnvironment/CreateLinkPost/{courseId}",
-    defaults: new { controller = "CourseEnvironment", action = "CreateLinkPost" }
+        name: "CourseEnvironmentCreateLinkPost",
+        pattern: "CourseEnvironment/CreateLinkPost/{courseId}",
+        defaults: new { controller = "CourseEnvironment", action = "CreateLinkPost" }
+    );
+
+    endpoints.MapControllerRoute(
+        name: "CourseEnvironmentEditTextPost",
+        pattern: "CourseEnvironment/EditTextPost/{postId}",
+        defaults: new { controller = "CourseEnvironment", action = "EditTextPost" }
+    );
+
+    endpoints.MapControllerRoute(
+        name: "CourseEnvironmentEditLinkPost",
+        pattern: "CourseEnvironment/EditLinkPost/{postId}",
+        defaults: new { controller = "CourseEnvironment", action = "EditLinkPost" }
     );
 
     endpoints.MapControllerRoute(

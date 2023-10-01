@@ -140,44 +140,45 @@ namespace TeamWebApplication.Controllers
 			return RedirectToAction("TeacherIndex", new { courseId });
 		}
 
-		/*
-        public IActionResult EditLinkPost(int postId)
-        {
-            LinkPost? post = _postContainer.GetLinkPost(postId);
-            return View(post);
-        }
         public IActionResult EditTextPost(int postId)
         {
-            TextPost? post = _postContainer.GetTextPost(postId);
+            TextPost? post = (TextPost)_postContainer.GetPost(postId);
+			return View(post);
+        }
+
+        public IActionResult EditLinkPost(int postId)
+        {
+            LinkPost? post = (LinkPost)_postContainer.GetPost(postId);
             return View(post);
         }
 
         [HttpPost]
-        public IActionResult EditPost(LinkPost post)
+        public IActionResult EditTextPost(TextPost post, int courseId)
         {
-            LinkPost? originalPost = _postContainer.GetLinkPost(post.PostId);
-            originalPost.Name = post.Name;
-            originalPost.IsVisible = post.IsVisible;
-            originalPost.CreationDate = DateTime.Now;
-            originalPost.PostType = post.PostType;
-            originalPost.LinkContent = post.LinkContent;
-            _postContainer.WritePosts();
-            return RedirectToAction("TeacherIndex");
-        }
-
-        [HttpPost]
-        public IActionResult EditPost(TextPost post)
-        {
-            TextPost? originalPost = _postContainer.GetTextPost(post.PostId);
+            TextPost? originalPost = (TextPost)_postContainer.GetPost(post.PostId);
             originalPost.Name = post.Name;
             originalPost.IsVisible = post.IsVisible;
             originalPost.CreationDate = DateTime.Now;
             originalPost.PostType = post.PostType;
             originalPost.TextContent = post.TextContent;
             _postContainer.WritePosts();
-            return RedirectToAction("TeacherIndex");
+            return RedirectToAction("TeacherIndex", new { courseId });
         }
 
+        [HttpPost]
+        public IActionResult EditLinkPost(LinkPost post, int courseId)
+        {
+            LinkPost? originalPost = (LinkPost)_postContainer.GetPost(post.PostId);
+            originalPost.Name = post.Name;
+            originalPost.IsVisible = post.IsVisible;
+            originalPost.CreationDate = DateTime.Now;
+            originalPost.PostType = post.PostType;
+            originalPost.LinkContent = post.LinkContent;
+            _postContainer.WritePosts();
+            return RedirectToAction("TeacherIndex", new { courseId });
+        }
+
+        /*
         public IActionResult DeletePost(int postId)
         {
             Post post = _postContainer.PostList.SingleOrDefault(post => post.PostId == postId);
