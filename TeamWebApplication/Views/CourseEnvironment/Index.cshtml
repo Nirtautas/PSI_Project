@@ -36,7 +36,8 @@
 
     @foreach (Post post in Model.PostData)
     {
-        @Html.Raw(@post.DataToHtml());
+        @if (post.IsVisible)
+            @Html.Raw(@post.DataToHtml());
     }
 </div>
 
