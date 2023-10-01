@@ -89,11 +89,10 @@ namespace TeamWebApplication.Data
             return post.PostId;
         }
 
-        public int DeletePost(Post post)
+        public void DeletePost(Post post)
         {
             PostList.Remove(post);
             WritePosts();
-            return post.PostId;
         }
     }
 }

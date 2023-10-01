@@ -1,0 +1,39 @@
+﻿@model TextPost
+@{
+	ViewData["Title"] = "Delete Link Post";
+}
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width" />
+		<title>Delete Link Post</title>
+		<link rel="stylesheet" href="~/css/CreateCourseStyle.css" asp-append-version="true" />
+	</head>
+
+	<body>
+		<div class="ribbon">
+			<div class="Name">
+				<a>Mudli</a>
+			</div>
+		</div>
+		<form method="post" asp-controller="CourseEnvironment" asp-action="DeleteTextPost">
+			<div class="form-container">
+				<h2>Delete a Text Post</h2>
+			</div>
+			<div class="form-container">
+				<h2>Do you wish to delete post: @Model.Name?</h2>
+			</div>
+			<input type="hidden" id="Input.Name" name="name" asp-for="Name" value="@Model.Name" />
+			<input type="hidden" id="Visibility" asp-for="IsVisible" value="@Model.IsVisible" />
+			<input type="hidden" id="TextContent" name="TextContent" asp-for="TextContent" />
+			<input type="hidden" id="courseId" name="courseId" asp-for="CourseId" value="@Model.CourseId" />
+			<input type="hidden" id="PostType" name="PostType" asp-for="PostType" value="@Model.PostType" />
+			<input type="hidden" id="CreationDate" name="CreationDate" asp-for="CreationDate" value="@Model.CreationDate" />
+			<input type="hidden" id="PostId" name="PostId" asp-for="PostId" value="@Model.PostId" />
+
+			<button type="submit" class="btn-primary">Delete Post</button>
+			<a asp-action="TeacherIndex" asp-controller="CourseEnvironment" asp-route-courseId="@Model.CourseId" class="text-style" style="text-decoration: none; color: #ffffff;">Back</a>
+		</form>
+	</body>
+</html>

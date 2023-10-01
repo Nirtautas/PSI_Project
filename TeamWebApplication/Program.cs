@@ -71,7 +71,19 @@ app.UseEndpoints(endpoints =>
         defaults: new { controller = "CourseEnvironment", action = "EditLinkPost" }
     );
 
-    endpoints.MapControllerRoute(
+	endpoints.MapControllerRoute(
+    	name: "CourseEnvironmentDeleteTextPost",
+	    pattern: "CourseEnvironment/DeleteTextPost/{postId}",
+	    defaults: new { controller = "CourseEnvironment", action = "DeleteTextPost" }
+    );
+
+	endpoints.MapControllerRoute(
+		name: "CourseEnvironmentDeleteLinkPost",
+		pattern: "CourseEnvironment/DeleteLinkPost/{postId}",
+		defaults: new { controller = "CourseEnvironment", action = "DeleteLinkPost" }
+	);
+
+	endpoints.MapControllerRoute(
         name: "CourseEnvironmentAddComment",
         pattern: "CourseEnvironment/AddComment/{courseId}",
         defaults: new { controller = "CourseEnvironment", action = "AddComment" }

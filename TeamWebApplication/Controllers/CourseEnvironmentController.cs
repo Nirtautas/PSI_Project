@@ -178,38 +178,32 @@ namespace TeamWebApplication.Controllers
             return RedirectToAction("TeacherIndex", new { courseId });
         }
 
-        /*
-        public IActionResult DeletePost(int postId)
-        {
-            Post post = _postContainer.PostList.SingleOrDefault(post => post.PostId == postId);
-            return View(post);
-        }
+		public IActionResult DeleteTextPost(int postId)
+		{
+			TextPost? post = (TextPost)_postContainer.GetPost(postId);
+			return View(post);
+		}
 
-        [HttpPost, ActionName("DeletePost")]
-        public IActionResult DeletePosts(int postId)
+		public IActionResult DeleteLinkPost(int postId)
+		{
+			LinkPost? post = (LinkPost)_postContainer.GetPost(postId);
+			return View(post);
+		}
+
+		[HttpPost]
+        public IActionResult DeleteTextPost(TextPost post, int courseId)
         {
-            TextPost post = (TextPost)_postContainer.PostList.SingleOrDefault(post => post.PostId == postId);
-            if (post == null)
-            {
-                return NotFound();
-            }
-            _postContainer.DeletePost(post);
-            _postContainer.WritePosts();
-            return RedirectToAction("TeacherIndex");
-        }
-        [HttpPost, ActionName("DeletePost")]
-        public IActionResult DeleteLinkPosts(int postId)
-        {
-            LinkPost post = (LinkPost)_postContainer.PostList.SingleOrDefault(post => post.PostId == postId);
-            if (post == null)
-            {
-                return NotFound();
-            }
-            _postContainer.DeletePost(post);
-            _postContainer.WritePosts();
-            return RedirectToAction("TeacherIndex");
-        }
-    }
-        */
+			TextPost originalPost = (TextPost)_postContainer.GetPost(post.PostId);
+			_postContainer.DeletePost(originalPost);
+			return RedirectToAction("TeacherIndex", new { courseId });
+		}
+
+		[HttpPost]
+		public IActionResult DeleteLinkPost(LinkPost post, int courseId)
+		{
+			Post originalPost = (LinkPost)_postContainer.GetPost(post.PostId);
+			_postContainer.DeletePost(originalPost);
+			return RedirectToAction("TeacherIndex", new { courseId });
+		}
 	}
 }
