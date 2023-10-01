@@ -1,0 +1,49 @@
+﻿@model LinkPost
+@{
+	ViewData["Title"] = "Create Link Post";
+}
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width" />
+		<title>Create Link Post</title>
+		<link rel="stylesheet" href="~/css/CreateCourseStyle.css" asp-append-version="true" />
+	</head>
+
+	<body>
+		<div class="ribbon">
+			<div class="Name">
+				<a>Mudli</a>
+			</div>
+		</div>
+		<form method="post" asp-controller="CourseEnvironment" asp-action="CreateLinkPost">
+
+			<div class="form-container">
+				<h2>Create a Link Post</h2>
+			</div>
+			<div class="form-info-container">
+				<label for="Name">Name:</label>
+				<input type="text" id="Input.Name" name="name" asp-for="Name" class="form-control" value="@Model.Name" required />
+				<span class="text-danger"></span>
+			</div>
+
+			<div>
+				<label for="Visibility" class="radio-label">
+					Is post visible?
+					<input type="checkbox" id="Visibility" asp-for="IsVisible" />
+				</label>
+			</div>
+			<span class="text-danger"></span>
+
+			<div class="form-info-container">
+				<label for="LinkContent">Text Data</label>
+				<input type="text" id="LinkContent" name="LinkContent" asp-for="LinkContent" class="form-control" required />
+				<span class="text-danger"></span>
+			</div>
+
+			<button type="submit" class="btn-primary">Create Post</button>
+			<a asp-action="TeacherIndex" asp-controller="CourseEnvironment" asp-route-courseId="@Model.CourseId" class="text-style" style="text-decoration: none; color: #ffffff;">Back</a>
+		</form>
+	</body>
+</html>

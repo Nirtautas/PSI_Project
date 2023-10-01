@@ -1,7 +1,6 @@
-﻿using TeamWebApplication.Models;
-using System.Globalization;
+﻿using System.Globalization;
 
-namespace TeamWebApplication.Models
+namespace TeamWebApplication.Models.Unused
 {
     // THIS FILE IS NOT SUPPOSED TO BE USED.
     // EVERYTHING GOES THROUGH User.cs
@@ -10,7 +9,7 @@ namespace TeamWebApplication.Models
         //These variables are fetched from files
         public AcademicDegree AcademicDegree { get; set; }
         public int YearIn { get; set; }
-        
+
         public Student()
         {
 

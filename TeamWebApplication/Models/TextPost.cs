@@ -1,9 +1,11 @@
-﻿namespace TeamWebApplication.Models
+﻿using Microsoft.Extensions.Hosting;
+
+namespace TeamWebApplication.Models
 {
     public class TextPost : Post
     {
-        public string TextContent { get; set; }
-        public TextPost(int id, int courseId, string name, DateTime creationDate, bool IsVisible, PostType PostType, string textContent)
+		public string? TextContent { get; set; } = null;
+		public TextPost(int id, int courseId, string name, DateTime creationDate, bool IsVisible, PostType PostType, string textContent)
         {
             base.PostId = id;
             base.CourseId = courseId;
@@ -12,6 +14,11 @@
             base.IsVisible = IsVisible;
             base.PostType = PostType;
             this.TextContent = textContent;
+        }
+
+        public TextPost()
+        {
+        
         }
 
         public override string ToString()
@@ -26,9 +33,19 @@
                 TextContent;
         }
 
-        public override string DataToString()
+        public override void ApplyData(string? textData)
+        {
+            TextContent = textData;
+        }
+
+        public override string? DataToString()
         {
             return TextContent;
+        }
+
+        public override string? DataToHtml()
+        {
+            return "<p>" + DataToString() + "</p>";
         }
     }
 }

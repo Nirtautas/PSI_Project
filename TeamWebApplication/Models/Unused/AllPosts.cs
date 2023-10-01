@@ -1,4 +1,4 @@
-﻿namespace TeamWebApplication.Models
+﻿namespace TeamWebApplication.Models.Unused
 {
     public class AllPosts
     {

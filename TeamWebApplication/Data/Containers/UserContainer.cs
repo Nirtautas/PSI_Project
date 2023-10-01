@@ -9,7 +9,8 @@ namespace TeamWebApplication.Data
     {
 		public int loggedInUserId { get; set; } = 0;
         public Role? loggedInUserRole { get; set; } = null;
-		private int userIdCounter;
+        public int currentCourseId { get; set; } = 0;
+        private int userIdCounter;
         public ICollection<User> userList { get; }
 
         public UserContainer(IRelationContainer relationContainer)
