@@ -33,9 +33,12 @@
         <div>
             <div class="course-navigation-array">
                 <input placeholder="Search course...">
-                <button class="create-course-button">
-                    <a asp-action="Create" asp-controller="Course">Create Course</a>
-                </button>
+                @if (Model.User.Role == Role.Lecturer)
+                {
+                    <button class="create-course-button">
+                        <a asp-action="Create" asp-controller="Course">Create Course</a>
+                    </button>
+                }
             </div>
 
             <div class="container">
@@ -43,11 +46,11 @@
                     @foreach (Course course in Model.Courses)
                     {
                         <div class="card">
-                            <a class="card-image" asp-action="TeacherIndex" asp-controller="CourseEnvironment" asp-route-courseId="@course.Id">
+                            <a class="card-image" asp-action="Index" asp-controller="CourseEnvironment" asp-route-courseId="@course.Id">
                                 <img src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8d3JpdGluZyUyMGElMjBib29rfGVufDB8fDB8fHww&w=1000&q=80">
                             </a>
                             <div class="invisible-box"></div>
-                            <a class="card-body" asp-action="TeacherIndex" asp-controller="CourseEnvironment" asp-route-courseId="@course.Id">
+                            <a class="card-body" asp-action="Index" asp-controller="CourseEnvironment" asp-route-courseId="@course.Id">
                                 <div class="course-title-holder">
                                     <h3>@course.Name</h3>
                                 </div>
