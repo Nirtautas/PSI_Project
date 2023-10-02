@@ -76,6 +76,35 @@ namespace TeamWebApplication.Controllers
             return View(viewModel);
         }
 
+        public IActionResult TeacherVisitorIndex(int courseId)
+        {
+            _userContainer.currentCourseId = courseId;
+            IEnumerable<Post> coursePosts = (
+                from post in _postContainer.PostList
+                where post.CourseId == courseId
+                select post
+            ).ToList();
+
+            Comment comment1 = new();
+            IEnumerable<Comment> courseComments = (
+                from comment in _commentContainer.CommentList
+                where comment.CourseId == courseId
+                orderby comment.CommentCreationTime descending
+                select comment
+            ).ToList();
+            comment1.CourseId = courseId;
+            int loggedInUser = _userContainer.loggedInUserId;
+
+            var viewModel = new CourseAndComment
+            {
+                PostData = coursePosts,
+                CommentData = courseComments,
+                comment = comment1,
+                LoggedInUser = loggedInUser
+            };
+            return View(viewModel);
+        }
+
         [HttpPost]
         public IActionResult AddComment(int courseId, Comment comment)
         {

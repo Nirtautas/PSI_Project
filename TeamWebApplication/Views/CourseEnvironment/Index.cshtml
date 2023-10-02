@@ -40,7 +40,15 @@
             <span class="star-reflection"></span>
         </div>
 
-        <div class="course-body">
+<div>
+    <div class="course-navigation-array"></div>
+
+    @foreach (Post post in Model.PostData)
+    {
+        @if (post.IsVisible)
+            @Html.Raw(@post.DataToHtml());
+    }
+</div>
 
             <div class="star-rating">
                 <i>Give the course a rating</i>
