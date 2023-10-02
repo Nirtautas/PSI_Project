@@ -71,6 +71,7 @@ namespace TeamWebApplication.Controllers
             Course? originalCourse = _courseContainer.GetCourse(course.Id);
             originalCourse.Name = course.Name;
             originalCourse.IsVisible = course.IsVisible;
+            originalCourse.IsPublic = course.IsPublic;
             originalCourse.Description = course.Description;
             _courseContainer.WriteCourses();
             return RedirectToAction("TeacherIndex");
