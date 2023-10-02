@@ -9,12 +9,14 @@ namespace TeamWebApplication.Controllers
         private readonly IUserContainer _userContainer;
         private readonly ICourseContainer _courseContainer;
         private readonly IRelationContainer _relationContainer;
+        private readonly IPostContainer _postContainer;
 
-        public CourseController(IUserContainer userContainer, ICourseContainer courseContainer, IRelationContainer relationContainer)
+        public CourseController(IUserContainer userContainer, ICourseContainer courseContainer, IRelationContainer relationContainer, IPostContainer postContainer)
         {
             _userContainer = userContainer;
             _courseContainer = courseContainer;
             _relationContainer = relationContainer;
+            _postContainer = postContainer;
         }
 
         public IActionResult Index()
@@ -32,8 +34,8 @@ namespace TeamWebApplication.Controllers
 
         public IActionResult TeacherIndex()
         {
-			_userContainer.currentCourseId = 0;
-			IEnumerable<Course> coursesTaken = (
+            _userContainer.currentCourseId = 0;
+            IEnumerable<Course> coursesTaken = (
                 from user in _userContainer.userList
                 where user.UserId == _userContainer.loggedInUserId
                 from courseId in user.CoursesUserTakesId
@@ -56,7 +58,7 @@ namespace TeamWebApplication.Controllers
             _userContainer.AddRelation(_userContainer.loggedInUserId, createdCourseId);
             _relationContainer.AddRelationData(createdCourseId, _userContainer.loggedInUserId);
             _courseContainer.WriteCourses();
-            return RedirectToAction("TeacherIndex");
+            return RedirectToAction("CreateTextPost", new { courseId = createdCourseId });//
         }
 
         public IActionResult Edit(int courseId)
@@ -77,6 +79,11 @@ namespace TeamWebApplication.Controllers
             return RedirectToAction("TeacherIndex");
         }
 
+        public IActionResult CreateTextPost(int courseId)
+        {
+            _postContainer.CreatePost(courseId);
+            return RedirectToAction("TeacherIndex");
+        }
         public IActionResult Delete(int courseId)
         {
             Course course = _courseContainer.courseList.SingleOrDefault(course => course.Id == courseId);
@@ -109,7 +116,8 @@ namespace TeamWebApplication.Controllers
         {
             String[] userIdList = userIdString.Split(';');
             Course? currentCourse = _courseContainer.GetCourse(_userContainer.currentCourseId);
-            foreach (var word in userIdList) {
+            foreach (var word in userIdList)
+            {
                 if (Int32.TryParse(word, out int userId) != false && currentCourse != null)
                 {
                     User? user;
