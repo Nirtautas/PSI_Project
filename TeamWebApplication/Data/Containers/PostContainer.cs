@@ -57,14 +57,9 @@ namespace TeamWebApplication.Data
             }
         }
 
-        public LinkPost? GetLinkPost(int postId)
+        public Post? GetPost(int postId)
         {
-            LinkPost? post = (LinkPost)PostList.SingleOrDefault(post => post.PostId == postId);
-            return post;
-        }
-        public TextPost? GetTextPost(int postId)
-        {
-            TextPost? post = (TextPost)PostList.SingleOrDefault(post => post.PostId == postId);
+            Post? post = PostList.SingleOrDefault(post => post.PostId == postId);
             return post;
         }
 
@@ -84,33 +79,20 @@ namespace TeamWebApplication.Data
             }
         }
     
-        public int CreatePost(LinkPost linkPost)
+        public int CreatePost(Post post, int currentCourseId)
         {
-            linkPost.PostId = postIdCounter;
+            post.CourseId = currentCourseId;
+            post.PostId = postIdCounter;
             postIdCounter++;
-            linkPost.CreationDate = DateTime.Now;
-            PostList.Add(linkPost);
-            return linkPost.PostId;
+            post.CreationDate = DateTime.Now;
+            PostList.Add(post);
+            return post.PostId;
         }
-        public int CreatePost(TextPost textPost)
+
+        public void DeletePost(Post post)
         {
-            textPost.PostId = postIdCounter;
-            postIdCounter++;
-            textPost.CreationDate = DateTime.Now;
-            PostList.Add(textPost);
-            return textPost.PostId;
-        }
-        public int DeletePost(TextPost postToRemove)
-        {
-            PostList.Remove(postToRemove);
+            PostList.Remove(post);
             WritePosts();
-            return postToRemove.PostId;
-        }
-        public int DeletePost(LinkPost postToRemove)
-        {
-            PostList.Remove(postToRemove);
-            WritePosts();
-            return postToRemove.PostId;
         }
     }
 }

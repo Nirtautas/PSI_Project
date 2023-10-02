@@ -12,6 +12,5 @@ namespace TeamWebApplication.Data
         public int DeleteCourse(Course courseToRemove);
         public void PrintRelation();
         ICollection<Course> courseList { get; }
-        public int currentCourseId { get; set; }
     }
 }

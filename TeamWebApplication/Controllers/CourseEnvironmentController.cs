@@ -20,6 +20,7 @@ namespace TeamWebApplication.Controllers
 
         public IActionResult Index(int courseId)
         {
+            _userContainer.currentCourseId = courseId;
             IEnumerable<Post> coursePosts = (
                 from post in _postContainer.PostList
                 where post.CourseId == courseId
@@ -48,7 +49,8 @@ namespace TeamWebApplication.Controllers
 
         public IActionResult TeacherIndex(int courseId)
         {
-            IEnumerable<Post> coursePosts = (
+			_userContainer.currentCourseId = courseId;
+			IEnumerable<Post> coursePosts = (
                 from post in _postContainer.PostList
                 where post.CourseId == courseId
                 select post
@@ -107,94 +109,101 @@ namespace TeamWebApplication.Controllers
                 return RedirectToAction("Index", new { courseId });
             return RedirectToAction("TeacherIndex", new { courseId });
         }
-        public IActionResult CreatePost()
+        
+        public IActionResult CreateTextPost()
         {
-            Post post = new();
+            Post post = new TextPost();
+            return View(post);
+        }
+
+        public IActionResult CreateLinkPost()
+        {
+            Post post = new LinkPost();
             return View(post);
         }
 
         [HttpPost]
-        public IActionResult CreatePost(LinkPost post)
+        public IActionResult CreateTextPost(TextPost post, int courseId)
         {
-            _postContainer.CreatePost(post);
+            post.PostType = PostType.Text;
+            _postContainer.CreatePost(post, _userContainer.currentCourseId);
             _postContainer.WritePosts();
-            return RedirectToAction("TeacherIndex");
-        }
+			return RedirectToAction("TeacherIndex", new { courseId });
+		}
 
-        [HttpPost]
-        public IActionResult CreatePost(TextPost post)
+		[HttpPost]
+		public IActionResult CreateLinkPost(LinkPost post, int courseId)
+		{
+            post.PostType = PostType.Link;
+			_postContainer.CreatePost(post, _userContainer.currentCourseId);
+			_postContainer.WritePosts();
+			return RedirectToAction("TeacherIndex", new { courseId });
+		}
+
+        public IActionResult EditTextPost(int postId)
         {
-            _postContainer.CreatePost(post);
-            _postContainer.WritePosts();
-            return RedirectToAction("TeacherIndex");
+            TextPost? post = (TextPost)_postContainer.GetPost(postId);
+			return View(post);
         }
 
         public IActionResult EditLinkPost(int postId)
         {
-            LinkPost? post = _postContainer.GetLinkPost(postId);
-            return View(post);
-        }
-        public IActionResult EditTextPost(int postId)
-        {
-            TextPost? post = _postContainer.GetTextPost(postId);
+            LinkPost? post = (LinkPost)_postContainer.GetPost(postId);
             return View(post);
         }
 
         [HttpPost]
-        public IActionResult EditPost(LinkPost post)
+        public IActionResult EditTextPost(TextPost post, int courseId)
         {
-            LinkPost? originalPost = _postContainer.GetLinkPost(post.PostId);
-            originalPost.Name = post.Name;
-            originalPost.IsVisible = post.IsVisible;
-            originalPost.CreationDate = DateTime.Now;
-            originalPost.PostType = post.PostType;
-            originalPost.LinkContent = post.LinkContent;
-            _postContainer.WritePosts();
-            return RedirectToAction("TeacherIndex");
-        }
-
-        [HttpPost]
-        public IActionResult EditPost(TextPost post)
-        {
-            TextPost? originalPost = _postContainer.GetTextPost(post.PostId);
+            TextPost? originalPost = (TextPost)_postContainer.GetPost(post.PostId);
             originalPost.Name = post.Name;
             originalPost.IsVisible = post.IsVisible;
             originalPost.CreationDate = DateTime.Now;
             originalPost.PostType = post.PostType;
             originalPost.TextContent = post.TextContent;
             _postContainer.WritePosts();
-            return RedirectToAction("TeacherIndex");
+            return RedirectToAction("TeacherIndex", new { courseId });
         }
 
-        public IActionResult DeletePost(int postId)
+        [HttpPost]
+        public IActionResult EditLinkPost(LinkPost post, int courseId)
         {
-            Post post = _postContainer.PostList.SingleOrDefault(post => post.PostId == postId);
-            return View(post);
+            LinkPost? originalPost = (LinkPost)_postContainer.GetPost(post.PostId);
+            originalPost.Name = post.Name;
+            originalPost.IsVisible = post.IsVisible;
+            originalPost.CreationDate = DateTime.Now;
+            originalPost.PostType = post.PostType;
+            originalPost.LinkContent = post.LinkContent;
+            _postContainer.WritePosts();
+            return RedirectToAction("TeacherIndex", new { courseId });
         }
 
-        [HttpPost, ActionName("DeletePost")]
-        public IActionResult DeletePosts(int postId)
+		public IActionResult DeleteTextPost(int postId)
+		{
+			TextPost? post = (TextPost)_postContainer.GetPost(postId);
+			return View(post);
+		}
+
+		public IActionResult DeleteLinkPost(int postId)
+		{
+			LinkPost? post = (LinkPost)_postContainer.GetPost(postId);
+			return View(post);
+		}
+
+		[HttpPost]
+        public IActionResult DeleteTextPost(TextPost post, int courseId)
         {
-            TextPost post = (TextPost)_postContainer.PostList.SingleOrDefault(post => post.PostId == postId);
-            if (post == null)
-            {
-                return NotFound();
-            }
-            _postContainer.DeletePost(post);
-            _postContainer.WritePosts();
-            return RedirectToAction("TeacherIndex");
-        }
-        [HttpPost, ActionName("DeletePost")]
-        public IActionResult DeleteLinkPosts(int postId)
-        {
-            LinkPost post = (LinkPost)_postContainer.PostList.SingleOrDefault(post => post.PostId == postId);
-            if (post == null)
-            {
-                return NotFound();
-            }
-            _postContainer.DeletePost(post);
-            _postContainer.WritePosts();
-            return RedirectToAction("TeacherIndex");
-        }
-    }
+			TextPost originalPost = (TextPost)_postContainer.GetPost(post.PostId);
+			_postContainer.DeletePost(originalPost);
+			return RedirectToAction("TeacherIndex", new { courseId });
+		}
+
+		[HttpPost]
+		public IActionResult DeleteLinkPost(LinkPost post, int courseId)
+		{
+			Post originalPost = (LinkPost)_postContainer.GetPost(post.PostId);
+			_postContainer.DeletePost(originalPost);
+			return RedirectToAction("TeacherIndex", new { courseId });
+		}
+	}
 }
