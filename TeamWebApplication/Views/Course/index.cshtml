@@ -13,16 +13,16 @@
 </head>
 
 <body>
-<div class="ribbon">
-    <div class="project-name-container">
-        <a class="text-style name">Mudli</a>
+    <div class="ribbon">
+        <div class="project-name-container">
+            <a class="text-style name">Mudli</a>
+        </div>
+        <div class="buttons-container">
+            <a asp-action="Index" asp-controller="PublicCourse" class="text-style button">Public courses</a>
+            <a asp-action="Index" asp-controller="Course" class="text-style button">My Courses</a>
+            <a asp-action="Index" asp-controller="Home" class="text-style button">Log out</a>
+        </div>
     </div>
-    <div class="buttons-container">
-        <a asp-action="Index" asp-controller="PublicCourse" class="text-style button">Public courses</a>
-        <a asp-action="Index" asp-controller="Course" class="text-style button">My Courses</a>
-        <a asp-action="Index" asp-controller="Home" class="text-style button">Log out</a>
-    </div>
-</div>
     <div class="courses-header">
         <a>Courses</a>
     </div>
