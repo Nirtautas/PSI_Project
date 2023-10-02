@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Hosting;
 using TeamWebApplication.Data;
 using TeamWebApplication.Models;
 
@@ -20,8 +21,8 @@ namespace TeamWebApplication.Controllers
         public IActionResult Index(int courseId)
         {
             IEnumerable<Post> coursePosts = (
-                from post in _postContainer.postList
-                where post.courseId == courseId
+                from post in _postContainer.PostList
+                where post.CourseId == courseId
                 select post
             ).ToList();
 
@@ -48,8 +49,8 @@ namespace TeamWebApplication.Controllers
         public IActionResult TeacherIndex(int courseId)
         {
             IEnumerable<Post> coursePosts = (
-                from post in _postContainer.postList
-                where post.courseId == courseId
+                from post in _postContainer.PostList
+                where post.CourseId == courseId
                 select post
             ).ToList();
 
@@ -72,7 +73,6 @@ namespace TeamWebApplication.Controllers
             };
             return View(viewModel);
         }
-
 
         [HttpPost]
         public IActionResult AddComment(int courseId, Comment comment)
@@ -106,6 +106,95 @@ namespace TeamWebApplication.Controllers
             if (_userContainer.loggedInUserRole == Role.Student)
                 return RedirectToAction("Index", new { courseId });
             return RedirectToAction("TeacherIndex", new { courseId });
+        }
+        public IActionResult CreatePost()
+        {
+            Post post = new();
+            return View(post);
+        }
+
+        [HttpPost]
+        public IActionResult CreatePost(LinkPost post)
+        {
+            _postContainer.CreatePost(post);
+            _postContainer.WritePosts();
+            return RedirectToAction("TeacherIndex");
+        }
+
+        [HttpPost]
+        public IActionResult CreatePost(TextPost post)
+        {
+            _postContainer.CreatePost(post);
+            _postContainer.WritePosts();
+            return RedirectToAction("TeacherIndex");
+        }
+
+        public IActionResult EditLinkPost(int postId)
+        {
+            LinkPost? post = _postContainer.GetLinkPost(postId);
+            return View(post);
+        }
+        public IActionResult EditTextPost(int postId)
+        {
+            TextPost? post = _postContainer.GetTextPost(postId);
+            return View(post);
+        }
+
+        [HttpPost]
+        public IActionResult EditPost(LinkPost post)
+        {
+            LinkPost? originalPost = _postContainer.GetLinkPost(post.PostId);
+            originalPost.Name = post.Name;
+            originalPost.IsVisible = post.IsVisible;
+            originalPost.CreationDate = DateTime.Now;
+            originalPost.PostType = post.PostType;
+            originalPost.LinkContent = post.LinkContent;
+            _postContainer.WritePosts();
+            return RedirectToAction("TeacherIndex");
+        }
+
+        [HttpPost]
+        public IActionResult EditPost(TextPost post)
+        {
+            TextPost? originalPost = _postContainer.GetTextPost(post.PostId);
+            originalPost.Name = post.Name;
+            originalPost.IsVisible = post.IsVisible;
+            originalPost.CreationDate = DateTime.Now;
+            originalPost.PostType = post.PostType;
+            originalPost.TextContent = post.TextContent;
+            _postContainer.WritePosts();
+            return RedirectToAction("TeacherIndex");
+        }
+
+        public IActionResult DeletePost(int postId)
+        {
+            Post post = _postContainer.PostList.SingleOrDefault(post => post.PostId == postId);
+            return View(post);
+        }
+
+        [HttpPost, ActionName("DeletePost")]
+        public IActionResult DeletePosts(int postId)
+        {
+            TextPost post = (TextPost)_postContainer.PostList.SingleOrDefault(post => post.PostId == postId);
+            if (post == null)
+            {
+                return NotFound();
+            }
+            _postContainer.DeletePost(post);
+            _postContainer.WritePosts();
+            return RedirectToAction("TeacherIndex");
+        }
+        [HttpPost, ActionName("DeletePost")]
+        public IActionResult DeleteLinkPosts(int postId)
+        {
+            LinkPost post = (LinkPost)_postContainer.PostList.SingleOrDefault(post => post.PostId == postId);
+            if (post == null)
+            {
+                return NotFound();
+            }
+            _postContainer.DeletePost(post);
+            _postContainer.WritePosts();
+            return RedirectToAction("TeacherIndex");
         }
     }
 }

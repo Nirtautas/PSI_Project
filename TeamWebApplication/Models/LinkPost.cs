@@ -2,33 +2,33 @@
 {
     public class LinkPost : Post
     {
-        public string linkContent { get; set; }
-        public LinkPost(int id, int courseId, string name, DateTime creationDate, bool isVisible, PostType postType, string linkContent)
+        public string LinkContent { get; set; }
+        public LinkPost(int id, int courseId, string name, DateTime creationDate, bool IsVisible, PostType PostType, string linkContent)
         {
-            base.id = id;
-            base.courseId = courseId;
-            base.name = name;
-            base.creationDate = creationDate;
-            base.isVisible = isVisible;
-            base.postType = postType;
-            this.linkContent = linkContent;
+            base.PostId = id;
+            base.CourseId = courseId;
+            base.Name = name;
+            base.CreationDate = creationDate;
+            base.IsVisible = IsVisible;
+            base.PostType = PostType;
+            this.LinkContent = linkContent;
         }
 
         public override string ToString()
         {
             return
-                id.ToString() + ";" +
-                courseId.ToString() + ";" +
-                name + ";" +
-                creationDate.ToString() + ";" +
-                isVisible + ";" +
-                postType.ToString() + ';' +
-                linkContent;
+                PostId.ToString() + ";" +
+                CourseId.ToString() + ";" +
+                Name + ";" +
+                CreationDate.ToString() + ";" +
+                IsVisible + ";" +
+                PostType.ToString() + ';' +
+                LinkContent;
         }
 
         public override string DataToString()
         {
-            return linkContent;
+            return LinkContent;
         }
     }
 }

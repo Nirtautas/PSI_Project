@@ -144,7 +144,7 @@
     });
   };
 
-  const isVisible = element => {
+  const IsVisible = element => {
     if (!isElement$1(element) || element.getClientRects().length === 0) {
       return false;
     }
@@ -1054,7 +1054,7 @@
 
     focusableChildren(element) {
       const focusables = ['a', 'button', 'input', 'textarea', 'select', 'details', '[tabindex]', '[contenteditable="true"]'].map(selector => `${selector}:not([tabindex^="-"])`).join(', ');
-      return this.find(focusables, element).filter(el => !isDisabled(el) && isVisible(el));
+      return this.find(focusables, element).filter(el => !isDisabled(el) && IsVisible(el));
     }
 
   };
@@ -1178,7 +1178,7 @@
     nextWhenVisible() {
       // Don't call next when the page isn't visible
       // or the carousel or its parent isn't visible
-      if (!document.hidden && isVisible(this._element)) {
+      if (!document.hidden && IsVisible(this._element)) {
         this.next();
       }
     }
@@ -4011,7 +4011,7 @@
       key,
       target
     }) {
-      const items = SelectorEngine.find(SELECTOR_VISIBLE_ITEMS, this._menu).filter(isVisible);
+      const items = SelectorEngine.find(SELECTOR_VISIBLE_ITEMS, this._menu).filter(IsVisible);
 
       if (!items.length) {
         return;
@@ -4272,7 +4272,7 @@
    */
   const Default$7 = {
     className: 'modal-backdrop',
-    isVisible: true,
+    IsVisible: true,
     // if false, we use the backdrop helper without adding any element to the dom
     isAnimated: false,
     rootElement: 'body',
@@ -4281,7 +4281,7 @@
   };
   const DefaultType$7 = {
     className: 'string',
-    isVisible: 'boolean',
+    IsVisible: 'boolean',
     isAnimated: 'boolean',
     rootElement: '(element|string)',
     clickCallback: '(function|null)'
@@ -4299,7 +4299,7 @@
     }
 
     show(callback) {
-      if (!this._config.isVisible) {
+      if (!this._config.IsVisible) {
         execute(callback);
         return;
       }
@@ -4318,7 +4318,7 @@
     }
 
     hide(callback) {
-      if (!this._config.isVisible) {
+      if (!this._config.IsVisible) {
         execute(callback);
         return;
       }
@@ -4659,7 +4659,7 @@
 
     _initializeBackDrop() {
       return new Backdrop({
-        isVisible: Boolean(this._config.backdrop),
+        IsVisible: Boolean(this._config.backdrop),
         // 'static' option will be translated to true, and booleans will keep their value
         isAnimated: this._isAnimated()
       });
@@ -4894,7 +4894,7 @@
       }
 
       EventHandler.one(target, EVENT_HIDDEN$3, () => {
-        if (isVisible(this)) {
+        if (IsVisible(this)) {
           this.focus();
         }
       });
@@ -5085,7 +5085,7 @@
     _initializeBackDrop() {
       return new Backdrop({
         className: CLASS_NAME_BACKDROP,
-        isVisible: this._config.backdrop,
+        IsVisible: this._config.backdrop,
         isAnimated: true,
         rootElement: this._element.parentNode,
         clickCallback: () => this.hide()
@@ -5144,7 +5144,7 @@
 
     EventHandler.one(target, EVENT_HIDDEN$2, () => {
       // focus on trigger when it is closed
-      if (isVisible(this)) {
+      if (IsVisible(this)) {
         this.focus();
       }
     }); // avoid conflict when clicking a toggler of an offcanvas, while another is open

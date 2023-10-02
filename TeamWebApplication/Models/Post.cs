@@ -1,19 +1,18 @@
 ﻿namespace TeamWebApplication.Models
 {
-    public abstract class Post
+    public class Post
     {
-        public int id { get; set; }
-        public int courseId { get; set; }
-        public string name { get; set; }
-        public DateTime creationDate { get; set; }
-        public bool isVisible { get; set; }
-        public PostType postType { get; set; }
-
-        //Will need to add child classes with specific post types.
-
-        public abstract string DataToString();
+        public int PostId { get; set; }
+        public int CourseId { get; set; }
+        public string Name { get; set; }
+        public DateTime CreationDate { get; set; }
+        public bool IsVisible { get; set; }
+        public PostType PostType { get; set; }
+        public virtual string DataToString()
+        {
+            return Name;
+        }
     }
-
     public enum PostType
     {
         Text,

@@ -7,12 +7,12 @@
         //public string FileType { get; set; } possible future implementation with specific icons
         public string FilePath { get; set; }
         public string FileName { get; set; }
-        public FilePost(int id, string name, DateTime creationDate, bool isVisible, string textContent, string fileName, string filePath)
+        public FilePost(int id, string name, DateTime creationDate, bool IsVisible, string textContent, string fileName, string filePath)
         {
-            base.id = id;
-            base.name = name;
-            base.creationDate = creationDate;
-            base.isVisible = isVisible;
+            base.PostId = id;
+            base.Name = name;
+            base.CreationDate = creationDate;
+            base.IsVisible = IsVisible;
             TextContent = textContent;
             FileName = fileName;
             //FileType = fileType; 
@@ -21,12 +21,12 @@
         public override string ToString()
         {
             return
-                id.ToString() + ";" +
-                courseId.ToString() + ";" +
-                name + ";" +
-                creationDate.ToString() + ";" +
-                isVisible + ";" +
-                postType.ToString() + ';' +
+                PostId.ToString() + ";" +
+                CourseId.ToString() + ";" +
+                Name + ";" +
+                CreationDate.ToString() + ";" +
+                IsVisible + ";" +
+                PostType.ToString() + ';' +
                 TextContent;
         }
         public override string DataToString()
