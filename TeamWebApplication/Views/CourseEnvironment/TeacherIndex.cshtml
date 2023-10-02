@@ -5,16 +5,17 @@
 
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta name="viewport" content="width=device-width" />
-        <title>Courses</title>
-        <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-        <link rel="stylesheet" href="~/css/CoursesStyle.css" asp-append-version="true" />
-        <link rel="stylesheet" href="~/css/CommentStyle.css" asp-append-version="true" />
-        <link rel="stylesheet" href="~/css/DeleteButtonStyle.css" asp-append-version="true" />
-    </head>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Courses</title>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/CoursesStyle.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/CommentStyle.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/DeleteButtonStyle.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/PostStyle.css" asp-append-version="true" />
+</head>
 
-    <body>
+<body>
     <div class="ribbon">
         <div class="Name">
             <a class="text-style">Mudli</a>
@@ -46,84 +47,108 @@
 
         @foreach (Post post in Model.PostData)
         {
-            <div>
-                @Html.Raw(@post.DataToHtml())
-                @switch(post.PostType)
-                {
-                    case PostType.Text:
-                        <a class="hidden-button" asp-action="EditTextPost" asp-controller="CourseEnvironment" asp-route-postId="@post.PostId">Edit Post</a>
-                        <a class="hidden-button" asp-action="DeleteTextPost" asp-controller="CourseEnvironment" asp-route-postId="@post.PostId">Delete Post</a>
-                        break;
-                    case PostType.Link:
-                        <a class="hidden-button" asp-action="EditLinkPost" asp-controller="CourseEnvironment" asp-route-postId="@post.PostId">Edit Post</a>
-                        <a class="hidden-button" asp-action="DeleteLinkPost" asp-controller="CourseEnvironment" asp-route-postId="@post.PostId">Delete Post</a>
-                        break;
-                }
-            </div>
-        }
-    </div>
-
-
-    <!-- Displaying existing comments -->
-    <div class="comment-container">
-        <div class="comment-header">
-            <h2 class="comments-label">Comments</h2>
-        </div>
-
-        <div class="comment-section">
-            @foreach (var comment in Model.CommentData)
-            {
-                <div class="comment">
-                    <div class="comment-header">
-                        <div class="comment-header-left">@comment.UsersNameThatCommented</div>
-                        <div class="comment-header-right">@comment.CommentCreationTime.ToString("yyyy-MM-dd HH:mm:ss")</div>
+            <div class="post-container">
+                <div class="post-header">
+                    <div class="post-header-left">@post.Name</div>
+                </div>
+                <div class="post-body">
+                    <div>
+                        @Html.Raw(@post.DataToHtml())
                     </div>
-                    <div class="comment-body">
-                        <div style="display: block;" id="@comment.CommentId">
-                            @comment.UserComment
-                        </div>
-                        @if (Model.LoggedInUser == comment.UserId)
+                    <div class="post-button-container">
+                        @switch (post.PostType)
                         {
-                            <button class="delete-button" onclick="toggleTextareaVisibility(@comment.CommentId)"> <img class="delete-button" src="https://th.bing.com/th/id/OIP.4_sgSrCdA_8Jmfp8w9JUjAAAAA?pid=ImgDet&rs=1" alt="Image" /></button>
-                            <div style="display: none;" class="comment-form1" id="@comment.CommentId">
-                                <form method="post" asp-action="EditComment" asp-route-courseId="@Model.comment.CourseId" asp-controller="CourseEnvironment">
-                                    <input type="hidden" id="CourseId" name="CourseId" asp-for="@Model.comment.CourseId" value="@Model.comment.CourseId" />
-                                    <input type="hidden" id="CommentId" name="CommentId" asp-for="@Model.comment.CommentId" value="@comment.CommentId" />
-                                    <textarea name="UserComment" id="UserComment" rows="3" cols="50">@comment.UserComment</textarea>
-                                    <button type="submit" class="delete-button">
-                                        @*<button type="submit" class="delete-button" onclick="storeScrollPosition(@comment.CommentId)">*@
-                                        <img class="delete-button" src="https://th.bing.com/th/id/OIP.rXCLqHg2p4SkI0mkJfrw6gHaHa?pid=ImgDet&rs=1" alt="Image" />
+                            case PostType.Text:
+                                <a class="hidden-button" asp-action="EditTextPost" asp-controller="CourseEnvironment" asp-route-postId="@post.PostId">
+                                    <button type="button" class="delete-button">
+                                        <img class="delete-button" src="https://th.bing.com/th/id/OIP.4_sgSrCdA_8Jmfp8w9JUjAAAAA?pid=ImgDet&rs=1" alt="Image" />
                                     </button>
-                                </form>
-                            </div>
-
-                            <form method="post" asp-action="Delete" asp-route-courseId="@Model.comment.CourseId" asp-controller="CourseEnvironment">
-                                <input type="hidden" id="CourseId" name="CourseId" asp-for="@Model.comment.CourseId" value="@Model.comment.CourseId" />
-                                <input type="hidden" id="CommentId" name="CommentId" asp-for="@Model.comment.CommentId" value="@comment.CommentId" />
-                                <button type="submit" class="delete-button" onclick="storeScrollPosition(@comment.CommentId)">
-                                    <img class="delete-button" src="https://static.vecteezy.com/system/resources/previews/009/921/243/large_2x/trash-glyph-round-corner-free-vector.jpg" alt="Image" />
-                                </button>
-                            </form>
+                                </a>
+                                <div class="button-space"></div>
+                                <a class="hidden-button" asp-action="DeleteTextPost" asp-controller="CourseEnvironment" asp-route-postId="@post.PostId">
+                                    <button type="button" class="delete-button">
+                                        <img class="delete-button" src="https://static.vecteezy.com/system/resources/previews/009/921/243/large_2x/trash-glyph-round-corner-free-vector.jpg" alt="Image" />
+                                    </button>
+                                </a>
+                                break;
+                            case PostType.Link:
+                                <a class="edit-button" asp-action="EditLinkPost" asp-controller="CourseEnvironment" asp-route-postId="@post.PostId">
+                                    <button type="button" class="delete-button">
+                                        <img class="delete-button" src="https://th.bing.com/th/id/OIP.4_sgSrCdA_8Jmfp8w9JUjAAAAA?pid=ImgDet&rs=1" alt="Image" />
+                                    </button>
+                                </a>
+                                <div class="button-space"></div>
+                                <a class="delete-button" asp-action="DeleteLinkPost" asp-controller="CourseEnvironment" asp-route-postId="@post.PostId">
+                                    <button type="button" class="delete-button">
+                                        <img class="delete-button" src="https://static.vecteezy.com/system/resources/previews/009/921/243/large_2x/trash-glyph-round-corner-free-vector.jpg" alt="Image" />
+                                    </button>
+                                </a>
+                                break;
                         }
                     </div>
                 </div>
-            }
-        </div>
-    </div>
-
-    <div id="comment-form" class="comment-form" style="display: block;">
-        <form asp-action="AddComment" asp-controller="CourseEnvironment" method="post">
-            <input type="hidden" id="CourseId" name="CourseId" asp-for="@Model.comment.CourseId" value="@Model.comment.CourseId" />
-            <input type="hidden" id="CommentId" name="CommentId" asp-for="@Model.comment.CommentId" value="@Model.comment.CommentId" />
-            <div class="form-group">
-                <div class="textarea-container">
-                    <textarea name="UserComment" id="UserComment" asp-for="@Model.comment.UserComment" rows="3" cols="50" placeholder="Write your comment here" required></textarea>
-                    <button type="submit" class="button">Submit</button>
-                </div>
             </div>
-        </form>
-    </div>
-    </body>
+        }
+
+        <!-- Displaying existing comments -->
+        <div class="comment-container">
+            <div class="comment-header">
+                <h2 class="comments-label">Comments</h2>
+            </div>
+
+            <div class="comment-section">
+                @foreach (var comment in Model.CommentData)
+                {
+                    <div class="comment">
+                        <div class="comment-header">
+                            <div class="comment-header-left">@comment.UsersNameThatCommented</div>
+                            <div class="comment-header-right">@comment.CommentCreationTime.ToString("yyyy-MM-dd HH:mm:ss")</div>
+                        </div>
+                        <div class="comment-body">
+                            <div style="display: block;" id="@comment.CommentId">
+                                @comment.UserComment
+                            </div>
+                            @if (Model.LoggedInUser == comment.UserId)
+                            {
+                                <button class="delete-button" onclick="toggleTextareaVisibility(@comment.CommentId)"> <img class="delete-button" src="https://th.bing.com/th/id/OIP.4_sgSrCdA_8Jmfp8w9JUjAAAAA?pid=ImgDet&rs=1" alt="Image" /></button>
+                                <div style="display: none;" class="comment-form1" id="@comment.CommentId">
+                                    <form method="post" asp-action="EditComment" asp-route-courseId="@Model.comment.CourseId" asp-controller="CourseEnvironment">
+                                        <input type="hidden" id="CourseId" name="CourseId" asp-for="@Model.comment.CourseId" value="@Model.comment.CourseId" />
+                                        <input type="hidden" id="CommentId" name="CommentId" asp-for="@Model.comment.CommentId" value="@comment.CommentId" />
+                                        <textarea name="UserComment" id="UserComment" rows="3" cols="50">@comment.UserComment</textarea>
+                                        <button type="submit" class="delete-button">
+                                            <img class="delete-button" src="https://th.bing.com/th/id/OIP.rXCLqHg2p4SkI0mkJfrw6gHaHa?pid=ImgDet&rs=1" alt="Image" />
+                                        </button>
+                                    </form>
+                                </div>
+
+                                <form method="post" asp-action="Delete" asp-route-courseId="@Model.comment.CourseId" asp-controller="CourseEnvironment">
+                                    <input type="hidden" id="CourseId" name="CourseId" asp-for="@Model.comment.CourseId" value="@Model.comment.CourseId" />
+                                    <input type="hidden" id="CommentId" name="CommentId" asp-for="@Model.comment.CommentId" value="@comment.CommentId" />
+                                    <button type="submit" class="delete-button" onclick="storeScrollPosition(@comment.CommentId)">
+                                        <img class="delete-button" src="https://static.vecteezy.com/system/resources/previews/009/921/243/large_2x/trash-glyph-round-corner-free-vector.jpg" alt="Image" />
+                                    </button>
+                                </form>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <div id="comment-form" class="comment-form" style="display: block;">
+            <form asp-action="AddComment" asp-controller="CourseEnvironment" method="post">
+                <input type="hidden" id="CourseId" name="CourseId" asp-for="@Model.comment.CourseId" value="@Model.comment.CourseId" />
+                <input type="hidden" id="CommentId" name="CommentId" asp-for="@Model.comment.CommentId" value="@Model.comment.CommentId" />
+                <div class="form-group">
+                    <div class="textarea-container">
+                        <textarea name="UserComment" id="UserComment" asp-for="@Model.comment.UserComment" rows="3" cols="50" placeholder="Write your comment here" required></textarea>
+                        <button type="submit" class="button">Submit</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+</body>
 </html>
 
 <script>
