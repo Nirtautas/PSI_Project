@@ -54,7 +54,7 @@ namespace TeamWebApplication.Controllers
             _userContainer.AddRelation(_userContainer.loggedInUserId, createdCourseId);
             _relationContainer.AddRelationData(createdCourseId, _userContainer.loggedInUserId);
             _courseContainer.WriteCourses();
-            return RedirectToAction("Index");
+            return RedirectToAction("CreateTextPost", new { courseId = createdCourseId });
         }
 
         public IActionResult Edit(int courseId)
