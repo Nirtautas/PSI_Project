@@ -5,6 +5,7 @@
 
 <!DOCTYPE html>
 <html>
+<<<<<<< HEAD
     <head>
         <meta name="viewport" content="width=device-width" />
         <title>Courses</title>
@@ -29,6 +30,36 @@
         </div>
         <div class="courses-header">
             <a>Courses</a>
+=======
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Courses</title>
+    <link rel="stylesheet" href="~/css/ribbon.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/CoursesStyle.css" asp-append-version="true" />
+</head>
+
+<body>
+<div class="ribbon">
+    <div class="project-name-container">
+        <a class="text-style name">Mudli</a>
+    </div>
+    <div class="buttons-container">
+        <a asp-action="TeacherIndex" asp-controller="PublicCourse" class="text-style button">Public courses</a>
+        <a asp-action="TeacherIndex" asp-controller="Course" class="text-style button">My Courses</a>
+        <a asp-action="Index" asp-controller="Home" class="text-style button">Log out</a>
+    </div>
+</div>
+
+    <div class="courses-header">
+        <a>Courses</a>
+    </div>
+    <div>
+        <div class="course-navigation-array">
+            <input placeholder="Search course...">
+            <button class="create-course-button">
+                <a asp-action="Create" asp-controller="Course">Create Course</a>
+            </button>
+>>>>>>> f74eb53f97d4441bf54eaa3ef99212ba6b7bf46c
         </div>
         <div>
             <div class="course-navigation-array">

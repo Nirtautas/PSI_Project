@@ -6,16 +6,18 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>Courses</title>
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+
+    <link rel="stylesheet" href="~/css/ribbon.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/CoursesStyle.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/CommentStyle.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/DeleteButtonStyle.css" asp-append-version="true" />
 </head>
 
 <div class="ribbon">
-    <div class="Name">
-        <a class="text-style">Mudli</a>
+    <div class="project-name-container">
+        <a class="text-style name">Mudli</a>
     </div>
+<<<<<<< HEAD
     <div class="logout-button">
         <a asp-action="Index" asp-controller="PublicCourse" class="text-style" style="text-decoration: none; color: #ffffff;">Public courses</a>
     </div>
@@ -85,47 +87,134 @@
                 </div>
             </div>
         }
+=======
+    <div class="buttons-container">
+        <a asp-action="Index" asp-controller="PublicCourse" class="text-style button">Public courses</a>
+        <a asp-action="Index" asp-controller="Course" class="text-style button">My Courses</a>
+        <a asp-action="Index" asp-controller="Home" class="text-style button">Log out</a>
+>>>>>>> f74eb53f97d4441bf54eaa3ef99212ba6b7bf46c
     </div>
 </div>
 
-<div id="comment-form" class="comment-form" style="display: block;">
-    <form asp-action="AddComment" asp-controller="CourseEnvironment" method="post">
-        <input type="hidden" id="CourseId" name="CourseId" asp-for="@Model.comment.CourseId" value="@Model.comment.CourseId" />
-        <input type="hidden" id="CommentId" name="CommentId" asp-for="@Model.comment.CommentId" value="@Model.comment.CommentId" />
-        <div class="form-group">
-            <div class="textarea-container">
-                <textarea name="UserComment" id="UserComment" asp-for="@Model.comment.UserComment" rows="3" cols="50" placeholder="Write your comment here" required></textarea>
-                <button type="submit" class="button">Submit</button>
-            </div>
+<div class="sidebar-and-content">
+    <div class="sidebar">
+        <!--add posts here-->
+        <a href="#">Link 1</a>
+        <a href="#">Link 2</a>
+        <a href="#">Link 3</a>
+        <a href="#">Link 4</a>
+    </div>
+    <div class="main-content">
+
+        <div class="course-name">
+            <a>Course name</a>
+            <span class="star-reflection"></span>
         </div>
-    </form>
+
+        <div class="course-body">
+
+            <div class="star-rating">
+                <i>Give the course a rating</i>
+                <form method="post">
+                    <div class="star-container">
+                        <input type="radio" name="rating">
+                        <input type="radio" name="rating">
+                        <input type="radio" name="rating">
+                        <input type="radio" name="rating">
+                        <input type="radio" name="rating">
+                        <input type="radio" name="rating">
+                        <input type="radio" name="rating">
+                        <input type="radio" name="rating">
+                        <input type="radio" name="rating">
+                        <input type="radio" name="rating">
+                    </div>
+                    <button type="submit" class="submit-button">Submit</button>
+                </form>
+            </div>
+
+            <div class="comment-input-container">
+                <i>Leave a comment</i>
+                <form asp-action="AddComment" asp-route-courseId="@Model.comment.CourseId" asp-controller="CourseEnvironment" method="post">
+                    <div class="form-group">
+                        <textarea name="comment.UserComment" id="@Model.comment.UserComment" rows="3" cols="50" placeholder="Write your comment here"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="submit-button">Submit Comment</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="comment-container">
+                @foreach (var comment in Model.CommentData)
+                {
+                    <div class="comment">
+                        <div class="comment-header">
+                            <div class="comment-header-left">@comment.UsersNameThatCommented</div>
+                            <div class="comment-header-right">@comment.CommentCreationTime.ToString("yyyy-MM-dd HH:mm:ss")</div>
+                        </div>
+                        <div class="comment-body">
+                            <div style="display: block;" id="@comment.CommentId">
+                                @comment.UserComment
+                            </div>
+                            @if (Model.LoggedInUser == comment.UserId)
+                            {
+                                <div style="display: none;" class="comment-form1" id="@comment.CommentId">
+                                    <form method="post" asp-action="EditComment" asp-route-courseId="@Model.comment.CourseId" asp-controller="CourseEnvironment">
+                                        <input type="hidden" id="CourseId" name="CourseId" asp-for="@Model.comment.CourseId" value="@Model.comment.CourseId" />
+                                        <input type="hidden" id="CommentId" name="CommentId" asp-for="@Model.comment.CommentId" value="@comment.CommentId" />
+                                        <textarea name="UserComment" id="UserComment" rows="3" cols="50">@comment.UserComment</textarea>
+                                        <button type="submit" class="delete-button">
+                                            <img class="delete-button" src="https://th.bing.com/th/id/OIP.rXCLqHg2p4SkI0mkJfrw6gHaHa?pid=ImgDet&rs=1" alt="Image" />
+                                        </button>
+                                    </form>
+                                </div>
+                                <div class="delete-and-edit-container" id="@comment.CommentId">
+                                    <button class="delete-button" onclick="toggleTextareaVisibility(@comment.CommentId)">
+                                        <img class="delete-button" src="https://th.bing.com/th/id/OIP.4_sgSrCdA_8Jmfp8w9JUjAAAAA?pid=ImgDet&rs=1" alt="Image" />
+                                    </button>
+
+                                    <form method="post" asp-action="Delete" asp-route-courseId="@Model.comment.CourseId" asp-controller="CourseEnvironment">
+                                        <input type="hidden" id="CourseId" name="CourseId" asp-for="@Model.comment.CourseId" value="@Model.comment.CourseId" />
+                                        <input type="hidden" id="CommentId" name="CommentId" asp-for="@Model.comment.CommentId" value="@comment.CommentId" />
+                                        <button type="submit" class="delete-button" onclick="storeScrollPosition(@comment.CommentId)">
+                                            <img class="delete-button" src="https://static.vecteezy.com/system/resources/previews/009/921/243/large_2x/trash-glyph-round-corner-free-vector.jpg" alt="Image" />
+                                        </button>
+                                    </form>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+
+        </div>
+    </div>
 </div>
+
+
+
 <script>
     function toggleTextareaVisibility(commentId) {
-        var elements = document.querySelectorAll(`[id="${commentId}"]`); // Update the textarea id
-        console.log(elements)
+        var elements = document.querySelectorAll(`[id="${commentId}"]`);
         elements.forEach(element => {
             if (element.style.display === "none") {
                 element.style.display = "block";
+                // Show the delete and edit buttons
+                var buttons = document.querySelectorAll(`.delete-and-edit-container[id="${commentId}"]`);
+                buttons.forEach(button => {
+                    button.style.display = "none"; // Change "none" to "block"
+                });
             } else {
                 element.style.display = "none";
+                // Hide the delete and edit buttons
+                var buttons = document.querySelectorAll(`.delete-and-edit-container[id="${commentId}"]`);
+                buttons.forEach(button => {
+                    button.style.display = "block"; // Change "block" to "none"
+                });
             }
-        }
-        )
+        });
     }
 </script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-@*<script>
-    //after reloading page user should be brought back to the previous place that user scrolled to
-        document.addEventListener('DOMContentLoaded', function () {
-            console.log('DOMContentLoaded event fired.');
-            var scrollPosition = localStorage.getItem('scrollPosition_' + @comment.CommentId); // Use a unique key
-            console.log('Retrieved scroll position:', scrollPosition);
-            if (scrollPosition !== null) {
-                console.log('Restoring scroll position to:', scrollPosition);
-                // Scroll the page to the stored position
-                window.scrollTo(0, scrollPosition);
-            }
-        });
-</script>*@
+<script src="https://kit.fontawesome.com/d5cb7f48d5.js" crossorigin="anonymous"></script>
 

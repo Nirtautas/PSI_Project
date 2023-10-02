@@ -1,6 +1,15 @@
+<<<<<<< HEAD
 40010
 40000;10000;20000;Jonas;Paguzinskas;2023-09-18 12:23:40;Sus course
 40001;10001;20002;Alita;Stuknaite;2023-09-27 16:14:09;good
 40002;10000;20002;Alita;Stuknaite;2023-09-27 13:10:30;Cool
 40004;10001;20002;Alita;Stuknaite;2023-09-27 16:41:51;nice
 40005;10002;20002;Alita;Stuknaite;2023-09-28 16:12:38;pls work baby
+=======
+40019
+40001;10001;20002;Alita;Stuknaite;2023-09-27 16:14:09;good
+40002;10000;20002;Alita;Stuknaite;2023-09-27 13:10:30;Cool
+40004;10001;20002;Alita;Stuknaite;2023-09-27 16:41:51;nice
+40005;10000;20000;Jonas;Paguzinskas;2023-09-28 16:48:26;asdasdasd
+40018;10006;20000;Jonas;Paguzinskas;2023-09-28 17:38:25;woah
+>>>>>>> f74eb53f97d4441bf54eaa3ef99212ba6b7bf46c
