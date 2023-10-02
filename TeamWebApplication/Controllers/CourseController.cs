@@ -19,19 +19,6 @@ namespace TeamWebApplication.Controllers
 
         public IActionResult Index()
         {
-            _userContainer.currentCourseId = 0;
-            IEnumerable<Course> coursesTaken = (
-                from user in _userContainer.userList
-                where user.UserId == _userContainer.loggedInUserId
-                from courseId in user.CoursesUserTakesId
-                join course in _courseContainer.courseList on courseId equals course.Id
-                select course
-            ).ToList();
-            return View(coursesTaken);
-        }
-
-        public IActionResult TeacherIndex()
-        {
 			_userContainer.currentCourseId = 0;
 			IEnumerable<Course> coursesTaken = (
                 from user in _userContainer.userList
@@ -40,7 +27,16 @@ namespace TeamWebApplication.Controllers
                 join course in _courseContainer.courseList on courseId equals course.Id
                 select course
             ).ToList();
-            return View(coursesTaken);
+            
+            User currentUser = _userContainer.GetUser(_userContainer.loggedInUserId);
+
+            var viewModel = new CourseViewModel
+            {
+                Courses = coursesTaken,
+                User = currentUser
+            };
+
+            return View(viewModel);
         }
 
         public IActionResult Create()
@@ -56,7 +52,7 @@ namespace TeamWebApplication.Controllers
             _userContainer.AddRelation(_userContainer.loggedInUserId, createdCourseId);
             _relationContainer.AddRelationData(createdCourseId, _userContainer.loggedInUserId);
             _courseContainer.WriteCourses();
-            return RedirectToAction("TeacherIndex");
+            return RedirectToAction("Index");
         }
 
         public IActionResult Edit(int courseId)
@@ -74,7 +70,7 @@ namespace TeamWebApplication.Controllers
             originalCourse.IsPublic = course.IsPublic;
             originalCourse.Description = course.Description;
             _courseContainer.WriteCourses();
-            return RedirectToAction("TeacherIndex");
+            return RedirectToAction("Index");
         }
 
         public IActionResult Delete(int courseId)
@@ -95,7 +91,7 @@ namespace TeamWebApplication.Controllers
             _userContainer.DeleteRelation(_userContainer.loggedInUserId, courseId);
             _relationContainer.DeleteRelationData(courseId, _userContainer.loggedInUserId);
             _courseContainer.WriteCourses();
-            return RedirectToAction("TeacherIndex");
+            return RedirectToAction("Index");
         }
 
         public IActionResult AddUser(int courseId)
@@ -121,7 +117,7 @@ namespace TeamWebApplication.Controllers
                     }
                 }
             }
-            return RedirectToAction("TeacherIndex");
+            return RedirectToAction("Index");
         }
 
         public IActionResult RemoveUser(int courseId)
@@ -148,7 +144,7 @@ namespace TeamWebApplication.Controllers
                     }
                 }
             }
-            return RedirectToAction("TeacherIndex");
+            return RedirectToAction("Index");
         }
 
         public IActionResult CheckUsers(int courseId)
