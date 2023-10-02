@@ -92,9 +92,6 @@ namespace TeamWebApplication.Controllers
         [HttpPost]
         public IActionResult EditComment(int courseId, int commentId, String userComment)
         {
-            Console.WriteLine(courseId);
-            Console.WriteLine(commentId);
-            Console.WriteLine(userComment);
             Comment originalComment = _commentContainer.CommentList.SingleOrDefault(comment => comment.CommentId == commentId);
             originalComment.UserComment = userComment;
             originalComment.CommentCreationTime = DateTime.Now;
@@ -109,7 +106,7 @@ namespace TeamWebApplication.Controllers
             _commentContainer.DeleteComment(comment);
             return RedirectToAction("Index", new { courseId });
         }
-        
+
         public IActionResult CreateTextPost()
         {
             Post post = new TextPost();
@@ -131,9 +128,9 @@ namespace TeamWebApplication.Controllers
             return RedirectToAction("Index", new { courseId });
         }
 
-		[HttpPost]
-		public IActionResult CreateLinkPost(LinkPost post, int courseId)
-		{
+        [HttpPost]
+        public IActionResult CreateLinkPost(LinkPost post, int courseId)
+        {
             post.PostType = PostType.Link;
 			_postContainer.CreatePost(post, _userContainer.currentCourseId);
 			_postContainer.WritePosts();
@@ -143,7 +140,7 @@ namespace TeamWebApplication.Controllers
         public IActionResult EditTextPost(int postId)
         {
             TextPost? post = (TextPost)_postContainer.GetPost(postId);
-			return View(post);
+            return View(post);
         }
 
         public IActionResult EditLinkPost(int postId)
@@ -178,19 +175,19 @@ namespace TeamWebApplication.Controllers
             return RedirectToAction("Index", new { courseId });
         }
 
-		public IActionResult DeleteTextPost(int postId)
-		{
-			TextPost? post = (TextPost)_postContainer.GetPost(postId);
-			return View(post);
-		}
+        public IActionResult DeleteTextPost(int postId)
+        {
+            TextPost? post = (TextPost)_postContainer.GetPost(postId);
+            return View(post);
+        }
 
-		public IActionResult DeleteLinkPost(int postId)
-		{
-			LinkPost? post = (LinkPost)_postContainer.GetPost(postId);
-			return View(post);
-		}
+        public IActionResult DeleteLinkPost(int postId)
+        {
+            LinkPost? post = (LinkPost)_postContainer.GetPost(postId);
+            return View(post);
+        }
 
-		[HttpPost]
+        [HttpPost]
         public IActionResult DeleteTextPost(TextPost post, int courseId)
         {
 			TextPost originalPost = (TextPost)_postContainer.GetPost(post.PostId);

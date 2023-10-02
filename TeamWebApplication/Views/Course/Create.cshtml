@@ -36,10 +36,10 @@
 
             <label for="Faculty">Faculty:</label>
             <select id="Faculty" name="Faculty" class="form-group1" required>
-                <option value="" disabled selected>Select Faculty</option>
+                <option value="" class="form-group1" disabled selected>Select Faculty</option>
                 @foreach (var faculty in ViewData["Faculties"] as string[])
                 {
-                    <option>@faculty</option>
+                    <option class="form-group1">@faculty</option>
                 }
             </select>
             <span class="text-danger"></span>

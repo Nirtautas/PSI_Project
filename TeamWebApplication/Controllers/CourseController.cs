@@ -9,12 +9,14 @@ namespace TeamWebApplication.Controllers
         private readonly IUserContainer _userContainer;
         private readonly ICourseContainer _courseContainer;
         private readonly IRelationContainer _relationContainer;
+        private readonly IPostContainer _postContainer;
 
-        public CourseController(IUserContainer userContainer, ICourseContainer courseContainer, IRelationContainer relationContainer)
+        public CourseController(IUserContainer userContainer, ICourseContainer courseContainer, IRelationContainer relationContainer, IPostContainer postContainer)
         {
             _userContainer = userContainer;
             _courseContainer = courseContainer;
             _relationContainer = relationContainer;
+            _postContainer = postContainer;
         }
 
         public IActionResult Index()
@@ -73,6 +75,11 @@ namespace TeamWebApplication.Controllers
             return RedirectToAction("Index");
         }
 
+        public IActionResult CreateTextPost(int courseId)
+        {
+            _postContainer.CreatePost(courseId);
+            return RedirectToAction("Index");
+        }
         public IActionResult Delete(int courseId)
         {
             Course course = _courseContainer.courseList.SingleOrDefault(course => course.Id == courseId);
@@ -105,7 +112,8 @@ namespace TeamWebApplication.Controllers
         {
             String[] userIdList = userIdString.Split(';');
             Course? currentCourse = _courseContainer.GetCourse(_userContainer.currentCourseId);
-            foreach (var word in userIdList) {
+            foreach (var word in userIdList)
+            {
                 if (Int32.TryParse(word, out int userId) != false && currentCourse != null)
                 {
                     User? user;

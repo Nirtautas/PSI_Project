@@ -225,3 +225,9 @@ form .btn-primary {
     form .btn-primary:hover {
         background-color: #51314e;
     }
+
+.form-group1 {
+    background-color: var(--primary);
+    position: relative;
+    color: var(--text); 
+}
