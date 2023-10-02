@@ -31,7 +31,6 @@
         </header>
         <input type="hidden" id="Id" name="Id" asp-for="Id" value="@Model.Id" />
         <input type="hidden" id="CreationDate" name="CreationDate" asp-for="CreationDate" value="@Model.CreationDate" />
-        <input type="hidden" id="IsPublic" name="IsPublic" asp-for="IsPublic" value="@Model.IsPublic" />
         <div class="form-info-container">
             <label for="Name">Course name:</label>
             <input type="text" id="Name" name="Name" asp-for="Name" class="form-control" required />
@@ -55,6 +54,14 @@
                 <label for="Visibility" class="radio-label">
                     Is course visible?
                     <input type="checkbox" id="Visibility" asp-for="IsVisible"/>
+                </label>
+            </div>
+            <span class="text-danger"></span>
+
+            <div>
+                <label for="Publicity" class="radio-label">
+                    Is course public?
+                    <input type="checkbox" id="Publicity" asp-for="IsPublic" />
                 </label>
             </div>
             <span class="text-danger"></span>
