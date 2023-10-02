@@ -8,23 +8,19 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>Courses</title>
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/ribbon.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/CoursesStyle.css" asp-append-version="true" />
 </head>
 
 <body>
     <div class="ribbon">
-        <div class="Name">
-            <a class="text-style">Mudli</a>
+        <div class="project-name-container">
+            <a class="text-style name">Mudli</a>
         </div>
-        <div class="logout-button">
-            <a asp-action="Index" asp-controller="PublicCourse" class="text-style" style="text-decoration: none; color: #ffffff;">Public courses</a>
-        </div>
-        <div class="logout-button">
-            <a asp-action="Index" asp-controller="Course" class="text-style" style="text-decoration: none; color: #ffffff;">My Courses</a>
-        </div>
-        <div class="logout-button">
-            <a asp-action="Index" asp-controller="Home" class="text-style" style="text-decoration: none; color: #ffffff;">Log out</a>
+        <div class="buttons-container">
+            <a asp-action="Index" asp-controller="PublicCourse" class="text-style button">Public courses</a>
+            <a asp-action="Index" asp-controller="Course" class="text-style button">My Courses</a>
+            <a asp-action="Index" asp-controller="Home" class="text-style button">Log out</a>
         </div>
     </div>
     <div class="courses-header">

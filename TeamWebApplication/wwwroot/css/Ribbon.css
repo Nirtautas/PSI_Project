@@ -1,0 +1,44 @@
+﻿.ribbon {
+    background-color: #714770;
+    height: 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.project-name-container {
+    display: flex;
+    align-items: center;
+    margin-left: 15px;
+}
+
+.buttons-container {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin-right: 20px;
+}
+
+.text-style {
+    text-decoration: none;
+    color: #ffffff;
+}
+
+.button {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    margin-left: 5px;
+    padding: 0px 10px;
+    transition: 0.5s;
+}
+
+.button:hover {
+    background-color: #51314e;
+}
+
+.name {
+    font-size: 30px;
+    margin-right: auto;
+}
