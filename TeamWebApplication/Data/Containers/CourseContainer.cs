@@ -30,12 +30,12 @@ namespace TeamWebApplication.Data
                 {
                     splitString = readString.Split(';');
                     Course course = new Course(
-                        Int32.Parse(splitString[0]),                                                              //id
-                        splitString[1],                                                                           //name
-                        DateTime.ParseExact(splitString[2], "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture), //creationDate
-                        splitString[3],                                                                           //description
-                        Boolean.Parse(splitString[4]),                                                            //IsVisible
-                        Boolean.Parse(splitString[5])                                                             //isPublic
+                        id: Int32.Parse(splitString[0]),                                                             
+                        name: splitString[1],                                                                         
+                        creationDate: DateTime.ParseExact(splitString[2], "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture), 
+                        description: splitString[3],                                                                        
+                        IsVisible: Boolean.Parse(splitString[4]),                                                        
+                        isPublic: Boolean.Parse(splitString[5])                                                           
                     );
                     foreach (Relation<int> relation in relationContainer.relationData)
                     {

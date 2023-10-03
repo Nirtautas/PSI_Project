@@ -32,25 +32,25 @@ namespace TeamWebApplication.Data
                     {
                         case "Text":
                             TextPost textPost = new TextPost(
-                                Int32.Parse(splitString[0]),                                                              //PostId
-                                Int32.Parse(splitString[1]),                                                              //postId
-                                splitString[2],                                                                           //Name
-                                DateTime.ParseExact(splitString[3], "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture), //creationDate
-                                Boolean.Parse(splitString[4]),                                                            //Is Visible?
-                                (PostType)Enum.Parse(typeof(PostType), splitString[5]),                                   //Type
-                                splitString[6]                                                                            //Text Data
+                                id: Int32.Parse(splitString[0]),                                                         
+                                courseId: Int32.Parse(splitString[1]),                                                             
+                                name: splitString[2],                                                                        
+                                creationDate: DateTime.ParseExact(splitString[3], "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture), 
+                                IsVisible: Boolean.Parse(splitString[4]),                                                         
+                                PostType: (PostType)Enum.Parse(typeof(PostType), splitString[5]),                                   
+                                textContent: splitString[6]                                                                          
                             );
                             PostList.Add(textPost);
                             break;
                         case "Link":
                             LinkPost linkPost = new LinkPost(
-                                Int32.Parse(splitString[0]),                                                              //PostId
-                                Int32.Parse(splitString[1]),                                                              //postId
-                                splitString[2],                                                                           //Name
-                                DateTime.ParseExact(splitString[3], "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture), //creationDate
-                                Boolean.Parse(splitString[4]),                                                            //Is Visible?
-                                (PostType)Enum.Parse(typeof(PostType), splitString[5]),                                   //Type
-                                splitString[6]                                                                            //Link Data
+                                id: Int32.Parse(splitString[0]),                                                           
+                                courseId: Int32.Parse(splitString[1]),                                                             
+                                name: splitString[2],                                                                          
+                                creationDate: DateTime.ParseExact(splitString[3], "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture), 
+                                IsVisible: Boolean.Parse(splitString[4]),                                                       
+                                PostType: (PostType)Enum.Parse(typeof(PostType), splitString[5]),                               
+                                linkContent: splitString[6]                                                                      
                             );
                             PostList.Add(linkPost);
                             break;

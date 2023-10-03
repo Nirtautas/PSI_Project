@@ -28,16 +28,16 @@ namespace TeamWebApplication.Data
                 {
                     splitString = readString.Split(';');
                     Comment comment = new Comment(
-                        Int32.Parse(splitString[0]),     //commentId                                                         
-                        Int32.Parse(splitString[1]),     //courseId
-                        Int32.Parse(splitString[2]),     //userId                                     
-                        splitString[3],                  //user name
-                        splitString[4],                  //user surname
-                        DateTime.ParseExact(splitString[5], "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture), //creation date                                                                         //description
-                        splitString[6]    //comment                                                        
+                        commentId: Int32.Parse(splitString[0]),                                                            
+                        courseId: Int32.Parse(splitString[1]),     
+                        userId: Int32.Parse(splitString[2]),                                     
+                        usersNameThatCommented: splitString[3],                
+                        usersSurnameThatCommented: splitString[4],               
+                        commentCreationTime: DateTime.ParseExact(splitString[5], "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture),                                                                      //description
+                        userComment: splitString[6]                                                        
                     );
                     CommentList.Add(comment);
-                }//repository class - kai duombazei
+                }
             }
         }
         public void CreateComment(Comment comment, int currentCourseId, int loggedInUserId, IUserContainer _userContainer)

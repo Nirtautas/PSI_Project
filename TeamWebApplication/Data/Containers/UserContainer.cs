@@ -34,14 +34,14 @@ namespace TeamWebApplication.Data
                 {
                     splitString = readString.Split(';');
                     User user = new User(
-                        Int32.Parse(splitString[0]),                                                     //UserId
-                        splitString[1],                                                                  //Name
-                        splitString[2],                                                                  //Surname
-                        splitString[3],                                                                  //Email
-                        splitString[4],                                                                  //Password
-                        (Role)Enum.Parse(typeof(Role), splitString[5]),                                  //Role
-                        (Faculty)Enum.Parse(typeof(Faculty), splitString[6]),                            //Faculty
-                        (Specialization)Enum.Parse(typeof(Specialization), splitString[7])               //Specialization
+                        id: Int32.Parse(splitString[0]),                                                
+                        name: splitString[1],                                                           
+                        surname: splitString[2],                                                               
+                        email: splitString[3],                                                           
+                        password: splitString[4],                                                               
+                        role: (Role)Enum.Parse(typeof(Role), splitString[5]),                              
+                        faculty: (Faculty)Enum.Parse(typeof(Faculty), splitString[6]),                          
+                        specialization: (Specialization)Enum.Parse(typeof(Specialization), splitString[7])          
                         );
                     foreach (Relation<int> relation in relationContainer.relationData)
                     {
