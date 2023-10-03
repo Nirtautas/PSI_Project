@@ -1,4 +1,4 @@
-10017
+10022
 10000;Computer Architecture;2023-09-18 17:27:40;Course for computer architecture;True;False
 10001;Functional Programming;2023-09-18 17:27:40;Course for functional programming;False;False
 10002;Database Systems;2023-09-18 17:27:40;Course for database systems;True;True

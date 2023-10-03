@@ -272,3 +272,8 @@ body {
 .hidden-button:active {
     background-color: #201f20;
 }
+
+.confirmation-message {
+    color: purple;
+}
+
