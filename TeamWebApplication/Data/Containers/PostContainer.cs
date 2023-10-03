@@ -5,11 +5,13 @@ namespace TeamWebApplication.Data
 {
     public class PostContainer : IPostContainer
     {
+        public string fetchingPath { get; }
         private int postIdCounter;
         public ICollection<Post> PostList { get; }
 
-        public PostContainer()
+        public PostContainer(string fetchingPath = "./TextData/PostData.txt")
         {
+            this.fetchingPath = fetchingPath;
             PostList = new List<Post>();
             FetchPosts();
         }
@@ -18,7 +20,7 @@ namespace TeamWebApplication.Data
         {
             string? readString;
             string[]? splitString;
-            using (StreamReader? reader = new StreamReader("./TextData/PostData.txt"))
+            using (StreamReader? reader = new StreamReader(fetchingPath))
             {
                 if ((readString = reader.ReadLine()) != null)
                     postIdCounter = Int32.Parse(readString);
@@ -71,7 +73,7 @@ namespace TeamWebApplication.Data
 
         public void WritePosts()
         {
-            using (StreamWriter? writer = new StreamWriter("./TextData/PostData.txt"))
+            using (StreamWriter? writer = new StreamWriter(fetchingPath))
             {
                 writer.WriteLine(postIdCounter);
                 foreach (Post post in PostList)
@@ -81,19 +83,6 @@ namespace TeamWebApplication.Data
 
         public int CreatePost(Post post, int currentCourseId)
         {
-            post.CourseId = currentCourseId;
-            post.PostId = postIdCounter;
-            postIdCounter++;
-            post.CreationDate = DateTime.Now;
-            PostList.Add(post);
-            return post.PostId;
-        }
-        public int CreatePost(int currentCourseId, String name = "Bendra", String textContent = "Welcome to the course!")
-        {
-            TextPost post = new TextPost();
-            post.Name = name;
-            post.PostType = PostType.Text;
-            post.TextContent = textContent;
             post.CourseId = currentCourseId;
             post.PostId = postIdCounter;
             postIdCounter++;

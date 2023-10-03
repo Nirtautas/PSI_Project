@@ -7,14 +7,16 @@ namespace TeamWebApplication.Data
 {
     public class UserContainer : IUserContainer
     {
-		public int loggedInUserId { get; set; } = 0;
+        public string fetchingPath { get; }
+        public int loggedInUserId { get; set; } = 0;
         public Role? loggedInUserRole { get; set; } = null;
         public int currentCourseId { get; set; } = 0;
         private int userIdCounter;
         public ICollection<User> userList { get; }
 
-        public UserContainer(IRelationContainer relationContainer)
+        public UserContainer(IRelationContainer relationContainer, string fetchingPath = "./TextData/UserData.txt")
         {
+            this.fetchingPath = fetchingPath;
             userList = new List<User>();
             FetchUsers(relationContainer);
         }
@@ -23,7 +25,7 @@ namespace TeamWebApplication.Data
         {
             string? readString;
             string[]? splitString;
-            using (StreamReader? reader = new StreamReader("./TextData/UserData.txt"))
+            using (StreamReader? reader = new StreamReader(fetchingPath))
             {
                 if ((readString = reader.ReadLine()) != null)
                     userIdCounter = Int32.Parse(readString);
@@ -80,7 +82,7 @@ namespace TeamWebApplication.Data
 
         public void WriteUsers()
         {
-            using (StreamWriter? writer = new StreamWriter("./TextData/UserData.txt"))
+            using (StreamWriter? writer = new StreamWriter(fetchingPath))
             {
                 writer.WriteLine(userIdCounter);
                 foreach (var user in userList)

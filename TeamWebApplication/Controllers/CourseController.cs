@@ -75,11 +75,6 @@ namespace TeamWebApplication.Controllers
             return RedirectToAction("Index");
         }
 
-        public IActionResult CreateTextPost(int courseId)
-        {
-            _postContainer.CreatePost(courseId);
-            return RedirectToAction("Index");
-        }
         public IActionResult Delete(int courseId)
         {
             Course course = _courseContainer.courseList.SingleOrDefault(course => course.Id == courseId);

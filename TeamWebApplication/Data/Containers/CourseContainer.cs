@@ -5,12 +5,13 @@ namespace TeamWebApplication.Data
 {
     public sealed class CourseContainer : ICourseContainer
     {
-        public int currentCourseId { get; set; } = 0;
+        public string fetchingPath { get; }
         private int courseIdCounter;
         public ICollection<Course> courseList { get; }
 
-        public CourseContainer(IRelationContainer relationContainer)
+        public CourseContainer(IRelationContainer relationContainer, string fetchingPath = "./TextData/CourseData.txt")
         {
+            this.fetchingPath = fetchingPath;
             courseList = new List<Course>();
             FetchCourses(relationContainer);
         }
@@ -20,7 +21,7 @@ namespace TeamWebApplication.Data
         {
             string? readString;
             string[]? splitString;
-            using (StreamReader? reader = new StreamReader("./TextData/CourseData.txt"))
+            using (StreamReader? reader = new StreamReader(fetchingPath))
             {
                 if ((readString = reader.ReadLine()) != null)
                     courseIdCounter = Int32.Parse(readString);
@@ -64,7 +65,7 @@ namespace TeamWebApplication.Data
 
         public void WriteCourses()
         {
-            using (StreamWriter? writer = new StreamWriter("./TextData/CourseData.txt"))
+            using (StreamWriter? writer = new StreamWriter(fetchingPath))
             {
                 writer.WriteLine(courseIdCounter);
                 foreach (var course in courseList)
