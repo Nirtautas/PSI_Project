@@ -5,12 +5,12 @@ namespace TeamWebApplication.Data
 {
     public sealed class CommentContainer : ICommentContainer
     {
-        public string fetchingPath { get; }
+        public string FetchingPath { get; }
         private int commentIdCounter;
         public ICollection<Comment> CommentList { get; }
         public CommentContainer(string fetchingPath = "./TextData/CommentData.txt")
         {
-            this.fetchingPath = fetchingPath;
+            this.FetchingPath = fetchingPath;
             CommentList = new List<Comment>();
             FetchComments();
         }
@@ -19,7 +19,7 @@ namespace TeamWebApplication.Data
         {
             string? readString;
             string[]? splitString;
-            using (StreamReader? reader = new StreamReader(fetchingPath))
+            using (StreamReader? reader = new StreamReader(FetchingPath))
             {
                 if ((readString = reader.ReadLine()) != null)
                     commentIdCounter = Int32.Parse(readString);
@@ -67,7 +67,7 @@ namespace TeamWebApplication.Data
         }
         public void WriteComments()
         {
-            using (StreamWriter? writer = new StreamWriter(fetchingPath))
+            using (StreamWriter? writer = new StreamWriter(FetchingPath))
             {
                 writer.WriteLine(commentIdCounter);
                 foreach (Comment comment in CommentList)

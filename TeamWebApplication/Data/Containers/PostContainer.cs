@@ -5,13 +5,13 @@ namespace TeamWebApplication.Data
 {
     public class PostContainer : IPostContainer
     {
-        public string fetchingPath { get; }
+        public string FetchingPath { get; }
         private int postIdCounter;
         public ICollection<Post> PostList { get; }
 
         public PostContainer(string fetchingPath = "./TextData/PostData.txt")
         {
-            this.fetchingPath = fetchingPath;
+            this.FetchingPath = fetchingPath;
             PostList = new List<Post>();
             FetchPosts();
         }
@@ -20,7 +20,7 @@ namespace TeamWebApplication.Data
         {
             string? readString;
             string[]? splitString;
-            using (StreamReader? reader = new StreamReader(fetchingPath))
+            using (StreamReader? reader = new StreamReader(FetchingPath))
             {
                 if ((readString = reader.ReadLine()) != null)
                     postIdCounter = Int32.Parse(readString);
@@ -73,7 +73,7 @@ namespace TeamWebApplication.Data
 
         public void WritePosts()
         {
-            using (StreamWriter? writer = new StreamWriter(fetchingPath))
+            using (StreamWriter? writer = new StreamWriter(FetchingPath))
             {
                 writer.WriteLine(postIdCounter);
                 foreach (Post post in PostList)
