@@ -27,16 +27,19 @@
 
 <div class="sidebar-and-content">
     <div class="sidebar">
-        <!--add posts here-->
-        <a href="#">Link 1</a>
-        <a href="#">Link 2</a>
-        <a href="#">Link 3</a>
-        <a href="#">Link 4</a>
+        @foreach (Post post in Model.PostData)
+        {
+            <a>@post.Name</a>
+        }
+        @if (!Model.IsStudent)
+        {
+            <a asp-action="CreateTextPost" asp-controller="CourseEnvironment" asp-route-courseId="@Model.comment.CourseId"  class="create-new-course">+</a>
+        }
     </div>
     <div class="main-content">
 
         <div class="course-name">
-            <a>Course name</a>
+            <a>@Model.CourseName</a>
             <span class="star-reflection"></span>
         </div>
 

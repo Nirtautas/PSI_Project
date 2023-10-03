@@ -8,5 +8,7 @@
         public ICollection<User> UserData { get; set; }
         public int LoggedInUser { get; set; }
         public Comment comment { get; set; }
+        public string CourseName { get; set; }
+        public bool IsStudent { get; set; }
     }
 }

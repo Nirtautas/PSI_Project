@@ -33,7 +33,7 @@ namespace TeamWebApplication.Data
                                 Int32.Parse(splitString[0]),                                                              //PostId
                                 Int32.Parse(splitString[1]),                                                              //postId
                                 splitString[2],                                                                           //Name
-                                DateTime.ParseExact(splitString[3], "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture), //creationDate
+                                DateTime.ParseExact(splitString[3], "M/d/yyyy h:mm:ss tt", CultureInfo.InvariantCulture), //creationDate
                                 Boolean.Parse(splitString[4]),                                                            //Is Visible?
                                 (PostType)Enum.Parse(typeof(PostType), splitString[5]),                                   //Type
                                 splitString[6]                                                                            //Text Data

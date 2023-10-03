@@ -31,7 +31,7 @@ namespace TeamWebApplication.Data
                     Course course = new Course(
                         Int32.Parse(splitString[0]),                                                              //id
                         splitString[1],                                                                           //name
-                        DateTime.ParseExact(splitString[2], "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture), //creationDate
+                        DateTime.ParseExact(splitString[2], "M/d/yyyy h:mm:ss tt", CultureInfo.InvariantCulture), //creationDate
                         splitString[3],                                                                           //description
                         Boolean.Parse(splitString[4]),                                                            //IsVisible
                         Boolean.Parse(splitString[5])                                                             //isPublic

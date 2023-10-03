@@ -1,8 +1,9 @@
-10008
-10000;Computer Architecture;2023-09-18 17:27:40;Course for computer architecture;True;False
-10001;Functional Programming;2023-09-18 17:27:40;Course for functional programming;False;False
-10002;Database Systems;2023-09-18 17:27:40;Course for database systems;False;False
-10003;English C1;2023-09-18 21:23:11;Course for English C1;True;False
-10004;C# Begginer Course;2023-09-18 21:23:11;Course for C# begginers;True;True
-10005;cool course;2023-09-25 17:57:19;newton;False;False
-10006;Object Oriented Programming;2023-09-26 14:02:57;Learning the basics of JAVA;True;False
+10009
+10000;Computer Architecture;9/18/2023 5:27:40 PM;Course for computer architecture;True;False
+10001;Functional Programming;9/18/2023 5:27:40 PM;Course for functional programming;False;False
+10002;Database Systems;9/18/2023 5:27:40 PM;Course for database systems;False;False
+10003;English C1;9/18/2023 9:23:11 PM;Course for English C1;True;False
+10004;C# Begginer Course;9/18/2023 9:23:11 PM;Course for C# begginers;True;True
+10005;cool course;9/25/2023 5:57:19 PM;newton;False;False
+10006;Object Oriented Programming;9/26/2023 2:02:57 PM;Learning the basics of JAVA;True;False
+10008;a;10/2/2023 3:27:21 PM;damn;True;False

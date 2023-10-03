@@ -17,17 +17,25 @@ namespace TeamWebApplication.Controllers
             _relationContainer = relationContainer;
         }
 
+
         public IActionResult Index()
         {
+            private struct coursesAndUser
+            {
+                IEnumerable<Course> coursesTaken;
+                User loggedInUser;
+            };
+            coursesAndUser passView;
             _userContainer.currentCourseId = 0;
-            IEnumerable<Course> coursesTaken = (
+            passView.coursesTaken = (
                 from user in _userContainer.userList
                 where user.UserId == _userContainer.loggedInUserId
                 from courseId in user.CoursesUserTakesId
                 join course in _courseContainer.courseList on courseId equals course.Id
                 select course
             ).ToList();
-            return View(coursesTaken);
+
+            return View(passView);
         }
 
         public IActionResult TeacherIndex()

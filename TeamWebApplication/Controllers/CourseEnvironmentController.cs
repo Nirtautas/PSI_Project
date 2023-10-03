@@ -10,12 +10,14 @@ namespace TeamWebApplication.Controllers
         private readonly IPostContainer _postContainer;
         private readonly ICommentContainer _commentContainer;
         private readonly IUserContainer _userContainer;
+        private readonly ICourseContainer _courseContainer;
 
-        public CourseEnvironmentController(IPostContainer postContainer, ICommentContainer commentContainer, IUserContainer userContainer)
+        public CourseEnvironmentController(IPostContainer postContainer, ICommentContainer commentContainer, IUserContainer userContainer, ICourseContainer courseContainer)
         {
             _postContainer = postContainer;
             _commentContainer = commentContainer;
             _userContainer = userContainer;
+            _courseContainer = courseContainer;
         }
 
         public IActionResult Index(int courseId)
@@ -35,14 +37,18 @@ namespace TeamWebApplication.Controllers
                 select comment
             ).ToList();
             comment1.CourseId = courseId;
-            int loggedInUser = _userContainer.loggedInUserId;
 
+            int loggedInUser = _userContainer.loggedInUserId;
+            bool isStudent = _userContainer.loggedInUserRole == Role.Student; //1 - is student, 0 - is lecturer
+            string courseName = _courseContainer.GetCourse(courseId).Name;
             var viewModel = new CourseAndComment
             {
                 PostData = coursePosts,
                 CommentData = courseComments,
                 comment = comment1,
-                LoggedInUser = loggedInUser
+                LoggedInUser = loggedInUser,
+                CourseName = courseName,
+                IsStudent = isStudent
             };
             return View(viewModel);
         }
