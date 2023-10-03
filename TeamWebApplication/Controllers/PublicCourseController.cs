@@ -7,10 +7,12 @@ namespace TeamWebApplication.Controllers
     public class PublicCourseController : Controller
     {
         private readonly ICourseContainer _courseContainer;
+        private readonly IUserContainer _userContainer;
 
-        public PublicCourseController(ICourseContainer courseContainer)
+        public PublicCourseController(ICourseContainer courseContainer, IUserContainer userContainer)
         {
             _courseContainer = courseContainer;
+            _userContainer = userContainer;
         }
 
         public IActionResult Index()
@@ -20,7 +22,15 @@ namespace TeamWebApplication.Controllers
                 where course.IsPublic == true
                 select course
             ).ToList();
-            return View(publicCourses);
+            User currentUser = _userContainer.GetUser(_userContainer.loggedInUserId);
+
+            var viewModel = new CourseViewModel
+            {
+                Courses = publicCourses,
+                User = currentUser
+            };
+
+            return View(viewModel);
         }
 
         public IActionResult TeacherIndex()

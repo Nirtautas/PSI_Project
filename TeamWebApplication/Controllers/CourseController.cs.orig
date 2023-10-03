@@ -22,6 +22,29 @@ namespace TeamWebApplication.Controllers
 
         public IActionResult Index()
         {
+<<<<<<< HEAD
+            private struct coursesAndUser
+            {
+                IEnumerable<Course> coursesTaken;
+                User loggedInUser;
+            };
+            coursesAndUser passView;
+            _userContainer.currentCourseId = 0;
+            passView.coursesTaken = (
+                from user in _userContainer.userList
+                where user.UserId == _userContainer.loggedInUserId
+                from courseId in user.CoursesUserTakesId
+                join course in _courseContainer.courseList on courseId equals course.Id
+                select course
+            ).ToList();
+
+            return View(passView);
+        }
+
+        public IActionResult TeacherIndex()
+        {
+=======
+>>>>>>> 853dbfae9b46c9a6b1f9fe1d1453a67be6aaf65d
 			_userContainer.currentCourseId = 0;
 			IEnumerable<Course> coursesTaken = (
                 from user in _userContainer.userList

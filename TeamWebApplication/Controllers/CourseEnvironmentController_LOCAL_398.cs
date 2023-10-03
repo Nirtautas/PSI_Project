@@ -22,39 +22,6 @@ namespace TeamWebApplication.Controllers
 
         public IActionResult Index(int courseId)
         {
-			_userContainer.currentCourseId = courseId;
-			IEnumerable<Post> coursePosts = (
-                from post in _postContainer.PostList
-                where post.CourseId == courseId
-                select post
-            ).ToList();
-
-            Comment comment1 = new();
-            IEnumerable<Comment> courseComments = (
-                from comment in _commentContainer.CommentList
-                where comment.CourseId == courseId
-                orderby comment.CommentCreationTime descending
-                select comment
-            ).ToList();
-            comment1.CourseId = courseId;
-
-            int loggedInUser = _userContainer.loggedInUserId;
-
-            User currentUser = _userContainer.GetUser(_userContainer.loggedInUserId);
-
-            var viewModel = new CourseAndComment
-            {
-                PostData = coursePosts,
-                CommentData = courseComments,
-                comment = comment1,
-                LoggedInUser = loggedInUser,
-                User = currentUser
-            };
-            return View(viewModel);
-        }
-
-        public IActionResult TeacherVisitorIndex(int courseId)
-        {
             _userContainer.currentCourseId = courseId;
             IEnumerable<Post> coursePosts = (
                 from post in _postContainer.PostList
@@ -70,17 +37,47 @@ namespace TeamWebApplication.Controllers
                 select comment
             ).ToList();
             comment1.CourseId = courseId;
+
             int loggedInUser = _userContainer.loggedInUserId;
-
-            User currentUser = _userContainer.GetUser(_userContainer.loggedInUserId);
-
+            bool isStudent = _userContainer.loggedInUserRole == Role.Student; //1 - is student, 0 - is lecturer
+            string courseName = _courseContainer.GetCourse(courseId).Name;
             var viewModel = new CourseAndComment
             {
                 PostData = coursePosts,
                 CommentData = courseComments,
                 comment = comment1,
                 LoggedInUser = loggedInUser,
-                User = currentUser
+                CourseName = courseName,
+                IsStudent = isStudent
+            };
+            return View(viewModel);
+        }
+
+        public IActionResult TeacherIndex(int courseId)
+        {
+			_userContainer.currentCourseId = courseId;
+			IEnumerable<Post> coursePosts = (
+                from post in _postContainer.PostList
+                where post.CourseId == courseId
+                select post
+            ).ToList();
+
+            Comment comment1 = new();
+            IEnumerable<Comment> courseComments = (
+                from comment in _commentContainer.CommentList
+                where comment.CourseId == courseId
+                orderby comment.CommentCreationTime descending
+                select comment
+            ).ToList();
+            comment1.CourseId = courseId;
+            int loggedInUser = _userContainer.loggedInUserId;
+
+            var viewModel = new CourseAndComment
+            {
+                PostData = coursePosts,
+                CommentData = courseComments,
+                comment = comment1,
+                LoggedInUser = loggedInUser
             };
             return View(viewModel);
         }
@@ -89,17 +86,24 @@ namespace TeamWebApplication.Controllers
         public IActionResult AddComment(int courseId, Comment comment)
         {
             _commentContainer.CreateComment(comment, courseId, _userContainer.loggedInUserId, _userContainer);
-            return RedirectToAction("Index", new { courseId });
+            if (_userContainer.loggedInUserRole == Role.Student)
+                return RedirectToAction("Index", new { courseId });
+            return RedirectToAction("TeacherIndex", new { courseId });
         }
 
         [HttpPost]
         public IActionResult EditComment(int courseId, int commentId, String userComment)
         {
+            Console.WriteLine(courseId);
+            Console.WriteLine(commentId);
+            Console.WriteLine(userComment);
             Comment originalComment = _commentContainer.CommentList.SingleOrDefault(comment => comment.CommentId == commentId);
             originalComment.UserComment = userComment;
             originalComment.CommentCreationTime = DateTime.Now;
             _commentContainer.WriteComments();
-            return RedirectToAction("Index", new { courseId });
+            if (_userContainer.loggedInUserRole == Role.Student)
+                return RedirectToAction("Index", new { courseId });
+            return RedirectToAction("TeacherIndex", new { courseId });
         }
 
         [HttpPost]
@@ -107,9 +111,11 @@ namespace TeamWebApplication.Controllers
         {
             Comment comment = _commentContainer.CommentList.SingleOrDefault(comment => comment.CommentId == commentId);
             _commentContainer.DeleteComment(comment);
-            return RedirectToAction("Index", new { courseId });
+            if (_userContainer.loggedInUserRole == Role.Student)
+                return RedirectToAction("Index", new { courseId });
+            return RedirectToAction("TeacherIndex", new { courseId });
         }
-
+        
         public IActionResult CreateTextPost()
         {
             Post post = new TextPost();
@@ -128,22 +134,22 @@ namespace TeamWebApplication.Controllers
             post.PostType = PostType.Text;
             _postContainer.CreatePost(post, _userContainer.currentCourseId);
             _postContainer.WritePosts();
-            return RedirectToAction("Index", new { courseId });
-        }
+			return RedirectToAction("TeacherIndex", new { courseId });
+		}
 
-        [HttpPost]
-        public IActionResult CreateLinkPost(LinkPost post, int courseId)
-        {
+		[HttpPost]
+		public IActionResult CreateLinkPost(LinkPost post, int courseId)
+		{
             post.PostType = PostType.Link;
 			_postContainer.CreatePost(post, _userContainer.currentCourseId);
 			_postContainer.WritePosts();
-            return RedirectToAction("Index", new { courseId });
-        }
+			return RedirectToAction("TeacherIndex", new { courseId });
+		}
 
         public IActionResult EditTextPost(int postId)
         {
             TextPost? post = (TextPost)_postContainer.GetPost(postId);
-            return View(post);
+			return View(post);
         }
 
         public IActionResult EditLinkPost(int postId)
@@ -162,7 +168,7 @@ namespace TeamWebApplication.Controllers
             originalPost.PostType = post.PostType;
             originalPost.TextContent = post.TextContent;
             _postContainer.WritePosts();
-            return RedirectToAction("Index", new { courseId });
+            return RedirectToAction("TeacherIndex", new { courseId });
         }
 
         [HttpPost]
@@ -175,35 +181,35 @@ namespace TeamWebApplication.Controllers
             originalPost.PostType = post.PostType;
             originalPost.LinkContent = post.LinkContent;
             _postContainer.WritePosts();
-            return RedirectToAction("Index", new { courseId });
+            return RedirectToAction("TeacherIndex", new { courseId });
         }
 
-        public IActionResult DeleteTextPost(int postId)
-        {
-            TextPost? post = (TextPost)_postContainer.GetPost(postId);
-            return View(post);
-        }
+		public IActionResult DeleteTextPost(int postId)
+		{
+			TextPost? post = (TextPost)_postContainer.GetPost(postId);
+			return View(post);
+		}
 
-        public IActionResult DeleteLinkPost(int postId)
-        {
-            LinkPost? post = (LinkPost)_postContainer.GetPost(postId);
-            return View(post);
-        }
+		public IActionResult DeleteLinkPost(int postId)
+		{
+			LinkPost? post = (LinkPost)_postContainer.GetPost(postId);
+			return View(post);
+		}
 
-        [HttpPost]
+		[HttpPost]
         public IActionResult DeleteTextPost(TextPost post, int courseId)
         {
 			TextPost originalPost = (TextPost)_postContainer.GetPost(post.PostId);
 			_postContainer.DeletePost(originalPost);
-            return RedirectToAction("Index", new { courseId });
-        }
+			return RedirectToAction("TeacherIndex", new { courseId });
+		}
 
 		[HttpPost]
 		public IActionResult DeleteLinkPost(LinkPost post, int courseId)
 		{
 			Post originalPost = (LinkPost)_postContainer.GetPost(post.PostId);
 			_postContainer.DeletePost(originalPost);
-            return RedirectToAction("Index", new { courseId });
-        }
+			return RedirectToAction("TeacherIndex", new { courseId });
+		}
 	}
 }

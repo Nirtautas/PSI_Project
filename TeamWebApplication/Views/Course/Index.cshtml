@@ -1,63 +1,97 @@
-@model IEnumerable<Course>
+﻿@model CourseViewModel
 @{
     ViewData["Title"] = "Courses";
 }
 
 <!DOCTYPE html>
 <html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Courses</title>
-    <link rel="stylesheet" href="~/css/ribbon.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/CoursesStyle.css" asp-append-version="true" />
-</head>
+    <head>
+        <meta name="viewport" content="width=device-width" />
+        <title>Courses</title>
+        <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/css/CoursesStyle.css" asp-append-version="true" />
+    </head>
 
-<body>
-    <div class="ribbon">
-        <div class="project-name-container">
-            <a class="text-style name">Mudli</a>
-        </div>
-        <div class="buttons-container">
-            <a asp-action="Index" asp-controller="PublicCourse" class="text-style button">Public courses</a>
-            <a asp-action="Index" asp-controller="Course" class="text-style button">My Courses</a>
-            <a asp-action="Index" asp-controller="Home" class="text-style button">Log out</a>
-        </div>
-    </div>
-    <div class="courses-header">
-        <a>Courses</a>
-    </div>
-    <div>
-        <div class="course-navigation-array">
-            <input placeholder="Search course...">
-        </div>
-
-        <div class="container">
-            <div class="card-group">
-                @foreach(Course course in Model)
-                {
-                    @if (!course.IsPublic && course.IsVisible)
-                    {
-                        <a asp-action="Index" asp-controller="CourseEnvironment" asp-route-courseId="@course.Id" style="text-decoration: none; color: #ffffff;">
-                            <div class="card">
-                                <div class="card-image">
-                                    <img src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8d3JpdGluZyUyMGElMjBib29rfGVufDB8fDB8fHww&w=1000&q=80">
-                                </div>
-                                <div class="invisible-box"></div>
-                                <div class="card-body">
-                                    <div class="course-title-holder">
-                                        <h3>@course.Name</h3>
-                                    </div>
-                                    <div class="course-description-holder">
-                                        <p>@course.Description</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    }
-                }
+    <body>
+        <div class="ribbon">
+            <div class="Name">
+                <a class="text-style">Mudli</a>
+            </div>
+            <div class="logout-button">
+                <a asp-action="Index" asp-controller="PublicCourse" class="text-style" style="text-decoration: none; color: #ffffff;">Public courses</a>
+            </div>
+            <div class="logout-button">
+                <a asp-action="Index" asp-controller="Course" class="text-style" style="text-decoration: none; color: #ffffff;">My Courses</a>
+            </div>
+            <div class="logout-button">
+                <a asp-action="Index" asp-controller="Home" class="text-style" style="text-decoration: none; color: #ffffff;">Log out</a>
             </div>
         </div>
-    </div>
+        <div class="courses-header">
+            <a>Courses</a>
+        </div>
+        <div>
+            <div class="course-navigation-array">
+                <input placeholder="Search course...">
+                @if (Model.User.Role == Role.Lecturer)
+                {
+                    <button class="create-course-button">
+                        <a asp-action="Create" asp-controller="Course">Create Course</a>
+                    </button>
+                }
+            </div>
+
+            <div class="container">
+                <div class="card-group">
+                    @foreach (Course course in Model.Courses)
+                    {
+                        <div class="card">
+                            <a class="card-image" asp-action="Index" asp-controller="CourseEnvironment" asp-route-courseId="@course.Id">
+                                <img src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8d3JpdGluZyUyMGElMjBib29rfGVufDB8fDB8fHww&w=1000&q=80">
+                            </a>
+                            <div class="invisible-box"></div>
+                            <a class="card-body" asp-action="Index" asp-controller="CourseEnvironment" asp-route-courseId="@course.Id">
+                                <div class="course-title-holder">
+                                    <h3>@course.Name</h3>
+                                </div>
+                                <div class="course-description-holder">
+                                    <p>@course.Description</p>
+                                </div>
+                            </a>
+                            <div>
+                            @if (Model.User.Role == Role.Lecturer)
+                            {
+                                <button class="showButtons">
+                                    <img src="~/dots.png">
+                                </button>
+                                <span class="hidden-buttons">
+                                    <a class="hidden-button" asp-action="AddUser" asp-controller="Course" asp-route-courseId="@course.Id">Add User</a>
+                                    <a class="hidden-button" asp-action="RemoveUser" asp-controller="Course" asp-route-courseId="@course.Id">Remove User</a>
+                                    <a class="hidden-button" asp-action="CheckUsers" asp-controller="Course" asp-route-courseId="@course.Id">Check Users</a>
+                                    <a class="hidden-button" asp-action="Edit" asp-controller="Course" asp-route-courseId="@course.Id">Edit</a>
+                                    <a class="hidden-button" asp-action="Delete" asp-controller="Course" asp-route-courseId="@course.Id">Delete</a>
+                                </span>
+                            }
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
         <div class="ribbon"></div>
-</body>
+    </body>
 </html>
+<script>
+    // shows hidden buttons
+    var showButtons = document.querySelectorAll(".showButtons");
+    showButtons.forEach(function (button) {
+        button.addEventListener("click", function () {
+            var hiddenButtons = button.nextElementSibling;
+            if (hiddenButtons.style.display === "none" || hiddenButtons.style.display === "") {
+                hiddenButtons.style.display = "flex";
+            } else {
+                hiddenButtons.style.display = "none";
+            }
+        });
+    });
+</script>

@@ -36,10 +36,10 @@
 
             <label for="Faculty">Faculty:</label>
             <select id="Faculty" name="Faculty" class="form-group1" required>
-                <option value="" disabled selected>Select Faculty</option>
+                <option value="" class="form-group1" disabled selected>Select Faculty</option>
                 @foreach (var faculty in ViewData["Faculties"] as string[])
                 {
-                    <option>@faculty</option>
+                    <option class="form-group1">@faculty</option>
                 }
             </select>
             <span class="text-danger"></span>
@@ -55,10 +55,18 @@
                 </label>
             </div>
             <span class="text-danger"></span>
+
+            <div>
+                <label for="Publicity" class="radio-label">
+                    Is course public?
+                    <input type="checkbox" id="Publicity" asp-for="IsPublic" />
+                </label>
+            </div>
+            <span class="text-danger"></span>
         </div>
 
         <button type="submit" class="btn-primary">Create course</button>
-        <a asp-action="TeacherIndex" asp-controller="Course" class="text-style" style="text-decoration: none; color: #ffffff;">Back</a>
+        <a asp-action="Index" asp-controller="Course" class="text-style" style="text-decoration: none; color: #ffffff;">Back</a>
     </form>
 </body>
 </html>

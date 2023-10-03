@@ -10,14 +10,12 @@ namespace TeamWebApplication.Controllers
         private readonly IPostContainer _postContainer;
         private readonly ICommentContainer _commentContainer;
         private readonly IUserContainer _userContainer;
-        private readonly ICourseContainer _courseContainer;
 
-        public CourseEnvironmentController(IPostContainer postContainer, ICommentContainer commentContainer, IUserContainer userContainer, ICourseContainer courseContainer)
+        public CourseEnvironmentController(IPostContainer postContainer, ICommentContainer commentContainer, IUserContainer userContainer)
         {
             _postContainer = postContainer;
             _commentContainer = commentContainer;
             _userContainer = userContainer;
-            _courseContainer = courseContainer;
         }
 
         public IActionResult Index(int courseId)
@@ -37,7 +35,6 @@ namespace TeamWebApplication.Controllers
                 select comment
             ).ToList();
             comment1.CourseId = courseId;
-
             int loggedInUser = _userContainer.loggedInUserId;
 
             User currentUser = _userContainer.GetUser(_userContainer.loggedInUserId);

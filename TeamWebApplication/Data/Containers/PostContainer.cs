@@ -78,9 +78,22 @@ namespace TeamWebApplication.Data
                     writer.WriteLine(post.ToString());
             }
         }
-    
+
         public int CreatePost(Post post, int currentCourseId)
         {
+            post.CourseId = currentCourseId;
+            post.PostId = postIdCounter;
+            postIdCounter++;
+            post.CreationDate = DateTime.Now;
+            PostList.Add(post);
+            return post.PostId;
+        }
+        public int CreatePost(int currentCourseId, String name = "Bendra", String textContent = "Welcome to the course!")
+        {
+            TextPost post = new TextPost();
+            post.Name = name;
+            post.PostType = PostType.Text;
+            post.TextContent = textContent;
             post.CourseId = currentCourseId;
             post.PostId = postIdCounter;
             postIdCounter++;

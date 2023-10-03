@@ -22,6 +22,42 @@ namespace TeamWebApplication.Controllers
 
         public IActionResult Index(int courseId)
         {
+<<<<<<< HEAD
+            _userContainer.currentCourseId = courseId;
+            IEnumerable<Post> coursePosts = (
+                from post in _postContainer.PostList
+                where post.CourseId == courseId
+                select post
+            ).ToList();
+
+            Comment comment1 = new();
+            IEnumerable<Comment> courseComments = (
+                from comment in _commentContainer.CommentList
+                where comment.CourseId == courseId
+                orderby comment.CommentCreationTime descending
+                select comment
+            ).ToList();
+            comment1.CourseId = courseId;
+
+            int loggedInUser = _userContainer.loggedInUserId;
+            bool isStudent = _userContainer.loggedInUserRole == Role.Student; //1 - is student, 0 - is lecturer
+            string courseName = _courseContainer.GetCourse(courseId).Name;
+            var viewModel = new CourseAndComment
+            {
+                PostData = coursePosts,
+                CommentData = courseComments,
+                comment = comment1,
+                LoggedInUser = loggedInUser,
+                CourseName = courseName,
+                IsStudent = isStudent
+            };
+            return View(viewModel);
+        }
+
+        public IActionResult TeacherIndex(int courseId)
+        {
+=======
+>>>>>>> 853dbfae9b46c9a6b1f9fe1d1453a67be6aaf65d
 			_userContainer.currentCourseId = courseId;
 			IEnumerable<Post> coursePosts = (
                 from post in _postContainer.PostList
@@ -37,7 +73,6 @@ namespace TeamWebApplication.Controllers
                 select comment
             ).ToList();
             comment1.CourseId = courseId;
-
             int loggedInUser = _userContainer.loggedInUserId;
 
             User currentUser = _userContainer.GetUser(_userContainer.loggedInUserId);

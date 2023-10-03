@@ -1,49 +1,49 @@
 ﻿@model TextPost
 @{
-	ViewData["Title"] = "Create Text Post";
+    ViewData["Title"] = "Create Text Post";
 }
 
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta name="viewport" content="width=device-width" />
-		<title>Create Text Post</title>
-		<link rel="stylesheet" href="~/css/CreateCourseStyle.css" asp-append-version="true" />
-	</head>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Create Text Post</title>
+    <link rel="stylesheet" href="~/css/CreateCourseStyle.css" asp-append-version="true" />
+</head>
 
-	<body>
-		<div class="ribbon">
-			<div class="Name">
-				<a>Mudli</a>
-			</div>
-		</div>
-		<form method="post" asp-controller="CourseEnvironment" asp-action="CreateTextPost">
+<body>
+    <div class="ribbon">
+        <div class="Name">
+            <a>Mudli</a>
+        </div>
+    </div>
+    <form method="post" asp-controller="CourseEnvironment" asp-action="CreateTextPost">
 
-			<div class="form-container">
-				<h2>Create a Text Post</h2>
-			</div>
-			<div class="form-info-container">
-				<label for="Name">Name:</label>
-				<input type="text" id="Input.Name" name="name" asp-for="Name" class="form-control" required />
-				<span class="text-danger"></span>
-			</div>
+        <div class="form-container">
+            <h2>Create a Text Post</h2>
+        </div>
+        <div class="form-info-container">
+            <label for="Name">Name:</label>
+            <textarea id="Input.Name" name="name" asp-for="Name" class="form-control" required></textarea>
+            <span class="text-danger"></span>
+        </div>
 
-			<div>
-				<label for="Visibility" class="radio-label">
-					Is post visible?
-					<input type="checkbox" id="Visibility" asp-for="IsVisible" />
-				</label>
-			</div>
-			<span class="text-danger"></span>
+        <div>
+            <label for="Visibility" class="radio-label">
+                Is post visible?
+                <input type="checkbox" id="Visibility" asp-for="IsVisible" />
+            </label>
+        </div>
+        <span class="text-danger"></span>
 
-			<div class="form-info-container">
-				<label for="TextContent">Text Data</label>
-				<input type="text" id="TextContent" name="TextContent" asp-for="TextContent" class="form-control" required />
-				<span class="text-danger"></span>
-			</div>
+        <div class="form-info-container">
+            <label for="TextContent">Text Data</label>
+            <textarea id="TextContent" name="TextContent" asp-for="TextContent" class="form-control" required></textarea>
+            <span class="text-danger"></span>
+        </div>
 
-			<button type="submit" class="btn-primary">Create Post</button>
-			<a asp-action="TeacherIndex" asp-controller="CourseEnvironment" asp-route-courseId="@Model.CourseId" class="text-style" style="text-decoration: none; color: #ffffff;">Back</a>
-		</form>
-	</body>
+        <button type="submit" class="btn-primary">Create Post</button>
+        <a asp-action="Index" asp-controller="CourseEnvironment" asp-route-courseId="@Model.CourseId" class="text-style" style="text-decoration: none; color: #ffffff;">Back</a>
+    </form>
+</body>
 </html>
