@@ -3,12 +3,12 @@ namespace TeamWebApplication.Data
 {
     public class RelationContainer : IRelationContainer
     {
-        public string fetchingPath { get; }
+        public string FetchingPath { get; }
         public ICollection<Relation<int>> relationData { get; }
 
         public RelationContainer(string fetchingPath = "./TextData/UserCourseRelation.txt")
         {
-            this.fetchingPath = fetchingPath;
+            this.FetchingPath = fetchingPath;
             relationData = new List<Relation<int>>();
             FetchRelationData();
         }
@@ -18,7 +18,7 @@ namespace TeamWebApplication.Data
             string? readString;
             string[]? splitString;
 
-            using (StreamReader? reader = new StreamReader(fetchingPath))
+            using (StreamReader? reader = new StreamReader(FetchingPath))
             {
                 while ((readString = reader.ReadLine()) != null)
                 {
@@ -54,7 +54,7 @@ namespace TeamWebApplication.Data
 
         public void WriteRelationData()
         {
-            using (StreamWriter? writer = new StreamWriter(fetchingPath))
+            using (StreamWriter? writer = new StreamWriter(FetchingPath))
             {
                 foreach (var relation in relationData)
                     writer.WriteLine(relation.ToString());
