@@ -7,14 +7,16 @@ namespace TeamWebApplication.Data
 {
     public class UserContainer : IUserContainer
     {
-		public int loggedInUserId { get; set; } = 0;
+        public string fetchingPath { get; }
+        public int loggedInUserId { get; set; } = 0;
         public Role? loggedInUserRole { get; set; } = null;
         public int currentCourseId { get; set; } = 0;
         private int userIdCounter;
         public ICollection<User> userList { get; }
 
-        public UserContainer(IRelationContainer relationContainer)
+        public UserContainer(IRelationContainer relationContainer, string fetchingPath = "./TextData/UserData.txt")
         {
+            this.fetchingPath = fetchingPath;
             userList = new List<User>();
             FetchUsers(relationContainer);
         }
@@ -23,7 +25,7 @@ namespace TeamWebApplication.Data
         {
             string? readString;
             string[]? splitString;
-            using (StreamReader? reader = new StreamReader("./TextData/UserData.txt"))
+            using (StreamReader? reader = new StreamReader(fetchingPath))
             {
                 if ((readString = reader.ReadLine()) != null)
                     userIdCounter = Int32.Parse(readString);
@@ -32,14 +34,14 @@ namespace TeamWebApplication.Data
                 {
                     splitString = readString.Split(';');
                     User user = new User(
-                        Int32.Parse(splitString[0]),                                                     //UserId
-                        splitString[1],                                                                  //Name
-                        splitString[2],                                                                  //Surname
-                        splitString[3],                                                                  //Email
-                        splitString[4],                                                                  //Password
-                        (Role)Enum.Parse(typeof(Role), splitString[5]),                                  //Role
-                        (Faculty)Enum.Parse(typeof(Faculty), splitString[6]),                            //Faculty
-                        (Specialization)Enum.Parse(typeof(Specialization), splitString[7])               //Specialization
+                        id: Int32.Parse(splitString[0]),                                                
+                        name: splitString[1],                                                           
+                        surname: splitString[2],                                                               
+                        email: splitString[3],                                                           
+                        password: splitString[4],                                                               
+                        role: (Role)Enum.Parse(typeof(Role), splitString[5]),                              
+                        faculty: (Faculty)Enum.Parse(typeof(Faculty), splitString[6]),                          
+                        specialization: (Specialization)Enum.Parse(typeof(Specialization), splitString[7])          
                         );
                     foreach (Relation<int> relation in relationContainer.relationData)
                     {
@@ -80,7 +82,7 @@ namespace TeamWebApplication.Data
 
         public void WriteUsers()
         {
-            using (StreamWriter? writer = new StreamWriter("./TextData/UserData.txt"))
+            using (StreamWriter? writer = new StreamWriter(fetchingPath))
             {
                 writer.WriteLine(userIdCounter);
                 foreach (var user in userList)

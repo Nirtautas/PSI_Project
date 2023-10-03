@@ -5,11 +5,13 @@ namespace TeamWebApplication.Data
 {
     public class PostContainer : IPostContainer
     {
+        public string fetchingPath { get; }
         private int postIdCounter;
         public ICollection<Post> PostList { get; }
 
-        public PostContainer()
+        public PostContainer(string fetchingPath = "./TextData/PostData.txt")
         {
+            this.fetchingPath = fetchingPath;
             PostList = new List<Post>();
             FetchPosts();
         }
@@ -18,7 +20,7 @@ namespace TeamWebApplication.Data
         {
             string? readString;
             string[]? splitString;
-            using (StreamReader? reader = new StreamReader("./TextData/PostData.txt"))
+            using (StreamReader? reader = new StreamReader(fetchingPath))
             {
                 if ((readString = reader.ReadLine()) != null)
                     postIdCounter = Int32.Parse(readString);
@@ -30,25 +32,25 @@ namespace TeamWebApplication.Data
                     {
                         case "Text":
                             TextPost textPost = new TextPost(
-                                Int32.Parse(splitString[0]),                                                              //PostId
-                                Int32.Parse(splitString[1]),                                                              //postId
-                                splitString[2],                                                                           //Name
-                                DateTime.ParseExact(splitString[3], "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture), //creationDate
-                                Boolean.Parse(splitString[4]),                                                            //Is Visible?
-                                (PostType)Enum.Parse(typeof(PostType), splitString[5]),                                   //Type
-                                splitString[6]                                                                            //Text Data
+                                id: Int32.Parse(splitString[0]),                                                         
+                                courseId: Int32.Parse(splitString[1]),                                                             
+                                name: splitString[2],                                                                        
+                                creationDate: DateTime.ParseExact(splitString[3], "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture), 
+                                IsVisible: Boolean.Parse(splitString[4]),                                                         
+                                PostType: (PostType)Enum.Parse(typeof(PostType), splitString[5]),                                   
+                                textContent: splitString[6]                                                                          
                             );
                             PostList.Add(textPost);
                             break;
                         case "Link":
                             LinkPost linkPost = new LinkPost(
-                                Int32.Parse(splitString[0]),                                                              //PostId
-                                Int32.Parse(splitString[1]),                                                              //postId
-                                splitString[2],                                                                           //Name
-                                DateTime.ParseExact(splitString[3], "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture), //creationDate
-                                Boolean.Parse(splitString[4]),                                                            //Is Visible?
-                                (PostType)Enum.Parse(typeof(PostType), splitString[5]),                                   //Type
-                                splitString[6]                                                                            //Link Data
+                                id: Int32.Parse(splitString[0]),                                                           
+                                courseId: Int32.Parse(splitString[1]),                                                             
+                                name: splitString[2],                                                                          
+                                creationDate: DateTime.ParseExact(splitString[3], "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture), 
+                                IsVisible: Boolean.Parse(splitString[4]),                                                       
+                                PostType: (PostType)Enum.Parse(typeof(PostType), splitString[5]),                               
+                                linkContent: splitString[6]                                                                      
                             );
                             PostList.Add(linkPost);
                             break;
@@ -71,7 +73,7 @@ namespace TeamWebApplication.Data
 
         public void WritePosts()
         {
-            using (StreamWriter? writer = new StreamWriter("./TextData/PostData.txt"))
+            using (StreamWriter? writer = new StreamWriter(fetchingPath))
             {
                 writer.WriteLine(postIdCounter);
                 foreach (Post post in PostList)
@@ -81,19 +83,6 @@ namespace TeamWebApplication.Data
 
         public int CreatePost(Post post, int currentCourseId)
         {
-            post.CourseId = currentCourseId;
-            post.PostId = postIdCounter;
-            postIdCounter++;
-            post.CreationDate = DateTime.Now;
-            PostList.Add(post);
-            return post.PostId;
-        }
-        public int CreatePost(int currentCourseId, String name = "Bendra", String textContent = "Welcome to the course!")
-        {
-            TextPost post = new TextPost();
-            post.Name = name;
-            post.PostType = PostType.Text;
-            post.TextContent = textContent;
             post.CourseId = currentCourseId;
             post.PostId = postIdCounter;
             postIdCounter++;
