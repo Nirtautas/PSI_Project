@@ -1,4 +1,4 @@
-10022
+10023
 10000;Computer Architecture;2023-09-18 17:27:40;Course for computer architecture;True;False
 10001;Functional Programming;2023-09-18 17:27:40;Course for functional programming;False;False
 10002;Database Systems;2023-09-18 17:27:40;Course for database systems;True;True
@@ -8,3 +8,4 @@
 10006;Object Oriented Programming;2023-09-26 14:02:57;Learning the basics of JAVA;True;False
 10008;Public test course;2023-10-02 12:16:42;This is a public course;True;True
 10016;New;2023-10-02 22:33:25;Nice;True;True
+10022;kkkkkkkkkkkkk;2023-10-03 22:31:16;lk;True;True
