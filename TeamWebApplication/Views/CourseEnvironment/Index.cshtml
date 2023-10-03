@@ -132,7 +132,7 @@
                                     </form>
                                 </div>
 
-                                <form method="post" asp-action="Delete" asp-route-courseId="@Model.comment.CourseId" asp-controller="CourseEnvironment">
+                                <form onsubmit="return confirm('Are you sure you want to delete this course?');" method="post" asp-action="Delete" asp-route-courseId="@Model.comment.CourseId" asp-controller="CourseEnvironment">
                                     <input type="hidden" id="CourseId" name="CourseId" asp-for="@Model.comment.CourseId" value="@Model.comment.CourseId" />
                                     <input type="hidden" id="CommentId" name="CommentId" asp-for="@Model.comment.CommentId" value="@comment.CommentId" />
                                     <button type="submit" class="delete-button" onclick="storeScrollPosition(@comment.CommentId)">
