@@ -35,7 +35,8 @@ namespace TeamWebApplication.Data
                                 id: Int32.Parse(splitString[0]),                                                         
                                 courseId: Int32.Parse(splitString[1]),                                                             
                                 name: splitString[2],                                                                        
-                                creationDate: DateTime.ParseExact(splitString[3], "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture), 
+                                //creationDate: DateTime.ParseExact(splitString[3], "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture),
+                                creationDate: DateTime.ParseExact(splitString[3], "M/d/yyyy h:mm:ss tt", CultureInfo.InvariantCulture), 
                                 IsVisible: Boolean.Parse(splitString[4]),                                                         
                                 PostType: (PostType)Enum.Parse(typeof(PostType), splitString[5]),                                   
                                 textContent: splitString[6]                                                                          
@@ -46,8 +47,9 @@ namespace TeamWebApplication.Data
                             LinkPost linkPost = new LinkPost(
                                 id: Int32.Parse(splitString[0]),                                                           
                                 courseId: Int32.Parse(splitString[1]),                                                             
-                                name: splitString[2],                                                                          
-                                creationDate: DateTime.ParseExact(splitString[3], "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture), 
+                                name: splitString[2],
+                                //creationDate: DateTime.ParseExact(splitString[3], "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture),
+                                creationDate: DateTime.ParseExact(splitString[3], "M/d/yyyy h:mm:ss tt", CultureInfo.InvariantCulture),
                                 IsVisible: Boolean.Parse(splitString[4]),                                                       
                                 PostType: (PostType)Enum.Parse(typeof(PostType), splitString[5]),                               
                                 linkContent: splitString[6]                                                                      
