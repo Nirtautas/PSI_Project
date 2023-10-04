@@ -1,11 +1,12 @@
-30024
-30000;10000;Introduction;9/18/2023 7:27:40 PM;True;Text;This is a placeholder
-30001;10000;Unit 1;9/18/2023 8:27:40 PM;False;Text;This is an another placeholder
-30002;10002;Knowledge;9/18/2023 6:27:40 PM;True;Text;This is once more a placeholder
-30010;10001;More Knowledge;9/18/2023 6:27:40 PM;True;Text;This is yet another placeholder
-30003;10001;Click me;9/18/2023 6:27:40 PM;True;Link;https://www.youtube.com/watch?v=dQw4w9WgXcQ
-30011;10004;Nice;10/2/2023 7:52:45 PM;False;Link;kckcd
-30012;10011;scs;10/2/2023 10:03:06 PM;True;Text;css
-30013;10016;Bendra;10/2/2023 10:33:25 PM;False;Text;Welcome to the course!
-30016;10016;jjj;10/3/2023 11:57:16 AM;False;Text;dd
-30022;10003;q;10/4/2023 1:06:29 PM;False;Text;q
+30018
+30000;10000;Introduction;2023-09-18 19:27:40;True;Text;This is a placeholder
+30001;10000;Unit 1;2023-09-18 20:27:40;False;Text;This is an another placeholder
+30002;10002;Knowledge;2023-09-18 18:27:40;True;Text;This is once more a placeholder
+30010;10001;More Knowledge;2023-09-18 18:27:40;True;Text;This is yet another placeholder
+30003;10001;Click me;2023-09-18 18:27:40;True;Link;https://www.youtube.com/watch?v=dQw4w9WgXcQ
+30005;10003;asd;2023-10-01 20:56:41;True;Text;asd
+30006;10003;gdfg;2023-10-01 20:57:50;True;Text;dfgd
+30011;10004;Nice;2023-10-02 19:52:45;False;Link;kckcd
+30012;10011;scs;2023-10-02 22:03:06;True;Text;css
+30013;10016;Bendra;2023-10-02 22:33:25;False;Text;Welcome to the course!
+30016;10016;jjj;2023-10-03 11:57:16;False;Text;dd
