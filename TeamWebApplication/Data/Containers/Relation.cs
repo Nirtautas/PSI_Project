@@ -2,8 +2,8 @@
 {
     public struct Relation<T>
     {
-        public T value1;
-        public T value2;
+        public T value1 { get; set; }
+        public T value2 { get; set; }
 
         public Relation(T value1, T value2)
         {
