@@ -273,7 +273,13 @@ body {
     background-color: #201f20;
 }
 
+
 .button-alignment {
     display: flex;
     justify-content: flex-end;
 }
+
+.confirmation-message {
+    color: purple;
+}
+

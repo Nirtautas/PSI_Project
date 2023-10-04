@@ -55,7 +55,7 @@ namespace TeamWebApplication.Controllers
             _userContainer.AddRelation(_userContainer.loggedInUserId, createdCourseId);
             _relationContainer.AddRelationData(createdCourseId, _userContainer.loggedInUserId);
             _courseContainer.WriteCourses();
-            return RedirectToAction("CreateTextPost", new { courseId = createdCourseId });
+            return RedirectToAction("Index");
         }
 
         public IActionResult Edit(int courseId)
@@ -76,11 +76,6 @@ namespace TeamWebApplication.Controllers
             return RedirectToAction("Index");
         }
 
-        public IActionResult CreateTextPost(int courseId)
-        {
-            _postContainer.CreatePost(courseId);
-            return RedirectToAction("Index");
-        }
         public IActionResult Delete(int courseId)
         {
             Course course = _courseContainer.courseList.SingleOrDefault(course => course.Id == courseId);

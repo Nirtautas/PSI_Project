@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
+using Npgsql.PostgresTypes;
 using TeamWebApplication.Data;
 using TeamWebApplication.Models;
 
@@ -113,12 +114,14 @@ namespace TeamWebApplication.Controllers
         public IActionResult CreateTextPost()
         {
             Post post = new TextPost();
+            post.CourseId = _userContainer.currentCourseId;
             return View(post);
         }
 
         public IActionResult CreateLinkPost()
         {
             Post post = new LinkPost();
+            post.CourseId = _userContainer.currentCourseId;
             return View(post);
         }
 

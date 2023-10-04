@@ -5,12 +5,13 @@ namespace TeamWebApplication.Data
 {
     public sealed class CourseContainer : ICourseContainer
     {
-        public int currentCourseId { get; set; } = 0;
+        public string FetchingPath { get; }
         private int courseIdCounter;
         public ICollection<Course> courseList { get; }
 
-        public CourseContainer(IRelationContainer relationContainer)
+        public CourseContainer(IRelationContainer relationContainer, string fetchingPath = "./TextData/CourseData.txt")
         {
+            this.FetchingPath = fetchingPath;
             courseList = new List<Course>();
             FetchCourses(relationContainer);
         }
@@ -20,7 +21,7 @@ namespace TeamWebApplication.Data
         {
             string? readString;
             string[]? splitString;
-            using (StreamReader? reader = new StreamReader("./TextData/CourseData.txt"))
+            using (StreamReader? reader = new StreamReader(FetchingPath))
             {
                 if ((readString = reader.ReadLine()) != null)
                     courseIdCounter = Int32.Parse(readString);
@@ -29,12 +30,12 @@ namespace TeamWebApplication.Data
                 {
                     splitString = readString.Split(';');
                     Course course = new Course(
-                        Int32.Parse(splitString[0]),                                                              //id
-                        splitString[1],                                                                           //name
-                        DateTime.ParseExact(splitString[2], "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture), //creationDate
-                        splitString[3],                                                                           //description
-                        Boolean.Parse(splitString[4]),                                                            //IsVisible
-                        Boolean.Parse(splitString[5])                                                             //isPublic
+                        id: Int32.Parse(splitString[0]),                                                             
+                        name: splitString[1],                                                                         
+                        creationDate: DateTime.ParseExact(splitString[2], "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture), 
+                        description: splitString[3],                                                                        
+                        IsVisible: Boolean.Parse(splitString[4]),                                                        
+                        isPublic: Boolean.Parse(splitString[5])                                                           
                     );
                     foreach (Relation<int> relation in relationContainer.relationData)
                     {
@@ -64,7 +65,7 @@ namespace TeamWebApplication.Data
 
         public void WriteCourses()
         {
-            using (StreamWriter? writer = new StreamWriter("./TextData/CourseData.txt"))
+            using (StreamWriter? writer = new StreamWriter(FetchingPath))
             {
                 writer.WriteLine(courseIdCounter);
                 foreach (var course in courseList)
