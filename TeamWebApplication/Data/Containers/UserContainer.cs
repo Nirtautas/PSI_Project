@@ -45,8 +45,8 @@ namespace TeamWebApplication.Data
                         );
                     foreach (Relation<int> relation in relationContainer.relationData)
                     {
-                        if (Int32.Parse(splitString[0]) == relation.value2) //User
-                            user.CoursesUserTakesId.Add(relation.value1); //Course
+                        if (Int32.Parse(splitString[0]) == relation.Value2) //User
+                            user.CoursesUserTakesId.Add(relation.Value1); //Course
                     }
                     userList.Add(user);
                 }

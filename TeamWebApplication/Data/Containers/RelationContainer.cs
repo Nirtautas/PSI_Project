@@ -30,7 +30,7 @@ namespace TeamWebApplication.Data
 
         public void AddRelationData(int courseId, int userId)
         { 
-            if (!relationData.Any(item => item.value1 == courseId && item.value2 == userId)) //Course, User
+            if (!relationData.Any(item => item.Value1 == courseId && item.Value2 == userId)) //Course, User
             {
                 relationData.Add(new Relation<int>(courseId, userId));
                 WriteRelationData();
@@ -39,15 +39,13 @@ namespace TeamWebApplication.Data
 
         public void RemoveRelationData(int courseId, int userId)
         {
-            //Please review! I don't know if this is ok...
-            //You can't remove it in a foreach, and you can't remove it with LINQ T_T
             relationData.Remove(new Relation<int>(courseId, userId));
             WriteRelationData();
         }
 
         public void DeleteRelationData(int courseId, int userId)
         {
-            var relationToRemove = relationData.FirstOrDefault(relation => relation.value1 == courseId && relation.value2 == userId); //Course, User
+            var relationToRemove = relationData.FirstOrDefault(relation => relation.Value1 == courseId && relation.Value2 == userId); //Course, User
             relationData.Remove(relationToRemove);
             WriteRelationData();
         }
