@@ -277,3 +277,8 @@ body {
     display: flex;
     justify-content: flex-end;
 }
+
+.confirmation-message {
+    color: purple;
+}
+
