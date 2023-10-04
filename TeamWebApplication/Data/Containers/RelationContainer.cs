@@ -30,7 +30,7 @@ namespace TeamWebApplication.Data
 
         public void AddRelationData(int courseId, int userId)
         { 
-            if (!relationData.Any(item => item.value1 == courseId && item.value2 == userId)) //Course, User
+            if (!relationData.Any(item => item.Value1 == courseId && item.Value2 == userId)) //Course, User
             {
                 relationData.Add(new Relation<int>(courseId, userId));
                 WriteRelationData();
@@ -45,7 +45,7 @@ namespace TeamWebApplication.Data
 
         public void DeleteRelationData(int courseId, int userId)
         {
-            var relationToRemove = relationData.FirstOrDefault(relation => relation.value1 == courseId && relation.value2 == userId); //Course, User
+            var relationToRemove = relationData.FirstOrDefault(relation => relation.Value1 == courseId && relation.Value2 == userId); //Course, User
             relationData.Remove(relationToRemove);
             WriteRelationData();
         }

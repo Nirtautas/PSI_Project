@@ -2,30 +2,30 @@
 {
     public struct Relation<T>
     {
-        public T value1 { get; set; }
-        public T value2 { get; set; }
+        public T Value1 { get; set; }
+        public T Value2 { get; set; }
 
         public Relation(T value1, T value2)
         {
-            this.value1 = value1;
-            this.value2 = value2;
+            this.Value1 = value1;
+            this.Value2 = value2;
         }
 
         public void Swap()
         {
-            T temp = value1;
-            value1 = value2;
-            value2 = temp;
+            T temp = Value1;
+            Value1 = Value2;
+            Value2 = temp;
         }
 
         public bool IsSelf()
         {
-            return value1.Equals(value2);
+            return Value1.Equals(Value2);
         }
 
         public override string ToString()
         {
-            return value1 + ";" + value2;
+            return Value1 + ";" + Value2;
         }
     }
 }
