@@ -39,8 +39,6 @@ namespace TeamWebApplication.Data
 
         public void RemoveRelationData(int courseId, int userId)
         {
-            //Please review! I don't know if this is ok...
-            //You can't remove it in a foreach, and you can't remove it with LINQ T_T
             relationData.Remove(new Relation<int>(courseId, userId));
             WriteRelationData();
         }
