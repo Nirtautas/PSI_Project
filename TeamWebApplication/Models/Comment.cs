@@ -33,17 +33,5 @@ namespace TeamWebApplication.Models
             CommentCreationTime = commentCreationTime;
             UserComment = userComment;
         }
-
-        public override string ToString()
-        {
-            return
-                CommentId.ToString() + ";" +
-                CourseId.ToString() + ";" +
-                UserId.ToString() + ";" +
-                UsersNameThatCommented + ";" +
-                UsersSurnameThatCommented + ";" +
-                CommentCreationTime.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture) + ";" +
-                UserComment;
-        }
     }
 }

@@ -9,14 +9,12 @@ namespace TeamWebApplication.Controllers
         private readonly IUserContainer _userContainer;
         private readonly ICourseContainer _courseContainer;
         private readonly IRelationContainer _relationContainer;
-        private readonly IPostContainer _postContainer;
 
         public CourseController(IUserContainer userContainer, ICourseContainer courseContainer, IRelationContainer relationContainer, IPostContainer postContainer)
         {
             _userContainer = userContainer;
             _courseContainer = courseContainer;
             _relationContainer = relationContainer;
-            _postContainer = postContainer;
         }
 
         public IActionResult Index()

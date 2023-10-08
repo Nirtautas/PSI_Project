@@ -1,5 +1,6 @@
 ﻿using TeamWebApplication.Models;
 using System.Globalization;
+using TeamWebApplication.ExtensionMethods;
 
 namespace TeamWebApplication.Data
 {
@@ -69,14 +70,14 @@ namespace TeamWebApplication.Data
             {
                 writer.WriteLine(courseIdCounter);
                 foreach (var course in courseList)
-                    writer.WriteLine(course.ToString());
+                    writer.WriteLine(course.FormattedToString());
             }
         }
 
         public void PrintCourseList()
         {
             foreach (var course in courseList)
-                System.Diagnostics.Debug.WriteLine(course.ToString());
+                System.Diagnostics.Debug.WriteLine(course.FormattedToString());
         }
 
         public void PrintRelation()

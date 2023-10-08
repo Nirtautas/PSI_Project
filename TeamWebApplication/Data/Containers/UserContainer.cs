@@ -1,4 +1,5 @@
 ﻿using TeamWebApplication.Models;
+using TeamWebApplication.ExtensionMethods;
 using System.Globalization;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -86,13 +87,13 @@ namespace TeamWebApplication.Data
             {
                 writer.WriteLine(userIdCounter);
                 foreach (var user in userList)
-                    writer.WriteLine(user.ToString());
+                    writer.WriteLine(user.FormattedToString());
             }
         }
         public void PrintUserList()
         {
             foreach (var user in userList)
-                System.Diagnostics.Debug.WriteLine(user.ToString());
+                System.Diagnostics.Debug.WriteLine(user.FormattedToString());
         }
     }
 }

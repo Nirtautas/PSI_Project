@@ -32,16 +32,5 @@ namespace TeamWebApplication.Models
             UsersInCourseId = new List<int>();
             PostsInCourseId = new List<int>();
         }
-
-        public override string ToString()
-        {
-            return
-                Id.ToString() + ";" +
-                Name + ";" +
-                CreationDate.ToString() + ";" +
-                Description + ";" +
-                IsVisible + ";" +
-                IsPublic;
-        }
     }
 }

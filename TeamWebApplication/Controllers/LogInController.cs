@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
 using TeamWebApplication.Data;
 using TeamWebApplication.Models;
 
@@ -7,7 +6,7 @@ namespace TeamWebApplication.Controllers
 {
     public class LogInController : Controller
     {
-        private readonly IUserContainer _userContainer;//readonly - constant
+        private readonly IUserContainer _userContainer;
 
         public LogInController(IUserContainer userContainer)
         {
@@ -31,7 +30,7 @@ namespace TeamWebApplication.Controllers
         {
             var user = _userContainer.userList.SingleOrDefault(user => user.Password == login.Password && user.UserId == login.UserId);
 			if (user == null)
-                return RedirectToAction("Index", "Login");//user not found}
+                return RedirectToAction("Index", "Login");//user was not found}
             _userContainer.loggedInUserId = user.UserId;
             _userContainer.loggedInUserRole = user.Role;
              return RedirectToAction("Index", "Course");
