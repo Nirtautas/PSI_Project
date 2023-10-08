@@ -4,7 +4,7 @@ using TeamWebApplication.Models;
 
 namespace TeamWebApplication.Models
 {
-    public class Course
+    public class Course : IComparable<Course>
     {
         //These variables are fetched from files
         public int Id { get; set; }
@@ -42,6 +42,15 @@ namespace TeamWebApplication.Models
                 Description + ";" +
                 IsVisible + ";" +
                 IsPublic;
+        }
+
+        public int CompareTo(Course? other)
+        {
+            if (Id > other.Id || other == null)
+                return 1;
+            else if (Id < other.Id)
+                return -1;
+            return 0;
         }
     }
 }
