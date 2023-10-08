@@ -4,8 +4,8 @@ namespace TeamWebApplication.Models
 {
     public class TextPost : Post
     {
-		public string? TextContent { get; set; } = null;
-		public TextPost(int id, int courseId, string name, DateTime creationDate, bool IsVisible, PostType PostType, string textContent)
+        public string? TextContent { get; set; } = null;
+        public TextPost(int id, int courseId, string name, DateTime creationDate, bool IsVisible, PostType PostType, string textContent)
         {
             base.PostId = id;
             base.CourseId = courseId;
@@ -18,7 +18,7 @@ namespace TeamWebApplication.Models
 
         public TextPost()
         {
-        
+
         }
 
         public override string ToString()
