@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
+using System.Configuration;
 using TeamWebApplication.Data;
+using TeamWebApplication.Data.Database;
 
 RelationContainer relationContainer = new RelationContainer();
 CourseContainer courseContainer = new CourseContainer(relationContainer);
@@ -10,6 +12,12 @@ PostContainer postContainer = new PostContainer();
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
+
+//Established connection with PostgreSQL database
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddDbContext<ApplicationDBContext>(options => options.UseNpgsql(connectionString));
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+
 builder.Services.AddSingleton<ICourseContainer, CourseContainer>();
 builder.Services.AddSingleton<IUserContainer, UserContainer>();
 builder.Services.AddSingleton<IRelationContainer, RelationContainer>();

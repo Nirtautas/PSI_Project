@@ -49,18 +49,18 @@ namespace TeamWebApplication.Data
 
         public Course? GetCourse(int courseId)
         {
-            Course? course = courseList.SingleOrDefault(course => course.Id == courseId);
+            Course? course = courseList.SingleOrDefault(course => course.CourseId == courseId);
             return course;
         }
 
         public int CreateCourse(Course course, int loggedInUserId)
         {
-            course.Id = courseIdCounter;
+            course.CourseId = courseIdCounter;
             courseIdCounter++;
             course.CreationDate = DateTime.Now;
             course.UsersInCourseId.Add(loggedInUserId);
             courseList.Add(course);
-            return course.Id;
+            return course.CourseId;
         }
 
         public void WriteCourses()
@@ -91,7 +91,7 @@ namespace TeamWebApplication.Data
         {
                 courseList.Remove(courseToRemove);
                 WriteCourses(); 
-            return courseToRemove.Id;
+            return courseToRemove.CourseId;
         }
     }
 }

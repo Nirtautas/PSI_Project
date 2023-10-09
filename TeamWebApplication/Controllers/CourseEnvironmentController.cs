@@ -32,7 +32,7 @@ namespace TeamWebApplication.Controllers
             IEnumerable<Comment> courseComments = (
                 from comment in _commentContainer.CommentList
                 where comment.CourseId == courseId
-                orderby comment.CommentCreationTime descending
+                orderby comment.CreationTime descending
                 select comment
             ).ToList();
             comment1.CourseId = courseId;
@@ -64,7 +64,7 @@ namespace TeamWebApplication.Controllers
             IEnumerable<Comment> courseComments = (
                 from comment in _commentContainer.CommentList
                 where comment.CourseId == courseId
-                orderby comment.CommentCreationTime descending
+                orderby comment.CreationTime descending
                 select comment
             ).ToList();
             comment1.CourseId = courseId;
@@ -95,7 +95,7 @@ namespace TeamWebApplication.Controllers
         {
             Comment originalComment = _commentContainer.CommentList.SingleOrDefault(comment => comment.CommentId == commentId);
             originalComment.UserComment = userComment;
-            originalComment.CommentCreationTime = DateTime.Now;
+            originalComment.CreationTime = DateTime.Now;
             _commentContainer.WriteComments();
             return RedirectToAction("Index", new { courseId });
         }

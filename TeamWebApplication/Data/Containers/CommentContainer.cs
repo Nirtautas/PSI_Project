@@ -47,9 +47,9 @@ namespace TeamWebApplication.Data
             comment.CourseId = currentCourseId;
             var user = _userContainer.userList.SingleOrDefault(user => user.UserId == loggedInUserId);
             comment.UserId = user.UserId;
-            comment.UsersNameThatCommented = user.Name;
-            comment.UsersSurnameThatCommented = user.Surname;
-            comment.CommentCreationTime = DateTime.Now;
+            comment.CommentatorName = user.Name;
+            comment.CommentatorSurname = user.Surname;
+            comment.CreationTime = DateTime.Now;
             CommentList.Add(comment);
             WriteComments();
         }

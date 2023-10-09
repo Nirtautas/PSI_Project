@@ -26,7 +26,7 @@ namespace TeamWebApplication.Controllers
                 from user in _userContainer.userList
                 where user.UserId == _userContainer.loggedInUserId
                 from courseId in user.CoursesUserTakesId
-                join course in _courseContainer.courseList on courseId equals course.Id
+                join course in _courseContainer.courseList on courseId equals course.CourseId
                 select course
             ).ToList();
             
@@ -66,7 +66,7 @@ namespace TeamWebApplication.Controllers
         [HttpPost]
         public IActionResult Edit(Course course)
         {
-            Course? originalCourse = _courseContainer.GetCourse(course.Id);
+            Course? originalCourse = _courseContainer.GetCourse(course.CourseId);
             originalCourse.Name = course.Name;
             originalCourse.IsVisible = course.IsVisible;
             originalCourse.IsPublic = course.IsPublic;
@@ -77,14 +77,14 @@ namespace TeamWebApplication.Controllers
 
         public IActionResult Delete(int courseId)
         {
-            Course course = _courseContainer.courseList.SingleOrDefault(course => course.Id == courseId);
+            Course course = _courseContainer.courseList.SingleOrDefault(course => course.CourseId == courseId);
             return View(course);
         }
 
         [HttpPost, ActionName("Delete")]
         public IActionResult DeleteCourse(int courseId)
         {
-            Course course = _courseContainer.courseList.SingleOrDefault(course => course.Id == courseId);
+            Course course = _courseContainer.courseList.SingleOrDefault(course => course.CourseId == courseId);
             if (course == null)
             {
                 return NotFound();

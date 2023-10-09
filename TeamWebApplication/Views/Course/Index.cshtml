@@ -46,11 +46,11 @@
                     @foreach (Course course in Model.Courses)
                     {
                         <div class="card">
-                            <a class="card-image" asp-action="Index" asp-controller="CourseEnvironment" asp-route-courseId="@course.Id">
+                            <a class="card-image" asp-action="Index" asp-controller="CourseEnvironment" asp-route-courseId="@course.CourseId">
                                 <img src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8d3JpdGluZyUyMGElMjBib29rfGVufDB8fDB8fHww&w=1000&q=80">
                             </a>
                             <div class="invisible-box"></div>
-                            <a class="card-body" asp-action="Index" asp-controller="CourseEnvironment" asp-route-courseId="@course.Id">
+                            <a class="card-body" asp-action="Index" asp-controller="CourseEnvironment" asp-route-courseId="@course.CourseId">
                                 <div class="course-title-holder">
                                     <h3>@course.Name</h3>
                                 </div>
@@ -65,11 +65,11 @@
                                     <img src="~/dots.png">
                                 </button>
                                 <span class="hidden-buttons">
-                                    <a class="hidden-button" asp-action="AddUser" asp-controller="Course" asp-route-courseId="@course.Id">Add User</a>
-                                    <a class="hidden-button" asp-action="RemoveUser" asp-controller="Course" asp-route-courseId="@course.Id">Remove User</a>
-                                    <a class="hidden-button" asp-action="CheckUsers" asp-controller="Course" asp-route-courseId="@course.Id">Check Users</a>
-                                    <a class="hidden-button" asp-action="Edit" asp-controller="Course" asp-route-courseId="@course.Id">Edit</a>
-                                    <a class="hidden-button" asp-action="Delete" asp-controller="Course" asp-route-courseId="@course.Id">Delete</a>
+                                    <a class="hidden-button" asp-action="AddUser" asp-controller="Course" asp-route-courseId="@course.CourseId">Add User</a>
+                                    <a class="hidden-button" asp-action="RemoveUser" asp-controller="Course" asp-route-courseId="@course.CourseId">Remove User</a>
+                                    <a class="hidden-button" asp-action="CheckUsers" asp-controller="Course" asp-route-courseId="@course.CourseId">Check Users</a>
+                                    <a class="hidden-button" asp-action="Edit" asp-controller="Course" asp-route-courseId="@course.CourseId">Edit</a>
+                                    <a class="hidden-button" asp-action="Delete" asp-controller="Course" asp-route-courseId="@course.CourseId">Delete</a>
                                 </span>
                             }
                             </div>
