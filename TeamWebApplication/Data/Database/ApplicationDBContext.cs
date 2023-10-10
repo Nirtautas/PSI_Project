@@ -13,6 +13,7 @@ namespace TeamWebApplication.Data.Database
         public DbSet<Post> Posts { get; set; }
         public DbSet<Comment> Comments { get; set; }
 		public DbSet<CourseUser> CoursesUsers { get; set; }
+		public DbSet<UserDetails> UserDetails { get; set; }
 
 		public ApplicationDBContext(DbContextOptions<ApplicationDBContext> options) : base(options)
         {
@@ -56,6 +57,9 @@ namespace TeamWebApplication.Data.Database
 				Specialization = Specialization.ProgramSystems
 			};
 			modelBuilder.Entity<User>().HasData(user1, user2, user3);
+
+			//UserDetails seeding
+			modelBuilder.Entity<UserDetails>().HasData(new UserDetails { Id = 1, loggedInUserId = -1, loggedInUserRole = Role.None, currentCourseId = -1 });
 
 			//Course seeding
 			var course1 = new Course

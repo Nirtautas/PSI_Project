@@ -7,12 +7,10 @@ namespace TeamWebApplication.Controllers
 {
     public class PublicCourseController : Controller
     {
-        private readonly IUserContainer _userContainer;
         private readonly ApplicationDBContext _db;
 
-        public PublicCourseController(IUserContainer userContainer, ApplicationDBContext db)
+        public PublicCourseController(ApplicationDBContext db)
         {
-            _userContainer = userContainer;
             _db = db;
         }
 
@@ -23,7 +21,7 @@ namespace TeamWebApplication.Controllers
                 where course.IsPublic == true
                 select course
             ).ToList();
-            var currentUser = _db.Users.Find(_userContainer.loggedInUserId);
+            var currentUser = _db.Users.Find(_db.UserDetails.First<UserDetails>().loggedInUserId);
 
             var viewModel = new CourseViewModel
             {

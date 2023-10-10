@@ -8,13 +8,11 @@ namespace TeamWebApplication.Controllers
 {
     public class LogInController : Controller
     {
-        private readonly IUserContainer _userContainer;
 		private readonly ApplicationDBContext _db;
 
-		public LogInController(IUserContainer userContainer, ApplicationDBContext db)
+		public LogInController(ApplicationDBContext db)
         {
             _db = db;
-            _userContainer = userContainer;
         }
 
         public IActionResult Index()
@@ -31,11 +29,12 @@ namespace TeamWebApplication.Controllers
         [HttpPost]
         public IActionResult Login(LoginDetails login)
         {
-            var dbUser = _db.Users.FirstOrDefault(dbUser => dbUser.UserId == login.UserId && dbUser.Password == login.Password);
-			if (dbUser == null)
+            var user = _db.Users.FirstOrDefault(user => user.UserId == login.UserId && user.Password == login.Password);
+			if (user == null)
 				return RedirectToAction("Index", "Login");
-			_userContainer.loggedInUserId = dbUser.UserId;
-			_userContainer.loggedInUserRole = dbUser.Role;
+			_db.UserDetails.First<UserDetails>().loggedInUserId = user.UserId;
+			_db.UserDetails.First<UserDetails>().loggedInUserRole = user.Role;
+			_db.SaveChanges();
 			return RedirectToAction("Index", "Course");
         }
     }

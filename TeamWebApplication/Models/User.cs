@@ -69,7 +69,8 @@ namespace TeamWebApplication.Models
     public enum Role
     {
         Student,
-        Lecturer
+        Lecturer,
+        None
     }
     public enum Faculty
     {

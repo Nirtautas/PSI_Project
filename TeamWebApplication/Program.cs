@@ -1,9 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using System.Configuration;
-using TeamWebApplication.Data;
 using TeamWebApplication.Data.Database;
-
-UserContainer userContainer = new UserContainer();
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,7 +10,6 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<ApplicationDBContext>(options => options.UseNpgsql(connectionString));
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
-builder.Services.AddSingleton<IUserContainer, UserContainer>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

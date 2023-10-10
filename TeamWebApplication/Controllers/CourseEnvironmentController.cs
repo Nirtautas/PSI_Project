@@ -9,18 +9,17 @@ namespace TeamWebApplication.Controllers
 {
     public class CourseEnvironmentController : Controller
     {
-        private readonly IUserContainer _userContainer;
         private readonly ApplicationDBContext _db;
 
-        public CourseEnvironmentController(IUserContainer userContainer, ApplicationDBContext db)
+        public CourseEnvironmentController(ApplicationDBContext db)
         {
             _db = db;
-            _userContainer = userContainer;
         }
 
         public IActionResult Index(int courseId)
         {
-			_userContainer.currentCourseId = courseId;
+			_db.UserDetails.First<UserDetails>().currentCourseId = courseId;
+			_db.SaveChanges();
 			IEnumerable<Post> coursePosts = (
                 from post in _db.Posts
                 where post.CourseId == courseId
@@ -35,9 +34,9 @@ namespace TeamWebApplication.Controllers
                 select comment
             ).ToList();
             comment1.CourseId = courseId;
-            int loggedInUser = _userContainer.loggedInUserId;
+            int loggedInUser = _db.UserDetails.First<UserDetails>().loggedInUserId;
 
-            User currentUser = _db.Users.Find(_userContainer.loggedInUserId);
+            User currentUser = _db.Users.Find(_db.UserDetails.First<UserDetails>().loggedInUserId);
 
             var viewModel = new CourseAndComment
             {
@@ -52,8 +51,9 @@ namespace TeamWebApplication.Controllers
 
         public IActionResult TeacherVisitorIndex(int courseId)
         {
-            _userContainer.currentCourseId = courseId;
-            IEnumerable<Post> coursePosts = (
+			_db.UserDetails.First<UserDetails>().currentCourseId = courseId;
+			_db.SaveChanges();
+			IEnumerable<Post> coursePosts = (
                 from post in _db.Posts
                 where post.CourseId == courseId
                 select post
@@ -67,9 +67,9 @@ namespace TeamWebApplication.Controllers
                 select comment
             ).ToList();
             comment1.CourseId = courseId;
-            int loggedInUser = _userContainer.loggedInUserId;
+            int loggedInUser = _db.UserDetails.First<UserDetails>().loggedInUserId;
 
-            User currentUser = _db.Users.Find(_userContainer.loggedInUserId);
+            User currentUser = _db.Users.Find(_db.UserDetails.First<UserDetails>().loggedInUserId);
 
             var viewModel = new CourseAndComment
             {
@@ -85,7 +85,7 @@ namespace TeamWebApplication.Controllers
         [HttpPost]
         public IActionResult AddComment(int courseId, Comment comment)
         {
-			var user = _db.Users.Find(_userContainer.loggedInUserId);
+			var user = _db.Users.Find(_db.UserDetails.First<UserDetails>().loggedInUserId);
 
 			comment.CourseId = courseId;
 			comment.UserId = user.UserId;
@@ -124,14 +124,14 @@ namespace TeamWebApplication.Controllers
         public IActionResult CreateTextPost()
         {
             Post post = new TextPost();
-            post.CourseId = _userContainer.currentCourseId;
+            post.CourseId = _db.UserDetails.First<UserDetails>().currentCourseId;
             return View(post);
         }
 
         public IActionResult CreateLinkPost()
         {
             Post post = new LinkPost();
-            post.CourseId = _userContainer.currentCourseId;
+            post.CourseId = _db.UserDetails.First<UserDetails>().currentCourseId;
             return View(post);
         }
 
