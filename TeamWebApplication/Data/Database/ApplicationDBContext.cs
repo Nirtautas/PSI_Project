@@ -21,6 +21,7 @@ namespace TeamWebApplication.Data.Database
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+			//User seeding
 			var user1 = new User
 			{
 				UserId = 20000,
@@ -56,6 +57,7 @@ namespace TeamWebApplication.Data.Database
 			};
 			modelBuilder.Entity<User>().HasData(user1, user2, user3);
 
+			//Course seeding
 			var course1 = new Course
 			{
 				CourseId = 10000,
@@ -85,6 +87,7 @@ namespace TeamWebApplication.Data.Database
 			};
 			modelBuilder.Entity<Course>().HasData(course1, course2, course3);
 
+			//CourseUser seeding
 			modelBuilder.Entity<CourseUser>()
 			.HasKey(t => new { t.CourseId, t.UserId });
 
@@ -123,6 +126,77 @@ namespace TeamWebApplication.Data.Database
 				{
 					CourseId = course2.CourseId,
 					UserId = user3.UserId
+				}
+			);
+
+			//Post seeding
+			modelBuilder.Entity<TextPost>().HasData(
+				new TextPost
+				{
+					PostId = 30000,
+					CourseId = course1.CourseId,
+					Name = "Introduction",
+					CreationDate = DateTime.Now,
+					IsVisible = true,
+					PostType = PostType.Text,
+					TextContent = "This is a placeholder"
+				},
+				new TextPost
+				{
+					PostId = 30001,
+					CourseId = course3.CourseId,
+					Name = "Knowledge",
+					CreationDate = DateTime.Now,
+					IsVisible = true,
+					PostType = PostType.Text,
+					TextContent = "This is once more a placeholder"
+				}
+			);
+
+			modelBuilder.Entity<LinkPost>().HasData(
+				new LinkPost
+				{
+					PostId = 30002,
+					CourseId = course2.CourseId,
+					Name = "Click me",
+					CreationDate = DateTime.Now,
+					IsVisible = true,
+					PostType = PostType.Link,
+					LinkContent = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+				}
+			);
+
+			//Comment seeding
+			modelBuilder.Entity<Comment>().HasData(
+				new Comment
+				{
+					CommentId = 40000,
+					CourseId = course1.CourseId,
+					UserId = user1.UserId,
+					CommentatorName = user1.Name,
+					CommentatorSurname = user1.Surname,
+					CreationTime = DateTime.Now,
+					UserComment = "Sus course"
+				},
+				new Comment
+				{
+					CommentId = 40001,
+					CourseId = course2.CourseId,
+					UserId = user3.UserId,
+					CommentatorName = user3.Name,
+					CommentatorSurname = user3.Surname,
+					CreationTime = DateTime.Now,
+					UserComment = "good"
+				},
+				new Comment
+				{
+					CommentId = 40003,
+					CourseId = course1.CourseId,
+					UserId = user3.UserId,
+					CommentatorName = user3.Name,
+					CommentatorSurname = user3.Surname,
+					CreationTime = DateTime.Now,
+					UserComment = "Cool"
 				}
 			);
 

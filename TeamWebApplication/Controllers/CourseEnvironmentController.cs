@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Hosting;
 using Npgsql.PostgresTypes;
 using TeamWebApplication.Data;
+using TeamWebApplication.Data.Database;
 using TeamWebApplication.Models;
 
 namespace TeamWebApplication.Controllers
@@ -11,9 +12,11 @@ namespace TeamWebApplication.Controllers
         private readonly IPostContainer _postContainer;
         private readonly ICommentContainer _commentContainer;
         private readonly IUserContainer _userContainer;
+        private readonly ApplicationDBContext _db;
 
-        public CourseEnvironmentController(IPostContainer postContainer, ICommentContainer commentContainer, IUserContainer userContainer)
+        public CourseEnvironmentController(IPostContainer postContainer, ICommentContainer commentContainer, IUserContainer userContainer, ApplicationDBContext db)
         {
+            _db = db;
             _postContainer = postContainer;
             _commentContainer = commentContainer;
             _userContainer = userContainer;

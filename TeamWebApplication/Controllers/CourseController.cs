@@ -34,7 +34,7 @@ namespace TeamWebApplication.Controllers
 				select course
             ).ToList();
             
-            User currentUser = _db.Users.FirstOrDefault(t => t.UserId == _userContainer.loggedInUserId);
+            User currentUser = _db.Users.Find(_userContainer.loggedInUserId);
 
             var viewModel = new CourseViewModel
             {
@@ -64,14 +64,14 @@ namespace TeamWebApplication.Controllers
 
         public IActionResult Edit(int courseId)
         {
-            Course? course = _db.Courses.SingleOrDefault(t => t.CourseId == courseId);
+            Course? course = _db.Courses.Find(courseId);
             return View(course);
         }
 
         [HttpPost]
         public IActionResult Edit(Course course)
         {
-			Course? originalCourse = _db.Courses.SingleOrDefault(t => t.CourseId == course.CourseId);
+			Course? originalCourse = _db.Courses.Find(course.CourseId);
             originalCourse.Name = course.Name;
             originalCourse.IsVisible = course.IsVisible;
             originalCourse.IsPublic = course.IsPublic;
@@ -83,14 +83,14 @@ namespace TeamWebApplication.Controllers
 
         public IActionResult Delete(int courseId)
         {
-            Course course = _db.Courses.SingleOrDefault(t => t.CourseId == courseId);
+            Course course = _db.Courses.Find(courseId);
             return View(course);
         }
 
         [HttpPost, ActionName("Delete")]
         public IActionResult DeleteCourse(int courseId)
         {
-            Course course = _db.Courses.SingleOrDefault(t => t.CourseId == courseId);
+            Course course = _db.Courses.Find(courseId);
             _db.Courses.Remove(course);
 			_db.SaveChanges();
 			return RedirectToAction("Index");
@@ -106,17 +106,16 @@ namespace TeamWebApplication.Controllers
         public IActionResult AddUser(String userIdString)
         {
             String[] userIdList = userIdString.Split(';');
-            Course? currentCourse = _courseContainer.GetCourse(_userContainer.currentCourseId);
+            Course? currentCourse = _db.Courses.Find(_userContainer.currentCourseId);
             foreach (var word in userIdList)
             {
                 if (Int32.TryParse(word, out int userId) != false && currentCourse != null)
                 {
                     User? user;
-                    if ((user = _userContainer.GetUser(userId)) != null && userId != _userContainer.loggedInUserId)
+                    if ((user = _db.Users.Find(userId)) != null && userId != _userContainer.loggedInUserId)
                     {
-                        _relationContainer.AddRelationData(_userContainer.currentCourseId, userId);
-                        currentCourse.UsersInCourseId.Add(userId);
-                        user.CoursesUserTakesId.Add(_userContainer.currentCourseId);
+                        _db.CoursesUsers.Add(new CourseUser { CourseId = _userContainer.currentCourseId, UserId = userId });
+                        _db.SaveChanges();
                     }
                 }
             }
@@ -133,7 +132,7 @@ namespace TeamWebApplication.Controllers
         public IActionResult RemoveUser(String userIdString)
         {
             String[] userIdList = userIdString.Split(';');
-            Course? currentCourse = _courseContainer.GetCourse(_userContainer.currentCourseId);
+            Course? currentCourse = _db.Courses.Find(_userContainer.currentCourseId);
             foreach (var word in userIdList)
             {
                 if (Int32.TryParse(word, out int userId) != false && currentCourse != null)
@@ -141,9 +140,8 @@ namespace TeamWebApplication.Controllers
                     User? user;
                     if ((user = _userContainer.GetUser(userId)) != null && userId != _userContainer.loggedInUserId)
                     {
-                        _relationContainer.RemoveRelationData(_userContainer.currentCourseId, userId);
-                        currentCourse.UsersInCourseId.Remove(userId);
-                        user.CoursesUserTakesId.Remove(_userContainer.currentCourseId);
+                        _db.CoursesUsers.Remove(new CourseUser { CourseId = _userContainer.currentCourseId, UserId = userId });
+                        _db.SaveChanges();
                     }
                 }
             }
@@ -153,12 +151,15 @@ namespace TeamWebApplication.Controllers
         public IActionResult CheckUsers(int courseId)
         {
             _userContainer.currentCourseId = courseId;
-            Course? currentCourse = _courseContainer.GetCourse(_userContainer.currentCourseId);
             ICollection<User> userInCourseList = (
-                from user in _userContainer.userList
-                where currentCourse.UsersInCourseId.Contains(user.UserId)
-                select user
-            ).ToList();
+				from user in _db.Users
+				join userCourse in _db.CoursesUsers
+				on user.UserId equals userCourse.UserId
+				join course in _db.Courses
+				on userCourse.CourseId equals course.CourseId
+				where course.CourseId == _userContainer.currentCourseId
+				select user
+			).ToList();
             return View(userInCourseList);
         }
     }
