@@ -66,7 +66,7 @@ namespace TeamWebApplication.Migrations
                             CommentatorName = "Jonas",
                             CommentatorSurname = "Paguzinskas",
                             CourseId = 10000,
-                            CreationTime = new DateTime(2023, 10, 10, 15, 35, 6, 793, DateTimeKind.Local).AddTicks(5492),
+                            CreationTime = new DateTime(2023, 10, 10, 16, 13, 7, 531, DateTimeKind.Local).AddTicks(2750),
                             UserComment = "Sus course",
                             UserId = 20000
                         },
@@ -76,7 +76,7 @@ namespace TeamWebApplication.Migrations
                             CommentatorName = "Alita",
                             CommentatorSurname = "Stuknaite",
                             CourseId = 10001,
-                            CreationTime = new DateTime(2023, 10, 10, 15, 35, 6, 793, DateTimeKind.Local).AddTicks(5496),
+                            CreationTime = new DateTime(2023, 10, 10, 16, 13, 7, 531, DateTimeKind.Local).AddTicks(2754),
                             UserComment = "good",
                             UserId = 20002
                         },
@@ -86,7 +86,7 @@ namespace TeamWebApplication.Migrations
                             CommentatorName = "Alita",
                             CommentatorSurname = "Stuknaite",
                             CourseId = 10000,
-                            CreationTime = new DateTime(2023, 10, 10, 15, 35, 6, 793, DateTimeKind.Local).AddTicks(5499),
+                            CreationTime = new DateTime(2023, 10, 10, 16, 13, 7, 531, DateTimeKind.Local).AddTicks(2757),
                             UserComment = "Cool",
                             UserId = 20002
                         });
@@ -125,7 +125,7 @@ namespace TeamWebApplication.Migrations
                         new
                         {
                             CourseId = 10000,
-                            CreationDate = new DateTime(2023, 10, 10, 15, 35, 6, 793, DateTimeKind.Local).AddTicks(2679),
+                            CreationDate = new DateTime(2023, 10, 10, 16, 13, 7, 530, DateTimeKind.Local).AddTicks(11),
                             Description = "Course for computer architecture",
                             IsPublic = false,
                             IsVisible = true,
@@ -134,7 +134,7 @@ namespace TeamWebApplication.Migrations
                         new
                         {
                             CourseId = 10001,
-                            CreationDate = new DateTime(2023, 10, 10, 15, 35, 6, 793, DateTimeKind.Local).AddTicks(2709),
+                            CreationDate = new DateTime(2023, 10, 10, 16, 13, 7, 530, DateTimeKind.Local).AddTicks(42),
                             Description = "Course for functional programming",
                             IsPublic = false,
                             IsVisible = false,
@@ -143,7 +143,7 @@ namespace TeamWebApplication.Migrations
                         new
                         {
                             CourseId = 10002,
-                            CreationDate = new DateTime(2023, 10, 10, 15, 35, 6, 793, DateTimeKind.Local).AddTicks(2711),
+                            CreationDate = new DateTime(2023, 10, 10, 16, 13, 7, 530, DateTimeKind.Local).AddTicks(44),
                             Description = "Course for database systems",
                             IsPublic = true,
                             IsVisible = true,
@@ -207,10 +207,6 @@ namespace TeamWebApplication.Migrations
                     b.Property<DateTime>("CreationDate")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<bool>("IsVisible")
                         .HasColumnType("boolean");
 
@@ -218,13 +214,16 @@ namespace TeamWebApplication.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<int>("PostType")
+                        .HasColumnType("integer");
+
                     b.HasKey("PostId");
 
                     b.HasIndex("CourseId");
 
                     b.ToTable("Posts");
 
-                    b.HasDiscriminator<string>("Discriminator").HasValue("Post");
+                    b.HasDiscriminator<int>("PostType");
                 });
 
             modelBuilder.Entity("TeamWebApplication.Models.User", b =>
@@ -309,16 +308,17 @@ namespace TeamWebApplication.Migrations
 
                     b.ToTable("Posts");
 
-                    b.HasDiscriminator().HasValue("LinkPost");
+                    b.HasDiscriminator().HasValue(1);
 
                     b.HasData(
                         new
                         {
                             PostId = 30002,
                             CourseId = 10001,
-                            CreationDate = new DateTime(2023, 10, 10, 15, 35, 6, 793, DateTimeKind.Local).AddTicks(5480),
+                            CreationDate = new DateTime(2023, 10, 10, 16, 13, 7, 531, DateTimeKind.Local).AddTicks(2733),
                             IsVisible = true,
                             Name = "Click me",
+                            PostType = 0,
                             LinkContent = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
                         });
                 });
@@ -332,25 +332,27 @@ namespace TeamWebApplication.Migrations
 
                     b.ToTable("Posts");
 
-                    b.HasDiscriminator().HasValue("TextPost");
+                    b.HasDiscriminator().HasValue(0);
 
                     b.HasData(
                         new
                         {
                             PostId = 30000,
                             CourseId = 10000,
-                            CreationDate = new DateTime(2023, 10, 10, 15, 35, 6, 793, DateTimeKind.Local).AddTicks(5460),
+                            CreationDate = new DateTime(2023, 10, 10, 16, 13, 7, 531, DateTimeKind.Local).AddTicks(2700),
                             IsVisible = true,
                             Name = "Introduction",
+                            PostType = 0,
                             TextContent = "This is a placeholder"
                         },
                         new
                         {
                             PostId = 30001,
                             CourseId = 10002,
-                            CreationDate = new DateTime(2023, 10, 10, 15, 35, 6, 793, DateTimeKind.Local).AddTicks(5470),
+                            CreationDate = new DateTime(2023, 10, 10, 16, 13, 7, 531, DateTimeKind.Local).AddTicks(2713),
                             IsVisible = true,
                             Name = "Knowledge",
+                            PostType = 0,
                             TextContent = "This is once more a placeholder"
                         });
                 });

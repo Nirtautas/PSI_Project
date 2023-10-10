@@ -12,7 +12,6 @@ namespace TeamWebApplication.Models
         public string Name { get; set; }
         public DateTime CreationDate { get; set; }
         public bool IsVisible { get; set; }
-        [NotMapped]
         public PostType PostType { get; set; }
 
         //Database links

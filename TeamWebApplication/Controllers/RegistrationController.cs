@@ -7,11 +7,9 @@ namespace TeamWebApplication.Controllers
 {
     public class RegistrationController : Controller
     {
-        private readonly IUserContainer _userContainer;
         private readonly ApplicationDBContext _db;
-        public RegistrationController(IUserContainer userContainer, ApplicationDBContext db)
+        public RegistrationController(ApplicationDBContext db)
         {
-            _userContainer = userContainer;
             _db = db;
         }
         public IActionResult Index()

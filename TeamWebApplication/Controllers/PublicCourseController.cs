@@ -1,28 +1,29 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TeamWebApplication.Data;
+using TeamWebApplication.Data.Database;
 using TeamWebApplication.Models;
 
 namespace TeamWebApplication.Controllers
 {
     public class PublicCourseController : Controller
     {
-        private readonly ICourseContainer _courseContainer;
         private readonly IUserContainer _userContainer;
+        private readonly ApplicationDBContext _db;
 
-        public PublicCourseController(ICourseContainer courseContainer, IUserContainer userContainer)
+        public PublicCourseController(IUserContainer userContainer, ApplicationDBContext db)
         {
-            _courseContainer = courseContainer;
             _userContainer = userContainer;
+            _db = db;
         }
 
         public IActionResult Index()
         {
             IEnumerable<Course> publicCourses = (
-                from course in _courseContainer.courseList
+                from course in _db.Courses
                 where course.IsPublic == true
                 select course
             ).ToList();
-            User currentUser = _userContainer.GetUser(_userContainer.loggedInUserId);
+            var currentUser = _db.Users.Find(_userContainer.loggedInUserId);
 
             var viewModel = new CourseViewModel
             {
@@ -36,7 +37,7 @@ namespace TeamWebApplication.Controllers
         public IActionResult TeacherIndex()
         {
             IEnumerable<Course> publicCourses = (
-                from course in _courseContainer.courseList
+                from course in _db.Courses
                 where course.IsPublic == true
                 select course
             ).ToList();

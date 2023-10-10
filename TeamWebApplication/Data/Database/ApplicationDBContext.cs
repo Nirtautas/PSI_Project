@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Metadata;
 using TeamWebApplication.Migrations;
 using TeamWebApplication.Models;
 
@@ -9,8 +10,7 @@ namespace TeamWebApplication.Data.Database
     {
         public DbSet<Course> Courses { get; set; }
         public DbSet<User> Users { get; set; }
-        public DbSet<TextPost> TextPosts { get; set; }
-        public DbSet<LinkPost> LinkPosts { get; set; }
+        public DbSet<Post> Posts { get; set; }
         public DbSet<Comment> Comments { get; set; }
 		public DbSet<CourseUser> CoursesUsers { get; set; }
 
@@ -130,6 +130,11 @@ namespace TeamWebApplication.Data.Database
 			);
 
 			//Post seeding
+			modelBuilder.Entity<Post>()
+				.HasDiscriminator(t => t.PostType)
+				.HasValue<TextPost>(PostType.Text)
+				.HasValue<LinkPost>(PostType.Link);
+
 			modelBuilder.Entity<TextPost>().HasData(
 				new TextPost
 				{
@@ -138,7 +143,6 @@ namespace TeamWebApplication.Data.Database
 					Name = "Introduction",
 					CreationDate = DateTime.Now,
 					IsVisible = true,
-					PostType = PostType.Text,
 					TextContent = "This is a placeholder"
 				},
 				new TextPost
@@ -148,7 +152,6 @@ namespace TeamWebApplication.Data.Database
 					Name = "Knowledge",
 					CreationDate = DateTime.Now,
 					IsVisible = true,
-					PostType = PostType.Text,
 					TextContent = "This is once more a placeholder"
 				}
 			);
@@ -161,7 +164,6 @@ namespace TeamWebApplication.Data.Database
 					Name = "Click me",
 					CreationDate = DateTime.Now,
 					IsVisible = true,
-					PostType = PostType.Link,
 					LinkContent = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
 				}
 			);
