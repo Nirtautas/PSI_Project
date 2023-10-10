@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using TeamWebApplication.Models;
 
 namespace TeamWebApplication.Models
 {
@@ -14,7 +13,6 @@ namespace TeamWebApplication.Models
         public Faculty Faculty { get; set; }
         public Specialization Specialization { get; set; }
         public ICollection<int>? CoursesUserTakesId { get; set; }
-
         public User()
         {
             CoursesUserTakesId = new List<int>();
@@ -33,17 +31,9 @@ namespace TeamWebApplication.Models
             CoursesUserTakesId = new List<int>();
         }
 
-        public override string ToString()
-        {
-            return
-                UserId.ToString() + ";" +
-                Name + ";" +
-                Surname + ";" +
-                Email + ";" +
-                Password + ";" +
-                Role.ToString() + ";" +
-                Faculty.ToString() + ";" +
-                Specialization.ToString();
+        public int CompareTo(User? other)
+        {//User su esamu User, ids; td sort ICollection - tik realizacija, var list.. add sort
+            throw new NotImplementedException();
         }
 
         public int CompareTo(User? other)

@@ -33,17 +33,6 @@ namespace TeamWebApplication.Models
             PostsInCourseId = new List<int>();
         }
 
-        public override string ToString()
-        {
-            return
-                Id.ToString() + ";" +
-                Name + ";" +
-                CreationDate.ToString() + ";" +
-                Description + ";" +
-                IsVisible + ";" +
-                IsPublic;
-        }
-
         public int CompareTo(Course? other)
         {
             if (Id > other.Id || other == null)

@@ -1,4 +1,6 @@
-﻿namespace TeamWebApplication.Data
+﻿using TeamWebApplication.ExtensionMethods;
+
+namespace TeamWebApplication.Data.Containers.Unused
 {
     public static class ContainerHelper
     {
@@ -23,13 +25,13 @@
         {
             foreach (var course in courseContainer.courseList)
             {
-                System.Diagnostics.Debug.WriteLine(course.ToString());
+                System.Diagnostics.Debug.WriteLine(course.FormattedToString());
                 foreach (var inUser in course.UsersInCourseId)
                 {
                     foreach (var user in userContainer.userList)
                     {
-                       if (inUser == user.UserId)
-                           System.Diagnostics.Debug.WriteLine("\t" + user.ToString());
+                        if (inUser == user.UserId)
+                            System.Diagnostics.Debug.WriteLine("\t" + user.FormattedToString());
                     }
                 }
                 System.Diagnostics.Debug.WriteLine("");
