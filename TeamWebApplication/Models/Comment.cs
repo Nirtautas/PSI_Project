@@ -2,7 +2,7 @@
 
 namespace TeamWebApplication.Models
 {
-    public class Comment
+    public class Comment : IComparable<Comment>
     {
         public int CommentId { get; set; }
         public int CourseId { get; set; }
@@ -32,6 +32,15 @@ namespace TeamWebApplication.Models
             UsersSurnameThatCommented = usersSurnameThatCommented;
             CommentCreationTime = commentCreationTime;
             UserComment = userComment;
+        }
+
+        public int CompareTo(Comment? other)
+        {
+            if (CommentId > other.CommentId || other == null)
+                return 1;
+            else if (CommentId < other.CommentId)
+                return -1;
+            return 1;
         }
     }
 }
