@@ -361,3 +361,11 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/TeamWebApplication/Migrations/20231010100103_UpdateIds.Designer.cs
+/TeamWebApplication/Migrations/20231010100103_UpdateIds.cs
+/TeamWebApplication/Migrations/20231010092700_SeedingReferenceTableCurrent.Designer.cs
+/TeamWebApplication/Migrations/20231010092700_SeedingReferenceTableCurrent.cs
+/TeamWebApplication/Migrations/20231010091550_SeedingReferenceTable.Designer.cs
+/TeamWebApplication/Migrations/20231010091550_SeedingReferenceTable.cs
+/TeamWebApplication/Migrations/20231010085353_SeedingCourseUser.cs
+/TeamWebApplication/Migrations/20231010085353_SeedingCourseUser.Designer.cs
