@@ -134,7 +134,7 @@ namespace TeamWebApplication.Controllers
                 if (Int32.TryParse(word, out int userId) != false && currentCourse != null)
                 {
                     User? user;
-                    if ((user = _userContainer.GetUser(userId)) != null && userId != _userContainer.loggedInUserId)
+                    if ((user = _db.Users.Find(userId)) != null && userId != _userContainer.loggedInUserId)
                     {
                         _db.CoursesUsers.Remove(new CourseUser { CourseId = _userContainer.currentCourseId, UserId = userId });
                         _db.SaveChanges();
