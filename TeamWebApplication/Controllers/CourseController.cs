@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using TeamWebApplication.Data;
+using TeamWebApplication.Data.Database;
 using TeamWebApplication.Models;
 
 namespace TeamWebApplication.Controllers
@@ -9,28 +11,30 @@ namespace TeamWebApplication.Controllers
         private readonly IUserContainer _userContainer;
         private readonly ICourseContainer _courseContainer;
         private readonly IRelationContainer _relationContainer;
-        private readonly IPostContainer _postContainer;
+        private readonly ApplicationDBContext _db;
 
-        public CourseController(IUserContainer userContainer, ICourseContainer courseContainer, IRelationContainer relationContainer, IPostContainer postContainer)
+        public CourseController(IUserContainer userContainer, ICourseContainer courseContainer, IRelationContainer relationContainer, IPostContainer postContainer, ApplicationDBContext db)
         {
+            _db = db;
             _userContainer = userContainer;
             _courseContainer = courseContainer;
             _relationContainer = relationContainer;
-            _postContainer = postContainer;
         }
 
         public IActionResult Index()
         {
 			_userContainer.currentCourseId = 0;
 			IEnumerable<Course> coursesTaken = (
-                from user in _userContainer.userList
-                where user.UserId == _userContainer.loggedInUserId
-                from courseId in user.CoursesUserTakesId
-                join course in _courseContainer.courseList on courseId equals course.CourseId
-                select course
+			    from user in _db.Users
+				join userCourse in _db.CoursesUsers
+				on user.UserId equals userCourse.UserId
+				join course in _db.Courses
+				on userCourse.CourseId equals course.CourseId
+				where user.UserId == _userContainer.loggedInUserId
+				select course
             ).ToList();
             
-            User currentUser = _userContainer.GetUser(_userContainer.loggedInUserId);
+            User currentUser = _db.Users.FirstOrDefault(t => t.UserId == _userContainer.loggedInUserId);
 
             var viewModel = new CourseViewModel
             {
@@ -50,50 +54,46 @@ namespace TeamWebApplication.Controllers
         [HttpPost]
         public IActionResult Create(Course course)
         {
-            int createdCourseId = _courseContainer.CreateCourse(course, _userContainer.loggedInUserId);
-            _userContainer.AddRelation(_userContainer.loggedInUserId, createdCourseId);
-            _relationContainer.AddRelationData(createdCourseId, _userContainer.loggedInUserId);
-            _courseContainer.WriteCourses();
+			course.CreationDate = DateTime.Now;
+			_db.Courses.Add(course);
+			_db.SaveChanges();
+			_db.CoursesUsers.Add(new CourseUser { CourseId = course.CourseId, UserId = _userContainer.loggedInUserId });
+			_db.SaveChanges();
             return RedirectToAction("Index");
         }
 
         public IActionResult Edit(int courseId)
         {
-            Course? course = _courseContainer.GetCourse(courseId);
+            Course? course = _db.Courses.SingleOrDefault(t => t.CourseId == courseId);
             return View(course);
         }
 
         [HttpPost]
         public IActionResult Edit(Course course)
         {
-            Course? originalCourse = _courseContainer.GetCourse(course.CourseId);
+			Course? originalCourse = _db.Courses.SingleOrDefault(t => t.CourseId == course.CourseId);
             originalCourse.Name = course.Name;
             originalCourse.IsVisible = course.IsVisible;
             originalCourse.IsPublic = course.IsPublic;
             originalCourse.Description = course.Description;
-            _courseContainer.WriteCourses();
-            return RedirectToAction("Index");
+            _db.Update(originalCourse);
+			_db.SaveChanges();
+			return RedirectToAction("Index");
         }
 
         public IActionResult Delete(int courseId)
         {
-            Course course = _courseContainer.courseList.SingleOrDefault(course => course.CourseId == courseId);
+            Course course = _db.Courses.SingleOrDefault(t => t.CourseId == courseId);
             return View(course);
         }
 
         [HttpPost, ActionName("Delete")]
         public IActionResult DeleteCourse(int courseId)
         {
-            Course course = _courseContainer.courseList.SingleOrDefault(course => course.CourseId == courseId);
-            if (course == null)
-            {
-                return NotFound();
-            }
-            _courseContainer.DeleteCourse(course);
-            _userContainer.DeleteRelation(_userContainer.loggedInUserId, courseId);
-            _relationContainer.DeleteRelationData(courseId, _userContainer.loggedInUserId);
-            _courseContainer.WriteCourses();
-            return RedirectToAction("Index");
+            Course course = _db.Courses.SingleOrDefault(t => t.CourseId == courseId);
+            _db.Courses.Remove(course);
+			_db.SaveChanges();
+			return RedirectToAction("Index");
         }
 
         public IActionResult AddUser(int courseId)

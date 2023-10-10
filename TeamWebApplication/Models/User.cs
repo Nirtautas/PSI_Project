@@ -17,7 +17,7 @@ namespace TeamWebApplication.Models
         public Specialization Specialization { get; set; }
 
         //Database links
-        public ICollection<Course> Courses { get; set; }
+        public ICollection<CourseUser> Courses { get; set; }
         public ICollection<Comment> Comments { get; set; }
 
         //Unmapped fields

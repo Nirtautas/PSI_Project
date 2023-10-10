@@ -16,7 +16,7 @@ namespace TeamWebApplication.Models
         public bool IsPublic { get; set; }
 
         //Database links
-        public ICollection<User> Users { get; set; }
+        public ICollection<CourseUser> Users { get; set; }
         public ICollection<Post> Posts { get; set; }
         public ICollection<Comment> Comments { get; set; }
 
