@@ -9,9 +9,9 @@ namespace TeamWebApplication.Data
     public class UserContainer : IUserContainer
     {
         public string FetchingPath { get; }
-        public int loggedInUserId { get; set; } = 0;
-        public Role? loggedInUserRole { get; set; } = null;
-        public int currentCourseId { get; set; } = 0;
+        public int LoggedInUserId { get; set; } = 0;
+        public Role? LoggedInUserRole { get; set; } = null;
+        public int CurrentCourseId { get; set; } = 0;
         private int userIdCounter;
         public ICollection<User> userList { get; }
 
@@ -44,7 +44,7 @@ namespace TeamWebApplication.Data
                         faculty: (Faculty)Enum.Parse(typeof(Faculty), splitString[6]),                          
                         specialization: (Specialization)Enum.Parse(typeof(Specialization), splitString[7])          
                         );
-                    foreach (Relation<int> relation in relationContainer.relationData)
+                    foreach (Relation<int> relation in relationContainer.RelationData)
                     {
                         if (Int32.Parse(splitString[0]) == relation.Value2) //User
                             user.CoursesUserTakesId.Add(relation.Value1); //Course

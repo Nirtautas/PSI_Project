@@ -1,4 +1,4 @@
-30025
+30026
 30000;10000;Introduction;2023-09-18 19:27:40;True;Text;This is a placeholder
 30001;10000;Unit 1;2023-09-18 20:27:40;False;Text;This is an another placeholder
 30002;10002;Knowledge;2023-09-18 18:27:40;True;Text;This is once more a placeholder
@@ -14,3 +14,4 @@
 30022;10004;Introduction;2023-10-09 00:04:47;True;Text;Welcome to the course!
 30023;10008;Introduction;2023-10-09 00:05:18;True;Text;Welcome to the course!
 30024;10008;Unit 1;2023-10-09 00:06:26;True;Link;https://www.youtube.com/watch?v=wxznTygnRfQ
+30025;10004;Unit 1;2023-10-11 14:03:24;True;Text;Read the news
