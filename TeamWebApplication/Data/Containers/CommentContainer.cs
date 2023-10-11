@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using TeamWebApplication.ExtensionMethods;
 using TeamWebApplication.Models;
 
 namespace TeamWebApplication.Data
@@ -63,7 +64,7 @@ namespace TeamWebApplication.Data
         public void PrintComments()
         {
             foreach (Comment comment in CommentList)
-                System.Diagnostics.Debug.WriteLine(comment.ToString());
+                System.Diagnostics.Debug.WriteLine(comment.FormattedToString());
         }
         public void WriteComments()
         {
@@ -71,7 +72,7 @@ namespace TeamWebApplication.Data
             {
                 writer.WriteLine(commentIdCounter);
                 foreach (Comment comment in CommentList)
-                    writer.WriteLine(comment.ToString());
+                    writer.WriteLine(comment.FormattedToString());
             }
         }
     }

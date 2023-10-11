@@ -1,4 +1,5 @@
 ﻿using TeamWebApplication.Models;
+using TeamWebApplication.ExtensionMethods;
 using System.Globalization;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -8,9 +9,9 @@ namespace TeamWebApplication.Data
     public class UserContainer : IUserContainer
     {
         public string FetchingPath { get; }
-        public int loggedInUserId { get; set; } = 0;
-        public Role? loggedInUserRole { get; set; } = null;
-        public int currentCourseId { get; set; } = 0;
+        public int LoggedInUserId { get; set; } = 0;
+        public Role? LoggedInUserRole { get; set; } = null;
+        public int CurrentCourseId { get; set; } = 0;
         private int userIdCounter;
         public ICollection<User> userList { get; }
 
@@ -43,10 +44,10 @@ namespace TeamWebApplication.Data
                         faculty: (Faculty)Enum.Parse(typeof(Faculty), splitString[6]),                          
                         specialization: (Specialization)Enum.Parse(typeof(Specialization), splitString[7])          
                         );
-                    foreach (Relation<int> relation in relationContainer.relationData)
+                    foreach (Relation<int> relation in relationContainer.RelationData)
                     {
-                        if (Int32.Parse(splitString[0]) == relation.value2) //User
-                            user.CoursesUserTakesId.Add(relation.value1); //Course
+                        if (Int32.Parse(splitString[0]) == relation.Value2) //User
+                            user.CoursesUserTakesId.Add(relation.Value1); //Course
                     }
                     userList.Add(user);
                 }
@@ -86,13 +87,13 @@ namespace TeamWebApplication.Data
             {
                 writer.WriteLine(userIdCounter);
                 foreach (var user in userList)
-                    writer.WriteLine(user.ToString());
+                    writer.WriteLine(user.FormattedToString());
             }
         }
         public void PrintUserList()
         {
             foreach (var user in userList)
-                System.Diagnostics.Debug.WriteLine(user.ToString());
+                System.Diagnostics.Debug.WriteLine(user.FormattedToString());
         }
     }
 }

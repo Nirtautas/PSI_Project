@@ -1,24 +1,18 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using TeamWebApplication.Models;
 
 namespace TeamWebApplication.Models
 {
-    public class User
+    public class User : IComparable<User>
     {
-        //These variables are fetched from files
         public int UserId { get; set; }
         public string Name { get; set; }
         public string Surname { get; set; }
-
-        // BirthDate not implemented yet in the frontend
-        // public string BirthDate { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
         public Role Role { get; set; }
         public Faculty Faculty { get; set; }
         public Specialization Specialization { get; set; }
         public ICollection<int>? CoursesUserTakesId { get; set; }
-
         public User()
         {
             CoursesUserTakesId = new List<int>();
@@ -37,17 +31,13 @@ namespace TeamWebApplication.Models
             CoursesUserTakesId = new List<int>();
         }
 
-        public override string ToString()
+        public int CompareTo(User? other)
         {
-            return
-                UserId.ToString() + ";" +
-                Name + ";" +
-                Surname + ";" +
-                Email + ";" +
-                Password + ";" +
-                Role.ToString() + ";" +
-                Faculty.ToString() + ";" +
-                Specialization.ToString();
+            if (UserId > other.UserId || other == null)
+                return 1;
+            else if (UserId < other.UserId)
+                return -1;
+            return 0;
         }
     }
 

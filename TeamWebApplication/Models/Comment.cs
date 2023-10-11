@@ -2,7 +2,7 @@
 
 namespace TeamWebApplication.Models
 {
-    public class Comment
+    public class Comment : IComparable<Comment>
     {
         public int CommentId { get; set; }
         public int CourseId { get; set; }
@@ -34,16 +34,13 @@ namespace TeamWebApplication.Models
             UserComment = userComment;
         }
 
-        public override string ToString()
+        public int CompareTo(Comment? other)
         {
-            return
-                CommentId.ToString() + ";" +
-                CourseId.ToString() + ";" +
-                UserId.ToString() + ";" +
-                UsersNameThatCommented + ";" +
-                UsersSurnameThatCommented + ";" +
-                CommentCreationTime.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture) + ";" +
-                UserComment;
+            if (CommentId > other.CommentId || other == null)
+                return 1;
+            else if (CommentId < other.CommentId)
+                return -1;
+            return 1;
         }
     }
 }

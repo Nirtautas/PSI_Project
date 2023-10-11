@@ -18,7 +18,7 @@ namespace TeamWebApplication.Models
 
         public LinkPost()
         {
-        
+
         }
 
         public override string ToString()

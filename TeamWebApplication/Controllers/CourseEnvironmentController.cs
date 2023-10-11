@@ -23,7 +23,7 @@ namespace TeamWebApplication.Controllers
 
         public IActionResult Index(int courseId)
         {
-			_userContainer.currentCourseId = courseId;
+			_userContainer.CurrentCourseId = courseId;
 			IEnumerable<Post> coursePosts = (
                 from post in _postContainer.PostList
                 where post.CourseId == courseId
@@ -38,10 +38,9 @@ namespace TeamWebApplication.Controllers
                 select comment
             ).ToList();
             comment1.CourseId = courseId;
+            int loggedInUser = _userContainer.LoggedInUserId;
 
-            int loggedInUser = _userContainer.loggedInUserId;
-
-            User currentUser = _userContainer.GetUser(_userContainer.loggedInUserId);
+            User currentUser = _userContainer.GetUser(_userContainer.LoggedInUserId);
 
             var viewModel = new CourseAndComment
             {
@@ -56,7 +55,7 @@ namespace TeamWebApplication.Controllers
 
         public IActionResult TeacherVisitorIndex(int courseId)
         {
-            _userContainer.currentCourseId = courseId;
+            _userContainer.CurrentCourseId = courseId;
             IEnumerable<Post> coursePosts = (
                 from post in _postContainer.PostList
                 where post.CourseId == courseId
@@ -71,9 +70,9 @@ namespace TeamWebApplication.Controllers
                 select comment
             ).ToList();
             comment1.CourseId = courseId;
-            int loggedInUser = _userContainer.loggedInUserId;
+            int loggedInUser = _userContainer.LoggedInUserId;
 
-            User currentUser = _userContainer.GetUser(_userContainer.loggedInUserId);
+            User currentUser = _userContainer.GetUser(_userContainer.LoggedInUserId);
 
             var viewModel = new CourseAndComment
             {
@@ -89,7 +88,7 @@ namespace TeamWebApplication.Controllers
         [HttpPost]
         public IActionResult AddComment(int courseId, Comment comment)
         {
-            _commentContainer.CreateComment(comment, courseId, _userContainer.loggedInUserId, _userContainer);
+            _commentContainer.CreateComment(comment, courseId, _userContainer.LoggedInUserId, _userContainer);
             return RedirectToAction("Index", new { courseId });
         }
 
@@ -114,14 +113,14 @@ namespace TeamWebApplication.Controllers
         public IActionResult CreateTextPost()
         {
             Post post = new TextPost();
-            post.CourseId = _userContainer.currentCourseId;
+            post.CourseId = _userContainer.CurrentCourseId;
             return View(post);
         }
 
         public IActionResult CreateLinkPost()
         {
             Post post = new LinkPost();
-            post.CourseId = _userContainer.currentCourseId;
+            post.CourseId = _userContainer.CurrentCourseId;
             return View(post);
         }
 
@@ -129,7 +128,7 @@ namespace TeamWebApplication.Controllers
         public IActionResult CreateTextPost(TextPost post, int courseId)
         {
             post.PostType = PostType.Text;
-            _postContainer.CreatePost(post, _userContainer.currentCourseId);
+            _postContainer.CreatePost(post, _userContainer.CurrentCourseId);
             _postContainer.WritePosts();
             return RedirectToAction("Index", new { courseId });
         }
@@ -138,7 +137,7 @@ namespace TeamWebApplication.Controllers
         public IActionResult CreateLinkPost(LinkPost post, int courseId)
         {
             post.PostType = PostType.Link;
-			_postContainer.CreatePost(post, _userContainer.currentCourseId);
+			_postContainer.CreatePost(post, _userContainer.CurrentCourseId);
 			_postContainer.WritePosts();
             return RedirectToAction("Index", new { courseId });
         }

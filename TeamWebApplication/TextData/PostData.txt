@@ -1,12 +1,17 @@
-30018
+30026
 30000;10000;Introduction;2023-09-18 19:27:40;True;Text;This is a placeholder
 30001;10000;Unit 1;2023-09-18 20:27:40;False;Text;This is an another placeholder
 30002;10002;Knowledge;2023-09-18 18:27:40;True;Text;This is once more a placeholder
 30010;10001;More Knowledge;2023-09-18 18:27:40;True;Text;This is yet another placeholder
 30003;10001;Click me;2023-09-18 18:27:40;True;Link;https://www.youtube.com/watch?v=dQw4w9WgXcQ
-30005;10003;asd;2023-10-01 20:56:41;True;Text;asd
-30006;10003;gdfg;2023-10-01 20:57:50;True;Text;dfgd
-30011;10004;Nice;2023-10-02 19:52:45;False;Link;kckcd
+30005;10003;Introduction;2023-10-01 20:56:41;True;Text;Welcome to the course!
+30006;10003;Unit 1;2023-10-08 23:35:31;True;Text;Read 20 pages of the given article
 30012;10011;scs;2023-10-02 22:03:06;True;Text;css
 30013;10016;Bendra;2023-10-02 22:33:25;False;Text;Welcome to the course!
-30016;10016;jjj;2023-10-03 11:57:16;False;Text;dd
+30016;10016;Introduction;2023-10-03 11:57:16;False;Text;Welcome to the course!
+30019;10006;Introduction;2023-10-04 18:12:51;True;Text;Welcome to the course!
+30021;10003;Unit 2;2023-10-08 23:37:14;True;Text;Do 3 pages of grammar tasks.
+30022;10004;Introduction;2023-10-09 00:04:47;True;Text;Welcome to the course!
+30023;10008;Introduction;2023-10-09 00:05:18;True;Text;Welcome to the course!
+30024;10008;Unit 1;2023-10-09 00:06:26;True;Link;https://www.youtube.com/watch?v=wxznTygnRfQ
+30025;10004;Unit 1;2023-10-11 14:03:24;True;Text;Read the news

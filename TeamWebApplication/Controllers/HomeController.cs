@@ -18,8 +18,8 @@ namespace TeamWebApplication.Controllers
 
         public IActionResult Index()
         {
-            _userContainer.loggedInUserId = 0;
-            _userContainer.loggedInUserRole = null;
+            _userContainer.LoggedInUserId = 0;
+            _userContainer.LoggedInUserRole = null;
             return View();
         }
 
