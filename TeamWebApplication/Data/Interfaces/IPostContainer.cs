@@ -8,7 +8,7 @@ namespace TeamWebApplication.Data
         void PrintPostList();
         void WritePosts();
         ICollection<Post> PostList { get; }
-        int CreatePost(Post post, int CurrentCourseId);
+        int CreatePost(Post post, int currentCourseId);
         void DeletePost(Post post);
         Post? GetPost(int postId);
     }
