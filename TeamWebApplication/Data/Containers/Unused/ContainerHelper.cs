@@ -23,7 +23,7 @@ namespace TeamWebApplication.Data.Containers.Unused
 
         public static void PrintRelationalList(ICourseContainer courseContainer, IUserContainer userContainer)
         {
-            foreach (var course in courseContainer.courseList)
+            foreach (var course in courseContainer.CourseList)
             {
                 System.Diagnostics.Debug.WriteLine(course.FormattedToString());
                 foreach (var inUser in course.UsersInCourseId)

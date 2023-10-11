@@ -8,7 +8,7 @@ namespace TeamWebApplication.Data
         void FetchComments();
         void PrintComments();
         void WriteComments();
-        void CreateComment(Comment comment, int currentCourseId, int loggedInUserId, IUserContainer _userContainer);
+        void CreateComment(Comment comment, int CurrentCourseId, int LoggedInUserId, IUserContainer _userContainer);
         void DeleteComment(Comment comment);
         ICollection<Comment> CommentList { get; }
     }

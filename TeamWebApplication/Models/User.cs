@@ -32,11 +32,6 @@ namespace TeamWebApplication.Models
         }
 
         public int CompareTo(User? other)
-        {//User su esamu User, ids; td sort ICollection - tik realizacija, var list.. add sort
-            throw new NotImplementedException();
-        }
-
-        public int CompareTo(User? other)
         {
             if (UserId > other.UserId || other == null)
                 return 1;

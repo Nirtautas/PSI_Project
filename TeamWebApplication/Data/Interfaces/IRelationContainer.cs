@@ -5,9 +5,9 @@
         void FetchRelationData();
         void PrintRelationData();
         void WriteRelationData();
-        public void AddRelationData(int courseId, int userId);
-        public void RemoveRelationData(int courseId, int userId);
-        public void DeleteRelationData(int courseId, int userId);
-        ICollection<Relation<int>> relationData { get; }
+        void AddRelationData(int courseId, int userId);
+        void RemoveRelationData(int courseId, int userId);
+        void DeleteRelationData(int courseId, int userId);
+        ICollection<Relation<int>> RelationData { get; }
     }
 }

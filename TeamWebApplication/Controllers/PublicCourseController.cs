@@ -18,11 +18,11 @@ namespace TeamWebApplication.Controllers
         public IActionResult Index()
         {
             IEnumerable<Course> publicCourses = (
-                from course in _courseContainer.courseList
+                from course in _courseContainer.CourseList
                 where course.IsPublic == true
                 select course
             ).ToList();
-            User currentUser = _userContainer.GetUser(_userContainer.loggedInUserId);
+            User currentUser = _userContainer.GetUser(_userContainer.LoggedInUserId);
 
             var viewModel = new CourseViewModel
             {
@@ -36,7 +36,7 @@ namespace TeamWebApplication.Controllers
         public IActionResult TeacherIndex()
         {
             IEnumerable<Course> publicCourses = (
-                from course in _courseContainer.courseList
+                from course in _courseContainer.CourseList
                 where course.IsPublic == true
                 select course
             ).ToList();
