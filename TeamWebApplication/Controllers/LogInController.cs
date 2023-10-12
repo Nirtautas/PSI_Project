@@ -1,21 +1,21 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TeamWebApplication.Data;
+using TeamWebApplication.Data.Database;
 using TeamWebApplication.Models;
 
 namespace TeamWebApplication.Controllers
 {
     public class LogInController : Controller
     {
-        private readonly IUserContainer _userContainer;
+		private readonly ApplicationDBContext _db;
 
-        public LogInController(IUserContainer userContainer)
+		public LogInController(ApplicationDBContext db)
         {
-            _userContainer = userContainer;
+            _db = db;
         }
 
         public IActionResult Index()
         {
-
             var loginDetails = new LoginDetails();
             return View(loginDetails);
         }
@@ -26,14 +26,15 @@ namespace TeamWebApplication.Controllers
         }
 
         [HttpPost]
-        public IActionResult Login(LoginDetails login)//login details from frontend
+        public IActionResult Login(LoginDetails login)
         {
-            var user = _userContainer.userList.SingleOrDefault(user => user.Password == login.Password && user.UserId == login.UserId);
+            var user = _db.Users.FirstOrDefault(user => user.UserId == login.UserId && user.Password == login.Password);
 			if (user == null)
-                return RedirectToAction("Index", "Login");//user was not found}
-            _userContainer.LoggedInUserId = user.UserId;
-            _userContainer.LoggedInUserRole = user.Role;
-             return RedirectToAction("Index", "Course");
+				return RedirectToAction("Index", "Login");
+			_db.UserDetails.First<UserDetails>().loggedInUserId = user.UserId;
+			_db.UserDetails.First<UserDetails>().loggedInUserRole = user.Role;
+			_db.SaveChanges();
+			return RedirectToAction("Index", "Course");
         }
     }
 }

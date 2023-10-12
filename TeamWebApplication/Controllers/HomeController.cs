@@ -2,25 +2,27 @@
 using TeamWebApplication.Models;
 using System.Diagnostics;
 using TeamWebApplication.Data;
+using TeamWebApplication.Data.Database;
 
 namespace TeamWebApplication.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly IUserContainer _userContainer;
+        private readonly ApplicationDBContext _db;
 
-        public HomeController(ILogger<HomeController> logger, IUserContainer userContainer)
+        public HomeController(ILogger<HomeController> logger, ApplicationDBContext db)
         {
             _logger = logger;
-            _userContainer = userContainer;
+            _db = db;
         }
 
         public IActionResult Index()
         {
-            _userContainer.LoggedInUserId = 0;
-            _userContainer.LoggedInUserRole = null;
-            return View();
+			_db.UserDetails.First<UserDetails>().loggedInUserId = -1;
+			_db.UserDetails.First<UserDetails>().loggedInUserRole = Role.None;
+			_db.SaveChanges();
+			return View();
         }
 
         public IActionResult Registration()
