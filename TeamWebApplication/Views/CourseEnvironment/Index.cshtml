@@ -118,8 +118,8 @@
                 {
                     <div class="post-container">
                         <div class="comment-header">
-                            <h2>@comment.UsersNameThatCommented</h2>
-                            <div class="comment-header-right">@comment.CommentCreationTime.ToString("yyyy-MM-dd HH:mm:ss")</div>
+                            <div class="comment-header-left">@comment.CommentatorName</div>
+                            <div class="comment-header-right">@comment.CreationTime.ToString("yyyy-MM-dd HH:mm:ss")</div>
                         </div>
                         <div class="comment-body">
                             <div id="@comment.CommentId">

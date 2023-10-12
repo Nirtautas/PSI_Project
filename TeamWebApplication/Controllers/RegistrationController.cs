@@ -1,16 +1,16 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TeamWebApplication.Models;
 using TeamWebApplication.Data;
-using System.Diagnostics;
+using TeamWebApplication.Data.Database;
 
 namespace TeamWebApplication.Controllers
 {
     public class RegistrationController : Controller
     {
-         private readonly IUserContainer _userContainer;
-        public RegistrationController(IUserContainer userContainer)
+        private readonly ApplicationDBContext _db;
+        public RegistrationController(ApplicationDBContext db)
         {
-            _userContainer = userContainer;
+            _db = db;
         }
         public IActionResult Index()
         {
@@ -21,8 +21,8 @@ namespace TeamWebApplication.Controllers
         [HttpPost]//tells the routing engine to send any POST requests to that action method to the one method over the other
         public IActionResult Login(User user)
         {
-            _userContainer.CreateUser(user);
-            _userContainer.WriteUsers();
+            _db.Users.Add(user);
+            _db.SaveChanges();
             return RedirectToAction("Index", "Login");
         }
     }

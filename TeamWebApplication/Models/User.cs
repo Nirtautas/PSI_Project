@@ -1,9 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using TeamWebApplication.Models;
 
 namespace TeamWebApplication.Models
 {
     public class User : IComparable<User>
     {
+        [Key]
         public int UserId { get; set; }
         public string Name { get; set; }
         public string Surname { get; set; }
@@ -12,6 +15,13 @@ namespace TeamWebApplication.Models
         public Role Role { get; set; }
         public Faculty Faculty { get; set; }
         public Specialization Specialization { get; set; }
+
+        //Database links
+        public ICollection<CourseUser> Courses { get; set; }
+        public ICollection<Comment> Comments { get; set; }
+
+        //Unmapped fields
+        [NotMapped]
         public ICollection<int>? CoursesUserTakesId { get; set; }
         public User()
         {
@@ -45,7 +55,8 @@ namespace TeamWebApplication.Models
     public enum Role
     {
         Student,
-        Lecturer
+        Lecturer,
+        None
     }
     public enum Faculty
     {
