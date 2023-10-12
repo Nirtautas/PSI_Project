@@ -1,7 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TeamWebApplication.Models
 {
+	[Table("CourseUsers")]
 	public class CourseUser
 	{
 		public int CourseId { get; set; }

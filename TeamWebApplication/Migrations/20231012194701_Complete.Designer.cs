@@ -12,8 +12,8 @@ using TeamWebApplication.Data.Database;
 namespace TeamWebApplication.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20231010135747_CompleteDatabase")]
-    partial class CompleteDatabase
+    [Migration("20231012194701_Complete")]
+    partial class Complete
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -68,7 +68,7 @@ namespace TeamWebApplication.Migrations
                             CommentatorName = "Jonas",
                             CommentatorSurname = "Paguzinskas",
                             CourseId = 10000,
-                            CreationTime = new DateTime(2023, 10, 10, 16, 57, 47, 384, DateTimeKind.Local).AddTicks(3872),
+                            CreationTime = new DateTime(2023, 10, 12, 22, 47, 1, 138, DateTimeKind.Local).AddTicks(1664),
                             UserComment = "Sus course",
                             UserId = 20000
                         },
@@ -78,7 +78,7 @@ namespace TeamWebApplication.Migrations
                             CommentatorName = "Alita",
                             CommentatorSurname = "Stuknaite",
                             CourseId = 10001,
-                            CreationTime = new DateTime(2023, 10, 10, 16, 57, 47, 384, DateTimeKind.Local).AddTicks(3876),
+                            CreationTime = new DateTime(2023, 10, 12, 22, 47, 1, 138, DateTimeKind.Local).AddTicks(1668),
                             UserComment = "good",
                             UserId = 20002
                         },
@@ -88,7 +88,7 @@ namespace TeamWebApplication.Migrations
                             CommentatorName = "Alita",
                             CommentatorSurname = "Stuknaite",
                             CourseId = 10000,
-                            CreationTime = new DateTime(2023, 10, 10, 16, 57, 47, 384, DateTimeKind.Local).AddTicks(3879),
+                            CreationTime = new DateTime(2023, 10, 12, 22, 47, 1, 138, DateTimeKind.Local).AddTicks(1671),
                             UserComment = "Cool",
                             UserId = 20002
                         });
@@ -127,7 +127,7 @@ namespace TeamWebApplication.Migrations
                         new
                         {
                             CourseId = 10000,
-                            CreationDate = new DateTime(2023, 10, 10, 16, 57, 47, 383, DateTimeKind.Local).AddTicks(1521),
+                            CreationDate = new DateTime(2023, 10, 12, 22, 47, 1, 136, DateTimeKind.Local).AddTicks(8940),
                             Description = "Course for computer architecture",
                             IsPublic = false,
                             IsVisible = true,
@@ -136,7 +136,7 @@ namespace TeamWebApplication.Migrations
                         new
                         {
                             CourseId = 10001,
-                            CreationDate = new DateTime(2023, 10, 10, 16, 57, 47, 383, DateTimeKind.Local).AddTicks(1555),
+                            CreationDate = new DateTime(2023, 10, 12, 22, 47, 1, 136, DateTimeKind.Local).AddTicks(8970),
                             Description = "Course for functional programming",
                             IsPublic = false,
                             IsVisible = false,
@@ -145,7 +145,7 @@ namespace TeamWebApplication.Migrations
                         new
                         {
                             CourseId = 10002,
-                            CreationDate = new DateTime(2023, 10, 10, 16, 57, 47, 383, DateTimeKind.Local).AddTicks(1557),
+                            CreationDate = new DateTime(2023, 10, 12, 22, 47, 1, 136, DateTimeKind.Local).AddTicks(8972),
                             Description = "Course for database systems",
                             IsPublic = true,
                             IsVisible = true,
@@ -165,7 +165,7 @@ namespace TeamWebApplication.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("CoursesUsers");
+                    b.ToTable("CourseUsers");
 
                     b.HasData(
                         new
@@ -213,7 +213,6 @@ namespace TeamWebApplication.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<int>("PostType")
@@ -348,7 +347,7 @@ namespace TeamWebApplication.Migrations
                         {
                             PostId = 30002,
                             CourseId = 10001,
-                            CreationDate = new DateTime(2023, 10, 10, 16, 57, 47, 384, DateTimeKind.Local).AddTicks(3857),
+                            CreationDate = new DateTime(2023, 10, 12, 22, 47, 1, 138, DateTimeKind.Local).AddTicks(1649),
                             IsVisible = true,
                             Name = "Click me",
                             PostType = 0,
@@ -372,7 +371,7 @@ namespace TeamWebApplication.Migrations
                         {
                             PostId = 30000,
                             CourseId = 10000,
-                            CreationDate = new DateTime(2023, 10, 10, 16, 57, 47, 384, DateTimeKind.Local).AddTicks(3827),
+                            CreationDate = new DateTime(2023, 10, 12, 22, 47, 1, 138, DateTimeKind.Local).AddTicks(1611),
                             IsVisible = true,
                             Name = "Introduction",
                             PostType = 0,
@@ -382,7 +381,7 @@ namespace TeamWebApplication.Migrations
                         {
                             PostId = 30001,
                             CourseId = 10002,
-                            CreationDate = new DateTime(2023, 10, 10, 16, 57, 47, 384, DateTimeKind.Local).AddTicks(3838),
+                            CreationDate = new DateTime(2023, 10, 12, 22, 47, 1, 138, DateTimeKind.Local).AddTicks(1627),
                             IsVisible = true,
                             Name = "Knowledge",
                             PostType = 0,

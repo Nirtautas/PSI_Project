@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.SignalR;
-using Microsoft.EntityFrameworkCore;
-using System.Reflection.Metadata;
-using TeamWebApplication.Migrations;
+﻿using Microsoft.EntityFrameworkCore;
 using TeamWebApplication.Models;
 
 namespace TeamWebApplication.Data.Database
@@ -57,9 +54,6 @@ namespace TeamWebApplication.Data.Database
 				Specialization = Specialization.ProgramSystems
 			};
 			modelBuilder.Entity<User>().HasData(user1, user2, user3);
-
-			//UserDetails seeding
-			modelBuilder.Entity<UserDetails>().HasData(new UserDetails { Id = 1, loggedInUserId = -1, loggedInUserRole = Role.None, currentCourseId = -1 });
 
 			//Course seeding
 			var course1 = new Course
@@ -173,6 +167,8 @@ namespace TeamWebApplication.Data.Database
 			);
 
 			//Comment seeding
+			modelBuilder.Entity<Comment>();
+
 			modelBuilder.Entity<Comment>().HasData(
 				new Comment
 				{
@@ -206,7 +202,11 @@ namespace TeamWebApplication.Data.Database
 				}
 			);
 
+			//UserDetails seeding
+			modelBuilder.Entity<UserDetails>()
+				.HasData(new UserDetails { Id = 1, loggedInUserId = -1, loggedInUserRole = Role.None, currentCourseId = -1 });
+
 			base.OnModelCreating(modelBuilder);
-        }
+		}
     }
 }

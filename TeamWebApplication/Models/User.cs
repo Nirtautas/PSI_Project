@@ -4,7 +4,8 @@ using TeamWebApplication.Models;
 
 namespace TeamWebApplication.Models
 {
-    public class User : IComparable<User>
+	[Table("Users")]
+	public class User : IComparable<User>
     {
         [Key]
         public int UserId { get; set; }

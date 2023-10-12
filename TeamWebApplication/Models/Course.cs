@@ -3,7 +3,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TeamWebApplication.Models
 {
-    public class Course : IComparable<Course>
+	[Table("Courses")]
+	public class Course : IComparable<Course>
     {
         [Key]
         public int CourseId { get; set; }

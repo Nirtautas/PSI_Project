@@ -1,9 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
 
 namespace TeamWebApplication.Models
 {
-    public class Comment : IComparable<Comment>
+	[Table("Comments")]
+	public class Comment : IComparable<Comment>
     {
         [Key]
         public int CommentId { get; set; }
