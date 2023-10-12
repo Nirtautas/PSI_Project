@@ -11,12 +11,14 @@ namespace TeamWebApplication.Controllers
         private readonly IPostContainer _postContainer;
         private readonly ICommentContainer _commentContainer;
         private readonly IUserContainer _userContainer;
+        private readonly ICourseContainer _courseContainer;
 
-        public CourseEnvironmentController(IPostContainer postContainer, ICommentContainer commentContainer, IUserContainer userContainer)
+        public CourseEnvironmentController(IPostContainer postContainer, ICommentContainer commentContainer, IUserContainer userContainer, ICourseContainer courseContainer)
         {
             _postContainer = postContainer;
             _commentContainer = commentContainer;
             _userContainer = userContainer;
+            _courseContainer = courseContainer;
         }
 
         public IActionResult Index(int courseId)

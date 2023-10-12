@@ -15,100 +15,57 @@ body {
     padding: 0;
 }
 
-/* Comment section styles */
-.comment-container {
-    margin-top: 320px;
-    height: 13.33%;
-    padding: 20px;
-    margin-bottom: 60px;
-}
 
-h2 {
-    margin: 10px 120px;
-    font-size: 24px;
-    color: var(--primary);
+.comment-container {
+    margin: 20px 15px;
 }
 
 .comment {
+    background-color: var(--primary);
+    border: 2px solid var(--secondary);
+    border-radius: 10px;
+    margin: 10px 0;
+    padding: 10px;
     display: flex;
     flex-direction: column;
-    background-color: var(--background);
-    border: 2px solid var(--primary);
-    border-radius: 10px;
-    margin: 10px 120px;
-    padding: 10px;
-    box-shadow: 0 0 10px var(--primary);
+    box-shadow: 0 0 10px var(--secondary);
 }
 
 .comment-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-bottom: 10px;
 }
 
 .comment-header-left {
     font-weight: bold;
     color: var(--text);
-    margin-bottom: 7px;
 }
 
 .comment-header-right {
-    color: var(--text);
+    color: var(--background);
     font-size: 12px;
-    margin-bottom: 10px;
 }
 
 .comment-body {
-    color: var(--text);
-    margin-right: 10px;
     display: flex;
     justify-content: space-between;
-    align-items: center;
 }
 
-.comment-form {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    max-width: none;
-    margin: 0px;
-    background-color: var(--background);
-    padding: 5px;
-    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
-}
-
-.textarea-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin: 5px;
-    margin-left: 134px;
-    margin-right: 148px;
-}
-
-textarea {
-    flex: 1;
-    padding: 10px;
-    border: 1px solid var(--text);
-    border-radius: 5px;
-    background-color: transparent;
-    color: var(--text);
-    box-shadow: 0 0 5px var(--background);
-    margin-right: 10px;
-}
-
-.button {
-    padding: 10px;
-    background-color: var(--primary);
-    color: var(--text);
-    font-size: 18px;
-    border-radius: 5px;
-    cursor: pointer;
-    border: none;
-    box-shadow: 0 0 10px var(--primary);
-    transition: background-color 0.3s;
-}
-
-    .button:hover {
-        background-color: #51314e;
+    .comment-body .button {
+        background-color: transparent;
+        border: none;
+        cursor: pointer;
+        padding: 0;
     }
+
+    .comment-body svg {
+        height: 2rem;
+        fill: var(--primary);
+    }
+
+.delete-and-edit-container {
+    display: flex;
+    justify-content: flex-end;
+}
