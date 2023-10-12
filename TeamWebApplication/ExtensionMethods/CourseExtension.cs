@@ -7,7 +7,7 @@ namespace TeamWebApplication.ExtensionMethods
         public static string FormattedToString(this Course course)
         {
             return
-            course.Id.ToString() + ";" +
+            course.CourseId.ToString() + ";" +
             course.Name + ";" +
             course.CreationDate.ToString() + ";" +
             course.Description + ";" +

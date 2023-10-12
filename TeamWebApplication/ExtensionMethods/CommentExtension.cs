@@ -11,9 +11,9 @@ namespace TeamWebApplication.ExtensionMethods
               comment.CommentId.ToString() + ";" +
               comment.CourseId.ToString() + ";" +
               comment.UserId.ToString() + ";" +
-              comment.UsersNameThatCommented + ";" +
-              comment.UsersSurnameThatCommented + ";" +
-              comment.CommentCreationTime.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture) + ";" +
+              comment.CommentatorName + ";" +
+              comment.CommentatorSurname + ";" +
+              comment.CreationTime.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture) + ";" +
               comment.UserComment;
         }
     }
