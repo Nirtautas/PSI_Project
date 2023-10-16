@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TeamWebApplication.Models;
+using TeamWebApplication.Models.Enums;
 
 namespace TeamWebApplication.Data.Database
 {

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using TeamWebApplication.Models;
+using TeamWebApplication.Models.Enums;
 
 namespace TeamWebApplication.Models
 {
@@ -50,38 +50,5 @@ namespace TeamWebApplication.Models
                 return -1;
             return 0;
         }
-    }
-
-
-    public enum Role
-    {
-        Student,
-        Lecturer,
-        None
-    }
-    public enum Faculty
-    {
-        [Display(Name = "Mathematics and Informatics")]
-        MathematicsAndInformatics,
-        [Display(Name = "Chemistry and Geosciences")]
-        ChemistryAndGeosciences,
-        Physics,
-        Filology
-    }
-    public enum Specialization
-    {
-        [Display(Name = "Program systems")]
-        ProgramSystems,
-        Informatics,
-        Chemistry,
-        Geology,
-        [Display(Name = "Quantum physics")]
-        QuantumPhysics,
-        [Display(Name = "Fluid physics")]
-        FluidPhysics,
-        [Display(Name = "English filology")]
-        EnglishFilology,
-        [Display(Name = "Lithuanian filology")]
-        LithuanianFilology,
     }
 }

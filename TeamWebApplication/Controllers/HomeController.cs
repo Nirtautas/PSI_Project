@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TeamWebApplication.Models;
+using TeamWebApplication.Models.Enums;
 using System.Diagnostics;
-using TeamWebApplication.Data;
 using TeamWebApplication.Data.Database;
 
 namespace TeamWebApplication.Controllers

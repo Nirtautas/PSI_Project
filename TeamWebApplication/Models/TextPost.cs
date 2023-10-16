@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Hosting;
+﻿using TeamWebApplication.Models.Enums;
 
 namespace TeamWebApplication.Models
 {
