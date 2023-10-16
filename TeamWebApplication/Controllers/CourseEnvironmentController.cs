@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Hosting;
-using Npgsql.PostgresTypes;
-using TeamWebApplication.Data;
 using TeamWebApplication.Data.Database;
 using TeamWebApplication.Models;
+using TeamWebApplication.Models.Enums;
 
 namespace TeamWebApplication.Controllers
 {

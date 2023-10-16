@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using TeamWebApplication.Models.Enums;
 
 namespace TeamWebApplication.Models
 {
@@ -30,10 +31,5 @@ namespace TeamWebApplication.Models
                 return -1;
             return 0;
         }
-    }
-    public enum PostType
-    {
-        Text,
-        Link
     }
 }
