@@ -1,6 +1,6 @@
 ﻿using TeamWebApplication.Models;
 
-namespace TeamWebApplication.ExtensionMethods
+namespace TeamWebApplication.Data.ExtensionMethods
 {
     public static class CourseExtension
     {

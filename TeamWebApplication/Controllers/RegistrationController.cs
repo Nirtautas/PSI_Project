@@ -1,16 +1,22 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TeamWebApplication.Models;
 using TeamWebApplication.Data.Database;
+using TeamWebApplication.Data.ExceptionLogger;
+using TeamWebApplication.Data.ExtensionMethods;
 
 namespace TeamWebApplication.Controllers
 {
     public class RegistrationController : Controller
     {
         private readonly ApplicationDBContext _db;
-        public RegistrationController(ApplicationDBContext db)
+        private readonly IExceptionLogger _logger;
+
+        public RegistrationController(ApplicationDBContext db, IExceptionLogger logger)
         {
             _db = db;
+            _logger = logger;
         }
+
         public IActionResult Index()
         {
             var user = new User();
@@ -20,9 +26,17 @@ namespace TeamWebApplication.Controllers
         [HttpPost]
         public IActionResult Login(User user)
         {
-            _db.Users.Add(user);
-            _db.SaveChanges();
-            return RedirectToAction("Index", "Login");
-        }
+            try
+            {
+				_db.Users.Add(user);
+				_db.SaveChanges();
+				return RedirectToAction("Index", "Login");
+			}
+            catch (Exception ex)
+            {
+                _logger.Log(ex);
+                throw;
+            }
+		}
     }
 }
