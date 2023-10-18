@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TeamWebApplication.Models;
-using TeamWebApplication.Data;
 using TeamWebApplication.Data.Database;
 
 namespace TeamWebApplication.Controllers
@@ -18,7 +17,7 @@ namespace TeamWebApplication.Controllers
             return View(user);
         }
 
-        [HttpPost]//tells the routing engine to send any POST requests to that action method to the one method over the other
+        [HttpPost]
         public IActionResult Login(User user)
         {
             _db.Users.Add(user);

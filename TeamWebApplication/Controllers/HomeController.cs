@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TeamWebApplication.Models;
-using TeamWebApplication.Models.Enums;
 using System.Diagnostics;
 using TeamWebApplication.Data.Database;
 
@@ -17,9 +16,7 @@ namespace TeamWebApplication.Controllers
 
         public IActionResult Index()
         {
-            HttpContext.Session.Remove("LoggedInUserId");
-            HttpContext.Session.Remove("LoggedInUserRole");
-            HttpContext.Session.Remove("CurrentCourseId");
+            HttpContext.Session.Clear();
 			_db.SaveChanges();
 			return View();
         }

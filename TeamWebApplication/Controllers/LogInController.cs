@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using TeamWebApplication.Data;
 using TeamWebApplication.Data.Database;
 using TeamWebApplication.Models;
 

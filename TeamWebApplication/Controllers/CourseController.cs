@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using TeamWebApplication.Data;
 using TeamWebApplication.Data.Database;
 using TeamWebApplication.Models;
 
@@ -14,7 +12,6 @@ namespace TeamWebApplication.Controllers
         {
             _db = db;
         }
-
 
         public IActionResult Index()
         {
