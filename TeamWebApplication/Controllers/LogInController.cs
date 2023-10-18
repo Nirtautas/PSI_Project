@@ -31,8 +31,9 @@ namespace TeamWebApplication.Controllers
             var user = _db.Users.FirstOrDefault(user => user.UserId == login.UserId && user.Password == login.Password);
 			if (user == null)
 				return RedirectToAction("Index", "Login");
-			_db.UserDetails.First<UserDetails>().loggedInUserId = user.UserId;
-			_db.UserDetails.First<UserDetails>().loggedInUserRole = user.Role;
+			
+            HttpContext.Session.SetInt32("LoggedInUserId", user.UserId);
+            HttpContext.Session.SetInt32("LoggedInUserRole", (int)user.Role);
 			_db.SaveChanges();
 			return RedirectToAction("Index", "Course");
         }

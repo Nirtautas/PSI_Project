@@ -18,18 +18,18 @@ namespace TeamWebApplication.Controllers
 
         public IActionResult Index()
         {
-			_db.UserDetails.First<UserDetails>().currentCourseId = -1;
+            HttpContext.Session.Remove("CurrentCourseId");
 			IEnumerable<Course> coursesTaken = (
 			    from user in _db.Users
 				join userCourse in _db.CoursesUsers
 				on user.UserId equals userCourse.UserId
 				join course in _db.Courses
 				on userCourse.CourseId equals course.CourseId
-				where user.UserId == _db.UserDetails.First<UserDetails>().loggedInUserId
+				where user.UserId == HttpContext.Session.GetInt32("LoggedInUserId")
 				select course
             ).ToList();
             
-            User currentUser = _db.Users.Find(_db.UserDetails.First<UserDetails>().loggedInUserId);
+            User currentUser = _db.Users.Find(HttpContext.Session.GetInt32("LoggedInUserId"));
 
             var viewModel = new CourseViewModel
             {
@@ -52,7 +52,7 @@ namespace TeamWebApplication.Controllers
 			course.CreationDate = DateTime.Now;
 			_db.Courses.Add(course);
 			_db.SaveChanges();
-			_db.CoursesUsers.Add(new CourseUser { CourseId = course.CourseId, UserId = _db.UserDetails.First<UserDetails>().loggedInUserId });
+			_db.CoursesUsers.Add(new CourseUser { CourseId = course.CourseId, UserId = (int)HttpContext.Session.GetInt32("LoggedInUserId") });
 			_db.SaveChanges();
             return RedirectToAction("Index");
         }
@@ -93,7 +93,7 @@ namespace TeamWebApplication.Controllers
 
         public IActionResult AddUser(int courseId)
         {
-			_db.UserDetails.First<UserDetails>().currentCourseId = courseId;
+			HttpContext.Session.SetInt32("CurrentCourseId", courseId);
 			_db.SaveChanges();
 			return View();
         }
@@ -102,15 +102,15 @@ namespace TeamWebApplication.Controllers
         public IActionResult AddUser(String userIdString)
         {
             String[] userIdList = userIdString.Split(';');
-            Course? currentCourse = _db.Courses.Find(_db.UserDetails.First<UserDetails>().currentCourseId);
+            Course? currentCourse = _db.Courses.Find(HttpContext.Session.GetInt32("CurrentCourseId"));
             foreach (var word in userIdList)
             {
                 if (Int32.TryParse(word, out int userId) != false && currentCourse != null)
                 {
                     User? user;
-                    if ((user = _db.Users.Find(userId)) != null && userId != _db.UserDetails.First<UserDetails>().loggedInUserId)
+                    if ((user = _db.Users.Find(userId)) != null && userId != HttpContext.Session.GetInt32("LoggedInUserId"))
                     {
-                        _db.CoursesUsers.Add(new CourseUser { CourseId = _db.UserDetails.First<UserDetails>().currentCourseId, UserId = userId });
+                        _db.CoursesUsers.Add(new CourseUser { CourseId = (int)HttpContext.Session.GetInt32("CurrentCourseId"), UserId = userId });
                         _db.SaveChanges();
                     }
                 }
@@ -120,7 +120,7 @@ namespace TeamWebApplication.Controllers
 
         public IActionResult RemoveUser(int courseId)
         {
-			_db.UserDetails.First<UserDetails>().currentCourseId = courseId;
+			HttpContext.Session.SetInt32("CurrentCourseId", courseId);
 			_db.SaveChanges();
 			return View();
         }
@@ -129,15 +129,15 @@ namespace TeamWebApplication.Controllers
         public IActionResult RemoveUser(String userIdString)
         {
             String[] userIdList = userIdString.Split(';');
-            Course? currentCourse = _db.Courses.Find(_db.UserDetails.First<UserDetails>().currentCourseId);
+            Course? currentCourse = _db.Courses.Find(HttpContext.Session.GetInt32("CurrentCourseId"));
             foreach (var word in userIdList)
             {
                 if (Int32.TryParse(word, out int userId) != false && currentCourse != null)
                 {
                     User? user;
-                    if ((user = _db.Users.Find(userId)) != null && userId != _db.UserDetails.First<UserDetails>().loggedInUserId)
+                    if ((user = _db.Users.Find(userId)) != null && userId != HttpContext.Session.GetInt32("LoggedInUserId"))
                     {
-                        _db.CoursesUsers.Remove(new CourseUser { CourseId = _db.UserDetails.First<UserDetails>().currentCourseId, UserId = userId });
+                        _db.CoursesUsers.Remove(new CourseUser { CourseId = (int)HttpContext.Session.GetInt32("LoggedInUserId"), UserId = userId });
                         _db.SaveChanges();
                     }
                 }
@@ -147,7 +147,7 @@ namespace TeamWebApplication.Controllers
 
         public IActionResult CheckUsers(int courseId)
         {
-			_db.UserDetails.First<UserDetails>().currentCourseId = courseId;
+			HttpContext.Session.SetInt32("CurrentCourseId", courseId);
 			_db.SaveChanges();
 			ICollection<User> userInCourseList = (
 				from user in _db.Users
@@ -155,7 +155,7 @@ namespace TeamWebApplication.Controllers
 				on user.UserId equals userCourse.UserId
 				join course in _db.Courses
 				on userCourse.CourseId equals course.CourseId
-				where course.CourseId == _db.UserDetails.First<UserDetails>().currentCourseId
+				where course.CourseId == HttpContext.Session.GetInt32("CurrentCourseId")
 				select user
 			).ToList();
             return View(userInCourseList);

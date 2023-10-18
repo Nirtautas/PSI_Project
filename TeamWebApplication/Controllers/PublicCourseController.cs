@@ -21,7 +21,8 @@ namespace TeamWebApplication.Controllers
                 where course.IsPublic == true
                 select course
             ).ToList();
-            var currentUser = _db.Users.Find(_db.UserDetails.First<UserDetails>().loggedInUserId);
+            var currentUser = _db.Users.Find(
+            HttpContext.Session.GetInt32("LoggedInUserId"));
 
             var viewModel = new CourseViewModel
             {

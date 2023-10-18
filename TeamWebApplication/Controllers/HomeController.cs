@@ -8,19 +8,18 @@ namespace TeamWebApplication.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
         private readonly ApplicationDBContext _db;
 
-        public HomeController(ILogger<HomeController> logger, ApplicationDBContext db)
+        public HomeController(ApplicationDBContext db)
         {
-            _logger = logger;
             _db = db;
         }
 
         public IActionResult Index()
         {
-			_db.UserDetails.First<UserDetails>().loggedInUserId = -1;
-			_db.UserDetails.First<UserDetails>().loggedInUserRole = Role.None;
+            HttpContext.Session.Remove("LoggedInUserId");
+            HttpContext.Session.Remove("LoggedInUserRole");
+            HttpContext.Session.Remove("CurrentCourseId");
 			_db.SaveChanges();
 			return View();
         }

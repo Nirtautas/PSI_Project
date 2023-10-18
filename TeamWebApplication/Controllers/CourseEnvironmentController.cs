@@ -16,7 +16,7 @@ namespace TeamWebApplication.Controllers
 
         public IActionResult Index(int courseId)
         {
-			_db.UserDetails.First<UserDetails>().currentCourseId = courseId;
+            HttpContext.Session.SetInt32("CurrentCourseId", courseId);
 			_db.SaveChanges();
 			IEnumerable<Post> coursePosts = (
                 from post in _db.Posts
@@ -32,9 +32,9 @@ namespace TeamWebApplication.Controllers
                 select comment
             ).ToList();
             comment1.CourseId = courseId;
-            int loggedInUser = _db.UserDetails.First<UserDetails>().loggedInUserId;
+            int loggedInUser = (int)HttpContext.Session.GetInt32("LoggedInUserId");
 
-            User currentUser = _db.Users.Find(_db.UserDetails.First<UserDetails>().loggedInUserId);
+            User currentUser = _db.Users.Find(HttpContext.Session.GetInt32("LoggedInUserId"));
 
             var viewModel = new CourseAndComment
             {
@@ -49,7 +49,7 @@ namespace TeamWebApplication.Controllers
 
         public IActionResult TeacherVisitorIndex(int courseId)
         {
-			_db.UserDetails.First<UserDetails>().currentCourseId = courseId;
+			HttpContext.Session.SetInt32("CurrentCourseId", courseId);
 			_db.SaveChanges();
 			IEnumerable<Post> coursePosts = (
                 from post in _db.Posts
@@ -65,9 +65,9 @@ namespace TeamWebApplication.Controllers
                 select comment
             ).ToList();
             comment1.CourseId = courseId;
-            int loggedInUser = _db.UserDetails.First<UserDetails>().loggedInUserId;
+            int loggedInUser = (int)HttpContext.Session.GetInt32("LoggedInUserId");
 
-            User currentUser = _db.Users.Find(_db.UserDetails.First<UserDetails>().loggedInUserId);
+            User currentUser = _db.Users.Find(HttpContext.Session.GetInt32("LoggedInUserId"));
 
             var viewModel = new CourseAndComment
             {
@@ -83,7 +83,7 @@ namespace TeamWebApplication.Controllers
         [HttpPost]
         public IActionResult AddComment(int courseId, Comment comment)
         {
-			var user = _db.Users.Find(_db.UserDetails.First<UserDetails>().loggedInUserId);
+			var user = _db.Users.Find(HttpContext.Session.GetInt32("LoggedInUserId"));
 
 			comment.CourseId = courseId;
 			comment.UserId = user.UserId;
@@ -122,14 +122,14 @@ namespace TeamWebApplication.Controllers
         public IActionResult CreateTextPost()
         {
             Post post = new TextPost();
-            post.CourseId = _db.UserDetails.First<UserDetails>().currentCourseId;
+            post.CourseId = (int)HttpContext.Session.GetInt32("CurrentCourseId");
             return View(post);
         }
 
         public IActionResult CreateLinkPost()
         {
             Post post = new LinkPost();
-            post.CourseId = _db.UserDetails.First<UserDetails>().currentCourseId;
+            post.CourseId = (int)HttpContext.Session.GetInt32("CurrentCourseId");
             return View(post);
         }
 
