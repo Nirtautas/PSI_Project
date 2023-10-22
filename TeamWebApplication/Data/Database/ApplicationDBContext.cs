@@ -11,7 +11,6 @@ namespace TeamWebApplication.Data.Database
         public DbSet<Post> Posts { get; set; }
         public DbSet<Comment> Comments { get; set; }
 		public DbSet<CourseUser> CoursesUsers { get; set; }
-		public DbSet<UserDetails> UserDetails { get; set; }
 
 		public ApplicationDBContext(DbContextOptions<ApplicationDBContext> options) : base(options)
         {
@@ -202,10 +201,6 @@ namespace TeamWebApplication.Data.Database
 					UserComment = "Cool"
 				}
 			);
-
-			//UserDetails seeding
-			modelBuilder.Entity<UserDetails>()
-				.HasData(new UserDetails { Id = 1, loggedInUserId = -1, loggedInUserRole = Role.None, currentCourseId = -1 });
 
 			base.OnModelCreating(modelBuilder);
 		}

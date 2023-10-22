@@ -1,4 +1,5 @@
-﻿using TeamWebApplication.Models.Enums;
+﻿
+using TeamWebApplication.Models.Enums;
 
 namespace TeamWebApplication.Models
 {

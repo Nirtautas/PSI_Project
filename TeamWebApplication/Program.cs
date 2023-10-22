@@ -1,10 +1,17 @@
 using Microsoft.EntityFrameworkCore;
 using TeamWebApplication.Data.Database;
+using TeamWebApplication.Data.ExceptionLogger;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(10);
+});
 
+builder.Services.AddSingleton<IExceptionLogger>(new ExceptionLogger(@".\Logs\"));
 //Established connection with PostgreSQL database
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ApplicationDBContext>(options => options.UseNpgsql(connectionString));
@@ -26,6 +33,7 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+app.UseSession();
 
 app.UseEndpoints(endpoints =>
 {

@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using TeamWebApplication.Data;
 using TeamWebApplication.Data.Database;
+using TeamWebApplication.Data.ExceptionLogger;
+using TeamWebApplication.Data.Exceptions;
+using TeamWebApplication.Data.ExtensionMethods;
 using TeamWebApplication.Models;
 
 namespace TeamWebApplication.Controllers
@@ -8,10 +10,12 @@ namespace TeamWebApplication.Controllers
     public class LogInController : Controller
     {
 		private readonly ApplicationDBContext _db;
+        private readonly IExceptionLogger _logger;
 
-		public LogInController(ApplicationDBContext db)
+		public LogInController(ApplicationDBContext db, IExceptionLogger logger)
         {
             _db = db;
+            _logger = logger;
         }
 
         public IActionResult Index()
@@ -28,13 +32,27 @@ namespace TeamWebApplication.Controllers
         [HttpPost]
         public IActionResult Login(LoginDetails login)
         {
-            var user = _db.Users.FirstOrDefault(user => user.UserId == login.UserId && user.Password == login.Password);
-			if (user == null)
-				return RedirectToAction("Index", "Login");
-			_db.UserDetails.First<UserDetails>().loggedInUserId = user.UserId;
-			_db.UserDetails.First<UserDetails>().loggedInUserRole = user.Role;
-			_db.SaveChanges();
-			return RedirectToAction("Index", "Course");
+            try
+            {
+				var user = _db.Users.FirstOrDefault(user => user.UserId == login.UserId && user.Password == login.Password);
+				if (user == null)
+					return RedirectToAction("Index", "Login");
+
+				HttpContext.Session.SetInt32("LoggedInUserId", user.UserId);
+				HttpContext.Session.SetInt32("LoggedInUserRole", (int)user.Role);
+				_db.SaveChanges();
+				return RedirectToAction("Index", "Course");
+			}
+            catch (SessionCredentialException ex)
+            {
+                _logger.Log(ex);
+				return RedirectToAction("Index", "Home");
+			}
+            catch (Exception ex1)
+            {
+                _logger.Log(ex1);
+                throw;
+            }
         }
     }
 }
