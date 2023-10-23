@@ -460,26 +460,28 @@ namespace TeamWebApplication.Controllers
             }
         }
 
-		[HttpGet]
         public async Task<IActionResult> DownloadFile(IFormFile file, FilePost post)
 		{
             Post? originalPost = (FilePost?)_db.Posts.Find(post.PostId);
 
-            string? fileName = _db.Posts
-				.Where(p => p.PostId == originalPost.PostId)
-				.OfType<FilePost>()
-				.Select(filePost => filePost.FileName)
-				.FirstOrDefault();
+            string? fileName = (
+				from p in _db.Posts
+                where p.PostId == originalPost.PostId
+                from filePost in _db.Posts.OfType<FilePost>()
+                where filePost.PostId == p.PostId
+                select filePost.FileName
+			).FirstOrDefault();
 
             var filePath = Path.Combine("wwwroot/uploads", fileName);
             var provider = new FileExtensionContentTypeProvider();
-            if (!provider.TryGetContentType(filePath, out var contenttype))
+            if (!provider.TryGetContentType(filePath, out string? contentType))
             {
-                contenttype = "application/octet-stream";
+				// if a file is without a type, it defaults to a binary file format
+                contentType = "application/octet-stream";
             }
 
             var bytes = await System.IO.File.ReadAllBytesAsync(filePath);
-            return File(bytes, contenttype, Path.GetFileName(filePath));
+            return File(bytes, contentType, fileName);
 		}
 
 		public IActionResult DeleteFilePost(int postId)
