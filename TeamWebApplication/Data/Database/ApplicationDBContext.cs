@@ -170,12 +170,12 @@ namespace TeamWebApplication.Data.Database
             modelBuilder.Entity<FilePost>().HasData(
                 new FilePost
                 {
-                    PostId = 30008,
+                    PostId = 30003,
                     CourseId = course2.CourseId,
-                    Name = "Click me",
+                    Name = "File",
                     CreationDate = DateTime.Now,
                     IsVisible = true,
-                    FilePath = "wwwroot/css/tvarkarastis.png"
+                    FileName = "tvarkarastis.jpg"
                 }
             );
 

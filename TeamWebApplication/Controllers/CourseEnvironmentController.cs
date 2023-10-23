@@ -430,10 +430,11 @@ namespace TeamWebApplication.Controllers
                     var fileExtension = Path.GetExtension(fileName);
 
 					// creates a new file name to avoid having several files with the same name
+					// (NOT IMPLEMENTED)
                     var uniqueFileName = Guid.NewGuid().ToString() + fileExtension;
 
-					// change 'fileName' to 'uniqueFileName' when unique file name recognition is implemented
-					string filePath = Path.Combine("wwwroot/uploads", fileName);
+                    // change 'fileName' to 'uniqueFileName' when unique file name recognition is implemented
+                    var filePath = Path.Combine("wwwroot/uploads", fileName);
 
                     using (var stream = new FileStream(filePath, FileMode.Create))
                     {
@@ -443,8 +444,8 @@ namespace TeamWebApplication.Controllers
 					post.PostType = PostType.File;
 					post.CreationDate = DateTime.Now;
 
-                    // change 'fileName' to 'filePath' when unique file name recognition is implemented
-                    post.FilePath = fileName;
+                    // change 'fileName' to 'uniqueFileName' when unique file name recognition is implemented
+                    post.FileName = fileName;
 
                     _db.Posts.Add(post);
                     _db.SaveChanges();
@@ -467,7 +468,7 @@ namespace TeamWebApplication.Controllers
             string? fileName = _db.Posts
 				.Where(p => p.PostId == originalPost.PostId)
 				.OfType<FilePost>()
-				.Select(filePost => filePost.FilePath)
+				.Select(filePost => filePost.FileName)
 				.FirstOrDefault();
 
             var filePath = Path.Combine("wwwroot/uploads", fileName);

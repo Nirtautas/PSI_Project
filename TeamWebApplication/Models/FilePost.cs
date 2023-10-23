@@ -6,9 +6,9 @@ namespace TeamWebApplication.Models
 {
     public class FilePost : Post
     {
-        public string? FilePath { get; set; } = null;
+        public string? FileName { get; set; } = null;
 
-        public FilePost(int id, int courseId, string name, DateTime creationDate, bool IsVisible, PostType PostType, string filePath)
+        public FilePost(int id, int courseId, string name, DateTime creationDate, bool IsVisible, PostType PostType, string fileName)
         {
             base.PostId = id;
             base.CourseId = courseId;
@@ -16,7 +16,7 @@ namespace TeamWebApplication.Models
             base.CreationDate = creationDate;
             base.IsVisible = IsVisible;
             base.PostType = PostType;
-            this.FilePath = filePath;
+            this.FileName = fileName;
         }
 
         public FilePost()
@@ -33,17 +33,17 @@ namespace TeamWebApplication.Models
                 CreationDate.ToString() + ";" +
                 IsVisible + ";" +
                 PostType.ToString() + ';' +
-                FilePath;
+                FileName;
         }
 
         public override void ApplyData(string? textData)
         {
-            FilePath = textData;
+            FileName = textData;
         }
 
         public override string? DataToString()
         {
-            return FilePath;
+            return FileName;
         }
 
         public override string? DataToHtml()

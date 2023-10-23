@@ -45,7 +45,7 @@ namespace TeamWebApplication.Models
 
         public override string? DataToHtml()
         {
-            return "<a href = \"" + DataToString() + " target=\" _blank\"\" >" + DataToString() + "</a>";
+            return "<p><a href = \"" + DataToString() + " target=\" _blank\"\" >" + DataToString() + "</a></p>";
         }
     }
 }
