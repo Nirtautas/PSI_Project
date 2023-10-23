@@ -7,6 +7,7 @@
 }
 
 body {
+    margin: 0;
     background-image: url('https://images.unsplash.com/photo-1524334228333-0f6db392f8a1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8ZGFyayUyMHNwYWNlfGVufDB8fDB8fHww&w=1000&q=80');
     font-family: Arial, sans-serif;
     color: var(--text);
