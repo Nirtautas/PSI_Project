@@ -197,33 +197,17 @@ namespace TeamWebApplication.Controllers
 			}
 		}
 
-        public IActionResult CreateLinkPost()
-        {
-            try
-            {
-				HttpContext.Session.GetInt32Ex("LoggedInUserId");
-				int? currentCourseId = HttpContext.Session.GetInt32Ex("CurrentCourseId");
-				Post post = new LinkPost();
-				post.CourseId = (int)currentCourseId;
-				return View(post);
-			}
-            catch (SessionCredentialException ex)
-            {
-                _logger.Log(ex);
-                return RedirectToAction("Index", "Home");
-            }
-		}
-
         [HttpPost]
-        public IActionResult CreateTextPost(TextPost post, int courseId)
+        public async Task<IActionResult> CreateTextPost(TextPost post, int courseId)
         {
             try
             {
 				post.PostType = PostType.Text;
 				post.CourseId = courseId;
 				post.CreationDate = DateTime.Now;
+                post.TextContent = await LinkValidation.ValidateAndReplaceLinks(post.TextContent);
 
-				_db.Posts.Add(post);
+                _db.Posts.Add(post);
 				_db.SaveChanges();
 				return RedirectToAction("Index", new { courseId });
 			}
@@ -233,26 +217,6 @@ namespace TeamWebApplication.Controllers
 				throw;
 			}
         }
-
-        [HttpPost]
-        public IActionResult CreateLinkPost(LinkPost post, int courseId)
-        {
-            try
-            {
-				post.PostType = PostType.Link;
-				post.CourseId = courseId;
-				post.CreationDate = DateTime.Now;
-
-				_db.Posts.Add(post);
-				_db.SaveChanges();
-				return RedirectToAction("Index", new { courseId });
-			}
-            catch (Exception ex)
-            {
-                _logger.Log(ex);
-                throw;
-            }
-		}
 
         public IActionResult EditTextPost(int postId)
         {
@@ -270,25 +234,8 @@ namespace TeamWebApplication.Controllers
 			}
 		}
 
-        public IActionResult EditLinkPost(int postId)
-        {
-
-			try
-			{
-				HttpContext.Session.GetInt32Ex("LoggedInUserId");
-				HttpContext.Session.GetInt32Ex("CurrentCourseId");
-				LinkPost? post = (LinkPost?)_db.Posts.Find(postId);
-				return View(post);
-			}
-			catch (SessionCredentialException ex)
-			{
-				_logger.Log(ex);
-				return RedirectToAction("Index", "Home");
-			}
-		}
-
         [HttpPost]
-        public IActionResult EditTextPost(TextPost post, int courseId)
+        public async Task<IActionResult> EditTextPost(TextPost post, int courseId)
         {
             try
             {
@@ -298,7 +245,7 @@ namespace TeamWebApplication.Controllers
 				originalPost.IsVisible = post.IsVisible;
 				originalPost.CreationDate = DateTime.Now;
 				originalPost.PostType = post.PostType;
-				originalPost.TextContent = post.TextContent;
+                originalPost.TextContent = await LinkValidation.ValidateAndReplaceLinks(post.TextContent);
 
 				_db.Posts.Update(originalPost);
 				_db.SaveChanges();
@@ -309,30 +256,6 @@ namespace TeamWebApplication.Controllers
                 _logger.Log(ex);
                 throw;
             }
-		}
-
-        [HttpPost]
-        public IActionResult EditLinkPost(LinkPost post, int courseId)
-        {
-            try
-            {
-				LinkPost? originalPost = (LinkPost)_db.Posts.Find(post.PostId);
-
-				originalPost.Name = post.Name;
-				originalPost.IsVisible = post.IsVisible;
-				originalPost.CreationDate = DateTime.Now;
-				originalPost.PostType = post.PostType;
-				originalPost.LinkContent = post.LinkContent;
-
-				_db.Posts.Update(originalPost);
-				_db.SaveChanges();
-				return RedirectToAction("Index", new { courseId });
-			}
-			catch (Exception ex)
-			{
-				_logger.Log(ex);
-				throw;
-			}
 		}
 
         public IActionResult DeleteTextPost(int postId)
@@ -351,45 +274,12 @@ namespace TeamWebApplication.Controllers
 			}
         }
 
-        public IActionResult DeleteLinkPost(int postId)
-        {
-			try
-			{
-				HttpContext.Session.GetInt32Ex("LoggedInUserId");
-				HttpContext.Session.GetInt32Ex("CurrentCourseId");
-				var post = _db.Posts.Find(postId);
-				return View(post);
-			}
-			catch (SessionCredentialException ex)
-			{
-				_logger.Log(ex);
-				return RedirectToAction("Index", "Home");
-			}
-		}
-
         [HttpPost]
         public IActionResult DeleteTextPost(TextPost post, int courseId)
         {
 			try
 			{
 				TextPost? originalPost = (TextPost?)_db.Posts.Find(post.PostId);
-				_db.Posts.Remove(originalPost);
-				_db.SaveChanges();
-				return RedirectToAction("Index", new { courseId });
-			}
-			catch (Exception ex)
-			{
-				_logger.Log(ex);
-				throw;
-			}
-		}
-
-		[HttpPost]
-		public IActionResult DeleteLinkPost(LinkPost post, int courseId)
-		{
-			try
-			{
-				Post? originalPost = (LinkPost?)_db.Posts.Find(post.PostId);
 				_db.Posts.Remove(originalPost);
 				_db.SaveChanges();
 				return RedirectToAction("Index", new { courseId });
