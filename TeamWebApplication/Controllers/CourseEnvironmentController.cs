@@ -460,28 +460,33 @@ namespace TeamWebApplication.Controllers
             }
         }
 
-        public async Task<IActionResult> DownloadFile(IFormFile file, FilePost post)
+		public async Task<IActionResult> DownloadFile(IFormFile file, FilePost post)
 		{
-            Post? originalPost = (FilePost?)_db.Posts.Find(post.PostId);
+			try
+			{
+				Post? originalPost = (FilePost?)_db.Posts.Find(post.PostId);
 
-            string? fileName = (
-				from p in _db.Posts
-                where p.PostId == originalPost.PostId
-                from filePost in _db.Posts.OfType<FilePost>()
-                where filePost.PostId == p.PostId
-                select filePost.FileName
-			).FirstOrDefault();
+				string? fileName = (
+					from p in _db.Posts
+					where p.PostId == originalPost.PostId
+					from filePost in _db.Posts.OfType<FilePost>()
+					where filePost.PostId == p.PostId
+					select filePost.FileName
+				).FirstOrDefault();
 
-            var filePath = Path.Combine("wwwroot/uploads", fileName);
-            var provider = new FileExtensionContentTypeProvider();
-            if (!provider.TryGetContentType(filePath, out string? contentType))
-            {
-				// if a file is without a type, it defaults to a binary file format
-                contentType = "application/octet-stream";
+				var filePath = Path.Combine("wwwroot/uploads", fileName);
+
+				var provider = new FileExtensionContentTypeProvider();
+				provider.TryGetContentType(filePath, out string? contentType);
+				var bytes = await System.IO.File.ReadAllBytesAsync(filePath);
+
+				return File(bytes, contentType, fileName);
+			}
+			catch (Exception ex)
+			{
+                _logger.Log(ex);
+                throw;
             }
-
-            var bytes = await System.IO.File.ReadAllBytesAsync(filePath);
-            return File(bytes, contentType, fileName);
 		}
 
 		public IActionResult DeleteFilePost(int postId)
