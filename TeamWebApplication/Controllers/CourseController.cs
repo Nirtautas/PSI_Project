@@ -298,10 +298,12 @@ namespace TeamWebApplication.Controllers
 			catch (SessionCredentialException ex)
 			{
 				_logger.Log(ex);
-				return RedirectToAction("Index", "Home");
+                //would be nice if it explained what its catching instead of just SessionCredentialException :((
+                return RedirectToAction("Index", "Home");
 			}
 			catch (Exception ex1)
 			{
+				//same here
 				_logger.Log(ex1);
 				throw;
 			}
