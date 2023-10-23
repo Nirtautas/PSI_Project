@@ -1,46 +1,77 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using TeamWebApplication.Data;
+using TeamWebApplication.Data.Database;
+using TeamWebApplication.Data.ExceptionLogger;
+using TeamWebApplication.Data.Exceptions;
+using TeamWebApplication.Data.ExtensionMethods;
 using TeamWebApplication.Models;
 
 namespace TeamWebApplication.Controllers
 {
     public class PublicCourseController : Controller
     {
-        private readonly ICourseContainer _courseContainer;
-        private readonly IUserContainer _userContainer;
+        private readonly ApplicationDBContext _db;
+        private readonly IExceptionLogger _logger;
 
-        public PublicCourseController(ICourseContainer courseContainer, IUserContainer userContainer)
+        public PublicCourseController(ApplicationDBContext db, IExceptionLogger logger)
         {
-            _courseContainer = courseContainer;
-            _userContainer = userContainer;
+            _db = db;
+            _logger = logger;
         }
 
         public IActionResult Index()
         {
-            IEnumerable<Course> publicCourses = (
-                from course in _courseContainer.courseList
-                where course.IsPublic == true
-                select course
-            ).ToList();
-            User currentUser = _userContainer.GetUser(_userContainer.loggedInUserId);
-
-            var viewModel = new CourseViewModel
+            try
             {
-                Courses = publicCourses,
-                User = currentUser
-            };
+				var currentUser = _db.Users.Find(HttpContext.Session.GetInt32Ex("LoggedInUserId"));
 
-            return View(viewModel);
-        }
+				IEnumerable<Course> publicCourses = (
+                    from course in _db.Courses
+                    where course.IsPublic == true
+                    select course
+                ).ToList();
+
+                var viewModel = new CourseViewModel
+                {
+                    Courses = publicCourses,
+                    User = currentUser
+                };
+
+				return View(viewModel);
+			}
+            catch (SessionCredentialException ex)
+            {
+                _logger.Log(ex);
+                return RedirectToAction("Index", "Home");
+            }
+            catch (Exception ex1)
+            {
+                _logger.Log(ex1);
+                throw;
+			}
+		}
 
         public IActionResult TeacherIndex()
         {
-            IEnumerable<Course> publicCourses = (
-                from course in _courseContainer.courseList
-                where course.IsPublic == true
-                select course
-            ).ToList();
-            return View(publicCourses);
+            try
+            {
+                HttpContext.Session.GetInt32Ex("LoggedInUserId");
+				IEnumerable<Course> publicCourses = (
+		            from course in _db.Courses
+		            where course.IsPublic == true
+		            select course
+	            ).ToList();
+				return View(publicCourses);
+			}
+			catch (SessionCredentialException ex)
+			{
+				_logger.Log(ex);
+				return RedirectToAction("Index", "Home");
+			}
+			catch (Exception ex1)
+			{
+				_logger.Log(ex1);
+				throw;
+			}
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Hosting;
+﻿using TeamWebApplication.Models.Enums;
 
 namespace TeamWebApplication.Models
 {
@@ -18,7 +18,7 @@ namespace TeamWebApplication.Models
 
         public LinkPost()
         {
-        
+
         }
 
         public override string ToString()

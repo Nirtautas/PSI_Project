@@ -1,26 +1,36 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TeamWebApplication.Models;
 using System.Diagnostics;
-using TeamWebApplication.Data;
+using TeamWebApplication.Data.Database;
+using TeamWebApplication.Data.ExceptionLogger;
+using TeamWebApplication.Data.ExtensionMethods;
 
 namespace TeamWebApplication.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-        private readonly IUserContainer _userContainer;
+        private readonly ApplicationDBContext _db;
+        private readonly IExceptionLogger _logger;
 
-        public HomeController(ILogger<HomeController> logger, IUserContainer userContainer)
+        public HomeController(ApplicationDBContext db, IExceptionLogger logger)
         {
+            _db = db;
             _logger = logger;
-            _userContainer = userContainer;
         }
 
         public IActionResult Index()
         {
-            _userContainer.loggedInUserId = 0;
-            _userContainer.loggedInUserRole = null;
-            return View();
+            try
+            {
+				HttpContext.Session.Clear();
+				_db.SaveChanges();
+				return View();
+			}
+            catch (Exception ex)
+            {
+                _logger.Log(ex);
+                throw;
+            }
         }
 
         public IActionResult Registration()

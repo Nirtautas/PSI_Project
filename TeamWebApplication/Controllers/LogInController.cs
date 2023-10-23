@@ -1,22 +1,25 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
-using TeamWebApplication.Data;
+using TeamWebApplication.Data.Database;
+using TeamWebApplication.Data.ExceptionLogger;
+using TeamWebApplication.Data.Exceptions;
+using TeamWebApplication.Data.ExtensionMethods;
 using TeamWebApplication.Models;
 
 namespace TeamWebApplication.Controllers
 {
     public class LogInController : Controller
     {
-        private readonly IUserContainer _userContainer;//readonly - constant
+		private readonly ApplicationDBContext _db;
+        private readonly IExceptionLogger _logger;
 
-        public LogInController(IUserContainer userContainer)
+		public LogInController(ApplicationDBContext db, IExceptionLogger logger)
         {
-            _userContainer = userContainer;
+            _db = db;
+            _logger = logger;
         }
 
         public IActionResult Index()
         {
-
             var loginDetails = new LoginDetails();
             return View(loginDetails);
         }
@@ -27,14 +30,29 @@ namespace TeamWebApplication.Controllers
         }
 
         [HttpPost]
-        public IActionResult Login(LoginDetails login)//login details from frontend
+        public IActionResult Login(LoginDetails login)
         {
-            var user = _userContainer.userList.SingleOrDefault(user => user.Password == login.Password && user.UserId == login.UserId);
-			if (user == null)
-                return RedirectToAction("Index", "Login");//user not found}
-            _userContainer.loggedInUserId = user.UserId;
-            _userContainer.loggedInUserRole = user.Role;
-             return RedirectToAction("Index", "Course");
+            try
+            {
+				var user = _db.Users.FirstOrDefault(user => user.UserId == login.UserId && user.Password == login.Password);
+				if (user == null)
+					return RedirectToAction("Index", "Login");
+
+				HttpContext.Session.SetInt32("LoggedInUserId", user.UserId);
+				HttpContext.Session.SetInt32("LoggedInUserRole", (int)user.Role);
+				_db.SaveChanges();
+				return RedirectToAction("Index", "Course");
+			}
+            catch (SessionCredentialException ex)
+            {
+                _logger.Log(ex);
+				return RedirectToAction("Index", "Home");
+			}
+            catch (Exception ex1)
+            {
+                _logger.Log(ex1);
+                throw;
+            }
         }
     }
 }

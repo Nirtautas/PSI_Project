@@ -1,212 +1,404 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Hosting;
-using Npgsql.PostgresTypes;
-using TeamWebApplication.Data;
+using TeamWebApplication.Data.Database;
+using TeamWebApplication.Data.ExceptionLogger;
+using TeamWebApplication.Data.Exceptions;
+using TeamWebApplication.Data.ExtensionMethods;
 using TeamWebApplication.Models;
+using TeamWebApplication.Models.Enums;
 
 namespace TeamWebApplication.Controllers
 {
     public class CourseEnvironmentController : Controller
     {
-        private readonly IPostContainer _postContainer;
-        private readonly ICommentContainer _commentContainer;
-        private readonly IUserContainer _userContainer;
-        private readonly ICourseContainer _courseContainer;
+        private readonly ApplicationDBContext _db;
+        private readonly IExceptionLogger _logger;
 
-        public CourseEnvironmentController(IPostContainer postContainer, ICommentContainer commentContainer, IUserContainer userContainer, ICourseContainer courseContainer)
+        public CourseEnvironmentController(ApplicationDBContext db, IExceptionLogger logger)
         {
-            _postContainer = postContainer;
-            _commentContainer = commentContainer;
-            _userContainer = userContainer;
-            _courseContainer = courseContainer;
+            _db = db;
+            _logger = logger;
         }
 
         public IActionResult Index(int courseId)
         {
-			_userContainer.currentCourseId = courseId;
-			IEnumerable<Post> coursePosts = (
-                from post in _postContainer.PostList
-                where post.CourseId == courseId
-                select post
-            ).ToList();
-
-            Comment comment1 = new();
-            IEnumerable<Comment> courseComments = (
-                from comment in _commentContainer.CommentList
-                where comment.CourseId == courseId
-                orderby comment.CommentCreationTime descending
-                select comment
-            ).ToList();
-            comment1.CourseId = courseId;
-
-            int loggedInUser = _userContainer.loggedInUserId;
-
-            User currentUser = _userContainer.GetUser(_userContainer.loggedInUserId);
-
-            var viewModel = new CourseAndComment
+            try
             {
-                PostData = coursePosts,
-                CommentData = courseComments,
-                comment = comment1,
-                LoggedInUser = loggedInUser,
-                User = currentUser
-            };
-            return View(viewModel);
+				int? loggedInUserId = HttpContext.Session.GetInt32Ex("LoggedInUserId");
+				HttpContext.Session.SetInt32("CurrentCourseId", courseId);
+                _db.SaveChanges();
+                IEnumerable<Post> coursePosts = (
+                    from post in _db.Posts
+                    where post.CourseId == courseId
+                    select post
+                ).ToList();
+
+                Comment comment1 = new();
+                IEnumerable<Comment> courseComments = (
+                    from comment in _db.Comments
+                    where comment.CourseId == courseId
+                    orderby comment.CreationTime descending
+                    select comment
+                ).ToList();
+                comment1.CourseId = courseId;
+
+                User currentUser = _db.Users.Find(loggedInUserId);
+
+                var viewModel = new CourseAndComment
+                {
+                    PostData = coursePosts,
+                    CommentData = courseComments,
+                    comment = comment1,
+                    LoggedInUser = (int)loggedInUserId,
+                    User = currentUser
+                };
+                return View(viewModel);
+            }
+            catch (SessionCredentialException ex)
+            {
+				_logger.Log(ex);
+                return RedirectToAction("Index", "Home");
+			}
+            catch (Exception ex1)
+            {
+                _logger.Log(ex1);
+                throw;
+            }
         }
 
         public IActionResult TeacherVisitorIndex(int courseId)
         {
-            _userContainer.currentCourseId = courseId;
-            IEnumerable<Post> coursePosts = (
-                from post in _postContainer.PostList
-                where post.CourseId == courseId
-                select post
-            ).ToList();
-
-            Comment comment1 = new();
-            IEnumerable<Comment> courseComments = (
-                from comment in _commentContainer.CommentList
-                where comment.CourseId == courseId
-                orderby comment.CommentCreationTime descending
-                select comment
-            ).ToList();
-            comment1.CourseId = courseId;
-            int loggedInUser = _userContainer.loggedInUserId;
-
-            User currentUser = _userContainer.GetUser(_userContainer.loggedInUserId);
-
-            var viewModel = new CourseAndComment
+            try
             {
-                PostData = coursePosts,
-                CommentData = courseComments,
-                comment = comment1,
-                LoggedInUser = loggedInUser,
-                User = currentUser
-            };
-            return View(viewModel);
-        }
+				int? loggedInUserId = HttpContext.Session.GetInt32Ex("LoggedInUserId");
+				HttpContext.Session.GetInt32Ex("LoggedInUserId");
+				HttpContext.Session.SetInt32("CurrentCourseId", courseId);
+				_db.SaveChanges();
+				IEnumerable<Post> coursePosts = (
+					from post in _db.Posts
+					where post.CourseId == courseId
+					select post
+				).ToList();
+
+				Comment comment1 = new();
+				IEnumerable<Comment> courseComments = (
+					from comment in _db.Comments
+					where comment.CourseId == courseId
+					orderby comment.CreationTime descending
+					select comment
+				).ToList();
+				comment1.CourseId = courseId;
+				User currentUser = _db.Users.Find(loggedInUserId);
+
+				var viewModel = new CourseAndComment
+				{
+					PostData = coursePosts,
+					CommentData = courseComments,
+					comment = comment1,
+					LoggedInUser = (int)loggedInUserId,
+					User = currentUser
+				};
+				return View(viewModel);
+			}
+			catch (SessionCredentialException ex)
+			{
+				_logger.Log(ex);
+				return RedirectToAction("Index", "Home");
+			}
+			catch (Exception ex1)
+			{
+				_logger.Log(ex1);
+				throw;
+			}
+		}
 
         [HttpPost]
         public IActionResult AddComment(int courseId, Comment comment)
         {
-            _commentContainer.CreateComment(comment, courseId, _userContainer.loggedInUserId, _userContainer);
-            return RedirectToAction("Index", new { courseId });
-        }
+            try
+            {
+				int? loggedInUserId = HttpContext.Session.GetInt32Ex("LoggedInUserId");
+				var user = _db.Users.Find(loggedInUserId);
+
+				comment.CourseId = courseId;
+				comment.UserId = user.UserId;
+				comment.CommentatorName = user.Name;
+				comment.CommentatorSurname = user.Surname;
+				comment.CreationTime = DateTime.Now;
+
+				_db.Comments.Add(comment);
+				_db.SaveChanges();
+				return RedirectToAction("Index", new { courseId });
+			}
+			catch (SessionCredentialException ex)
+			{
+				_logger.Log(ex);
+				return RedirectToAction("Index", "Home");
+			}
+			catch (Exception ex1)
+			{
+				_logger.Log(ex1);
+				throw;
+			}
+		}
 
         [HttpPost]
         public IActionResult EditComment(int courseId, int commentId, String userComment)
         {
-            Comment originalComment = _commentContainer.CommentList.SingleOrDefault(comment => comment.CommentId == commentId);
-            originalComment.UserComment = userComment;
-            originalComment.CommentCreationTime = DateTime.Now;
-            _commentContainer.WriteComments();
-            return RedirectToAction("Index", new { courseId });
+            try
+            {
+				var originalComment = _db.Comments.Find(commentId);
+
+				originalComment.UserComment = userComment;
+				originalComment.CreationTime = DateTime.Now;
+
+				_db.Comments.Update(originalComment);
+				_db.SaveChanges();
+				return RedirectToAction("Index", new { courseId });
+			}
+			catch (Exception ex)
+			{
+				_logger.Log(ex);
+                throw;
+			}
         }
 
         [HttpPost]
         public IActionResult Delete(int courseId, int commentId)
         {
-            Comment comment = _commentContainer.CommentList.SingleOrDefault(comment => comment.CommentId == commentId);
-            _commentContainer.DeleteComment(comment);
-            return RedirectToAction("Index", new { courseId });
-        }
+            try
+            {
+				var comment = _db.Comments.Find(commentId);
+
+				_db.Remove(comment);
+				_db.SaveChanges();
+				return RedirectToAction("Index", new { courseId });
+			}
+            catch (Exception ex)
+            {
+                _logger.Log(ex);
+                throw;
+            }
+		}
 
         public IActionResult CreateTextPost()
         {
-            Post post = new TextPost();
-            post.CourseId = _userContainer.currentCourseId;
-            return View(post);
-        }
+            try
+            {
+				HttpContext.Session.GetInt32Ex("LoggedInUserId");
+				int? currentCourseId = HttpContext.Session.GetInt32Ex("CurrentCourseId");
+				Post post = new TextPost();
+				post.CourseId = (int)currentCourseId;
+				return View(post);
+			}
+			catch (SessionCredentialException ex)
+			{
+				_logger.Log(ex);
+				return RedirectToAction("Index", "Home");
+			}
+		}
 
         public IActionResult CreateLinkPost()
         {
-            Post post = new LinkPost();
-            post.CourseId = _userContainer.currentCourseId;
-            return View(post);
-        }
+            try
+            {
+				HttpContext.Session.GetInt32Ex("LoggedInUserId");
+				int? currentCourseId = HttpContext.Session.GetInt32Ex("CurrentCourseId");
+				Post post = new LinkPost();
+				post.CourseId = (int)currentCourseId;
+				return View(post);
+			}
+            catch (SessionCredentialException ex)
+            {
+                _logger.Log(ex);
+                return RedirectToAction("Index", "Home");
+            }
+		}
 
         [HttpPost]
         public IActionResult CreateTextPost(TextPost post, int courseId)
         {
-            post.PostType = PostType.Text;
-            _postContainer.CreatePost(post, _userContainer.currentCourseId);
-            _postContainer.WritePosts();
-            return RedirectToAction("Index", new { courseId });
+            try
+            {
+				post.PostType = PostType.Text;
+				post.CourseId = courseId;
+				post.CreationDate = DateTime.Now;
+
+				_db.Posts.Add(post);
+				_db.SaveChanges();
+				return RedirectToAction("Index", new { courseId });
+			}
+            catch (Exception ex)
+			{
+				_logger.Log(ex);
+				throw;
+			}
         }
 
         [HttpPost]
         public IActionResult CreateLinkPost(LinkPost post, int courseId)
         {
-            post.PostType = PostType.Link;
-			_postContainer.CreatePost(post, _userContainer.currentCourseId);
-			_postContainer.WritePosts();
-            return RedirectToAction("Index", new { courseId });
-        }
+            try
+            {
+				post.PostType = PostType.Link;
+				post.CourseId = courseId;
+				post.CreationDate = DateTime.Now;
+
+				_db.Posts.Add(post);
+				_db.SaveChanges();
+				return RedirectToAction("Index", new { courseId });
+			}
+            catch (Exception ex)
+            {
+                _logger.Log(ex);
+                throw;
+            }
+		}
 
         public IActionResult EditTextPost(int postId)
         {
-            TextPost? post = (TextPost)_postContainer.GetPost(postId);
-            return View(post);
-        }
+			try
+			{
+				HttpContext.Session.GetInt32Ex("LoggedInUserId");
+				HttpContext.Session.GetInt32Ex("CurrentCourseId");
+				TextPost? post = (TextPost?)_db.Posts.Find(postId);
+				return View(post);
+			}
+			catch (SessionCredentialException ex)
+			{
+				_logger.Log(ex);
+				return RedirectToAction("Index", "Home");
+			}
+		}
 
         public IActionResult EditLinkPost(int postId)
         {
-            LinkPost? post = (LinkPost)_postContainer.GetPost(postId);
-            return View(post);
-        }
+
+			try
+			{
+				HttpContext.Session.GetInt32Ex("LoggedInUserId");
+				HttpContext.Session.GetInt32Ex("CurrentCourseId");
+				LinkPost? post = (LinkPost?)_db.Posts.Find(postId);
+				return View(post);
+			}
+			catch (SessionCredentialException ex)
+			{
+				_logger.Log(ex);
+				return RedirectToAction("Index", "Home");
+			}
+		}
 
         [HttpPost]
         public IActionResult EditTextPost(TextPost post, int courseId)
         {
-            TextPost? originalPost = (TextPost)_postContainer.GetPost(post.PostId);
-            originalPost.Name = post.Name;
-            originalPost.IsVisible = post.IsVisible;
-            originalPost.CreationDate = DateTime.Now;
-            originalPost.PostType = post.PostType;
-            originalPost.TextContent = post.TextContent;
-            _postContainer.WritePosts();
-            return RedirectToAction("Index", new { courseId });
-        }
+            try
+            {
+				TextPost? originalPost = (TextPost?)_db.Posts.Find(post.PostId);
+
+				originalPost.Name = post.Name;
+				originalPost.IsVisible = post.IsVisible;
+				originalPost.CreationDate = DateTime.Now;
+				originalPost.PostType = post.PostType;
+				originalPost.TextContent = post.TextContent;
+
+				_db.Posts.Update(originalPost);
+				_db.SaveChanges();
+				return RedirectToAction("Index", new { courseId });
+			}
+            catch (Exception ex)
+            {
+                _logger.Log(ex);
+                throw;
+            }
+		}
 
         [HttpPost]
         public IActionResult EditLinkPost(LinkPost post, int courseId)
         {
-            LinkPost? originalPost = (LinkPost)_postContainer.GetPost(post.PostId);
-            originalPost.Name = post.Name;
-            originalPost.IsVisible = post.IsVisible;
-            originalPost.CreationDate = DateTime.Now;
-            originalPost.PostType = post.PostType;
-            originalPost.LinkContent = post.LinkContent;
-            _postContainer.WritePosts();
-            return RedirectToAction("Index", new { courseId });
-        }
+            try
+            {
+				LinkPost? originalPost = (LinkPost)_db.Posts.Find(post.PostId);
+
+				originalPost.Name = post.Name;
+				originalPost.IsVisible = post.IsVisible;
+				originalPost.CreationDate = DateTime.Now;
+				originalPost.PostType = post.PostType;
+				originalPost.LinkContent = post.LinkContent;
+
+				_db.Posts.Update(originalPost);
+				_db.SaveChanges();
+				return RedirectToAction("Index", new { courseId });
+			}
+			catch (Exception ex)
+			{
+				_logger.Log(ex);
+				throw;
+			}
+		}
 
         public IActionResult DeleteTextPost(int postId)
         {
-            TextPost? post = (TextPost)_postContainer.GetPost(postId);
-            return View(post);
+			try
+			{
+				HttpContext.Session.GetInt32Ex("LoggedInUserId");
+				HttpContext.Session.GetInt32Ex("CurrentCourseId");
+				var post = _db.Posts.Find(postId);
+				return View(post);
+			}
+			catch (SessionCredentialException ex)
+			{
+				_logger.Log(ex);
+				return RedirectToAction("Index", "Home");
+			}
         }
 
         public IActionResult DeleteLinkPost(int postId)
         {
-            LinkPost? post = (LinkPost)_postContainer.GetPost(postId);
-            return View(post);
-        }
+			try
+			{
+				HttpContext.Session.GetInt32Ex("LoggedInUserId");
+				HttpContext.Session.GetInt32Ex("CurrentCourseId");
+				var post = _db.Posts.Find(postId);
+				return View(post);
+			}
+			catch (SessionCredentialException ex)
+			{
+				_logger.Log(ex);
+				return RedirectToAction("Index", "Home");
+			}
+		}
 
         [HttpPost]
         public IActionResult DeleteTextPost(TextPost post, int courseId)
         {
-			TextPost originalPost = (TextPost)_postContainer.GetPost(post.PostId);
-			_postContainer.DeletePost(originalPost);
-            return RedirectToAction("Index", new { courseId });
-        }
+			try
+			{
+				TextPost? originalPost = (TextPost?)_db.Posts.Find(post.PostId);
+				_db.Posts.Remove(originalPost);
+				_db.SaveChanges();
+				return RedirectToAction("Index", new { courseId });
+			}
+			catch (Exception ex)
+			{
+				_logger.Log(ex);
+				throw;
+			}
+		}
 
 		[HttpPost]
 		public IActionResult DeleteLinkPost(LinkPost post, int courseId)
 		{
-			Post originalPost = (LinkPost)_postContainer.GetPost(post.PostId);
-			_postContainer.DeletePost(originalPost);
-            return RedirectToAction("Index", new { courseId });
-        }
+			try
+			{
+				Post? originalPost = (LinkPost?)_db.Posts.Find(post.PostId);
+				_db.Posts.Remove(originalPost);
+				_db.SaveChanges();
+				return RedirectToAction("Index", new { courseId });
+			}
+			catch (Exception ex)
+			{
+				_logger.Log(ex);
+				throw;
+			}
+		}
 	}
 }

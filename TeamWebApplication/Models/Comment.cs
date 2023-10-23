@@ -1,16 +1,21 @@
-﻿using System.Globalization;
+﻿
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Globalization;
 
 namespace TeamWebApplication.Models
 {
-    public class Comment
+	[Table("Comments")]
+	public class Comment : IComparable<Comment>
     {
+        [Key]
         public int CommentId { get; set; }
         public int CourseId { get; set; }
         public int UserId { get; set; }
-        public string UsersNameThatCommented { get; set; }
-        public string UsersSurnameThatCommented { get; set; }
+        public string CommentatorName { get; set; }
+        public string CommentatorSurname { get; set; }
         public string UserComment { get; set; }
-        public DateTime CommentCreationTime { get; set; } = DateTime.Now;
+        public DateTime CreationTime { get; set; } = DateTime.Now;
 
         public Comment()
         {
@@ -28,22 +33,19 @@ namespace TeamWebApplication.Models
             CommentId = commentId;
             CourseId = courseId;
             UserId = userId;
-            UsersNameThatCommented = usersNameThatCommented;
-            UsersSurnameThatCommented = usersSurnameThatCommented;
-            CommentCreationTime = commentCreationTime;
+            CommentatorName = usersNameThatCommented;
+            CommentatorSurname = usersSurnameThatCommented;
+            CreationTime = commentCreationTime;
             UserComment = userComment;
         }
 
-        public override string ToString()
+        public int CompareTo(Comment? other)
         {
-            return
-                CommentId.ToString() + ";" +
-                CourseId.ToString() + ";" +
-                UserId.ToString() + ";" +
-                UsersNameThatCommented + ";" +
-                UsersSurnameThatCommented + ";" +
-                CommentCreationTime.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture) + ";" +
-                UserComment;
+            if (CommentId > other.CommentId || other == null)
+                return 1;
+            else if (CommentId < other.CommentId)
+                return -1;
+            return 1;
         }
     }
 }

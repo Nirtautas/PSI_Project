@@ -1,7 +1,14 @@
-﻿namespace TeamWebApplication.Models
+﻿
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using TeamWebApplication.Models.Enums;
+
+namespace TeamWebApplication.Models
 {
-    public abstract class Post
+    [Table("Posts")]
+    public abstract class Post : IComparable<Post>
     {
+        [Key]
         public int PostId { get; set; }
         public int CourseId { get; set; }
         public string? Name { get; set; }
@@ -9,14 +16,21 @@
         public bool IsVisible { get; set; }
         public PostType PostType { get; set; }
 
+        //Database links
+        public Course Course { get; set; }
+
         //Abstract definitions
         public abstract void ApplyData(string? textData);
         public abstract string? DataToString();
         public abstract string? DataToHtml();
-    }
-    public enum PostType
-    {
-        Text,
-        Link
+
+        public int CompareTo(Post? other)
+        {
+            if (PostId > other.PostId || other == null)
+                return 1;
+            else if (PostId < other.PostId)
+                return -1;
+            return 0;
+        }
     }
 }

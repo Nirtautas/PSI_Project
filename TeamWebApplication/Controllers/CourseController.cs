@@ -1,166 +1,310 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using TeamWebApplication.Data;
+using TeamWebApplication.Data.Database;
+using TeamWebApplication.Data.ExceptionLogger;
+using TeamWebApplication.Data.Exceptions;
+using TeamWebApplication.Data.ExtensionMethods;
 using TeamWebApplication.Models;
 
 namespace TeamWebApplication.Controllers
 {
     public class CourseController : Controller
     {
-        private readonly IUserContainer _userContainer;
-        private readonly ICourseContainer _courseContainer;
-        private readonly IRelationContainer _relationContainer;
-        private readonly IPostContainer _postContainer;
+        private readonly ApplicationDBContext _db;
+        private readonly IExceptionLogger _logger;
 
-        public CourseController(IUserContainer userContainer, ICourseContainer courseContainer, IRelationContainer relationContainer, IPostContainer postContainer)
+        public CourseController(ApplicationDBContext db, IExceptionLogger logger)
         {
-            _userContainer = userContainer;
-            _courseContainer = courseContainer;
-            _relationContainer = relationContainer;
-            _postContainer = postContainer;
+            _db = db;
+            _logger = logger;
         }
-
 
         public IActionResult Index()
         {
-			_userContainer.currentCourseId = 0;
-			IEnumerable<Course> coursesTaken = (
-                from user in _userContainer.userList
-                where user.UserId == _userContainer.loggedInUserId
-                from courseId in user.CoursesUserTakesId
-                join course in _courseContainer.courseList on courseId equals course.Id
-                select course
-            ).ToList();
-            
-            User currentUser = _userContainer.GetUser(_userContainer.loggedInUserId);
-
-            var viewModel = new CourseViewModel
+            try
             {
-                Courses = coursesTaken,
-                User = currentUser
-            };
+				int? loggedInUserId = HttpContext.Session.GetInt32Ex("LoggedInUserId");
+				HttpContext.Session.Remove("CurrentCourseId");
+				IEnumerable<Course> coursesTaken = (
+					from user in _db.Users
+					join userCourse in _db.CoursesUsers
+					on user.UserId equals userCourse.UserId
+					join course in _db.Courses
+					on userCourse.CourseId equals course.CourseId
+					where user.UserId == loggedInUserId
+					select course
+				).ToList();
 
-            return View(viewModel);
+				var currentUser = _db.Users.Find(loggedInUserId);
+
+				var viewModel = new CourseViewModel
+				{
+					Courses = coursesTaken,
+					User = currentUser
+				};
+
+				return View(viewModel);
+			}
+			catch (SessionCredentialException ex)
+			{
+				_logger.Log(ex);
+				return RedirectToAction("Index", "Home");
+			}
+			catch (Exception ex1)
+			{
+				_logger.Log(ex1);
+				throw;
+			}
         }
 
         public IActionResult Create()
         {
-            Course course = new Course();
-            return View(course);
+            try
+            {
+				HttpContext.Session.GetInt32Ex("LoggedInUserId");
+				Course course = new Course();
+				return View(course);
+			}
+            catch (SessionCredentialException ex)
+            {
+                _logger.Log(ex);
+				return RedirectToAction("Index", "Home");
+			}
         }
 
         [HttpPost]
         public IActionResult Create(Course course)
         {
-            int createdCourseId = _courseContainer.CreateCourse(course, _userContainer.loggedInUserId);
-            _userContainer.AddRelation(_userContainer.loggedInUserId, createdCourseId);
-            _relationContainer.AddRelationData(createdCourseId, _userContainer.loggedInUserId);
-            _courseContainer.WriteCourses();
-            return RedirectToAction("Index");
+            try
+            {
+				int? loggedInUserId = HttpContext.Session.GetInt32Ex("LoggedInUserId");
+				course.CreationDate = DateTime.Now;
+				_db.Courses.Add(course);
+				_db.SaveChanges();
+				_db.CoursesUsers.Add(new CourseUser { CourseId = course.CourseId, UserId = (int)loggedInUserId });
+				_db.SaveChanges();
+				return RedirectToAction("Index");
+			}
+			catch (SessionCredentialException ex)
+			{
+				_logger.Log(ex);
+				return RedirectToAction("Index", "Home");
+			}
+			catch (Exception ex1)
+			{
+				_logger.Log(ex1);
+				throw;
+			}
         }
 
         public IActionResult Edit(int courseId)
         {
-            Course? course = _courseContainer.GetCourse(courseId);
-            return View(course);
-        }
+            try
+            {
+				HttpContext.Session.GetInt32Ex("LoggedInUserId");
+				Course? course = _db.Courses.Find(courseId);
+				return View(course);
+			}
+            catch (SessionCredentialException ex)
+            {
+                _logger.Log(ex);
+                return RedirectToAction("Index", "Home");
+            }
+		}
 
         [HttpPost]
         public IActionResult Edit(Course course)
         {
-            Course? originalCourse = _courseContainer.GetCourse(course.Id);
-            originalCourse.Name = course.Name;
-            originalCourse.IsVisible = course.IsVisible;
-            originalCourse.IsPublic = course.IsPublic;
-            originalCourse.Description = course.Description;
-            _courseContainer.WriteCourses();
-            return RedirectToAction("Index");
+            try
+            {
+                Course? originalCourse = _db.Courses.Find(course.CourseId);
+                originalCourse.Name = course.Name;
+                originalCourse.IsVisible = course.IsVisible;
+                originalCourse.IsPublic = course.IsPublic;
+                originalCourse.Description = course.Description;
+                _db.Update(originalCourse);
+                _db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                _logger.Log(ex);
+                throw;
+            }
         }
 
         public IActionResult Delete(int courseId)
         {
-            Course course = _courseContainer.courseList.SingleOrDefault(course => course.Id == courseId);
-            return View(course);
+            try
+            {
+                HttpContext.Session.GetInt32Ex("LoggedInUserId");
+                Course? course = _db.Courses.Find(courseId);
+                return View(course);
+            }
+            catch (SessionCredentialException ex)
+            {
+				_logger.Log(ex);
+				return RedirectToAction("Index", "Home");
+			}
         }
 
         [HttpPost, ActionName("Delete")]
         public IActionResult DeleteCourse(int courseId)
         {
-            Course course = _courseContainer.courseList.SingleOrDefault(course => course.Id == courseId);
-            if (course == null)
+            try
             {
-                return NotFound();
+                Course? course = _db.Courses.Find(courseId);
+                _db.Courses.Remove(course);
+                _db.SaveChanges();
+                return RedirectToAction("Index");
             }
-            _courseContainer.DeleteCourse(course);
-            _userContainer.DeleteRelation(_userContainer.loggedInUserId, courseId);
-            _relationContainer.DeleteRelationData(courseId, _userContainer.loggedInUserId);
-            _courseContainer.WriteCourses();
-            return RedirectToAction("Index");
+            catch (Exception ex)
+            {
+                _logger.Log(ex);
+                throw;
+            }
         }
 
         public IActionResult AddUser(int courseId)
         {
-            _userContainer.currentCourseId = courseId;
-            return View();
-        }
+            try
+            {
+				HttpContext.Session.GetInt32Ex("LoggedInUserId");
+				HttpContext.Session.SetInt32("CurrentCourseId", courseId);
+				_db.SaveChanges();
+				return View();
+			}
+			catch (SessionCredentialException ex)
+			{
+				_logger.Log(ex);
+				return RedirectToAction("Index", "Home");
+			}
+			catch (Exception ex1)
+			{
+				_logger.Log(ex1);
+				throw;
+			}
+		}
 
         [HttpPost]
         public IActionResult AddUser(String userIdString)
         {
-            String[] userIdList = userIdString.Split(';');
-            Course? currentCourse = _courseContainer.GetCourse(_userContainer.currentCourseId);
-            foreach (var word in userIdList)
+            try
             {
-                if (Int32.TryParse(word, out int userId) != false && currentCourse != null)
-                {
-                    User? user;
-                    if ((user = _userContainer.GetUser(userId)) != null && userId != _userContainer.loggedInUserId)
-                    {
-                        _relationContainer.AddRelationData(_userContainer.currentCourseId, userId);
-                        currentCourse.UsersInCourseId.Add(userId);
-                        user.CoursesUserTakesId.Add(_userContainer.currentCourseId);
-                    }
-                }
-            }
-            return RedirectToAction("Index");
-        }
+				int? loggedInUserId = HttpContext.Session.GetInt32Ex("LoggedInUserId");
+				int? currentCourseId = HttpContext.Session.GetInt32Ex("CurrentCourseId");
+				String[] userIdList = userIdString.Split(';');
+				Course? currentCourse = _db.Courses.Find(currentCourseId);
+				foreach (var word in userIdList)
+				{
+					if (Int32.TryParse(word, out int userId) != false && currentCourse != null)
+					{
+						User? user;
+						if ((user = _db.Users.Find(userId)) != null && userId != loggedInUserId)
+						{
+							_db.CoursesUsers.Add(new CourseUser { CourseId = (int)currentCourseId, UserId = userId });
+							_db.SaveChanges();
+						}
+					}
+				}
+				return RedirectToAction("Index");
+			}
+			catch (SessionCredentialException ex)
+			{
+				_logger.Log(ex);
+				return RedirectToAction("Index", "Home");
+			}
+			catch (Exception ex1)
+			{
+				_logger.Log(ex1);
+				throw;
+			}
+		}
 
         public IActionResult RemoveUser(int courseId)
         {
-            _userContainer.currentCourseId = courseId;
-            return View();
-        }
+            try
+            {
+				HttpContext.Session.GetInt32Ex("LoggedInUserId");
+				HttpContext.Session.SetInt32("CurrentCourseId", courseId);
+				_db.SaveChanges();
+				return View();
+			}
+			catch (SessionCredentialException ex)
+			{
+				_logger.Log(ex);
+				return RedirectToAction("Index", "Home");
+			}
+			catch (Exception ex1)
+			{
+				_logger.Log(ex1);
+				throw;
+			}
+		}
 
         [HttpPost]
         public IActionResult RemoveUser(String userIdString)
-        {
-            String[] userIdList = userIdString.Split(';');
-            Course? currentCourse = _courseContainer.GetCourse(_userContainer.currentCourseId);
-            foreach (var word in userIdList)
-            {
-                if (Int32.TryParse(word, out int userId) != false && currentCourse != null)
-                {
-                    User? user;
-                    if ((user = _userContainer.GetUser(userId)) != null && userId != _userContainer.loggedInUserId)
-                    {
-                        _relationContainer.RemoveRelationData(_userContainer.currentCourseId, userId);
-                        currentCourse.UsersInCourseId.Remove(userId);
-                        user.CoursesUserTakesId.Remove(_userContainer.currentCourseId);
-                    }
-                }
-            }
-            return RedirectToAction("Index");
-        }
+        {	
+			try
+			{
+				int? loggedInUserId = HttpContext.Session.GetInt32Ex("LoggedInUserId");
+				int? currentCourseId = HttpContext.Session.GetInt32Ex("CurrentCourseId");
+				String[] userIdList = userIdString.Split(';');
+				Course? currentCourse = _db.Courses.Find(currentCourseId);
+				foreach (var word in userIdList)
+				{
+					if (Int32.TryParse(word, out int userId) != false && currentCourse != null)
+					{
+						User? user;
+						if ((user = _db.Users.Find(userId)) != null && userId != loggedInUserId)
+						{
+							_db.CoursesUsers.Remove(new CourseUser { CourseId = (int)currentCourseId, UserId = userId });
+							_db.SaveChanges();
+						}
+					}
+				}
+				return RedirectToAction("Index");
+			}
+			catch (SessionCredentialException ex)
+			{
+				_logger.Log(ex);
+				return RedirectToAction("Index", "Home");
+			}
+			catch (Exception ex1)
+			{
+				_logger.Log(ex1);
+				throw;
+			}
+		}
 
         public IActionResult CheckUsers(int courseId)
         {
-            _userContainer.currentCourseId = courseId;
-            Course? currentCourse = _courseContainer.GetCourse(_userContainer.currentCourseId);
-            ICollection<User> userInCourseList = (
-                from user in _userContainer.userList
-                where currentCourse.UsersInCourseId.Contains(user.UserId)
-                select user
-            ).ToList();
-            return View(userInCourseList);
-        }
+			try
+			{
+				HttpContext.Session.GetInt32Ex("LoggedInUserId");
+				int? currentCourseId = HttpContext.Session.GetInt32Ex("CurrentCourseId");
+				HttpContext.Session.SetInt32("CurrentCourseId", courseId);
+				_db.SaveChanges();
+				ICollection<User> userInCourseList = (
+					from user in _db.Users
+					join userCourse in _db.CoursesUsers
+					on user.UserId equals userCourse.UserId
+					join course in _db.Courses
+					on userCourse.CourseId equals course.CourseId
+					where course.CourseId == currentCourseId
+					select user
+				).ToList();
+				return View(userInCourseList);
+			}
+			catch (SessionCredentialException ex)
+			{
+				_logger.Log(ex);
+				return RedirectToAction("Index", "Home");
+			}
+			catch (Exception ex1)
+			{
+				_logger.Log(ex1);
+				throw;
+			}
+		}
     }
 }
