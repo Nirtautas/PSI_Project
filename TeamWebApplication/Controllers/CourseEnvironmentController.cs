@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.StaticFiles;
 using TeamWebApplication.Data.Database;
 using TeamWebApplication.Data.ExceptionLogger;
 using TeamWebApplication.Data.Exceptions;
@@ -423,14 +424,16 @@ namespace TeamWebApplication.Controllers
         {
             try
             {
-                //if (file != null && file.Length > 0)
-                //{
-                    var fileName = Path.GetFileName(file.FileName);
+				if (file != null && file.Length > 0)
+				{
+					var fileName = Path.GetFileName(file.FileName);
                     var fileExtension = Path.GetExtension(fileName);
 
-                    // var uniqueFileName = Guid.NewGuid().ToString() + fileExtension;
+					// creates a new file name to avoid having several files with the same name
+                    var uniqueFileName = Guid.NewGuid().ToString() + fileExtension;
 
-                    string filePath = Path.Combine("wwwroot/uploads", fileName);
+					// change 'fileName' to 'uniqueFileName' when unique file name recognition is implemented
+					string filePath = Path.Combine("wwwroot/uploads", fileName);
 
                     using (var stream = new FileStream(filePath, FileMode.Create))
                     {
@@ -438,14 +441,16 @@ namespace TeamWebApplication.Controllers
                     }
 
 					post.PostType = PostType.File;
-					post.FilePath = filePath;
-                    post.CreationDate = DateTime.Now;
+					post.CreationDate = DateTime.Now;
+
+                    // change 'fileName' to 'filePath' when unique file name recognition is implemented
+                    post.FilePath = fileName;
 
                     _db.Posts.Add(post);
                     _db.SaveChanges();
-                    
-                //}
-                return RedirectToAction("Index", new { courseId });
+
+				}
+				return RedirectToAction("Index", new { courseId });
             }
             catch (Exception ex)
             {
@@ -453,5 +458,60 @@ namespace TeamWebApplication.Controllers
 				throw;
             }
         }
-    }
+
+		[HttpGet]
+        public async Task<IActionResult> DownloadFile(IFormFile file, FilePost post)
+		{
+            Post? originalPost = (FilePost?)_db.Posts.Find(post.PostId);
+
+            string? fileName = _db.Posts
+				.Where(p => p.PostId == originalPost.PostId)
+				.OfType<FilePost>()
+				.Select(filePost => filePost.FilePath)
+				.FirstOrDefault();
+
+            var filePath = Path.Combine("wwwroot/uploads", fileName);
+            var provider = new FileExtensionContentTypeProvider();
+            if (!provider.TryGetContentType(filePath, out var contenttype))
+            {
+                contenttype = "application/octet-stream";
+            }
+
+            var bytes = await System.IO.File.ReadAllBytesAsync(filePath);
+            return File(bytes, contenttype, Path.GetFileName(filePath));
+		}
+
+		public IActionResult DeleteFilePost(int postId)
+		{
+			try
+			{
+				HttpContext.Session.GetInt32Ex("LoggedInUserId");
+				HttpContext.Session.GetInt32Ex("CurrentCourseId");
+				var post = _db.Posts.Find(postId);
+				return View(post);
+			}
+			catch (SessionCredentialException ex)
+			{
+				_logger.Log(ex);
+				return RedirectToAction("Index", "Home");
+			}
+		}
+
+		[HttpPost]
+		public IActionResult DeleteFilePost(FilePost post, int courseId)
+		{
+			try
+			{
+				Post? originalPost = (FilePost?)_db.Posts.Find(post.PostId);
+				_db.Posts.Remove(originalPost);
+				_db.SaveChanges();
+				return RedirectToAction("Index", new { courseId });
+			}
+			catch (Exception ex)
+			{
+				_logger.Log(ex);
+				throw;
+			}
+		}
+	}
 }

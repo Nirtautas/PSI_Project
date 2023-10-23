@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations.Schema;
 using TeamWebApplication.Models.Enums;
 
 namespace TeamWebApplication.Models
@@ -47,7 +48,7 @@ namespace TeamWebApplication.Models
 
         public override string? DataToHtml()
         {
-            return "<p>" + DataToString() + "</p>";
+            return "<a href = \"" + DataToString() + " target=\" _blank\"\" >" + DataToString() + "</a>";
         }
     }
 }
