@@ -61,12 +61,21 @@
                                 <div class="type-choice">
                                     <a asp-action="CreateTextPost" asp-controller="CourseEnvironment" asp-route-courseId="@Model.comment.CourseId" class="text-style" style="text-decoration: none; color: #ffffff;">Create Text Post</a>
                                     <a asp-action="CreateLinkPost" asp-controller="CourseEnvironment" asp-route-courseId="@Model.comment.CourseId" class="text-style" style="text-decoration: none; color: #ffffff;">Create Link Post</a>
+                                    <a asp-action="CreateFilePost" asp-controller="CourseEnvironment" asp-route-courseId="@Model.comment.CourseId" class="text-style" style="text-decoration: none; color: #ffffff;">Create File Post</a>
                                 </div>
                             </div>
                         </div>
                     </div>
                     }
                 </div>
+
+               @*   @foreach (Post post in Model.PostData)
+                {
+                    <div class="post-container" id="@post.PostId">
+                        <div class="post-text">@Html.Raw(@post.DataToHtml())</div>
+                    </div>
+                } *@
+                
                 @foreach (Post post in Model.PostData)
                 {
                     <div class="post-container" id="@post.PostId">

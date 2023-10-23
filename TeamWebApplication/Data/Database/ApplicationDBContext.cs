@@ -131,7 +131,8 @@ namespace TeamWebApplication.Data.Database
 			modelBuilder.Entity<Post>()
 				.HasDiscriminator(t => t.PostType)
 				.HasValue<TextPost>(PostType.Text)
-				.HasValue<LinkPost>(PostType.Link);
+				.HasValue<LinkPost>(PostType.Link)
+				.HasValue<FilePost>(PostType.File);
 
 			modelBuilder.Entity<TextPost>().HasData(
 				new TextPost
@@ -166,8 +167,20 @@ namespace TeamWebApplication.Data.Database
 				}
 			);
 
-			//Comment seeding
-			modelBuilder.Entity<Comment>();
+            modelBuilder.Entity<FilePost>().HasData(
+                new FilePost
+                {
+                    PostId = 30008,
+                    CourseId = course2.CourseId,
+                    Name = "Click me",
+                    CreationDate = DateTime.Now,
+                    IsVisible = true,
+                    FilePath = "wwwroot/css/tvarkarastis.png"
+                }
+            );
+
+            //Comment seeding
+            modelBuilder.Entity<Comment>();
 
 			modelBuilder.Entity<Comment>().HasData(
 				new Comment

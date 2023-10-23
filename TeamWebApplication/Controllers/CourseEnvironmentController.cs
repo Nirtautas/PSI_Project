@@ -400,5 +400,58 @@ namespace TeamWebApplication.Controllers
 				throw;
 			}
 		}
-	}
+
+        public IActionResult CreateFilePost()
+        {
+            try
+            {
+                HttpContext.Session.GetInt32Ex("LoggedInUserId");
+                int? currentCourseId = HttpContext.Session.GetInt32Ex("CurrentCourseId");
+                Post post = new FilePost();
+                post.CourseId = (int)currentCourseId;
+                return View(post);
+            }
+            catch (SessionCredentialException ex)
+            {
+                _logger.Log(ex);
+                return RedirectToAction("Index", "Home");
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateFilePost(int courseId, IFormFile file, FilePost post)
+        {
+            try
+            {
+                //if (file != null && file.Length > 0)
+                //{
+                    var fileName = Path.GetFileName(file.FileName);
+                    var fileExtension = Path.GetExtension(fileName);
+
+                    // var uniqueFileName = Guid.NewGuid().ToString() + fileExtension;
+
+                    string filePath = Path.Combine("wwwroot/uploads", fileName);
+
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await file.CopyToAsync(stream);
+                    }
+
+					post.PostType = PostType.File;
+					post.FilePath = filePath;
+                    post.CreationDate = DateTime.Now;
+
+                    _db.Posts.Add(post);
+                    _db.SaveChanges();
+                    
+                //}
+                return RedirectToAction("Index", new { courseId });
+            }
+            catch (Exception ex)
+            {
+                _logger.Log(ex);
+				throw;
+            }
+        }
+    }
 }

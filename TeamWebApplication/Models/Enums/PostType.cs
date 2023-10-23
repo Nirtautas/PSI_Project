@@ -3,6 +3,7 @@
 	public enum PostType
 	{
 		Text,
-		Link
+		Link,
+		File
 	}
 }
