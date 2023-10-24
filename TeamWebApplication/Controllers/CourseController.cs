@@ -280,9 +280,8 @@ namespace TeamWebApplication.Controllers
         {
 			try
 			{
-				HttpContext.Session.GetInt32Ex("LoggedInUserId");
-				int? currentCourseId = HttpContext.Session.GetInt32Ex("CurrentCourseId");
 				HttpContext.Session.SetInt32("CurrentCourseId", courseId);
+				int? currentCourseId = HttpContext.Session.GetInt32Ex("CurrentCourseId");
 				_db.SaveChanges();
 				ICollection<User> userInCourseList = (
 					from user in _db.Users
