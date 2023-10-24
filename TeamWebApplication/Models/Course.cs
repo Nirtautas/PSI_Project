@@ -30,10 +30,10 @@ namespace TeamWebApplication.Models
             PostsInCourseId = new List<int>();
         }
 
-        public Course(int id, string name, DateTime creationDate, string description, bool IsVisible, bool isPublic) {
+        public Course(int id, string name, string description, bool IsVisible, bool isPublic) {
             this.CourseId = id;
             this.Name = name;
-            this.CreationDate = creationDate;
+            this.CreationDate = DateTime.Now;
             this.Description = description;
             this.IsVisible = IsVisible;
             this.IsPublic = isPublic;

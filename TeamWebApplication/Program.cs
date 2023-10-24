@@ -57,27 +57,9 @@ app.UseEndpoints(endpoints =>
     );
 
     endpoints.MapControllerRoute(
-        name: "CourseEnvironmentCreateFilePost",
-        pattern: "CourseEnvironment/CreateFilePost/{courseId}",
-        defaults: new { controller = "CourseEnvironment", action = "CreateFilePost" }
-    );
-
-    endpoints.MapControllerRoute(
-        name: "CourseEnvironmentCreateLinkPost",
-        pattern: "CourseEnvironment/CreateLinkPost/{courseId}",
-        defaults: new { controller = "CourseEnvironment", action = "CreateLinkPost" }
-    );
-
-    endpoints.MapControllerRoute(
         name: "CourseEnvironmentEditTextPost",
         pattern: "CourseEnvironment/EditTextPost/{postId}",
         defaults: new { controller = "CourseEnvironment", action = "EditTextPost" }
-    );
-
-    endpoints.MapControllerRoute(
-        name: "CourseEnvironmentEditLinkPost",
-        pattern: "CourseEnvironment/EditLinkPost/{postId}",
-        defaults: new { controller = "CourseEnvironment", action = "EditLinkPost" }
     );
 
 	endpoints.MapControllerRoute(
@@ -85,12 +67,6 @@ app.UseEndpoints(endpoints =>
 	    pattern: "CourseEnvironment/DeleteTextPost/{postId}",
 	    defaults: new { controller = "CourseEnvironment", action = "DeleteTextPost" }
     );
-
-	endpoints.MapControllerRoute(
-		name: "CourseEnvironmentDeleteLinkPost",
-		pattern: "CourseEnvironment/DeleteLinkPost/{postId}",
-		defaults: new { controller = "CourseEnvironment", action = "DeleteLinkPost" }
-	);
 
 	endpoints.MapControllerRoute(
         name: "CourseEnvironmentAddComment",
