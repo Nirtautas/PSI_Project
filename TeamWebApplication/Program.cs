@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using TeamWebApplication.Data.Database;
 using TeamWebApplication.Data.ExceptionLogger;
+using TeamWebApplication.Data.MailService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +12,7 @@ builder.Services.AddSession(options =>
     options.IdleTimeout = TimeSpan.FromMinutes(10);
 });
 
+builder.Services.AddSingleton<IMailService, MailService>();
 builder.Services.AddSingleton<IExceptionLogger>(new ExceptionLogger(@".\Logs\"));
 //Established connection with PostgreSQL database
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
