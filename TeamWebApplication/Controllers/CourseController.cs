@@ -37,7 +37,7 @@ namespace TeamWebApplication.Controllers
 				);
                 if (!String.IsNullOrEmpty(searchString))
 				{
-                    coursesTaken = coursesTaken.Where(course => course.Name!.Contains(searchString, StringComparison.InvariantCultureIgnoreCase)).ToList();
+                    coursesTaken = coursesTaken.Where(course => course.Name.Contains(searchString, StringComparison.InvariantCultureIgnoreCase)).ToList();
                 }
 
 				var currentUser = _db.Users.Find(loggedInUserId);
