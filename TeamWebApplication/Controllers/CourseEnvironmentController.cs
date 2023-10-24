@@ -123,7 +123,6 @@ namespace TeamWebApplication.Controllers
                 comment.UserId = user.UserId;
                 comment.CommentatorName = user.Name;
                 comment.CommentatorSurname = user.Surname;
-                comment.CreationTime = DateTime.Now;
 
                 _db.Comments.Add(comment);
                 _db.SaveChanges();
@@ -204,7 +203,6 @@ namespace TeamWebApplication.Controllers
             {
                 post.PostType = PostType.Text;
                 post.CourseId = courseId;
-                post.CreationDate = DateTime.Now;
                 post.TextContent = LinkValidation.ValidateAndReplaceLinks(post.TextContent);
 
                 _db.Posts.Add(post);
@@ -235,7 +233,7 @@ namespace TeamWebApplication.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> EditTextPost(TextPost post, int courseId)
+        public IActionResult EditTextPost(TextPost post, int courseId)
         {
             try
             {
