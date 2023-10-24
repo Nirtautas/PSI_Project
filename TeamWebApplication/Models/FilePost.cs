@@ -1,11 +1,14 @@
-﻿using TeamWebApplication.Models.Enums;
+﻿using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations.Schema;
+using TeamWebApplication.Models.Enums;
 
 namespace TeamWebApplication.Models
 {
-    public class LinkPost : Post
+    public class FilePost : Post
     {
-        public string? LinkContent { get; set; } = null;
-        public LinkPost(int id, int courseId, string name, DateTime creationDate, bool IsVisible, PostType PostType, string linkContent)
+        public string? FileName { get; set; } = null;
+
+        public FilePost(int id, int courseId, string name, DateTime creationDate, bool IsVisible, PostType PostType, string fileName)
         {
             base.PostId = id;
             base.CourseId = courseId;
@@ -13,10 +16,10 @@ namespace TeamWebApplication.Models
             base.CreationDate = creationDate;
             base.IsVisible = IsVisible;
             base.PostType = PostType;
-            this.LinkContent = linkContent;
+            this.FileName = fileName;
         }
 
-        public LinkPost()
+        public FilePost()
         {
 
         }
@@ -30,22 +33,23 @@ namespace TeamWebApplication.Models
                 CreationDate.ToString() + ";" +
                 IsVisible + ";" +
                 PostType.ToString() + ';' +
-                LinkContent;
+                FileName;
         }
 
         public override void ApplyData(string? textData)
         {
-            LinkContent = textData;
+            FileName = textData;
         }
 
         public override string? DataToString()
         {
-            return LinkContent;
+            return FileName;
         }
 
         public override string? DataToHtml()
         {
-            return "<p><a href = \"" + DataToString() + " target=\" _blank\"\" >" + DataToString() + "</a></p>";
+            return "<a href = \"" + DataToString() + " target=\" _blank\"\" >" + DataToString() + "</a>";
         }
     }
 }
+

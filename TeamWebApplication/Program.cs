@@ -57,6 +57,12 @@ app.UseEndpoints(endpoints =>
     );
 
     endpoints.MapControllerRoute(
+        name: "CourseEnvironmentCreateFilePost",
+        pattern: "CourseEnvironment/CreateFilePost/{courseId}",
+        defaults: new { controller = "CourseEnvironment", action = "CreateFilePost" }
+    );
+
+    endpoints.MapControllerRoute(
         name: "CourseEnvironmentCreateLinkPost",
         pattern: "CourseEnvironment/CreateLinkPost/{courseId}",
         defaults: new { controller = "CourseEnvironment", action = "CreateLinkPost" }

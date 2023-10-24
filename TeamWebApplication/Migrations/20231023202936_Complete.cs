@@ -57,6 +57,7 @@ namespace TeamWebApplication.Migrations
                     CreationDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     IsVisible = table.Column<bool>(type: "boolean", nullable: false),
                     PostType = table.Column<int>(type: "integer", nullable: false),
+                    FileName = table.Column<string>(type: "text", nullable: true),
                     LinkContent = table.Column<string>(type: "text", nullable: true),
                     TextContent = table.Column<string>(type: "text", nullable: true)
                 },
@@ -130,9 +131,9 @@ namespace TeamWebApplication.Migrations
                 columns: new[] { "CourseId", "CreationDate", "Description", "IsPublic", "IsVisible", "Name" },
                 values: new object[,]
                 {
-                    { 10000, new DateTime(2023, 10, 18, 17, 3, 58, 876, DateTimeKind.Local).AddTicks(4689), "Course for computer architecture", false, true, "Computer Architecture" },
-                    { 10001, new DateTime(2023, 10, 18, 17, 3, 58, 876, DateTimeKind.Local).AddTicks(4727), "Course for functional programming", false, false, "Functional Programming" },
-                    { 10002, new DateTime(2023, 10, 18, 17, 3, 58, 876, DateTimeKind.Local).AddTicks(4729), "Course for database systems", true, true, "Database Systems" }
+                    { 10000, new DateTime(2023, 10, 23, 23, 29, 36, 195, DateTimeKind.Local).AddTicks(6746), "Course for computer architecture", false, true, "Computer Architecture" },
+                    { 10001, new DateTime(2023, 10, 23, 23, 29, 36, 195, DateTimeKind.Local).AddTicks(6780), "Course for functional programming", false, false, "Functional Programming" },
+                    { 10002, new DateTime(2023, 10, 23, 23, 29, 36, 195, DateTimeKind.Local).AddTicks(6783), "Course for database systems", true, true, "Database Systems" }
                 });
 
             migrationBuilder.InsertData(
@@ -150,9 +151,9 @@ namespace TeamWebApplication.Migrations
                 columns: new[] { "CommentId", "CommentatorName", "CommentatorSurname", "CourseId", "CreationTime", "UserComment", "UserId" },
                 values: new object[,]
                 {
-                    { 40000, "Jonas", "Paguzinskas", 10000, new DateTime(2023, 10, 18, 17, 3, 58, 877, DateTimeKind.Local).AddTicks(8411), "Sus course", 20000 },
-                    { 40001, "Alita", "Stuknaite", 10001, new DateTime(2023, 10, 18, 17, 3, 58, 877, DateTimeKind.Local).AddTicks(8415), "good", 20002 },
-                    { 40003, "Alita", "Stuknaite", 10000, new DateTime(2023, 10, 18, 17, 3, 58, 877, DateTimeKind.Local).AddTicks(8418), "Cool", 20002 }
+                    { 40000, "Jonas", "Paguzinskas", 10000, new DateTime(2023, 10, 23, 23, 29, 36, 197, DateTimeKind.Local).AddTicks(7364), "Sus course", 20000 },
+                    { 40001, "Alita", "Stuknaite", 10001, new DateTime(2023, 10, 23, 23, 29, 36, 197, DateTimeKind.Local).AddTicks(7368), "good", 20002 },
+                    { 40003, "Alita", "Stuknaite", 10000, new DateTime(2023, 10, 23, 23, 29, 36, 197, DateTimeKind.Local).AddTicks(7371), "Cool", 20002 }
                 });
 
             migrationBuilder.InsertData(
@@ -169,16 +170,21 @@ namespace TeamWebApplication.Migrations
 
             migrationBuilder.InsertData(
                 table: "Posts",
+                columns: new[] { "PostId", "CourseId", "CreationDate", "FileName", "IsVisible", "Name", "PostType" },
+                values: new object[] { 30003, 10001, new DateTime(2023, 10, 23, 23, 29, 36, 197, DateTimeKind.Local).AddTicks(7345), "tvarkarastis.jpg", true, "File", 2 });
+
+            migrationBuilder.InsertData(
+                table: "Posts",
                 columns: new[] { "PostId", "CourseId", "CreationDate", "IsVisible", "LinkContent", "Name", "PostType" },
-                values: new object[] { 30002, 10001, new DateTime(2023, 10, 18, 17, 3, 58, 877, DateTimeKind.Local).AddTicks(8394), true, "https://www.youtube.com/watch?v=dQw4w9WgXcQ", "Click me", 1 });
+                values: new object[] { 30002, 10001, new DateTime(2023, 10, 23, 23, 29, 36, 197, DateTimeKind.Local).AddTicks(7334), true, "https://www.youtube.com/watch?v=dQw4w9WgXcQ", "Click me", 1 });
 
             migrationBuilder.InsertData(
                 table: "Posts",
                 columns: new[] { "PostId", "CourseId", "CreationDate", "IsVisible", "Name", "PostType", "TextContent" },
                 values: new object[,]
                 {
-                    { 30000, 10000, new DateTime(2023, 10, 18, 17, 3, 58, 877, DateTimeKind.Local).AddTicks(8358), true, "Introduction", 0, "This is a placeholder" },
-                    { 30001, 10002, new DateTime(2023, 10, 18, 17, 3, 58, 877, DateTimeKind.Local).AddTicks(8375), true, "Knowledge", 0, "This is once more a placeholder" }
+                    { 30000, 10000, new DateTime(2023, 10, 23, 23, 29, 36, 197, DateTimeKind.Local).AddTicks(7286), true, "Introduction", 0, "This is a placeholder" },
+                    { 30001, 10002, new DateTime(2023, 10, 23, 23, 29, 36, 197, DateTimeKind.Local).AddTicks(7310), true, "Knowledge", 0, "This is once more a placeholder" }
                 });
 
             migrationBuilder.CreateIndex(

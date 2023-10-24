@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.StaticFiles;
 using TeamWebApplication.Data.Database;
 using TeamWebApplication.Data.ExceptionLogger;
 using TeamWebApplication.Data.Exceptions;
@@ -390,6 +391,126 @@ namespace TeamWebApplication.Controllers
 			try
 			{
 				Post? originalPost = (LinkPost?)_db.Posts.Find(post.PostId);
+				_db.Posts.Remove(originalPost);
+				_db.SaveChanges();
+				return RedirectToAction("Index", new { courseId });
+			}
+			catch (Exception ex)
+			{
+				_logger.Log(ex);
+				throw;
+			}
+		}
+
+        public IActionResult CreateFilePost()
+        {
+            try
+            {
+                HttpContext.Session.GetInt32Ex("LoggedInUserId");
+                int? currentCourseId = HttpContext.Session.GetInt32Ex("CurrentCourseId");
+                Post post = new FilePost();
+                post.CourseId = (int)currentCourseId;
+                return View(post);
+            }
+            catch (SessionCredentialException ex)
+            {
+                _logger.Log(ex);
+                return RedirectToAction("Index", "Home");
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateFilePost(int courseId, IFormFile file, FilePost post)
+        {
+            try
+            {
+				if (file != null && file.Length > 0)
+				{
+					var fileName = Path.GetFileName(file.FileName);
+                    var fileExtension = Path.GetExtension(fileName);
+
+					// creates a new file name to avoid having several files with the same name
+					// (NOT IMPLEMENTED)
+                    var uniqueFileName = Guid.NewGuid().ToString() + fileExtension;
+
+                    // change 'fileName' to 'uniqueFileName' when unique file name recognition is implemented
+                    var filePath = Path.Combine("wwwroot/uploads", fileName);
+
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await file.CopyToAsync(stream);
+                    }
+
+					post.PostType = PostType.File;
+					post.CreationDate = DateTime.Now;
+
+                    // change 'fileName' to 'uniqueFileName' when unique file name recognition is implemented
+                    post.FileName = fileName;
+
+                    _db.Posts.Add(post);
+                    _db.SaveChanges();
+
+				}
+				return RedirectToAction("Index", new { courseId });
+            }
+            catch (Exception ex)
+            {
+                _logger.Log(ex);
+				throw;
+            }
+        }
+
+		public async Task<IActionResult> DownloadFile(IFormFile file, FilePost post)
+		{
+			try
+			{
+				Post? originalPost = (FilePost?)_db.Posts.Find(post.PostId);
+
+				string? fileName = (
+					from p in _db.Posts
+					where p.PostId == originalPost.PostId
+					from filePost in _db.Posts.OfType<FilePost>()
+					where filePost.PostId == p.PostId
+					select filePost.FileName
+				).FirstOrDefault();
+
+				var filePath = Path.Combine("wwwroot/uploads", fileName);
+
+				var provider = new FileExtensionContentTypeProvider();
+				provider.TryGetContentType(filePath, out string? contentType);
+				var bytes = await System.IO.File.ReadAllBytesAsync(filePath);
+
+				return File(bytes, contentType, fileName);
+			}
+			catch (Exception ex)
+			{
+                _logger.Log(ex);
+                throw;
+            }
+		}
+
+		public IActionResult DeleteFilePost(int postId)
+		{
+			try
+			{
+				HttpContext.Session.GetInt32Ex("LoggedInUserId");
+				HttpContext.Session.GetInt32Ex("CurrentCourseId");
+				var post = _db.Posts.Find(postId);
+				return View(post);
+			}
+			catch (SessionCredentialException ex)
+			{
+				_logger.Log(ex);
+				return RedirectToAction("Index", "Home");
+			}
+		}
+
+		[HttpPost]
+		public IActionResult DeleteFilePost(FilePost post, int courseId)
+		{
+			try
+			{
+				Post? originalPost = (FilePost?)_db.Posts.Find(post.PostId);
 				_db.Posts.Remove(originalPost);
 				_db.SaveChanges();
 				return RedirectToAction("Index", new { courseId });

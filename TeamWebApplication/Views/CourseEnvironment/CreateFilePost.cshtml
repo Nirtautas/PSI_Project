@@ -1,0 +1,48 @@
+﻿@model FilePost
+@{
+    ViewData["Title"] = "Create File Post";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Create Text Post</title>
+    <link rel="stylesheet" href="~/css/CreateCourseStyle.css" asp-append-version="true" />
+</head>
+
+<body>
+    <div class="ribbon">
+        <div class="Name">
+            <a>Mudli</a>
+        </div>
+    </div>
+    <form method="post" enctype="multipart/form-data" asp-controller="CourseEnvironment" asp-action="CreateFilePost">
+
+        <div class="form-container">
+            <h2>Create a File Post</h2>
+        </div>
+        <div class="form-info-container">
+            <label for="Name">Name:</label>
+            <textarea id="Input.Name" name="name" asp-for="Name" class="form-control"></textarea>
+            <span class="text-danger"></span>
+        </div>
+
+        <div>
+            <label for="Visibility" class="radio-label">
+                Is post visible?
+                <input type="checkbox" id="Visibility" asp-for="IsVisible" />
+            </label>
+        </div>
+        <span class="text-danger"></span>
+
+        <div class="form-info-container">
+            <label for="file">Upload File:</label>
+            <input type="file" name="file" id="file" class="form-control" />
+        </div>
+
+        <button type="submit" class="btn-primary">Create Post</button>
+        <a asp-action="Index" asp-controller="CourseEnvironment" asp-route-courseId="@Model.CourseId" class="text-style" style="text-decoration: none; color: #ffffff;">Back</a>
+    </form>
+</body>
+</html>
