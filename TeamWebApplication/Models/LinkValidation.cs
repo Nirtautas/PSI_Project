@@ -5,7 +5,7 @@ namespace TeamWebApplication.Models
 {
     public class LinkValidation
     {
-        public static async Task<string> ValidateAndReplaceLinks(string TextContent)
+        public static string ValidateAndReplaceLinks(string TextContent)
         {
             string pattern = @"https?://\S+";
 
@@ -27,21 +27,21 @@ namespace TeamWebApplication.Models
                             }
                             else
                             {
-                                return match.Value;//returning original URL if it's not valid
+                                return url;//returning original URL if it's not valid
                             }
                         }
                         catch (HttpRequestException)
                         {
-                            return match.Value;
+                            return url;
                         }
                     }
                 }
                 else
                 {
-                    return match.Value; 
+                    return url; 
                 }
             });
-            return await Task.FromResult(TextContentWithValidLinks);
+            return TextContentWithValidLinks;
         }
     }
 }
