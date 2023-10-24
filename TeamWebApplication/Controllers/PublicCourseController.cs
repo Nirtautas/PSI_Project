@@ -24,11 +24,16 @@ namespace TeamWebApplication.Controllers
             {
 				var currentUser = _db.Users.Find(HttpContext.Session.GetInt32Ex("LoggedInUserId"));
 
-				IEnumerable<Course> publicCourses = (
+                string searchString = Request.Query["searchString"];
+                IEnumerable<Course> publicCourses = (
                     from course in _db.Courses
                     where course.IsPublic == true
                     select course
-                ).ToList();
+                );
+                if (!String.IsNullOrEmpty(searchString))
+                {
+                    publicCourses = publicCourses.Where(course => course.Name!.Contains(searchString, StringComparison.InvariantCultureIgnoreCase)).ToList();
+                }
 
                 var viewModel = new CourseViewModel
                 {
@@ -55,12 +60,19 @@ namespace TeamWebApplication.Controllers
             try
             {
                 HttpContext.Session.GetInt32Ex("LoggedInUserId");
-				IEnumerable<Course> publicCourses = (
-		            from course in _db.Courses
-		            where course.IsPublic == true
-		            select course
-	            ).ToList();
-				return View(publicCourses);
+
+                string searchString = Request.Query["searchString"];
+                IEnumerable<Course> publicCourses = (
+                    from course in _db.Courses
+                    where course.IsPublic == true
+                    select course
+                );
+                if (!String.IsNullOrEmpty(searchString))
+                {
+                    publicCourses = publicCourses.Where(course => course.Name!.Contains(searchString, StringComparison.InvariantCultureIgnoreCase)).ToList();
+                }
+
+                return View(publicCourses);
 			}
 			catch (SessionCredentialException ex)
 			{
