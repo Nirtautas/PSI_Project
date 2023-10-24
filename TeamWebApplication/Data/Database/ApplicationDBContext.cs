@@ -131,7 +131,6 @@ namespace TeamWebApplication.Data.Database
 			modelBuilder.Entity<Post>()
 				.HasDiscriminator(t => t.PostType)
 				.HasValue<TextPost>(PostType.Text)
-				.HasValue<LinkPost>(PostType.Link)
 				.HasValue<FilePost>(PostType.File);
 
             modelBuilder.Entity<TextPost>().HasData(

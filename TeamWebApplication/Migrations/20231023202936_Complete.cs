@@ -58,7 +58,6 @@ namespace TeamWebApplication.Migrations
                     IsVisible = table.Column<bool>(type: "boolean", nullable: false),
                     PostType = table.Column<int>(type: "integer", nullable: false),
                     FileName = table.Column<string>(type: "text", nullable: true),
-                    LinkContent = table.Column<string>(type: "text", nullable: true),
                     TextContent = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
@@ -172,11 +171,6 @@ namespace TeamWebApplication.Migrations
                 table: "Posts",
                 columns: new[] { "PostId", "CourseId", "CreationDate", "FileName", "IsVisible", "Name", "PostType" },
                 values: new object[] { 30003, 10001, new DateTime(2023, 10, 23, 23, 29, 36, 197, DateTimeKind.Local).AddTicks(7345), "tvarkarastis.jpg", true, "File", 2 });
-
-            migrationBuilder.InsertData(
-                table: "Posts",
-                columns: new[] { "PostId", "CourseId", "CreationDate", "IsVisible", "LinkContent", "Name", "PostType" },
-                values: new object[] { 30002, 10001, new DateTime(2023, 10, 23, 23, 29, 36, 197, DateTimeKind.Local).AddTicks(7334), true, "https://www.youtube.com/watch?v=dQw4w9WgXcQ", "Click me", 1 });
 
             migrationBuilder.InsertData(
                 table: "Posts",

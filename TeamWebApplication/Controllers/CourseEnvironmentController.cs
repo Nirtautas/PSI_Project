@@ -290,23 +290,6 @@ namespace TeamWebApplication.Controllers
 			}
 		}
 
-		[HttpPost]
-		public IActionResult DeleteLinkPost(LinkPost post, int courseId)
-		{
-			try
-			{
-				Post? originalPost = (LinkPost?)_db.Posts.Find(post.PostId);
-				_db.Posts.Remove(originalPost);
-				_db.SaveChanges();
-				return RedirectToAction("Index", new { courseId });
-			}
-			catch (Exception ex)
-			{
-				_logger.Log(ex);
-				throw;
-			}
-		}
-
         public IActionResult CreateFilePost()
         {
             try
