@@ -1,13 +1,13 @@
-﻿    @model LinkPost
+﻿@model FilePost
 @{
-    ViewData["Title"] = "Create Link Post";
+    ViewData["Title"] = "Create File Post";
 }
 
 <!DOCTYPE html>
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    <title>Create Link Post</title>
+    <title>Create Text Post</title>
     <link rel="stylesheet" href="~/css/CreateCourseStyle.css" asp-append-version="true" />
 </head>
 
@@ -17,14 +17,14 @@
             <a>Mudli</a>
         </div>
     </div>
-    <form method="post" asp-controller="CourseEnvironment" asp-action="CreateLinkPost">
+    <form method="post" enctype="multipart/form-data" asp-controller="CourseEnvironment" asp-action="CreateFilePost">
 
         <div class="form-container">
-            <h2>Create a Link Post</h2>
+            <h2>Create a File Post</h2>
         </div>
         <div class="form-info-container">
             <label for="Name">Name:</label>
-            <textarea id="Input.Name" name="name" asp-for="Name" class="form-control" required></textarea>
+            <textarea id="Input.Name" name="name" asp-for="Name" class="form-control"></textarea>
             <span class="text-danger"></span>
         </div>
 
@@ -37,9 +37,8 @@
         <span class="text-danger"></span>
 
         <div class="form-info-container">
-        <label for="LinkContent">Link Data</label>
-        <textarea id="LinkContent" name="LinkContent" asp-for="LinkContent" class="form-control" required></textarea>
-        <span class="text-danger"></span>
+            <label for="file">Upload File:</label>
+            <input type="file" name="file" id="file" class="form-control" />
         </div>
 
         <button type="submit" class="btn-primary">Create Post</button>

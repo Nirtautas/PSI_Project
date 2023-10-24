@@ -1,7 +1,6 @@
 ﻿
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Globalization;
 
 namespace TeamWebApplication.Models
 {
@@ -27,7 +26,6 @@ namespace TeamWebApplication.Models
         int userId,
         string usersNameThatCommented,
         string usersSurnameThatCommented,
-        DateTime commentCreationTime,
         string userComment)
         {
             CommentId = commentId;
@@ -35,7 +33,7 @@ namespace TeamWebApplication.Models
             UserId = userId;
             CommentatorName = usersNameThatCommented;
             CommentatorSurname = usersSurnameThatCommented;
-            CreationTime = commentCreationTime;
+            CreationTime = DateTime.Now;
             UserComment = userComment;
         }
 

@@ -60,19 +60,38 @@
                             <div class="content">
                                 <div class="type-choice">
                                     <a asp-action="CreateTextPost" asp-controller="CourseEnvironment" asp-route-courseId="@Model.comment.CourseId" class="text-style" style="text-decoration: none; color: #ffffff;">Create Text Post</a>
-                                    <a asp-action="CreateLinkPost" asp-controller="CourseEnvironment" asp-route-courseId="@Model.comment.CourseId" class="text-style" style="text-decoration: none; color: #ffffff;">Create Link Post</a>
+                                    <a asp-action="CreateFilePost" asp-controller="CourseEnvironment" asp-route-courseId="@Model.comment.CourseId" class="text-style" style="text-decoration: none; color: #ffffff;">Create File Post</a>
                                 </div>
                             </div>
                         </div>
                     </div>
                     }
                 </div>
+
+               @*   @foreach (Post post in Model.PostData)
+                {
+                    <div class="post-container" id="@post.PostId">
+                        <div class="post-text">@Html.Raw(@post.DataToHtml())</div>
+                    </div>
+                } *@
+                
                 @foreach (Post post in Model.PostData)
                 {
                     <div class="post-container" id="@post.PostId">
                         <h3>@post.Name</h3>
                         <div class="comment-body">
-                            <div class="post-text">@Html.Raw(@post.DataToHtml())</div>
+                            @if (post.PostType == PostType.File)
+                            {
+                                <p>
+                                    <a asp-action="DownloadFile" asp-controller="CourseEnvironment" asp-route-postId=@post.PostId>
+                                        @post.DataToString()
+                                    </a>
+                                </p>
+                            }
+                            else
+                            {
+                                <div class="post-text">@Html.Raw(post.DataToHtml())</div>
+                            }
                             <div class="delete-and-edit-container" id="@post.PostId">
                                 <!-- post editing and deletion for different types are the same and could be shortened-->
                                 @if (Model.User.Role == Role.Lecturer)
