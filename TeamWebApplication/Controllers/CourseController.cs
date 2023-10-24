@@ -232,7 +232,6 @@ namespace TeamWebApplication.Controllers
             {
 				HttpContext.Session.GetInt32Ex("LoggedInUserId");
 				HttpContext.Session.SetInt32("CurrentCourseId", courseId);
-				_db.SaveChanges();
 				return View();
 			}
 			catch (SessionCredentialException ex)

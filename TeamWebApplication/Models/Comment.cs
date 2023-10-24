@@ -19,6 +19,7 @@ namespace TeamWebApplication.Models
 
         public Comment()
         {
+
         }
 
         public Comment(

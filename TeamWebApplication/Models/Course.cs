@@ -19,15 +19,8 @@ namespace TeamWebApplication.Models
         public ICollection<Post> Posts { get; set; }
         public ICollection<Comment> Comments { get; set; }
 
-        //Unmapped fields
-        [NotMapped]
-        public ICollection<int>? UsersInCourseId { get; set; }
-        [NotMapped]
-        public ICollection<int>? PostsInCourseId { get; set; }
-
         public Course() {
-            UsersInCourseId = new List<int>();
-            PostsInCourseId = new List<int>();
+
         }
 
         public Course(int id, string name, DateTime creationDate, string description, bool IsVisible, bool isPublic) {
@@ -37,8 +30,6 @@ namespace TeamWebApplication.Models
             this.Description = description;
             this.IsVisible = IsVisible;
             this.IsPublic = isPublic;
-            UsersInCourseId = new List<int>();
-            PostsInCourseId = new List<int>();
         }
 
         public int CompareTo(Course? other)
