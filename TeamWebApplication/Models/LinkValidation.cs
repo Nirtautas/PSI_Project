@@ -1,14 +1,20 @@
 ﻿using System.Net;
 using System.Text.RegularExpressions;
+using TeamWebApplication.Data.ExceptionLogger;
 
 namespace TeamWebApplication.Models
 {
     public class LinkValidation
     {
+        private static IExceptionLogger _logger;
+        public LinkValidation(IExceptionLogger logger)
+        {
+            _logger = logger;
+        }
         public static string ValidateAndReplaceLinks(string TextContent)
         {
             string pattern = @"https?://\S+";
-
+            
             //replacing URLs with clickable links
             string TextContentWithValidLinks = Regex.Replace(TextContent, pattern, match =>
             {
@@ -30,17 +36,19 @@ namespace TeamWebApplication.Models
                                 return url;//returning original URL if it's not valid
                             }
                         }
-                        catch (HttpRequestException)
+                        catch (HttpRequestException ex)
                         {
+                            _logger.Log(ex);
                             return url;
                         }
                     }
                 }
                 else
                 {
-                    return url; 
+                    return url;
                 }
             });
+
             return TextContentWithValidLinks;
         }
     }

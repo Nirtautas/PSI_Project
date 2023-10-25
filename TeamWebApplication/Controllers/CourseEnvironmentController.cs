@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
+using Microsoft.Extensions.Hosting;
 using TeamWebApplication.Data.Database;
 using TeamWebApplication.Data.ExceptionLogger;
 using TeamWebApplication.Data.Exceptions;
@@ -147,10 +148,11 @@ namespace TeamWebApplication.Controllers
             try
             {
                 var originalComment = _db.Comments.Find(commentId);
-
+                if (originalComment.UserComment != userComment)
+                {
+                    originalComment.CreationTime = DateTime.Now;
+                }
                 originalComment.UserComment = userComment;
-                originalComment.CreationTime = DateTime.Now;
-
                 _db.Comments.Update(originalComment);
                 _db.SaveChanges();
                 return RedirectToAction("Index", new { courseId });
@@ -204,7 +206,6 @@ namespace TeamWebApplication.Controllers
             {
                 post.PostType = PostType.Text;
                 post.CourseId = courseId;
-                post.TextContent = LinkValidation.ValidateAndReplaceLinks(post.TextContent);
 
                 _db.Posts.Add(post);
                 _db.SaveChanges();
@@ -239,12 +240,14 @@ namespace TeamWebApplication.Controllers
             try
             {
                 TextPost? originalPost = (TextPost?)_db.Posts.Find(post.PostId);
-
+                if (originalPost.TextContent != post.TextContent || originalPost.Name != post.Name)
+                {
+                    originalPost.CreationDate = DateTime.Now;
+                }
                 originalPost.Name = post.Name;
                 originalPost.IsVisible = post.IsVisible;
-                originalPost.CreationDate = DateTime.Now;
                 originalPost.PostType = post.PostType;
-                originalPost.TextContent = LinkValidation.ValidateAndReplaceLinks(post.TextContent);
+                originalPost.TextContent = post.TextContent;
 
                 _db.Posts.Update(originalPost);
                 _db.SaveChanges();
@@ -276,19 +279,19 @@ namespace TeamWebApplication.Controllers
         [HttpPost]
         public IActionResult DeleteTextPost(TextPost post, int courseId)
         {
-			try
-			{
-				TextPost? originalPost = (TextPost?)_db.Posts.Find(post.PostId);
-				_db.Posts.Remove(originalPost);
-				_db.SaveChanges();
-				return RedirectToAction("Index", new { courseId });
-			}
-			catch (Exception ex)
-			{
-				_logger.Log(ex);
-				throw;
-			}
-		}
+            try
+            {
+                TextPost? originalPost = (TextPost?)_db.Posts.Find(post.PostId);
+                _db.Posts.Remove(originalPost);
+                _db.SaveChanges();
+                return RedirectToAction("Index", new { courseId });
+            }
+            catch (Exception ex)
+            {
+                _logger.Log(ex);
+                throw;
+            }
+        }
 
         public IActionResult CreateFilePost()
         {
@@ -312,13 +315,13 @@ namespace TeamWebApplication.Controllers
         {
             try
             {
-				if (file != null && file.Length > 0)
-				{
-					var fileName = Path.GetFileName(file.FileName);
+                if (file != null && file.Length > 0)
+                {
+                    var fileName = Path.GetFileName(file.FileName);
                     var fileExtension = Path.GetExtension(fileName);
 
-					// creates a new file name to avoid having several files with the same name
-					// (NOT IMPLEMENTED)
+                    // creates a new file name to avoid having several files with the same name
+                    // (NOT IMPLEMENTED)
                     var uniqueFileName = Guid.NewGuid().ToString() + fileExtension;
 
                     // change 'fileName' to 'uniqueFileName' when unique file name recognition is implemented
@@ -339,80 +342,80 @@ namespace TeamWebApplication.Controllers
                         _db.SaveChanges();
                     }
                 }
-				return RedirectToAction("Index", new { courseId });
+                return RedirectToAction("Index", new { courseId });
             }
             catch (Exception ex)
             {
                 _logger.Log(ex);
-				throw;
+                throw;
             }
         }
 
-		public async Task<IActionResult> DownloadFile(IFormFile file, FilePost post)
-		{
-			try
-			{
-				Post? originalPost = (FilePost?)_db.Posts.Find(post.PostId);
+        public async Task<IActionResult> DownloadFile(IFormFile file, FilePost post)
+        {
+            try
+            {
+                Post? originalPost = (FilePost?)_db.Posts.Find(post.PostId);
 
-				string? fileName = (
-					from p in _db.Posts
-					where p.PostId == originalPost.PostId
-					from filePost in _db.Posts.OfType<FilePost>()
-					where filePost.PostId == p.PostId
-					select filePost.FileName
-				).FirstOrDefault();
+                string? fileName = (
+                    from p in _db.Posts
+                    where p.PostId == originalPost.PostId
+                    from filePost in _db.Posts.OfType<FilePost>()
+                    where filePost.PostId == p.PostId
+                    select filePost.FileName
+                ).FirstOrDefault();
 
-				var filePath = Path.Combine("wwwroot/uploads", fileName);
+                var filePath = Path.Combine("wwwroot/uploads", fileName);
 
-				var provider = new FileExtensionContentTypeProvider();
-				provider.TryGetContentType(filePath, out string? contentType);
-				var bytes = await System.IO.File.ReadAllBytesAsync(filePath);
+                var provider = new FileExtensionContentTypeProvider();
+                provider.TryGetContentType(filePath, out string? contentType);
+                var bytes = await System.IO.File.ReadAllBytesAsync(filePath);
 
-				return File(bytes, contentType, fileName);
-			}
-			catch (Exception ex)
-			{
+                return File(bytes, contentType, fileName);
+            }
+            catch (Exception ex)
+            {
                 _logger.Log(ex);
                 throw;
             }
-		}
+        }
 
-		public IActionResult DeleteFilePost(int postId)
-		{
-			try
-			{
-				HttpContext.Session.GetInt32Ex("LoggedInUserId");
-				HttpContext.Session.GetInt32Ex("CurrentCourseId");
-				var post = _db.Posts.Find(postId);
-				return View(post);
-			}
-			catch (SessionCredentialException ex)
-			{
-				_logger.Log(ex);
-				return RedirectToAction("Index", "Home");
-			}
-		}
+        public IActionResult DeleteFilePost(int postId)
+        {
+            try
+            {
+                HttpContext.Session.GetInt32Ex("LoggedInUserId");
+                HttpContext.Session.GetInt32Ex("CurrentCourseId");
+                var post = _db.Posts.Find(postId);
+                return View(post);
+            }
+            catch (SessionCredentialException ex)
+            {
+                _logger.Log(ex);
+                return RedirectToAction("Index", "Home");
+            }
+        }
 
-		[HttpPost]
-		public IActionResult DeleteFilePost(FilePost post, int courseId)
-		{
-			try
-			{
-				FilePost? originalPost = (FilePost?)_db.Posts.Find(post.PostId);
-				var filePath = Path.Combine("wwwroot/uploads", originalPost.FileName);
+        [HttpPost]
+        public IActionResult DeleteFilePost(FilePost post, int courseId)
+        {
+            try
+            {
+                FilePost? originalPost = (FilePost?)_db.Posts.Find(post.PostId);
+                var filePath = Path.Combine("wwwroot/uploads", originalPost.FileName);
                 if (System.IO.File.Exists(filePath))
-				{
-					System.IO.File.Delete(filePath);
-				}
+                {
+                    System.IO.File.Delete(filePath);
+                }
                 _db.Posts.Remove(originalPost);
-				_db.SaveChanges();
-				return RedirectToAction("Index", new { courseId });
-			}
-			catch (Exception ex)
-			{
-				_logger.Log(ex);
-				throw;
-			}
-		}
-	}
+                _db.SaveChanges();
+                return RedirectToAction("Index", new { courseId });
+            }
+            catch (Exception ex)
+            {
+                _logger.Log(ex);
+                throw;
+            }
+        }
+    }
 }
