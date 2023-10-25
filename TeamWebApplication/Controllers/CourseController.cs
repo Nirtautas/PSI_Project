@@ -24,6 +24,8 @@ namespace TeamWebApplication.Controllers
             {
 				int? loggedInUserId = HttpContext.Session.GetInt32Ex("LoggedInUserId");
 				HttpContext.Session.Remove("CurrentCourseId");
+
+                string searchString = Request.Query["searchString"];
 				IEnumerable<Course> coursesTaken = (
 					from user in _db.Users
 					join userCourse in _db.CoursesUsers
@@ -32,7 +34,11 @@ namespace TeamWebApplication.Controllers
 					on userCourse.CourseId equals course.CourseId
 					where user.UserId == loggedInUserId
 					select course
-				).ToList();
+				);
+                if (!String.IsNullOrEmpty(searchString))
+				{
+                    coursesTaken = coursesTaken.Where(course => course.Name.Contains(searchString, StringComparison.InvariantCultureIgnoreCase)).ToList();
+                }
 
 				var currentUser = _db.Users.Find(loggedInUserId);
 
@@ -226,7 +232,6 @@ namespace TeamWebApplication.Controllers
             {
 				HttpContext.Session.GetInt32Ex("LoggedInUserId");
 				HttpContext.Session.SetInt32("CurrentCourseId", courseId);
-				_db.SaveChanges();
 				return View();
 			}
 			catch (SessionCredentialException ex)
@@ -280,9 +285,8 @@ namespace TeamWebApplication.Controllers
         {
 			try
 			{
-				HttpContext.Session.GetInt32Ex("LoggedInUserId");
-				int? currentCourseId = HttpContext.Session.GetInt32Ex("CurrentCourseId");
 				HttpContext.Session.SetInt32("CurrentCourseId", courseId);
+				int? currentCourseId = HttpContext.Session.GetInt32Ex("CurrentCourseId");
 				_db.SaveChanges();
 				ICollection<User> userInCourseList = (
 					from user in _db.Users

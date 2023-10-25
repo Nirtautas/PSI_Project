@@ -21,12 +21,9 @@ namespace TeamWebApplication.Models
         public ICollection<CourseUser> Courses { get; set; }
         public ICollection<Comment> Comments { get; set; }
 
-        //Unmapped fields
-        [NotMapped]
-        public ICollection<int>? CoursesUserTakesId { get; set; }
         public User()
         {
-            CoursesUserTakesId = new List<int>();
+
         }
 
         public User(int id, string name, string surname, string email, string password, Role role, Faculty faculty, Specialization specialization)
@@ -39,7 +36,6 @@ namespace TeamWebApplication.Models
             this.Role = role;
             this.Faculty = faculty;
             this.Specialization = specialization;
-            CoursesUserTakesId = new List<int>();
         }
 
         public int CompareTo(User? other)

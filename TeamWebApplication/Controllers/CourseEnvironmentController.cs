@@ -326,19 +326,19 @@ namespace TeamWebApplication.Controllers
 
                     using (var stream = new FileStream(filePath, FileMode.Create))
                     {
-                        await file.CopyToAsync(stream);
+                        Task fileCopy = file.CopyToAsync(stream);
+
+                        post.PostType = PostType.File;
+                        post.CreationDate = DateTime.Now;
+
+                        // change 'fileName' to 'uniqueFileName' when unique file name recognition is implemented
+                        post.FileName = fileName;
+
+                        await fileCopy;
+                        _db.Posts.Add(post);
+                        _db.SaveChanges();
                     }
-
-					post.PostType = PostType.File;
-					post.CreationDate = DateTime.Now;
-
-                    // change 'fileName' to 'uniqueFileName' when unique file name recognition is implemented
-                    post.FileName = fileName;
-
-                    _db.Posts.Add(post);
-                    _db.SaveChanges();
-
-				}
+                }
 				return RedirectToAction("Index", new { courseId });
             }
             catch (Exception ex)
@@ -398,8 +398,13 @@ namespace TeamWebApplication.Controllers
 		{
 			try
 			{
-				Post? originalPost = (FilePost?)_db.Posts.Find(post.PostId);
-				_db.Posts.Remove(originalPost);
+				FilePost? originalPost = (FilePost?)_db.Posts.Find(post.PostId);
+				var filePath = Path.Combine("wwwroot/uploads", originalPost.FileName);
+                if (System.IO.File.Exists(filePath))
+				{
+					System.IO.File.Delete(filePath);
+				}
+                _db.Posts.Remove(originalPost);
 				_db.SaveChanges();
 				return RedirectToAction("Index", new { courseId });
 			}
