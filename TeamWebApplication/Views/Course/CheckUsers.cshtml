@@ -8,71 +8,46 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>Add User</title>
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/CoursesStyle.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/CreateCourseStyle.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/ribbon.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/PostStyle.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/tableStyle.css" asp-append-version="true" />
 </head>
 
 <body>
 
     <div class="ribbon">
-        <div class="Name">
-            <a>Mudli</a>
+        <div class="project-name-container">
+            <a class="text-style name">Mudli</a>
+        </div>
+
+        <div class="buttons-container">
+            <a asp-action="Index" asp-controller="PublicCourse" class="text-style button">Public courses</a>
+            <a asp-action="Index" asp-controller="Course" class="text-style button">My Courses</a>
+            <a asp-action="Index" asp-controller="Home" class="text-style button">Log out</a>
         </div>
     </div>
-    <div class="courses-header">
-        <a>Posts</a>
-    </div>
-
-    <div>
-        <div class="course-navigation-array"></div>
-
-        <table class="table table-bordered table-striped">
-            <thead>
-                <tr>
-                    <th>
-                        Id
-                    </th>
-                    <th>
-                        Name
-                    </th>
-                    <th>
-                        Email
-                    </th>
-                    <th>
-                        Role
-                    </th>
-                    <th>
-                        Faculty
-                    </th>
-                    <th>
-                        Specialization
-                    </th>
-                </tr>
-            </thead>
+    <div class="table-container">
+        <h1>Users in this course</h1>
+        <table class="rwd-table">
             <tbody>
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Faculty</th>
+                    <th>Specialization</th>
+                </tr>
                 @foreach (User user in Model)
                 {
-                    <tr>
-                        <td>
-                            @user.UserId
-                        </td>
-                        <td>
-                            @(user.Name + " " + user.Surname)
-                        </td>
-                        <td>
-                            @user.Email
-                        </td>
-                        <td>
-                            @user.Role.ToString()
-                        </td>
-                        <td>
-                            @user.Faculty.ToString()
-                        </td>
-                        <td>
-                            @user.Specialization.ToString()
-                        </td>
-                    </tr>
+                <tr>
+                    <td data-th="Id">@user.UserId</td>
+                    <td data-th="Name">@(user.Name + " " + user.Surname)</td>
+                    <td data-th="Email">@user.Email</td>
+                    <td data-th="Role">@user.Role.ToString()</td>
+                    <td data-th="Faculty">@user.Faculty.ToString()</td>
+                    <td data-th="Specialization">@user.Specialization.ToString()</td>
+                </tr>
                 }
             </tbody>
         </table>
