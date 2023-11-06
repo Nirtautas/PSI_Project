@@ -1,11 +1,11 @@
 ﻿namespace TeamWebApplication.Data.ExceptionLogger
 {
-    public class ExceptionLogger : IExceptionLogger
+    public class DataLogger : IDataLogger
     {
         private string filePath;
         private string relativePath;
 
-        public ExceptionLogger(string relativePath)
+        public DataLogger(string relativePath)
         {
             this.relativePath = relativePath;
 			filePath = FormatFileName(relativePath);
@@ -27,7 +27,7 @@
             }
         }
 
-		public void LogMessage(string message)
+		public void Log(string message)
 		{
 			if (!Directory.Exists(relativePath))
 				Directory.CreateDirectory(relativePath);

@@ -3,20 +3,24 @@ using TeamWebApplication.Models;
 using TeamWebApplication.Data.Database;
 using TeamWebApplication.Data.ExceptionLogger;
 using TeamWebApplication.Data.MailService;
+using TeamWebApplication.Controllers.ControllerEventArgs;
 
 namespace TeamWebApplication.Controllers
 {
     public class RegistrationController : Controller
     {
         private readonly ApplicationDBContext _db;
-        private readonly IExceptionLogger _logger;
+        private readonly IDataLogger _logger;
         private readonly IMailService _mailService;
 
-        public RegistrationController(ApplicationDBContext db, IExceptionLogger logger, IMailService mailService)
+        public event EventHandler<RegistrationEventArgs> Registration;
+
+        public RegistrationController(ApplicationDBContext db, IDataLogger logger, IMailService mailService)
         {
             _db = db;
             _logger = logger;
             _mailService = mailService;
+            Registration += _mailService.OnRegistration;
         }
 
         public IActionResult Index()
@@ -36,7 +40,7 @@ namespace TeamWebApplication.Controllers
                     _db.SaveChanges();
                     int userId = _db.Users.Single(tuser => tuser.Email == user.Email).UserId;
 
-                    _mailService.SendConfirmationEmail(user.Email, user.Name, userId);
+                    OnUserRegistration(user.Email, user.Name, userId);
                     return RedirectToAction("Index", "Login");
                 }
                 return RedirectToAction("Index", "Login");
@@ -49,5 +53,14 @@ namespace TeamWebApplication.Controllers
                 throw;
             }
 		}
+
+        protected virtual void OnUserRegistration(string userEmail, string userName, int userId)
+        {
+            if (Registration != null)
+            {
+                _logger.Log(DateTime.Now + $": Registered {userName} with an id of {userId}.");
+                Registration.Invoke(this, new RegistrationEventArgs(userEmail, userName, userId));
+            }
+        }
     }
 }

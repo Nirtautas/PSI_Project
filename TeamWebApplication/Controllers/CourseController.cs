@@ -1,8 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Linq;
+using TeamWebApplication.Controllers.ControllerEventArgs;
 using TeamWebApplication.Data.Database;
 using TeamWebApplication.Data.ExceptionLogger;
 using TeamWebApplication.Data.Exceptions;
 using TeamWebApplication.Data.ExtensionMethods;
+using TeamWebApplication.Data.MailService;
 using TeamWebApplication.Models;
 
 namespace TeamWebApplication.Controllers
@@ -10,12 +13,17 @@ namespace TeamWebApplication.Controllers
     public class CourseController : Controller
     {
         private readonly ApplicationDBContext _db;
-        private readonly IExceptionLogger _logger;
+        private readonly IDataLogger _logger;
+		private readonly IMailService _mailService;
 
-        public CourseController(ApplicationDBContext db, IExceptionLogger logger)
+		public event EventHandler<AttendanceEventArgs> Attendance;
+
+        public CourseController(ApplicationDBContext db, IDataLogger logger, IMailService mailService)
         {
             _db = db;
             _logger = logger;
+			_mailService = mailService;
+			Attendance = _mailService.OnAttendanceChange;
         }
 
         public IActionResult Index()
@@ -205,10 +213,12 @@ namespace TeamWebApplication.Controllers
 					if (Int32.TryParse(word, out int userId) != false && currentCourse != null)
 					{
 						User? user;
-						if ((user = _db.Users.Find(userId)) != null && userId != loggedInUserId)
+						if ((user = _db.Users.Find(userId)) != null && userId != loggedInUserId &&
+							!_db.CoursesUsers.Any(row => row.UserId == userId && row.CourseId == currentCourse.CourseId))
 						{
 							_db.CoursesUsers.Add(new CourseUser { CourseId = (int)currentCourseId, UserId = userId });
 							_db.SaveChanges();
+							OnAttendanceChange(user.Email, user.Name, currentCourse.Name, true);
 						}
 					}
 				}
@@ -264,7 +274,8 @@ namespace TeamWebApplication.Controllers
 						{
 							_db.CoursesUsers.Remove(new CourseUser { CourseId = (int)currentCourseId, UserId = userId });
 							_db.SaveChanges();
-						}
+                            OnAttendanceChange(user.Email, user.Name, currentCourse.Name, false);
+                        }
 					}
 				}
 				return RedirectToAction("Index");
@@ -312,5 +323,17 @@ namespace TeamWebApplication.Controllers
 				throw;
 			}
 		}
+
+        protected virtual void OnAttendanceChange(string userEmail, string userName, string courseName, bool addedOrRemoved)
+        {
+            if (Attendance != null)
+            {
+				if (addedOrRemoved)
+					_logger.Log(DateTime.Now + $": Added {userName} to course {courseName}.");
+				else
+                    _logger.Log(DateTime.Now + $": Removed {userName} from course {courseName}.");
+                Attendance.Invoke(this, new AttendanceEventArgs(userEmail, userName, courseName, addedOrRemoved));
+            }
+        }
     }
 }

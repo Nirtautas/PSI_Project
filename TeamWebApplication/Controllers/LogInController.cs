@@ -10,9 +10,9 @@ namespace TeamWebApplication.Controllers
     public class LogInController : Controller
     {
 		private readonly ApplicationDBContext _db;
-        private readonly IExceptionLogger _logger;
+        private readonly IDataLogger _logger;
 
-		public LogInController(ApplicationDBContext db, IExceptionLogger logger)
+		public LogInController(ApplicationDBContext db, IDataLogger logger)
         {
             _db = db;
             _logger = logger;

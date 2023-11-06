@@ -13,7 +13,7 @@ builder.Services.AddSession(options =>
 });
 
 builder.Services.AddSingleton<IMailService, MailService>();
-builder.Services.AddSingleton<IExceptionLogger>(new ExceptionLogger(@".\Logs\"));
+builder.Services.AddSingleton<IDataLogger>(new DataLogger(@".\Logs\"));
 //Established connection with PostgreSQL database
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ApplicationDBContext>(options => options.UseNpgsql(connectionString));

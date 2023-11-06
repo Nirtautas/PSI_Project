@@ -12,9 +12,9 @@ namespace TeamWebApplication.Controllers
     public class CourseEnvironmentController : Controller
     {
         private readonly ApplicationDBContext _db;
-        private readonly IExceptionLogger _logger;
+        private readonly IDataLogger _logger;
 
-        public CourseEnvironmentController(ApplicationDBContext db, IExceptionLogger logger)
+        public CourseEnvironmentController(ApplicationDBContext db, IDataLogger logger)
         {
             _db = db;
             _logger = logger;
