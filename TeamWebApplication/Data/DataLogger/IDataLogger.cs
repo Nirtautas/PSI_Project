@@ -1,9 +1,9 @@
 ﻿namespace TeamWebApplication.Data.ExceptionLogger
 {
-	public interface IExceptionLogger
+	public interface IDataLogger
 	{
 		void Log(Exception ex);
-		void LogMessage(string message);
+		void Log(string message);
 		string FormatFileName(string relativePath);
 	}
 }

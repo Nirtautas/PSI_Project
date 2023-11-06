@@ -10,9 +10,9 @@ namespace TeamWebApplication.Controllers
     public class PublicCourseController : Controller
     {
         private readonly ApplicationDBContext _db;
-        private readonly IExceptionLogger _logger;
+        private readonly IDataLogger _logger;
 
-        public PublicCourseController(ApplicationDBContext db, IExceptionLogger logger)
+        public PublicCourseController(ApplicationDBContext db, IDataLogger logger)
         {
             _db = db;
             _logger = logger;

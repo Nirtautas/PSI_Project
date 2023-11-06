@@ -10,9 +10,9 @@ namespace TeamWebApplication.Controllers
     public class HomeController : Controller
     {
         private readonly ApplicationDBContext _db;
-        private readonly IExceptionLogger _logger;
+        private readonly IDataLogger _logger;
 
-        public HomeController(ApplicationDBContext db, IExceptionLogger logger)
+        public HomeController(ApplicationDBContext db, IDataLogger logger)
         {
             _db = db;
             _logger = logger;

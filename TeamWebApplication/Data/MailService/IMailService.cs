@@ -1,7 +1,10 @@
-﻿namespace TeamWebApplication.Data.MailService
+﻿using TeamWebApplication.Controllers.ControllerEventArgs;
+
+namespace TeamWebApplication.Data.MailService
 {
     public interface IMailService
     {
-        public void SendConfirmationEmail(string userEmail, string userName, int userId);
+        public void OnRegistration(object source, RegistrationEventArgs e);
+        public void OnAttendanceChange(object source, AttendanceEventArgs e);
     }
 }
