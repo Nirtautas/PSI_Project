@@ -19,9 +19,9 @@ namespace TeamWebApplication.Data.MailService
         {
             MailMessage mailMessage = new MailMessage();
             mailMessage.From = new MailAddress("MudliTeam.dev@outlook.com");
-            mailMessage.To.Add(e.UserEmail);
-            mailMessage.Subject = $"Welcome to Mudli {e.UserName}!";
-            mailMessage.Body = $"Welcome to Mudli! Your user identification code is {e.UserId}. Happy learning!";
+            mailMessage.To.Add(e.User.Email);
+            mailMessage.Subject = $"Welcome to Mudli {e.User.Name}!";
+            mailMessage.Body = $"Welcome to Mudli! Your user identification code is {e.User.UserId}. Happy learning!";
 
             SmtpClient smtpClient = new SmtpClient("smtp-mail.outlook.com", 587)
             {
@@ -44,16 +44,16 @@ namespace TeamWebApplication.Data.MailService
         {
             MailMessage mailMessage = new MailMessage();
             mailMessage.From = new MailAddress("MudliTeam.dev@outlook.com");
-            mailMessage.To.Add(e.UserEmail);
+            mailMessage.To.Add(e.User.Email);
             if (e.AddedOrRemoved)
             {
-                mailMessage.Subject = $"You have been added to course {e.CourseName}!";
-                mailMessage.Body = $"Dear {e.UserName}," + Environment.NewLine + $"You have been added to course {e.CourseName}!";
+                mailMessage.Subject = $"You have been added to course {e.Course.Name}!";
+                mailMessage.Body = $"Dear {e.User.Name}," + Environment.NewLine + $"You have been added to course {e.Course.Name}!";
             }
             else
             {
-                mailMessage.Subject = $"You have been removed from course {e.CourseName}!";
-                mailMessage.Body = $"Dear {e.UserName}," + Environment.NewLine + $"You have been removed from course {e.CourseName}!";
+                mailMessage.Subject = $"You have been removed from course {e.Course.Name}!";
+                mailMessage.Body = $"Dear {e.User.Name}," + Environment.NewLine + $"You have been removed from course {e.Course.Name}!";
             }
 
             SmtpClient smtpClient = new SmtpClient("smtp-mail.outlook.com", 587)

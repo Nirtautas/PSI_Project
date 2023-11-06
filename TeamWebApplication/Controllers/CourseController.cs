@@ -218,7 +218,7 @@ namespace TeamWebApplication.Controllers
 						{
 							_db.CoursesUsers.Add(new CourseUser { CourseId = (int)currentCourseId, UserId = userId });
 							_db.SaveChanges();
-							OnAttendanceChange(user.Email, user.Name, currentCourse.Name, true);
+							OnAttendanceChange(user, currentCourse, true);
 						}
 					}
 				}
@@ -274,7 +274,7 @@ namespace TeamWebApplication.Controllers
 						{
 							_db.CoursesUsers.Remove(new CourseUser { CourseId = (int)currentCourseId, UserId = userId });
 							_db.SaveChanges();
-                            OnAttendanceChange(user.Email, user.Name, currentCourse.Name, false);
+                            OnAttendanceChange(user, currentCourse, false);
                         }
 					}
 				}
@@ -324,15 +324,15 @@ namespace TeamWebApplication.Controllers
 			}
 		}
 
-        protected virtual void OnAttendanceChange(string userEmail, string userName, string courseName, bool addedOrRemoved)
+        protected virtual void OnAttendanceChange(User user, Course course, bool addedOrRemoved)
         {
             if (Attendance != null)
             {
 				if (addedOrRemoved)
-					_logger.Log(DateTime.Now + $": Added {userName} to course {courseName}.");
+					_logger.Log(DateTime.Now + $": Added {user.Name} to course {course.Name}.");
 				else
-                    _logger.Log(DateTime.Now + $": Removed {userName} from course {courseName}.");
-                Attendance.Invoke(this, new AttendanceEventArgs(userEmail, userName, courseName, addedOrRemoved));
+                    _logger.Log(DateTime.Now + $": Removed {user.Name} from course {course.Name}.");
+                Attendance.Invoke(this, new AttendanceEventArgs(user, course, addedOrRemoved));
             }
         }
     }

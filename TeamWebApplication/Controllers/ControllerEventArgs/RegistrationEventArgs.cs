@@ -1,16 +1,14 @@
-﻿namespace TeamWebApplication.Controllers.ControllerEventArgs
+﻿using TeamWebApplication.Models;
+
+namespace TeamWebApplication.Controllers.ControllerEventArgs
 {
     public class RegistrationEventArgs : EventArgs
     {
-        public string UserEmail { get; }
-        public string UserName { get; }
-        public int UserId { get; }
+        public User User { get; }
 
-        public RegistrationEventArgs(string userEmail, string userName, int userId)
+        public RegistrationEventArgs(User user)
         {
-            UserEmail = userEmail;
-            UserName = userName;
-            UserId = userId;
+            User = user;
         }
     }
 }

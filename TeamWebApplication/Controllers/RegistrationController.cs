@@ -38,11 +38,11 @@ namespace TeamWebApplication.Controllers
                 {
                     _db.Users.Add(user);
                     _db.SaveChanges();
-                    int userId = _db.Users.Single(tuser => tuser.Email == user.Email).UserId;
+                    user.UserId = _db.Users.Single(tuser => tuser.Email == user.Email).UserId;
 
-                    OnUserRegistration(user.Email, user.Name, userId);
+                    OnUserRegistration(user);
                     return RedirectToAction("Index", "Login");
-                }
+                } 
                 return RedirectToAction("Index", "Login");
             }
             catch (Exception ex)
@@ -54,12 +54,12 @@ namespace TeamWebApplication.Controllers
             }
 		}
 
-        protected virtual void OnUserRegistration(string userEmail, string userName, int userId)
+        protected virtual void OnUserRegistration(User user)
         {
             if (Registration != null)
             {
-                _logger.Log(DateTime.Now + $": Registered {userName} with an id of {userId}.");
-                Registration.Invoke(this, new RegistrationEventArgs(userEmail, userName, userId));
+                _logger.Log(DateTime.Now + $": Registered {user.Name} with an id of {user.UserId}.");
+                Registration.Invoke(this, new RegistrationEventArgs(user));
             }
         }
     }
