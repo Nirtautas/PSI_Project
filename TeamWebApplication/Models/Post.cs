@@ -23,7 +23,6 @@ namespace TeamWebApplication.Models
         public abstract void ApplyData(string? textData);
         public abstract string? DataToString();
         public abstract string? DataToHtml();
-
         public int CompareTo(Post? other)
         {
             if (PostId > other.PostId || other == null)

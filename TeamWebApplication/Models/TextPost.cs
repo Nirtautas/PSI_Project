@@ -1,4 +1,5 @@
 ﻿
+using Microsoft.Extensions.Hosting;
 using TeamWebApplication.Models.Enums;
 
 namespace TeamWebApplication.Models
@@ -6,12 +7,12 @@ namespace TeamWebApplication.Models
     public class TextPost : Post
     {
         public string? TextContent { get; set; } = null;
-        public TextPost(int id, int courseId, string name, bool IsVisible, PostType PostType, string textContent)
+        public TextPost(int id, int courseId, string name, DateTime creationDate, bool IsVisible, PostType PostType, string textContent)
         {
             base.PostId = id;
             base.CourseId = courseId;
             base.Name = name;
-            base.CreationDate = DateTime.Now;
+            base.CreationDate = creationDate;
             base.IsVisible = IsVisible;
             base.PostType = PostType;
             this.TextContent = textContent;
@@ -46,7 +47,7 @@ namespace TeamWebApplication.Models
 
         public override string? DataToHtml()
         {
-            return "<p>" + DataToString() + "</p>";
+            return "<p>" + LinkValidation.ValidateAndReplaceLinks(DataToString()) + "</p>";
         }
     }
 }
