@@ -6,8 +6,8 @@ namespace TeamWebApplication.Models
 {
     public class LinkValidation
     {
-        private static IExceptionLogger _logger;
-        public LinkValidation(IExceptionLogger logger)
+        private static IDataLogger _logger;
+        public LinkValidation(IDataLogger logger)
         {
             _logger = logger;
         }

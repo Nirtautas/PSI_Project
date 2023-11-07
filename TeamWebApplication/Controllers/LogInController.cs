@@ -2,7 +2,6 @@
 using TeamWebApplication.Data.Database;
 using TeamWebApplication.Data.ExceptionLogger;
 using TeamWebApplication.Data.Exceptions;
-using TeamWebApplication.Data.ExtensionMethods;
 using TeamWebApplication.Models;
 
 namespace TeamWebApplication.Controllers

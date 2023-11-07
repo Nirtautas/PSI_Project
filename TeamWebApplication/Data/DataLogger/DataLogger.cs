@@ -1,9 +1,11 @@
-﻿namespace TeamWebApplication.Data.ExceptionLogger
+﻿using System;
+
+namespace TeamWebApplication.Data.ExceptionLogger
 {
     public class DataLogger : IDataLogger
     {
-        private string filePath;
-        private string relativePath;
+        public string filePath { get; }
+        public string relativePath { get; }
 
         public DataLogger(string relativePath)
         {
@@ -13,12 +15,8 @@
 
         public void Log(Exception exception)
         {
-            if (!Directory.Exists(relativePath))
-                Directory.CreateDirectory(relativePath);
-
-            if (!File.Exists(filePath))
-                File.Create(filePath).Dispose();
-
+            CheckDirectory(relativePath);
+            CheckPath(filePath);
             using (StreamWriter writer = new StreamWriter(filePath, append: true))
             {
                 writer.WriteLine("At {0} {1}", DateTime.Now, exception.GetType().ToString());
@@ -29,17 +27,26 @@
 
 		public void Log(string message)
 		{
-			if (!Directory.Exists(relativePath))
-				Directory.CreateDirectory(relativePath);
-
-			if (!File.Exists(filePath))
-				File.Create(filePath).Dispose();
-
+            CheckDirectory(relativePath);
+            CheckPath(filePath);
 			using (StreamWriter writer = new StreamWriter(filePath, append: true))
 			{
-				writer.WriteLine(message);
+                writer.WriteLine("{0} : ", DateTime.Now);
+                writer.WriteLine(message);
 			}
 		}
+
+        public void CheckDirectory(string relativePath)
+        {
+            if (!Directory.Exists(relativePath))
+                Directory.CreateDirectory(relativePath);
+        }
+
+        public void CheckPath(string filePath)
+        {
+            if (!File.Exists(filePath))
+                File.Create(filePath).Dispose();
+        }
 
 		public string FormatFileName(string relativePath)
         {

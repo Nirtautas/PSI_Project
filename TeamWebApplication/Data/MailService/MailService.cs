@@ -1,6 +1,5 @@
 ﻿using System.Net;
 using System.Net.Mail;
-using TeamWebApplication.Controllers;
 using TeamWebApplication.Controllers.ControllerEventArgs;
 using TeamWebApplication.Data.ExceptionLogger;
 
