@@ -56,8 +56,8 @@ namespace TeamWebApplication.Models
         private static string RemovePunctuation(string text, out string punctuation)
         {
             string punctuationPlaceholder = "";
-            punctuation = string.Join("", Regex.Matches(text, @"[.,;](?!\S)").Cast<Match>().Select(match => match.Value));
-            text = Regex.Replace(text, @"[.,;](?!\S)", punctuationPlaceholder);//deleting punctuation from link
+            punctuation = string.Join("", Regex.Matches(text, @"[.,;?!](?!\S)").Cast<Match>().Select(match => match.Value));
+            text = Regex.Replace(text, @"[.,;?!](?!\S)", punctuationPlaceholder);//deleting punctuation from link
             return text;
         }
     }

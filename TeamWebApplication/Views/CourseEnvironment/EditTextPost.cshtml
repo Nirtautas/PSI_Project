@@ -28,7 +28,7 @@
 			<input type="hidden" id="PostId" name="PostId" asp-for="PostId" value="@Model.PostId" />
 			<div class="form-info-container">
 				<label for="Name">Name:</label>
-				<input type="text" id="Input.Name" name="name" asp-for="Name" class="form-control" required />
+			<textarea id="Input.Name" name="name" asp-for="Name" class="form-control" required />
 				<span class="text-danger"></span>
 			</div>
 
@@ -42,7 +42,7 @@
 
 		<div class="form-info-container">
 			<label for="TextContent">Text Data</label>
-			<input type="text" id="TextContent" name="TextContent" asp-for="TextContent" class="form-control" required />
+			<textarea id="TextContent" name="TextContent" asp-for="TextContent" class="form-control" required />
 			<span class="text-danger"></span>
 		</div>
 
