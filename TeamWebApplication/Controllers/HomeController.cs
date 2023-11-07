@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using TeamWebApplication.Models;
 using System.Diagnostics;
 using TeamWebApplication.Data.Database;
 using TeamWebApplication.Data.ExceptionLogger;
-using TeamWebApplication.Data.ExtensionMethods;
+using TeamWebApplication.Models;
 
 namespace TeamWebApplication.Controllers
 {
@@ -22,10 +21,10 @@ namespace TeamWebApplication.Controllers
         {
             try
             {
-				HttpContext.Session.Clear();
-				_db.SaveChanges();
-				return View();
-			}
+                HttpContext.Session.Clear();
+                _db.SaveChanges();
+                return View();
+            }
             catch (Exception ex)
             {
                 _logger.Log(ex);

@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
-using Microsoft.Extensions.Hosting;
 using TeamWebApplication.Data.Database;
 using TeamWebApplication.Data.ExceptionLogger;
 using TeamWebApplication.Data.Exceptions;

@@ -3,8 +3,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TeamWebApplication.Models
 {
-	[Table("Courses")]
-	public class Course : IComparable<Course>
+    [Table("Courses")]
+    public class Course : IComparable<Course>
     {
         [Key]
         public int CourseId { get; set; }
@@ -19,11 +19,13 @@ namespace TeamWebApplication.Models
         public ICollection<Post> Posts { get; set; }
         public ICollection<Comment> Comments { get; set; }
 
-        public Course() {
+        public Course()
+        {
 
         }
 
-        public Course(int id, string name, string description, bool IsVisible, bool isPublic) {
+        public Course(int id, string name, string description, bool IsVisible, bool isPublic)
+        {
             this.CourseId = id;
             this.Name = name;
             this.CreationDate = DateTime.Now;

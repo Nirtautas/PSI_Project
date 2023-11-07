@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace TeamWebApplication.Data.ExceptionLogger
+﻿namespace TeamWebApplication.Data.ExceptionLogger
 {
     public class DataLogger : IDataLogger
     {
@@ -10,8 +8,8 @@ namespace TeamWebApplication.Data.ExceptionLogger
         public DataLogger(string relativePath)
         {
             this.relativePath = relativePath;
-			filePath = FormatFileName(relativePath);
-		}
+            filePath = FormatFileName(relativePath);
+        }
 
         public void Log(Exception exception)
         {
@@ -20,21 +18,21 @@ namespace TeamWebApplication.Data.ExceptionLogger
             using (StreamWriter writer = new StreamWriter(filePath, append: true))
             {
                 writer.WriteLine("At {0} {1}", DateTime.Now, exception.GetType().ToString());
-				writer.WriteLine(exception.ToString());
+                writer.WriteLine(exception.ToString());
                 writer.WriteLine(exception.StackTrace);
             }
         }
 
-		public void Log(string message)
-		{
+        public void Log(string message)
+        {
             CheckDirectory(relativePath);
             CheckPath(filePath);
-			using (StreamWriter writer = new StreamWriter(filePath, append: true))
-			{
+            using (StreamWriter writer = new StreamWriter(filePath, append: true))
+            {
                 writer.WriteLine("{0} : ", DateTime.Now);
                 writer.WriteLine(message);
-			}
-		}
+            }
+        }
 
         public void CheckDirectory(string relativePath)
         {
@@ -48,10 +46,10 @@ namespace TeamWebApplication.Data.ExceptionLogger
                 File.Create(filePath).Dispose();
         }
 
-		public string FormatFileName(string relativePath)
+        public string FormatFileName(string relativePath)
         {
-	        string fileName = String.Format("Log_{0:yyyy-MM-dd}_{0:HH-mm-ss}.txt", DateTime.Now);
-	        return String.Concat(relativePath, fileName);
+            string fileName = String.Format("Log_{0:yyyy-MM-dd}_{0:HH-mm-ss}.txt", DateTime.Now);
+            return String.Concat(relativePath, fileName);
         }
     }
 }
