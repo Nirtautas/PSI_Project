@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.ComponentModel.DataAnnotations.Schema;
-using TeamWebApplication.Models.Enums;
+﻿using TeamWebApplication.Models.Enums;
 
 namespace TeamWebApplication.Models
 {

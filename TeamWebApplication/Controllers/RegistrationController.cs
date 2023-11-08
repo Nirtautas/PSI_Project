@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using TeamWebApplication.Models;
+using TeamWebApplication.Controllers.ControllerEventArgs;
 using TeamWebApplication.Data.Database;
 using TeamWebApplication.Data.ExceptionLogger;
 using TeamWebApplication.Data.MailService;
-using TeamWebApplication.Controllers.ControllerEventArgs;
+using TeamWebApplication.Models;
 
 namespace TeamWebApplication.Controllers
 {
@@ -42,7 +42,7 @@ namespace TeamWebApplication.Controllers
 
                     OnUserRegistration(user);
                     return RedirectToAction("Index", "Login");
-                } 
+                }
                 return RedirectToAction("Index", "Login");
             }
             catch (Exception ex)
@@ -52,7 +52,7 @@ namespace TeamWebApplication.Controllers
                 _logger.Log(ex);
                 throw;
             }
-		}
+        }
 
         protected virtual void OnUserRegistration(User user)
         {

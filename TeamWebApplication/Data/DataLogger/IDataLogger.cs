@@ -4,6 +4,8 @@
 	{
 		void Log(Exception ex);
 		void Log(string message);
-		string FormatFileName(string relativePath);
+		public void CheckDirectory(string relativePath);
+		public void CheckPath(string filePath);
+        string FormatFileName(string relativePath);
 	}
 }
