@@ -7,6 +7,7 @@ using TeamWebApplication.Data.Exceptions;
 using TeamWebApplication.Data.ExtensionMethods;
 using TeamWebApplication.Models;
 using TeamWebApplication.Models.Enums;
+using TeamWebApplication.Controllers.ControllerHandlers;
 
 namespace TeamWebApplication.Controllers
 {
@@ -14,7 +15,6 @@ namespace TeamWebApplication.Controllers
     {
         private readonly ApplicationDBContext _db;
         private readonly IDataLogger _logger;
-
         public CourseEnvironmentController(ApplicationDBContext db, IDataLogger logger)
         {
             _db = db;
@@ -206,9 +206,8 @@ namespace TeamWebApplication.Controllers
             {
                 post.PostType = PostType.Text;
                 post.CourseId = courseId;
+                PostHandler.AddPost(_db, post);
 
-                _db.Posts.Add(post);
-                _db.SaveChanges();
                 return RedirectToAction("Index", new { courseId });
             }
             catch (Exception ex)
@@ -338,8 +337,8 @@ namespace TeamWebApplication.Controllers
                         post.FileName = fileName;
 
                         await fileCopy;
-                        _db.Posts.Add(post);
-                        _db.SaveChanges();
+
+                        PostHandler.AddPost(_db, post);
                     }
                 }
                 return RedirectToAction("Index", new { courseId });

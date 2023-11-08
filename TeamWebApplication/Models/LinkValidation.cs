@@ -1,4 +1,6 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
+using System.Net.Http;
 using System.Text.RegularExpressions;
 using TeamWebApplication.Data.ExceptionLogger;
 
@@ -7,45 +9,58 @@ namespace TeamWebApplication.Models
     public class LinkValidation
     {
         private static IExceptionLogger _logger;
-        public LinkValidation(IExceptionLogger logger)
-        {
-            _logger = logger;
-        }
+
         public static string ValidateAndReplaceLinks(string TextContent)
         {
             string pattern = @"https?://\S+";
 
-            //replacing URLs with clickable links
+            // Replacing URLs with clickable links
             string TextContentWithValidLinks = Regex.Replace(TextContent, pattern, match =>
             {
                 string url = match.Value;
-                string removedPunctuation = "";//if after link there is punctuation, it must be removed for validation of url
-                string urlWithoutPunctuationrl = RemovePunctuation(url, out removedPunctuation);
+                string removedPunctuation = ""; // If there is punctuation after the link, it must be removed for URL validation
+                string urlWithoutPunctuation = RemovePunctuation(url, out removedPunctuation);
 
-                if (Uri.TryCreate(urlWithoutPunctuationrl, UriKind.Absolute, out Uri uriResult))//validating URL structure
+                try
                 {
-                    using (HttpClient client = new HttpClient())//making HTTP request to URL to check whether URL exists or resource at that URL is accessible
+                    if (Uri.TryCreate(urlWithoutPunctuation, UriKind.Absolute, out Uri uriResult)) // Validating URL structure
                     {
-                        try
+                        using (HttpClient client = new HttpClient())
                         {
-                            HttpResponseMessage response = client.GetAsync(uriResult).Result;
-                            if (response.StatusCode == HttpStatusCode.OK)//checking whether HTTP is responsive to that URL
+                            try
                             {
-                                return $"<a href=\"{uriResult}\">{uriResult}</a>" + $"{removedPunctuation}";
+                                HttpResponseMessage response = client.GetAsync(uriResult).Result;
+                                if (response.StatusCode == HttpStatusCode.NotFound)
+                                {
+                                    return url;
+                                }
+                                else if (response.StatusCode == HttpStatusCode.OK) // Checking whether HTTP is responsive to that URL
+                                {
+                                    return $"<a href=\"{uriResult}\">{uriResult}</a>" + $"{removedPunctuation}";
+                                }
+                                return url;
                             }
-                            else
+                            catch (HttpRequestException ex)
                             {
-                                return url;//returning original URL if it's not valid
+                                if (ex.InnerException is WebException webException && webException.Status == WebExceptionStatus.NameResolutionFailure)
+                                {
+                                    _logger.Log(new Exception("No such host is known: " + uriResult.Host));
+                                }
+                                else
+                                {
+                                    _logger.Log(ex);
+                                }
+                                return url;
                             }
-                        }
-                        catch (HttpRequestException ex)
-                        {
-                            _logger.Log(ex);
-                            return url;
                         }
                     }
+                    else
+                    {
+                        _logger.Log(new Exception($"Invalid URL format: {urlWithoutPunctuation}"));
+                        return url;
+                    }
                 }
-                else
+                catch (Exception ex)
                 {
                     return url;
                 }
@@ -53,11 +68,12 @@ namespace TeamWebApplication.Models
 
             return TextContentWithValidLinks;
         }
+
         private static string RemovePunctuation(string text, out string punctuation)
         {
             string punctuationPlaceholder = "";
-            punctuation = string.Join("", Regex.Matches(text, @"[.,;](?!\S)").Cast<Match>().Select(match => match.Value));
-            text = Regex.Replace(text, @"[.,;](?!\S)", punctuationPlaceholder);//deleting punctuation from link
+            punctuation = string.Join("", Regex.Matches(text, @"[.,;?!](?!\S)").Cast<Match>().Select(match => match.Value));
+            text = Regex.Replace(text, @"[.,;?!](?!\S)", punctuationPlaceholder); // Deleting punctuation from the link
             return text;
         }
     }
