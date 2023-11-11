@@ -27,9 +27,11 @@ namespace TeamWebApplication.Repositories
             return _db.Comments.Find(commentId);
         }
 
-        public IEnumerable<Comment> GetComments()
+        public IEnumerable<Comment> GetCommentsByCourseId(int courseId)
         {
-            return _db.Comments.ToList();
+            return _db.Comments
+                .Where(comment => comment.CourseId == courseId)
+                .ToList();
         }
 
         public void InsertComment(Comment comment)
