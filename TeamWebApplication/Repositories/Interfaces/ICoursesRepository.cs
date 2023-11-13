@@ -6,9 +6,9 @@ namespace TeamWebApplication.Repositories.Interfaces
     {
         IEnumerable<Course> GetCourses();
         Course GetCourseById(int id);
-        void InsertCourse(Comment comment);
+        void InsertCourse(Course course);
         void DeleteCourseById(int id);
-        void UpdateCourse(Comment comment);
+        void UpdateCourse(Course course);
         void Save();
     }
 }
