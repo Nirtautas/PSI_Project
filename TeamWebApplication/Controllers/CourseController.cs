@@ -6,48 +6,46 @@ using TeamWebApplication.Data.Exceptions;
 using TeamWebApplication.Data.ExtensionMethods;
 using TeamWebApplication.Data.MailService;
 using TeamWebApplication.Models;
+using TeamWebApplication.Repositories.Interfaces;
 
 namespace TeamWebApplication.Controllers
 {
     public class CourseController : Controller
     {
-        private readonly ApplicationDBContext _db;
+        private readonly ICoursesRepository _coursesRepository;
+        private readonly IUsersRepository _usersRepository;
+        private readonly ICourseUserRepository _courseUserRepository;
         private readonly IDataLogger _logger;
         private readonly IMailService _mailService;
 
         public event EventHandler<AttendanceEventArgs> Attendance;
 
-        public CourseController(ApplicationDBContext db, IDataLogger logger, IMailService mailService)
+        public CourseController(IDataLogger logger, IMailService mailService,
+            ICoursesRepository coursesRepository, IUsersRepository usersRepository, ICourseUserRepository courseUserRepository)
         {
-            _db = db;
             _logger = logger;
             _mailService = mailService;
+            _coursesRepository = coursesRepository;
+            _usersRepository = usersRepository;
+            _courseUserRepository = courseUserRepository;
             Attendance = _mailService.OnAttendanceChange;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             try
             {
-                int? loggedInUserId = HttpContext.Session.GetInt32Ex("LoggedInUserId");
+                var loggedInUserId = HttpContext.Session.GetInt32Ex("LoggedInUserId");
                 HttpContext.Session.Remove("CurrentCourseId");
 
-                string searchString = Request.Query["searchString"];
-                IEnumerable<Course> coursesTaken = (
-                    from user in _db.Users
-                    join userCourse in _db.CoursesUsers
-                    on user.UserId equals userCourse.UserId
-                    join course in _db.Courses
-                    on userCourse.CourseId equals course.CourseId
-                    where user.UserId == loggedInUserId
-                    select course
-                );
+                var searchString = Request.Query["searchString"];
+                var coursesTaken = await _coursesRepository.GetCoursesByUserIdAsync(loggedInUserId);
                 if (!String.IsNullOrEmpty(searchString))
                 {
                     coursesTaken = coursesTaken.Where(course => course.Name.Contains(searchString, StringComparison.InvariantCultureIgnoreCase)).ToList();
                 }
 
-                var currentUser = _db.Users.Find(loggedInUserId);
+                var currentUser = await _usersRepository.GetUserByIdAsync(loggedInUserId);
 
                 var viewModel = new CourseViewModel
                 {
@@ -85,16 +83,14 @@ namespace TeamWebApplication.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(Course course)
+        public async Task<IActionResult> Create(Course course)
         {
             try
             {
                 int? loggedInUserId = HttpContext.Session.GetInt32Ex("LoggedInUserId");
                 course.CreationDate = DateTime.Now;
-                _db.Courses.Add(course);
-                _db.SaveChanges();
-                _db.CoursesUsers.Add(new CourseUser { CourseId = course.CourseId, UserId = (int)loggedInUserId });
-                _db.SaveChanges();
+                await _coursesRepository.InsertCourseAsync(course);
+                await _courseUserRepository.InsertRelationAsync(course.CourseId, loggedInUserId);
                 return RedirectToAction("Index");
             }
             catch (SessionCredentialException ex)
@@ -109,12 +105,12 @@ namespace TeamWebApplication.Controllers
             }
         }
 
-        public IActionResult Edit(int courseId)
+        public async Task<IActionResult> Edit(int courseId)
         {
             try
             {
                 HttpContext.Session.GetInt32Ex("LoggedInUserId");
-                Course? course = _db.Courses.Find(courseId);
+                Course? course = await _coursesRepository.GetCourseByIdAsync(courseId);
                 return View(course);
             }
             catch (SessionCredentialException ex)
@@ -125,17 +121,11 @@ namespace TeamWebApplication.Controllers
         }
 
         [HttpPost]
-        public IActionResult Edit(Course course)
+        public async Task<IActionResult> Edit(Course course)
         {
             try
             {
-                Course? originalCourse = _db.Courses.Find(course.CourseId);
-                originalCourse.Name = course.Name;
-                originalCourse.IsVisible = course.IsVisible;
-                originalCourse.IsPublic = course.IsPublic;
-                originalCourse.Description = course.Description;
-                _db.Update(originalCourse);
-                _db.SaveChanges();
+                await _coursesRepository.UpdateCourseAsync(course);
                 return RedirectToAction("Index");
             }
             catch (Exception ex)
@@ -145,12 +135,12 @@ namespace TeamWebApplication.Controllers
             }
         }
 
-        public IActionResult Delete(int courseId)
+        public async Task<IActionResult> Delete(int courseId)
         {
             try
             {
                 HttpContext.Session.GetInt32Ex("LoggedInUserId");
-                Course? course = _db.Courses.Find(courseId);
+                Course? course = await _coursesRepository.GetCourseByIdAsync(courseId);
                 return View(course);
             }
             catch (SessionCredentialException ex)
@@ -161,13 +151,11 @@ namespace TeamWebApplication.Controllers
         }
 
         [HttpPost, ActionName("Delete")]
-        public IActionResult DeleteCourse(int courseId)
+        public async Task<IActionResult> DeleteCourse(int courseId)
         {
             try
             {
-                Course? course = _db.Courses.Find(courseId);
-                _db.Courses.Remove(course);
-                _db.SaveChanges();
+                await _coursesRepository.DeleteCourseByIdAsync(courseId);
                 return RedirectToAction("Index");
             }
             catch (Exception ex)
@@ -183,7 +171,6 @@ namespace TeamWebApplication.Controllers
             {
                 HttpContext.Session.GetInt32Ex("LoggedInUserId");
                 HttpContext.Session.SetInt32("CurrentCourseId", courseId);
-                _db.SaveChanges();
                 return View();
             }
             catch (SessionCredentialException ex)
@@ -199,24 +186,23 @@ namespace TeamWebApplication.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddUser(String userIdString)
+        public async Task<IActionResult> AddUser(String userIdString)
         {
             try
             {
                 int? loggedInUserId = HttpContext.Session.GetInt32Ex("LoggedInUserId");
                 int? currentCourseId = HttpContext.Session.GetInt32Ex("CurrentCourseId");
                 String[] userIdList = userIdString.Split(';');
-                Course? currentCourse = _db.Courses.Find(currentCourseId);
+                Course? currentCourse = await _coursesRepository.GetCourseByIdAsync(currentCourseId);
                 foreach (var word in userIdList)
                 {
                     if (Int32.TryParse(word, out int userId) != false && currentCourse != null)
                     {
                         User? user;
-                        if ((user = _db.Users.Find(userId)) != null && userId != loggedInUserId &&
-                            !_db.CoursesUsers.Any(row => row.UserId == userId && row.CourseId == currentCourse.CourseId))
+                        if ((user = await _usersRepository.GetUserByIdAsync(userId)) != null && userId != loggedInUserId &&
+                            !await _courseUserRepository.CheckIfRelationExistsAsync(currentCourse.CourseId, userId))
                         {
-                            _db.CoursesUsers.Add(new CourseUser { CourseId = (int)currentCourseId, UserId = userId });
-                            _db.SaveChanges();
+                            await _courseUserRepository.InsertRelationAsync(currentCourseId, userId);
                             OnAttendanceChange(user, currentCourse, true);
                         }
                     }
@@ -256,23 +242,22 @@ namespace TeamWebApplication.Controllers
         }
 
         [HttpPost]
-        public IActionResult RemoveUser(String userIdString)
+        public async Task<IActionResult> RemoveUser(String userIdString)
         {
             try
             {
                 int? loggedInUserId = HttpContext.Session.GetInt32Ex("LoggedInUserId");
                 int? currentCourseId = HttpContext.Session.GetInt32Ex("CurrentCourseId");
                 String[] userIdList = userIdString.Split(';');
-                Course? currentCourse = _db.Courses.Find(currentCourseId);
+                Course? currentCourse = await _coursesRepository.GetCourseByIdAsync(currentCourseId);
                 foreach (var word in userIdList)
                 {
                     if (Int32.TryParse(word, out int userId) != false && currentCourse != null)
                     {
                         User? user;
-                        if ((user = _db.Users.Find(userId)) != null && userId != loggedInUserId)
+                        if ((user = await _usersRepository.GetUserByIdAsync(userId)) != null && userId != loggedInUserId)
                         {
-                            _db.CoursesUsers.Remove(new CourseUser { CourseId = (int)currentCourseId, UserId = userId });
-                            _db.SaveChanges();
+                            await _courseUserRepository.DeleteRelationAsync(currentCourseId, userId);
                             OnAttendanceChange(user, currentCourse, false);
                         }
                     }
@@ -291,22 +276,13 @@ namespace TeamWebApplication.Controllers
             }
         }
 
-        public IActionResult CheckUsers(int courseId)
+        public async Task<IActionResult> CheckUsers(int courseId)
         {
             try
             {
                 HttpContext.Session.SetInt32("CurrentCourseId", courseId);
                 int? currentCourseId = HttpContext.Session.GetInt32Ex("CurrentCourseId");
-                _db.SaveChanges();
-                ICollection<User> userInCourseList = (
-                    from user in _db.Users
-                    join userCourse in _db.CoursesUsers
-                    on user.UserId equals userCourse.UserId
-                    join course in _db.Courses
-                    on userCourse.CourseId equals course.CourseId
-                    where course.CourseId == currentCourseId
-                    select user
-                ).ToList();
+                var userInCourseList = await _usersRepository.GetUsersInCourse(currentCourseId);
                 return View(userInCourseList);
             }
             catch (SessionCredentialException ex)

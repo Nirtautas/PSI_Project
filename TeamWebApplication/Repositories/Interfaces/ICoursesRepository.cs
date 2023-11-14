@@ -5,9 +5,10 @@ namespace TeamWebApplication.Repositories.Interfaces
     public interface ICoursesRepository
     {
         Task<IEnumerable<Course>> GetCoursesAsync();
-        Task<Course> GetCourseByIdAsync(int id);
+        Task<Course> GetCourseByIdAsync(int? id);
         Task InsertCourseAsync(Course course);
-        Task DeleteCourseByIdAsync(int id);
+        Task DeleteCourseByIdAsync(int? id);
+        Task<IEnumerable<Course>> GetCoursesByUserIdAsync(int? loggedInUserId);
         Task UpdateCourseAsync(Course course);
         Task SaveAsync();
     }

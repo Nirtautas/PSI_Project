@@ -13,8 +13,11 @@ namespace TeamWebApplication.Repositories
             _db = db;
         }
 
-        public async Task DeleteCourseByIdAsync(int id)
+        public async Task DeleteCourseByIdAsync(int? id)
         {
+            if (id == null)
+                throw new ArgumentNullException(nameof(id));
+            
             var courseToDelete = await _db.Courses.FindAsync(id);
 
             if (courseToDelete != null)
@@ -24,14 +27,32 @@ namespace TeamWebApplication.Repositories
             }
         }
 
-        public async Task<Course> GetCourseByIdAsync(int id)
+        public async Task<Course> GetCourseByIdAsync(int? id)
         {
+            if (id == null)
+                throw new ArgumentNullException(nameof(id));
             return await _db.Courses.FindAsync(id);
         }
 
         public async Task<IEnumerable<Course>> GetCoursesAsync()
         {
             return await _db.Courses.ToListAsync();
+        }
+
+        public async Task<IEnumerable<Course>> GetCoursesByUserIdAsync(int? loggedInUserId)
+        {
+            if (loggedInUserId == null)
+                throw new ArgumentNullException(nameof(loggedInUserId));
+
+            return await (
+                from user in _db.Users
+                join userCourse in _db.CoursesUsers
+                on user.UserId equals userCourse.UserId
+                join course in _db.Courses
+                on userCourse.CourseId equals course.CourseId
+                where user.UserId == loggedInUserId
+                select course
+           ).ToListAsync();
         }
 
         public async Task InsertCourseAsync(Course course)

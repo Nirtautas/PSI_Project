@@ -13,9 +13,27 @@ namespace TeamWebApplication.Repositories
             _db = db;
         }
 
-        public async Task<User> GetUserByIdAsync(int userId)
+        public async Task<User> GetUserByIdAsync(int? userId)
         {
+            if (userId == null)
+                throw new ArgumentNullException(nameof(userId));
             return await _db.Users.FirstOrDefaultAsync(u => u.UserId == userId);
+        }
+
+        public async Task<IEnumerable<User>> GetUsersInCourse(int? courseId)
+        {
+            if (courseId == null)
+                throw new ArgumentNullException(nameof(courseId));
+
+            return await (
+                from user in _db.Users
+                join userCourse in _db.CoursesUsers
+                on user.UserId equals userCourse.UserId
+                join course in _db.Courses
+                on userCourse.CourseId equals course.CourseId
+                where course.CourseId == courseId
+                select user
+            ).ToListAsync();
         }
 
         public async Task InsertUserAsync(User user)
