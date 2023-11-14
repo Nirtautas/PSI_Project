@@ -17,6 +17,7 @@ namespace TeamWebApplication.Controllers
         private readonly ICourseUserRepository _courseUserRepository;
         private readonly IDataLogger _logger;
         private readonly IMailService _mailService;
+        private readonly object objectLock = new Object();
 
         public event EventHandler<AttendanceEventArgs> Attendance;
 
@@ -186,27 +187,41 @@ namespace TeamWebApplication.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddUser(String userIdString)
+        // public async Task<IActionResult> AddUser(String userIdString)
+        //
+        // Monitor doesn't work with await
+        // could try using Semaphore Class, but it isn't a concurrent collection nor a monitor.
+        public IActionResult AddUser(String userIdString)
         {
             try
             {
                 int? loggedInUserId = HttpContext.Session.GetInt32Ex("LoggedInUserId");
                 int? currentCourseId = HttpContext.Session.GetInt32Ex("CurrentCourseId");
                 String[] userIdList = userIdString.Split(';');
-                Course? currentCourse = await _coursesRepository.GetCourseByIdAsync(currentCourseId);
-                foreach (var word in userIdList)
+                Course? currentCourse = _coursesRepository.GetCourseByIdAsync(currentCourseId).Result;
+
+                Monitor.Enter(objectLock);
+                try
                 {
-                    if (Int32.TryParse(word, out int userId) != false && currentCourse != null)
+                    foreach (var word in userIdList)
                     {
-                        User? user;
-                        if ((user = await _usersRepository.GetUserByIdAsync(userId)) != null && userId != loggedInUserId &&
-                            !await _courseUserRepository.CheckIfRelationExistsAsync(currentCourse.CourseId, userId))
+                        if (Int32.TryParse(word, out int userId) && currentCourse != null)
                         {
-                            await _courseUserRepository.InsertRelationAsync(currentCourseId, userId);
-                            OnAttendanceChange(user, currentCourse, true);
+                            User? user = _usersRepository.GetUserByIdAsync(userId).Result;
+
+                            if (user != null && userId != loggedInUserId &&!_courseUserRepository.CheckIfRelationExistsAsync(currentCourse.CourseId, userId).Result)
+                            {
+                                _courseUserRepository.InsertRelationAsync(currentCourseId, userId);
+                                OnAttendanceChange(user, currentCourse, true);
+                            }
                         }
                     }
                 }
+                finally
+                {
+                    Monitor.Exit(objectLock);
+                }
+
                 return RedirectToAction("Index");
             }
             catch (SessionCredentialException ex)
