@@ -9,10 +9,10 @@ namespace TeamWebApplication.Repositories.Interfaces
         Task<User?> GetUserByCredentialsAsync(int? userId, string? password);
         Task<bool> UserWithSuchEmailExistsAsync(string? email);
         Task<User?> GetUserByEmailAsync(string? email);
-        Task InsertUserAsync(User user);
-        Task DeleteUserByIdAsync(int id);
+        Task InsertUserAsync(User? user);
+        Task DeleteUserByIdAsync(int? id);
         Task DeleteUserAsync(User? user);
-        Task UpdateUserAsync(User user);
+        Task UpdateUserAsync(User? user);
         Task SaveAsync();
     }
 }

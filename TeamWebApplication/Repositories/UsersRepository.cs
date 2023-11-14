@@ -61,15 +61,21 @@ namespace TeamWebApplication.Repositories
             return await _db.Users.SingleOrDefaultAsync(tuser => tuser.Email == email);
         }
 
-        public async Task InsertUserAsync(User user)
+        public async Task InsertUserAsync(User? user)
         {
+            if (user == null)
+                throw new ArgumentNullException(nameof(user));
+
             await _db.Users.AddAsync(user);
             await SaveAsync();
         }
 
-        public async Task DeleteUserByIdAsync(int userId)
+        public async Task DeleteUserByIdAsync(int? userId)
         {
-            User user = await _db.Users.FirstOrDefaultAsync(u => u.UserId == userId);
+            if (userId == null)
+                throw new ArgumentNullException(nameof(userId));
+
+            var user = await _db.Users.FirstOrDefaultAsync(u => u.UserId == userId);
 
             if (user != null)
             {
@@ -87,8 +93,11 @@ namespace TeamWebApplication.Repositories
             await SaveAsync();
         }
 
-        public async Task UpdateUserAsync(User user)
+        public async Task UpdateUserAsync(User? user)
         {
+            if (user == null)
+                throw new ArgumentNullException(nameof(user));
+
             var existingUser = await _db.Users.FirstOrDefaultAsync(u => u.UserId == user.UserId);
 
             if (existingUser != null)

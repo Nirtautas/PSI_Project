@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using TeamWebApplication.Controllers.ControllerHandlers;
 using TeamWebApplication.Data.Database;
 using TeamWebApplication.Models;
 using TeamWebApplication.Repositories.Interfaces;
@@ -13,27 +12,39 @@ namespace TeamWebApplication.Repositories
         {
             _db = db;
         }
-        public async Task<IEnumerable<Post>> GetPostsByCourseAsync(int courseId)
+        public async Task<IEnumerable<Post>> GetPostsByCourseAsync(int? courseId)
         {
+            if (courseId == null)
+                throw new ArgumentNullException(nameof(courseId));
+
             return await _db.Posts
                 .Where(p => p.CourseId == courseId)
                 .ToListAsync();
         }
 
-        public async Task<Post> GetPostByIdAsync(int postId)
+        public async Task<Post?> GetPostByIdAsync(int? postId)
         {
+            if (postId == null)
+                throw new ArgumentNullException(nameof(postId));
+
             return await _db.Posts.FirstOrDefaultAsync(p => p.PostId == postId);
         }
 
-        public async Task InsertPostAsync(Post post)
+        public async Task InsertPostAsync<T>(T post) where T : Post?
         {
-            await PostHandler.AddPostAsync(_db, post);
+            if (post == null)
+                throw new ArgumentNullException(nameof(post));
+
+            await _db.Posts.AddAsync(post);
             await SaveAsync();
         }
 
-        public async Task DeletePostByIdAsync(int postId)
+        public async Task DeletePostByIdAsync(int? postId)
         {
-            Post post = await _db.Posts.FirstOrDefaultAsync(p => p.PostId == postId);
+            if (postId == null)
+                throw new ArgumentNullException(nameof(postId));
+
+            var post = await _db.Posts.FirstOrDefaultAsync(p => p.PostId == postId);
 
             if (post != null)
             {
@@ -42,9 +53,21 @@ namespace TeamWebApplication.Repositories
             }
         }
 
-        public async Task UpdateTextPostAsync(TextPost post)
+        public async Task DeletePostAsync<T>(T post) where T : Post?
         {
-            TextPost existingPost = (TextPost) await _db.Posts.FirstOrDefaultAsync(p => p.PostId == post.PostId);
+            if (post == null)
+                throw new ArgumentNullException(nameof(post));
+
+            _db.Posts.Remove(post);
+            await SaveAsync();
+        }
+
+        public async Task UpdateTextPostAsync(TextPost? post)
+        {
+            if(post == null)
+                throw new ArgumentNullException(nameof(post));
+
+            var existingPost = (TextPost?) await _db.Posts.FirstOrDefaultAsync(p => p.PostId == post.PostId);
 
             if (existingPost != null)
             {
@@ -61,9 +84,12 @@ namespace TeamWebApplication.Repositories
             }
         }
 
-        public async Task UpdateFilePostAsync(FilePost post)
+        public async Task UpdateFilePostAsync(FilePost? post)
         {
-            FilePost existingPost = (FilePost) await _db.Posts.FirstOrDefaultAsync(p => p.PostId == post.PostId);
+            if (post == null)
+                throw new ArgumentNullException(nameof(post));
+
+            var existingPost = (FilePost?) await _db.Posts.FirstOrDefaultAsync(p => p.PostId == post.PostId);
 
             if (existingPost != null)
             {
