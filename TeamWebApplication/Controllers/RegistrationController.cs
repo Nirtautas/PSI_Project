@@ -4,22 +4,23 @@ using TeamWebApplication.Data.Database;
 using TeamWebApplication.Data.ExceptionLogger;
 using TeamWebApplication.Data.MailService;
 using TeamWebApplication.Models;
+using TeamWebApplication.Repositories.Interfaces;
 
 namespace TeamWebApplication.Controllers
 {
     public class RegistrationController : Controller
     {
-        private readonly ApplicationDBContext _db;
+        private readonly IUsersRepository _usersRepository;
         private readonly IDataLogger _logger;
         private readonly IMailService _mailService;
 
         public event EventHandler<RegistrationEventArgs> Registration;
 
-        public RegistrationController(ApplicationDBContext db, IDataLogger logger, IMailService mailService)
+        public RegistrationController(IDataLogger logger, IMailService mailService, IUsersRepository usersRepository)
         {
-            _db = db;
             _logger = logger;
             _mailService = mailService;
+            _usersRepository = usersRepository;
             Registration += _mailService.OnRegistration;
         }
 
@@ -30,33 +31,30 @@ namespace TeamWebApplication.Controllers
         }
 
         [HttpPost]
-        public IActionResult Login(User user)
+        public async Task<IActionResult> Login(User user)
         {
             try
             {
-                if (!_db.Users.Any(tuser => tuser.Email == user.Email))
+                if (!await _usersRepository.UserWithSuchEmailExistsAsync(user.Email))
                 {
-                    _db.Users.Add(user);
-                    _db.SaveChanges();
-                    user.UserId = _db.Users.Single(tuser => tuser.Email == user.Email).UserId;
-
-                    OnUserRegistration(user);
+                    await _usersRepository.InsertUserAsync(user);
+                    var placedUser = await _usersRepository.GetUserByEmailAsync(user.Email);
+                    OnUserRegistration(placedUser);
                     return RedirectToAction("Index", "Login");
                 }
                 return RedirectToAction("Index", "Login");
             }
             catch (Exception ex)
             {
-                _db.Users.Remove(user);
-                _db.SaveChanges();
+                await _usersRepository.DeleteUserAsync(user);
                 _logger.Log(ex);
                 throw;
             }
         }
 
-        protected virtual void OnUserRegistration(User user)
+        protected virtual void OnUserRegistration(User? user)
         {
-            if (Registration != null)
+            if (Registration != null && user != null)
             {
                 _logger.Log(DateTime.Now + $": Registered {user.Name} with an id of {user.UserId}.");
                 Registration.Invoke(this, new RegistrationEventArgs(user));

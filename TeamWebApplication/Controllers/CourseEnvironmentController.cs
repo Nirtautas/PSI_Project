@@ -6,43 +6,40 @@ using TeamWebApplication.Data.Exceptions;
 using TeamWebApplication.Data.ExtensionMethods;
 using TeamWebApplication.Models;
 using TeamWebApplication.Models.Enums;
-using TeamWebApplication.Controllers.ControllerHandlers;
+using TeamWebApplication.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace TeamWebApplication.Controllers
 {
     public class CourseEnvironmentController : Controller
     {
-        private readonly ApplicationDBContext _db;
+        private readonly IUsersRepository _usersRepository;
+        private readonly IPostsRepository _postsRepository;
+        private readonly ICommentsRepository _commentsRepository;
         private readonly IDataLogger _logger;
-        public CourseEnvironmentController(ApplicationDBContext db, IDataLogger logger)
+
+        public CourseEnvironmentController(IDataLogger logger, IUsersRepository usersRepository,
+            IPostsRepository postsRepository, ICommentsRepository commentsRepository)
         {
-            _db = db;
             _logger = logger;
+            _usersRepository = usersRepository;
+            _postsRepository = postsRepository;
+            _commentsRepository = commentsRepository;
         }
 
-        public IActionResult Index(int courseId)
+        public async Task<IActionResult> Index(int courseId)
         {
             try
             {
-                int? loggedInUserId = HttpContext.Session.GetInt32Ex("LoggedInUserId");
+                var loggedInUserId = HttpContext.Session.GetInt32Ex("LoggedInUserId");
                 HttpContext.Session.SetInt32("CurrentCourseId", courseId);
-                _db.SaveChanges();
-                IEnumerable<Post> coursePosts = (
-                    from post in _db.Posts
-                    where post.CourseId == courseId
-                    select post
-                ).ToList();
+
+                var coursePosts = await _postsRepository.GetPostsByCourseAsync(courseId);
 
                 Comment comment1 = new();
-                IEnumerable<Comment> courseComments = (
-                    from comment in _db.Comments
-                    where comment.CourseId == courseId
-                    orderby comment.CreationTime descending
-                    select comment
-                ).ToList();
                 comment1.CourseId = courseId;
-
-                User currentUser = _db.Users.Find(loggedInUserId);
+                var courseComments = await _commentsRepository.GetCommentsByCourseIdAsync(courseId);
+                var currentUser = await _usersRepository.GetUserByIdAsync(loggedInUserId);
 
                 var viewModel = new CourseAndComment
                 {
@@ -66,29 +63,19 @@ namespace TeamWebApplication.Controllers
             }
         }
 
-        public IActionResult TeacherVisitorIndex(int courseId)
+        public async Task<IActionResult> TeacherVisitorIndex(int courseId)
         {
             try
             {
-                int? loggedInUserId = HttpContext.Session.GetInt32Ex("LoggedInUserId");
-                HttpContext.Session.GetInt32Ex("LoggedInUserId");
+                var loggedInUserId = HttpContext.Session.GetInt32Ex("LoggedInUserId");
                 HttpContext.Session.SetInt32("CurrentCourseId", courseId);
-                _db.SaveChanges();
-                IEnumerable<Post> coursePosts = (
-                    from post in _db.Posts
-                    where post.CourseId == courseId
-                    select post
-                ).ToList();
+
+                var coursePosts = await _postsRepository.GetPostsByCourseAsync(courseId);
 
                 Comment comment1 = new();
-                IEnumerable<Comment> courseComments = (
-                    from comment in _db.Comments
-                    where comment.CourseId == courseId
-                    orderby comment.CreationTime descending
-                    select comment
-                ).ToList();
                 comment1.CourseId = courseId;
-                User currentUser = _db.Users.Find(loggedInUserId);
+                var courseComments = await _commentsRepository.GetCommentsByCourseIdAsync(courseId);
+                var currentUser = await _usersRepository.GetUserByIdAsync(loggedInUserId);
 
                 var viewModel = new CourseAndComment
                 {
@@ -113,20 +100,19 @@ namespace TeamWebApplication.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddComment(int courseId, Comment comment)
+        public async Task<IActionResult> AddComment(int courseId, Comment comment)
         {
             try
             {
-                int? loggedInUserId = HttpContext.Session.GetInt32Ex("LoggedInUserId");
-                var user = _db.Users.Find(loggedInUserId);
+                var loggedInUserId = HttpContext.Session.GetInt32Ex("LoggedInUserId");
+                var user = await _usersRepository.GetUserByIdAsync(loggedInUserId);
 
                 comment.CourseId = courseId;
                 comment.UserId = user.UserId;
                 comment.CommentatorName = user.Name;
                 comment.CommentatorSurname = user.Surname;
 
-                _db.Comments.Add(comment);
-                _db.SaveChanges();
+                await _commentsRepository.InsertCommentAsync(comment);
                 return RedirectToAction("Index", new { courseId });
             }
             catch (SessionCredentialException ex)
@@ -142,18 +128,20 @@ namespace TeamWebApplication.Controllers
         }
 
         [HttpPost]
-        public IActionResult EditComment(int courseId, int commentId, String userComment)
+        public async Task<IActionResult> EditComment(int courseId, int commentId, String userComment)
         {
             try
             {
-                var originalComment = _db.Comments.Find(commentId);
-                if (originalComment.UserComment != userComment)
+                var originalComment = await _commentsRepository.GetCommentByIdAsync(commentId);
+                if (originalComment != null)
                 {
-                    originalComment.CreationTime = DateTime.Now;
+                    if (originalComment.UserComment != userComment)
+                    {
+                        originalComment.CreationTime = DateTime.Now;
+                    }
+                    originalComment.UserComment = userComment;
+                    await _commentsRepository.UpdateCommentAsync(originalComment);
                 }
-                originalComment.UserComment = userComment;
-                _db.Comments.Update(originalComment);
-                _db.SaveChanges();
                 return RedirectToAction("Index", new { courseId });
             }
             catch (Exception ex)
@@ -164,14 +152,12 @@ namespace TeamWebApplication.Controllers
         }
 
         [HttpPost]
-        public IActionResult Delete(int courseId, int commentId)
+        public async Task<IActionResult> Delete(int courseId, int commentId)
         {
             try
             {
-                var comment = _db.Comments.Find(commentId);
-
-                _db.Remove(comment);
-                _db.SaveChanges();
+                var comment = await _commentsRepository.GetCommentByIdAsync(commentId);
+                await _commentsRepository.DeleteCommentAsync(comment);
                 return RedirectToAction("Index", new { courseId });
             }
             catch (Exception ex)
@@ -186,9 +172,9 @@ namespace TeamWebApplication.Controllers
             try
             {
                 HttpContext.Session.GetInt32Ex("LoggedInUserId");
-                int? currentCourseId = HttpContext.Session.GetInt32Ex("CurrentCourseId");
+                var currentCourseId = HttpContext.Session.GetInt32Ex("CurrentCourseId");
                 Post post = new TextPost();
-                post.CourseId = (int)currentCourseId;
+                post.CourseId = currentCourseId;
                 return View(post);
             }
             catch (SessionCredentialException ex)
@@ -199,13 +185,13 @@ namespace TeamWebApplication.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateTextPost(TextPost post, int courseId)
+        public async Task<IActionResult> CreateTextPost(TextPost post, int courseId)
         {
             try
             {
                 post.PostType = PostType.Text;
                 post.CourseId = courseId;
-                PostHandler.AddPost(_db, post);
+                await _postsRepository.InsertPostAsync(post);
 
                 return RedirectToAction("Index", new { courseId });
             }
@@ -216,13 +202,13 @@ namespace TeamWebApplication.Controllers
             }
         }
 
-        public IActionResult EditTextPost(int postId)
+        public async Task<IActionResult> EditTextPost(int postId)
         {
             try
             {
                 HttpContext.Session.GetInt32Ex("LoggedInUserId");
                 HttpContext.Session.GetInt32Ex("CurrentCourseId");
-                TextPost? post = (TextPost?)_db.Posts.Find(postId);
+                var post = (TextPost?) await _postsRepository.GetPostByIdAsync(postId);
                 return View(post);
             }
             catch (SessionCredentialException ex)
@@ -233,11 +219,11 @@ namespace TeamWebApplication.Controllers
         }
 
         [HttpPost]
-        public IActionResult EditTextPost(TextPost post, int courseId)
+        public async Task<IActionResult> EditTextPost(TextPost post, int courseId)
         {
             try
             {
-                TextPost? originalPost = (TextPost?)_db.Posts.Find(post.PostId);
+                var originalPost = (TextPost?) await _postsRepository.GetPostByIdAsync(post.PostId);
                 if (originalPost.TextContent != post.TextContent || originalPost.Name != post.Name)
                 {
                     originalPost.CreationDate = DateTime.Now;
@@ -247,8 +233,7 @@ namespace TeamWebApplication.Controllers
                 originalPost.PostType = post.PostType;
                 originalPost.TextContent = post.TextContent;
 
-                _db.Posts.Update(originalPost);
-                _db.SaveChanges();
+                await _postsRepository.UpdateTextPostAsync(originalPost);
                 return RedirectToAction("Index", new { courseId });
             }
             catch (Exception ex)
@@ -258,13 +243,13 @@ namespace TeamWebApplication.Controllers
             }
         }
 
-        public IActionResult DeleteTextPost(int postId)
+        public async Task<IActionResult> DeleteTextPost(int postId)
         {
             try
             {
                 HttpContext.Session.GetInt32Ex("LoggedInUserId");
                 HttpContext.Session.GetInt32Ex("CurrentCourseId");
-                var post = _db.Posts.Find(postId);
+                var post = await _postsRepository.GetPostByIdAsync(postId);
                 return View(post);
             }
             catch (SessionCredentialException ex)
@@ -275,13 +260,12 @@ namespace TeamWebApplication.Controllers
         }
 
         [HttpPost]
-        public IActionResult DeleteTextPost(TextPost post, int courseId)
+        public async Task<IActionResult> DeleteTextPost(TextPost post, int courseId)
         {
             try
             {
-                TextPost? originalPost = (TextPost?)_db.Posts.Find(post.PostId);
-                _db.Posts.Remove(originalPost);
-                _db.SaveChanges();
+                var originalPost = (TextPost?) await _postsRepository.GetPostByIdAsync(post.PostId);
+                await _postsRepository.DeletePostAsync(originalPost);
                 return RedirectToAction("Index", new { courseId });
             }
             catch (Exception ex)
@@ -296,9 +280,9 @@ namespace TeamWebApplication.Controllers
             try
             {
                 HttpContext.Session.GetInt32Ex("LoggedInUserId");
-                int? currentCourseId = HttpContext.Session.GetInt32Ex("CurrentCourseId");
+                var currentCourseId = HttpContext.Session.GetInt32Ex("CurrentCourseId");
                 Post post = new FilePost();
-                post.CourseId = (int)currentCourseId;
+                post.CourseId = currentCourseId;
                 return View(post);
             }
             catch (SessionCredentialException ex)
@@ -336,8 +320,7 @@ namespace TeamWebApplication.Controllers
                         post.FileName = fileName;
 
                         await fileCopy;
-
-                        PostHandler.AddPost(_db, post);
+                        await _postsRepository.InsertPostAsync(post);
                     }
                 }
                 return RedirectToAction("Index", new { courseId });
@@ -353,15 +336,8 @@ namespace TeamWebApplication.Controllers
         {
             try
             {
-                Post? originalPost = (FilePost?)_db.Posts.Find(post.PostId);
-
-                string? fileName = (
-                    from p in _db.Posts
-                    where p.PostId == originalPost.PostId
-                    from filePost in _db.Posts.OfType<FilePost>()
-                    where filePost.PostId == p.PostId
-                    select filePost.FileName
-                ).FirstOrDefault();
+                var originalPost = (FilePost?) await _postsRepository.GetPostByIdAsync(post.PostId);
+                var fileName = originalPost.FileName;
 
                 var filePath = Path.Combine("wwwroot/uploads", fileName);
 
@@ -378,13 +354,13 @@ namespace TeamWebApplication.Controllers
             }
         }
 
-        public IActionResult DeleteFilePost(int postId)
+        public async Task<IActionResult> DeleteFilePost(int postId)
         {
             try
             {
                 HttpContext.Session.GetInt32Ex("LoggedInUserId");
                 HttpContext.Session.GetInt32Ex("CurrentCourseId");
-                var post = _db.Posts.Find(postId);
+                var post = await _postsRepository.GetPostByIdAsync(postId);
                 return View(post);
             }
             catch (SessionCredentialException ex)
@@ -395,18 +371,17 @@ namespace TeamWebApplication.Controllers
         }
 
         [HttpPost]
-        public IActionResult DeleteFilePost(FilePost post, int courseId)
+        public async Task<IActionResult> DeleteFilePost(FilePost post, int courseId)
         {
             try
             {
-                FilePost? originalPost = (FilePost?)_db.Posts.Find(post.PostId);
+                var originalPost = (FilePost?) await _postsRepository.GetPostByIdAsync(post.PostId);
                 var filePath = Path.Combine("wwwroot/uploads", originalPost.FileName);
                 if (System.IO.File.Exists(filePath))
                 {
                     System.IO.File.Delete(filePath);
                 }
-                _db.Posts.Remove(originalPost);
-                _db.SaveChanges();
+                await _postsRepository.DeletePostAsync(post);
                 return RedirectToAction("Index", new { courseId });
             }
             catch (Exception ex)

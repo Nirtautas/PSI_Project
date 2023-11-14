@@ -8,12 +8,10 @@ namespace TeamWebApplication.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ApplicationDBContext _db;
         private readonly IDataLogger _logger;
 
         public HomeController(ApplicationDBContext db, IDataLogger logger)
         {
-            _db = db;
             _logger = logger;
         }
 
@@ -22,7 +20,6 @@ namespace TeamWebApplication.Controllers
             try
             {
                 HttpContext.Session.Clear();
-                _db.SaveChanges();
                 return View();
             }
             catch (Exception ex)

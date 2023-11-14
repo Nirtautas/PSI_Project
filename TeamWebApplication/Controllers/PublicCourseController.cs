@@ -4,32 +4,32 @@ using TeamWebApplication.Data.ExceptionLogger;
 using TeamWebApplication.Data.Exceptions;
 using TeamWebApplication.Data.ExtensionMethods;
 using TeamWebApplication.Models;
+using TeamWebApplication.Repositories.Interfaces;
 
 namespace TeamWebApplication.Controllers
 {
     public class PublicCourseController : Controller
     {
-        private readonly ApplicationDBContext _db;
         private readonly IDataLogger _logger;
+        private readonly IUsersRepository _usersRepository;
+        private readonly ICoursesRepository _coursesRepository;
 
-        public PublicCourseController(ApplicationDBContext db, IDataLogger logger)
+        public PublicCourseController(IDataLogger logger, IUsersRepository usersRepository, ICoursesRepository coursesRepository)
         {
-            _db = db;
             _logger = logger;
+            _usersRepository = usersRepository;
+            _coursesRepository = coursesRepository;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             try
             {
-				var currentUser = _db.Users.Find(HttpContext.Session.GetInt32Ex("LoggedInUserId"));
+                var loggedInUserId = HttpContext.Session.GetInt32Ex("LoggedInUserId");
+                var currentUser = await _usersRepository.GetUserByIdAsync(loggedInUserId);
 
-                string searchString = Request.Query["searchString"];
-                IEnumerable<Course> publicCourses = (
-                    from course in _db.Courses
-                    where course.IsPublic == true
-                    select course
-                );
+                var searchString = Request.Query["searchString"];
+                var publicCourses = await _coursesRepository.GetPublicCoursesAsync();
                 if (!String.IsNullOrEmpty(searchString))
                 {
                     publicCourses = publicCourses.Where(course => course.Name!.Contains(searchString, StringComparison.InvariantCultureIgnoreCase)).ToList();
@@ -55,18 +55,14 @@ namespace TeamWebApplication.Controllers
 			}
 		}
 
-        public IActionResult TeacherIndex()
+        public async Task<IActionResult> TeacherIndex()
         {
             try
             {
                 HttpContext.Session.GetInt32Ex("LoggedInUserId");
 
-                string searchString = Request.Query["searchString"];
-                IEnumerable<Course> publicCourses = (
-                    from course in _db.Courses
-                    where course.IsPublic == true
-                    select course
-                );
+                var searchString = Request.Query["searchString"];
+                IEnumerable<Course> publicCourses = await _coursesRepository.GetPublicCoursesAsync();
                 if (!String.IsNullOrEmpty(searchString))
                 {
                     publicCourses = publicCourses.Where(course => course.Name!.Contains(searchString, StringComparison.InvariantCultureIgnoreCase)).ToList();
