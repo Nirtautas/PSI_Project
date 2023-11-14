@@ -327,6 +327,8 @@ namespace TeamWebApplication.Controllers
             }
         }
 
+       /* 
+        * File editing implementation will be finished in the future *
         public async Task<IActionResult> EditFilePost(int postId)
         {
             try
@@ -342,14 +344,22 @@ namespace TeamWebApplication.Controllers
                 return RedirectToAction("Index", "Home");
             }
         }
-        public async Task<IActionResult> EditFilePost(FilePost post, int courseId)
+
+        [HttpPost]
+        public async Task<IActionResult> EditFilePost(FilePost post, int courseId, IFormFile file)
         {
             try
             {
                 var originalPost = (FilePost?) await _postsRepository.GetPostByIdAsync(post.PostId);
-                if (originalPost != null && (originalPost.FileName != post.FileName || originalPost.Name != post.Name))
+                if (originalPost!= null && (originalPost.FileName != post.FileName || originalPost.Name != post.Name))
                 {
-                    originalPost.FileName = post.FileName;
+                    var fileName = Path.GetFileName(file.FileName);
+                    var filePath = Path.Combine("wwwroot/uploads", fileName);
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await file.CopyToAsync(stream);
+                    }
+                    originalPost.FileName = fileName;
                     await _postsRepository.UpdatePostAsync(originalPost, post);
                 }
                 return RedirectToAction("Index", new { courseId });
@@ -359,7 +369,7 @@ namespace TeamWebApplication.Controllers
                 _logger.Log(ex);
                 throw;
             }
-        }
+        }*/
 
         public async Task<IActionResult> DownloadFile(IFormFile file, FilePost post)
         {
