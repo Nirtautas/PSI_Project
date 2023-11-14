@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TeamWebApplication.Data.Database;
 using TeamWebApplication.Models;
+using TeamWebApplication.Models.Enums;
 using TeamWebApplication.Repositories.Interfaces;
 
 namespace TeamWebApplication.Repositories
@@ -62,48 +63,16 @@ namespace TeamWebApplication.Repositories
             await SaveAsync();
         }
 
-        public async Task UpdateTextPostAsync(TextPost? post)
-        {
-            if(post == null)
-                throw new ArgumentNullException(nameof(post));
-
-            var existingPost = (TextPost?) await _db.Posts.FirstOrDefaultAsync(p => p.PostId == post.PostId);
-
-            if (existingPost != null)
-            {
-                if (existingPost.TextContent != post.TextContent || existingPost.Name != post.Name)
-                {
-                    existingPost.CreationDate = DateTime.Now;
-                }
-                existingPost.Name = post.Name;
-                existingPost.IsVisible = post.IsVisible;
-                existingPost.PostType = post.PostType;
-                existingPost.TextContent = post.TextContent;
-
-                await SaveAsync();
-            }
-        }
-
-        public async Task UpdateFilePostAsync(FilePost? post)
+        public async Task UpdatePostAsync<T>(T originalPost, T post) where T : Post?
         {
             if (post == null)
                 throw new ArgumentNullException(nameof(post));
 
-            var existingPost = (FilePost?) await _db.Posts.FirstOrDefaultAsync(p => p.PostId == post.PostId);
-
-            if (existingPost != null)
-            {
-                if (existingPost.Name != post.Name)
-                {
-                    existingPost.CreationDate = DateTime.Now;
-                }
-                existingPost.Name = post.Name;
-                existingPost.IsVisible = post.IsVisible;
-                existingPost.PostType = post.PostType;
-                existingPost.FileName = post.FileName;
-
-                await SaveAsync();
-            }
+            originalPost.CreationDate = DateTime.Now;
+            originalPost.Name = post.Name;
+            originalPost.IsVisible = post.IsVisible;
+            originalPost.PostType = post.PostType;
+            await SaveAsync();
         }
 
         public async Task SaveAsync()

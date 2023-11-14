@@ -9,8 +9,7 @@ namespace TeamWebApplication.Repositories.Interfaces
         Task InsertPostAsync<T>(T post) where T : Post?;
         Task DeletePostByIdAsync(int? id);
         Task DeletePostAsync<T>(T post) where T : Post?;
-        Task UpdateTextPostAsync(TextPost? post);
-        Task UpdateFilePostAsync(FilePost? post);
+        Task UpdatePostAsync<T>(T originalPost, T post) where T : Post?;
         Task SaveAsync();
     }
 }

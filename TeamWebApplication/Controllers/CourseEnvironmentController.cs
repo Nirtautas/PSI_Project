@@ -224,16 +224,11 @@ namespace TeamWebApplication.Controllers
             try
             {
                 var originalPost = (TextPost?) await _postsRepository.GetPostByIdAsync(post.PostId);
-                if (originalPost.TextContent != post.TextContent || originalPost.Name != post.Name)
+                if (originalPost != null && (originalPost.TextContent != post.TextContent || originalPost.Name != post.Name))
                 {
-                    originalPost.CreationDate = DateTime.Now;
+                    originalPost.TextContent = post.TextContent;
+                    await _postsRepository.UpdatePostAsync(originalPost, post);
                 }
-                originalPost.Name = post.Name;
-                originalPost.IsVisible = post.IsVisible;
-                originalPost.PostType = post.PostType;
-                originalPost.TextContent = post.TextContent;
-
-                await _postsRepository.UpdateTextPostAsync(originalPost);
                 return RedirectToAction("Index", new { courseId });
             }
             catch (Exception ex)
@@ -331,7 +326,7 @@ namespace TeamWebApplication.Controllers
                 throw;
             }
         }
-
+        
         public async Task<IActionResult> DownloadFile(IFormFile file, FilePost post)
         {
             try
