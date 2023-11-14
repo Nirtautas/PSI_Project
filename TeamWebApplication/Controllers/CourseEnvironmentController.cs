@@ -326,7 +326,41 @@ namespace TeamWebApplication.Controllers
                 throw;
             }
         }
-        
+
+        public async Task<IActionResult> EditFilePost(int postId)
+        {
+            try
+            {
+                HttpContext.Session.GetInt32Ex("LoggedInUserId");
+                HttpContext.Session.GetInt32Ex("CurrentCourseId");
+                var post = (FilePost?) await _postsRepository.GetPostByIdAsync(postId);
+                return View(post);
+            }
+            catch (SessionCredentialException ex)
+            {
+                _logger.Log(ex);
+                return RedirectToAction("Index", "Home");
+            }
+        }
+        public async Task<IActionResult> EditFilePost(FilePost post, int courseId)
+        {
+            try
+            {
+                var originalPost = (FilePost?) await _postsRepository.GetPostByIdAsync(post.PostId);
+                if (originalPost != null && (originalPost.FileName != post.FileName || originalPost.Name != post.Name))
+                {
+                    originalPost.FileName = post.FileName;
+                    await _postsRepository.UpdatePostAsync(originalPost, post);
+                }
+                return RedirectToAction("Index", new { courseId });
+            }
+            catch (Exception ex)
+            {
+                _logger.Log(ex);
+                throw;
+            }
+        }
+
         public async Task<IActionResult> DownloadFile(IFormFile file, FilePost post)
         {
             try
