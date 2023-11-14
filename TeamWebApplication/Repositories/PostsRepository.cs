@@ -1,50 +1,50 @@
-﻿using TeamWebApplication.Controllers.ControllerHandlers;
+﻿using Microsoft.EntityFrameworkCore;
+using TeamWebApplication.Controllers.ControllerHandlers;
 using TeamWebApplication.Data.Database;
-using TeamWebApplication.Data.ExceptionLogger;
-using TeamWebApplication.Data.MailService;
 using TeamWebApplication.Models;
+using TeamWebApplication.Repositories.Interfaces;
 
 namespace TeamWebApplication.Repositories
 {
-    public class PostsRepository
+    public class PostsRepository : IPostsRepository
     {
         private readonly ApplicationDBContext _db;
         public PostsRepository(ApplicationDBContext db)
         {
             _db = db;
         }
-        public IEnumerable<Post> GetPostsByCourse(int courseId)
+        public async Task<IEnumerable<Post>> GetPostsByCourseAsync(int courseId)
         {
-            return _db.Posts
+            return await _db.Posts
                 .Where(p => p.CourseId == courseId)
-                .ToList();
+                .ToListAsync();
         }
 
-        public Post GetPostById(int postId)
+        public async Task<Post> GetPostByIdAsync(int postId)
         {
-            return _db.Posts.FirstOrDefault(p => p.PostId == postId);
+            return await _db.Posts.FirstOrDefaultAsync(p => p.PostId == postId);
         }
 
-        public void InsertPost(Post post)
+        public async Task InsertPostAsync(Post post)
         {
-            PostHandler.AddPost(_db, post);
-            Save();
+            await PostHandler.AddPostAsync(_db, post);
+            await SaveAsync();
         }
 
-        public void DeletePostById(int postId)
+        public async Task DeletePostByIdAsync(int postId)
         {
-            Post post = _db.Posts.FirstOrDefault(p => p.PostId == postId);
+            Post post = await _db.Posts.FirstOrDefaultAsync(p => p.PostId == postId);
 
             if (post != null)
             {
                 _db.Posts.Remove(post);
-                Save();
+                await SaveAsync();
             }
         }
 
-        public void UpdateTextPost(TextPost post)
+        public async Task UpdateTextPostAsync(TextPost post)
         {
-            TextPost existingPost = (TextPost)_db.Posts.FirstOrDefault(p => p.PostId == post.PostId);
+            TextPost existingPost = (TextPost) await _db.Posts.FirstOrDefaultAsync(p => p.PostId == post.PostId);
 
             if (existingPost != null)
             {
@@ -57,13 +57,13 @@ namespace TeamWebApplication.Repositories
                 existingPost.PostType = post.PostType;
                 existingPost.TextContent = post.TextContent;
 
-                Save();
+                await SaveAsync();
             }
         }
 
-        public void UpdateFilePost(FilePost post)
+        public async Task UpdateFilePostAsync(FilePost post)
         {
-            FilePost existingPost = (FilePost)_db.Posts.FirstOrDefault(p => p.PostId == post.PostId);
+            FilePost existingPost = (FilePost) await _db.Posts.FirstOrDefaultAsync(p => p.PostId == post.PostId);
 
             if (existingPost != null)
             {
@@ -76,13 +76,13 @@ namespace TeamWebApplication.Repositories
                 existingPost.PostType = post.PostType;
                 existingPost.FileName = post.FileName;
 
-                Save();
+                await SaveAsync();
             }
         }
 
-        public void Save()
+        public async Task SaveAsync()
         {
-            _db.SaveChanges();
+            await _db.SaveChangesAsync();
         }
 
     }

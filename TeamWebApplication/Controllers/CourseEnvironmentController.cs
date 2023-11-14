@@ -199,13 +199,13 @@ namespace TeamWebApplication.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateTextPost(TextPost post, int courseId)
+        public async Task<IActionResult> CreateTextPost(TextPost post, int courseId)
         {
             try
             {
                 post.PostType = PostType.Text;
                 post.CourseId = courseId;
-                PostHandler.AddPost(_db, post);
+                await PostHandler.AddPostAsync(_db, post);
 
                 return RedirectToAction("Index", new { courseId });
             }
@@ -336,8 +336,7 @@ namespace TeamWebApplication.Controllers
                         post.FileName = fileName;
 
                         await fileCopy;
-
-                        PostHandler.AddPost(_db, post);
+                        await PostHandler.AddPostAsync(_db, post);
                     }
                 }
                 return RedirectToAction("Index", new { courseId });

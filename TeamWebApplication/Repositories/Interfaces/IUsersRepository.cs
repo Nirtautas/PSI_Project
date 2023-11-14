@@ -4,10 +4,10 @@ namespace TeamWebApplication.Repositories.Interfaces
 {
     public interface IUsersRepository
     {
-        User GetUserById(int id);
-        void InsertUser(Post post);
-        void DeleteUserById(int id);
-        void UpdateUser(User user);
-        void Save();
+        Task<User> GetUserByIdAsync(int id);
+        Task InsertUserAsync(User user);
+        Task DeleteUserByIdAsync(int id);
+        Task UpdateUserAsync(User user);
+        Task SaveAsync();
     }
 }

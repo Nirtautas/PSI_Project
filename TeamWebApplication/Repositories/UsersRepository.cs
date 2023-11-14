@@ -1,11 +1,11 @@
-﻿using TeamWebApplication.Data.Database;
-using TeamWebApplication.Data.ExceptionLogger;
-using TeamWebApplication.Data.MailService;
+﻿using Microsoft.EntityFrameworkCore;
+using TeamWebApplication.Data.Database;
 using TeamWebApplication.Models;
+using TeamWebApplication.Repositories.Interfaces;
 
 namespace TeamWebApplication.Repositories
 {
-    public class UsersRepository
+    public class UsersRepository : IUsersRepository
     {
         private readonly ApplicationDBContext _db;
         public UsersRepository(ApplicationDBContext db)
@@ -13,31 +13,31 @@ namespace TeamWebApplication.Repositories
             _db = db;
         }
 
-        public User GetUserById(int userId)
+        public async Task<User> GetUserByIdAsync(int userId)
         {
-            return _db.Users.FirstOrDefault(u => u.UserId == userId);
+            return await _db.Users.FirstOrDefaultAsync(u => u.UserId == userId);
         }
 
-        public void InsertUser(User user)
+        public async Task InsertUserAsync(User user)
         {
-            _db.Users.Add(user);
-            Save();
+            await _db.Users.AddAsync(user);
+            await SaveAsync();
         }
 
-        public void DeleteUserById(int userId)
+        public async Task DeleteUserByIdAsync(int userId)
         {
-            User user = _db.Users.FirstOrDefault(u => u.UserId == userId);
+            User user = await _db.Users.FirstOrDefaultAsync(u => u.UserId == userId);
 
             if (user != null)
             {
                 _db.Users.Remove(user);
-                Save();
+                await SaveAsync();
             }
         }
 
-        public void UpdateUser(User user)
+        public async Task UpdateUserAsync(User user)
         {
-            var existingUser = _db.Users.FirstOrDefault(u => u.UserId == user.UserId);
+            var existingUser = await _db.Users.FirstOrDefaultAsync(u => u.UserId == user.UserId);
 
             if (existingUser != null)
             {
@@ -49,14 +49,13 @@ namespace TeamWebApplication.Repositories
                 existingUser.Faculty = user.Faculty;
                 existingUser.Specialization = user.Specialization;
 
-                Save();
+                await SaveAsync();
             }
         }
 
-        public void Save()
+        public async Task SaveAsync()
         {
-            _db.SaveChanges();
+            await _db.SaveChangesAsync();
         }
-
     }
 }

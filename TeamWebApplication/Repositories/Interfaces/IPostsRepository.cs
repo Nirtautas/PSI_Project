@@ -4,11 +4,12 @@ namespace TeamWebApplication.Repositories.Interfaces
 {
     public interface IPostsRepository
     {
-        IEnumerable<Post> GetPostsByCourse(int id);
-        Post GetPostById(int id);
-        void InsertPost(Post post);
-        void DeletePostById(int id);
-        void UpdatePost(Comment comment);
-        void Save();
+        Task<IEnumerable<Post>> GetPostsByCourseAsync(int id);
+        Task<Post> GetPostByIdAsync(int id);
+        Task InsertPostAsync(Post post);
+        Task DeletePostByIdAsync(int id);
+        Task UpdateTextPostAsync(TextPost post);
+        Task UpdateFilePostAsync(FilePost post);
+        Task SaveAsync();
     }
 }

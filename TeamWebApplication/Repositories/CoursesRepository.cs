@@ -1,6 +1,5 @@
-﻿using TeamWebApplication.Data.Database;
-using TeamWebApplication.Data.ExceptionLogger;
-using TeamWebApplication.Data.MailService;
+﻿using Microsoft.EntityFrameworkCore;
+using TeamWebApplication.Data.Database;
 using TeamWebApplication.Models;
 using TeamWebApplication.Repositories.Interfaces;
 
@@ -14,47 +13,47 @@ namespace TeamWebApplication.Repositories
             _db = db;
         }
 
-        public void DeleteCourseById(int id)
+        public async Task DeleteCourseByIdAsync(int id)
         {
-            var courseToDelete = _db.Courses.Find(id);
+            var courseToDelete = await _db.Courses.FindAsync(id);
 
             if (courseToDelete != null)
             {
                 _db.Courses.Remove(courseToDelete);
-                Save();
+                await SaveAsync();
             }
         }
 
-        public Course GetCourseById(int id)
+        public async Task<Course> GetCourseByIdAsync(int id)
         {
-            return _db.Courses.Find(id);
+            return await _db.Courses.FindAsync(id);
         }
 
-        public IEnumerable<Course> GetCourses()
+        public async Task<IEnumerable<Course>> GetCoursesAsync()
         {
-            return _db.Courses.ToList();
+            return await _db.Courses.ToListAsync();
         }
 
-        public void InsertCourse(Course course)
+        public async Task InsertCourseAsync(Course course)
         {
-            _db.Courses.Add(course);
-            Save();
+            await _db.Courses.AddAsync(course);
+            await SaveAsync();
         }
 
-        public void Save()
+        public async Task SaveAsync()
         {
-             _db.SaveChanges();
+             await _db.SaveChangesAsync();
         }
 
-        public void UpdateCourse(Course course)
+        public async Task UpdateCourseAsync(Course course)
         {
-            Course? originalCourse = _db.Courses.Find(course.CourseId);
+            Course? originalCourse = await _db.Courses.FindAsync(course.CourseId);
             originalCourse.Name = course.Name;
             originalCourse.IsVisible = course.IsVisible;
             originalCourse.IsPublic = course.IsPublic;
             originalCourse.Description = course.Description;
             _db.Update(originalCourse);
-            _db.SaveChanges();
+            await SaveAsync();
         }
     }
 }

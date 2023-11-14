@@ -4,11 +4,11 @@ namespace TeamWebApplication.Repositories.Interfaces
 {
     public interface ICoursesRepository
     {
-        IEnumerable<Course> GetCourses();
-        Course GetCourseById(int id);
-        void InsertCourse(Course course);
-        void DeleteCourseById(int id);
-        void UpdateCourse(Course course);
-        void Save();
+        Task<IEnumerable<Course>> GetCoursesAsync();
+        Task<Course> GetCourseByIdAsync(int id);
+        Task InsertCourseAsync(Course course);
+        Task DeleteCourseByIdAsync(int id);
+        Task UpdateCourseAsync(Course course);
+        Task SaveAsync();
     }
 }
