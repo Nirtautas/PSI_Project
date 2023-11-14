@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NuGet.Protocol.Plugins;
+using System.Reflection.Metadata;
 using TeamWebApplication.Data.Database;
 using TeamWebApplication.Models;
 using TeamWebApplication.Repositories.Interfaces;
@@ -21,7 +22,7 @@ namespace TeamWebApplication.Repositories
             return await _db.Users.FirstOrDefaultAsync(u => u.UserId == userId);
         }
 
-        public async Task<IEnumerable<User>> GetUsersInCourse(int? courseId)
+        public async Task<IEnumerable<User>> GetUsersInCourseAsync(int? courseId)
         {
             if (courseId == null)
                 throw new ArgumentNullException(nameof(courseId));
@@ -37,13 +38,27 @@ namespace TeamWebApplication.Repositories
             ).ToListAsync();
         }
 
-        public async Task<User?> GetUserByCredentials(int? userId, string? password)
+        public async Task<User?> GetUserByCredentialsAsync(int? userId, string? password)
         {
             if (userId == null)
                 throw new ArgumentNullException(nameof(userId));
             if (password == null)
                 throw new ArgumentNullException(nameof(password));
             return await _db.Users.FirstOrDefaultAsync(user => user.UserId == userId && user.Password == password);
+        }
+
+        public async Task<bool> UserWithSuchEmailExistsAsync(string? email)
+        {
+            if (email == null)
+                throw new ArgumentNullException(nameof(email));
+            return await _db.Users.AnyAsync(tuser => tuser.Email == email);
+        }
+
+        public async Task<User?> GetUserByEmailAsync(string? email)
+        {
+            if (email == null)
+                throw new ArgumentNullException(nameof(email));
+            return await _db.Users.SingleOrDefaultAsync(tuser => tuser.Email == email);
         }
 
         public async Task InsertUserAsync(User user)
@@ -61,6 +76,15 @@ namespace TeamWebApplication.Repositories
                 _db.Users.Remove(user);
                 await SaveAsync();
             }
+        }
+
+        public async Task DeleteUserAsync(User? user)
+        {
+            if (user == null)
+                throw new ArgumentNullException(nameof(user));
+
+            _db.Users.Remove(user);
+            await SaveAsync();
         }
 
         public async Task UpdateUserAsync(User user)

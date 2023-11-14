@@ -282,7 +282,7 @@ namespace TeamWebApplication.Controllers
             {
                 HttpContext.Session.SetInt32("CurrentCourseId", courseId);
                 int? currentCourseId = HttpContext.Session.GetInt32Ex("CurrentCourseId");
-                var userInCourseList = await _usersRepository.GetUsersInCourse(currentCourseId);
+                var userInCourseList = await _usersRepository.GetUsersInCourseAsync(currentCourseId);
                 return View(userInCourseList);
             }
             catch (SessionCredentialException ex)

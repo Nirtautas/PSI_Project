@@ -39,6 +39,15 @@ namespace TeamWebApplication.Repositories
             return await _db.Courses.ToListAsync();
         }
 
+        public async Task<IEnumerable<Course>> GetPublicCoursesAsync()
+        {
+            return await (
+                from course in _db.Courses
+                where course.IsPublic == true
+                select course
+           ).ToListAsync();
+        }
+
         public async Task<IEnumerable<Course>> GetCoursesByUserIdAsync(int? loggedInUserId)
         {
             if (loggedInUserId == null)

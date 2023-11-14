@@ -34,7 +34,7 @@ namespace TeamWebApplication.Controllers
         {
             try
             {
-                var user = await _usersRepository.GetUserByCredentials(login.UserId, login.Password);
+                var user = await _usersRepository.GetUserByCredentialsAsync(login.UserId, login.Password);
 				if (user == null)
 					return RedirectToAction("Index", "Login");
 
