@@ -224,16 +224,11 @@ namespace TeamWebApplication.Controllers
             try
             {
                 var originalPost = (TextPost?) await _postsRepository.GetPostByIdAsync(post.PostId);
-                if (originalPost.TextContent != post.TextContent || originalPost.Name != post.Name)
+                if (originalPost != null && (originalPost.TextContent != post.TextContent || originalPost.Name != post.Name))
                 {
-                    originalPost.CreationDate = DateTime.Now;
+                    originalPost.TextContent = post.TextContent;
+                    await _postsRepository.UpdatePostAsync(originalPost, post);
                 }
-                originalPost.Name = post.Name;
-                originalPost.IsVisible = post.IsVisible;
-                originalPost.PostType = post.PostType;
-                originalPost.TextContent = post.TextContent;
-
-                await _postsRepository.UpdateTextPostAsync(originalPost);
                 return RedirectToAction("Index", new { courseId });
             }
             catch (Exception ex)
@@ -331,6 +326,50 @@ namespace TeamWebApplication.Controllers
                 throw;
             }
         }
+
+       /* 
+        * File editing implementation will be finished in the future *
+        public async Task<IActionResult> EditFilePost(int postId)
+        {
+            try
+            {
+                HttpContext.Session.GetInt32Ex("LoggedInUserId");
+                HttpContext.Session.GetInt32Ex("CurrentCourseId");
+                var post = (FilePost?) await _postsRepository.GetPostByIdAsync(postId);
+                return View(post);
+            }
+            catch (SessionCredentialException ex)
+            {
+                _logger.Log(ex);
+                return RedirectToAction("Index", "Home");
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditFilePost(FilePost post, int courseId, IFormFile file)
+        {
+            try
+            {
+                var originalPost = (FilePost?) await _postsRepository.GetPostByIdAsync(post.PostId);
+                if (originalPost!= null && (originalPost.FileName != post.FileName || originalPost.Name != post.Name))
+                {
+                    var fileName = Path.GetFileName(file.FileName);
+                    var filePath = Path.Combine("wwwroot/uploads", fileName);
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await file.CopyToAsync(stream);
+                    }
+                    originalPost.FileName = fileName;
+                    await _postsRepository.UpdatePostAsync(originalPost, post);
+                }
+                return RedirectToAction("Index", new { courseId });
+            }
+            catch (Exception ex)
+            {
+                _logger.Log(ex);
+                throw;
+            }
+        }*/
 
         public async Task<IActionResult> DownloadFile(IFormFile file, FilePost post)
         {

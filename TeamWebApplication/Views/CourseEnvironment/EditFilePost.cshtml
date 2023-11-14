@@ -1,13 +1,13 @@
 ﻿@model FilePost
 @{
-    ViewData["Title"] = "Create File Post";
+    ViewData["Title"] = "Edit File Post";
 }
 
 <!DOCTYPE html>
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    <title>Create File Post</title>
+    <title>Edit File Post</title>
     <link rel="stylesheet" href="~/css/CreateCourseStyle.css" asp-append-version="true" />
 </head>
 
@@ -17,14 +17,18 @@
             <a>Mudli</a>
         </div>
     </div>
-    <form method="post" enctype="multipart/form-data" asp-controller="CourseEnvironment" asp-action="CreateFilePost">
+    <form method="post" enctype="multipart/form-data" asp-controller="CourseEnvironment" asp-action="EditFilePost">
 
         <div class="form-container">
-            <h2>Create a File Post</h2>
+            <h2>Edit a File Post</h2>
         </div>
+        <input type="hidden" id="courseId" name="courseId" asp-for="CourseId" value="@Model.CourseId" />
+        <input type="hidden" id="PostType" name="PostType" asp-for="PostType" value="@Model.PostType" />
+        <input type="hidden" id="CreationDate" name="CreationDate" asp-for="CreationDate" value="@Model.CreationDate" />
+        <input type="hidden" id="PostId" name="PostId" asp-for="PostId" value="@Model.PostId" />
         <div class="form-info-container">
             <label for="Name">Name:</label>
-            <textarea id="Input.Name" name="name" asp-for="Name" class="form-control"></textarea>
+            <input type="text" id="Input.Name" name="name" asp-for="Name" class="form-control" required />
             <span class="text-danger"></span>
         </div>
 
@@ -37,11 +41,12 @@
         <span class="text-danger"></span>
 
         <div class="form-info-container">
+            <label for="file">Previously uploaded file: @Url.Content(Model.FileName)</label>
             <label for="file">Upload File:</label>
-            <input type="file" name="file" id="file" class="form-control" required />
+            <input type="file" name="file" id="file" class="form-control" value="@Model.FileName"  required />
         </div>
 
-        <button type="submit" class="btn-primary">Create Post</button>
+        <button type="submit" class="btn-primary">Edit Post</button>
         <a asp-action="Index" asp-controller="CourseEnvironment" asp-route-courseId="@Model.CourseId" class="text-style" style="text-decoration: none; color: #ffffff;">Back</a>
     </form>
 </body>
