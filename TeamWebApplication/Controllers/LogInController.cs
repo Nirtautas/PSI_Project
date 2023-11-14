@@ -3,17 +3,18 @@ using TeamWebApplication.Data.Database;
 using TeamWebApplication.Data.ExceptionLogger;
 using TeamWebApplication.Data.Exceptions;
 using TeamWebApplication.Models;
+using TeamWebApplication.Repositories.Interfaces;
 
 namespace TeamWebApplication.Controllers
 {
     public class LogInController : Controller
     {
-		private readonly ApplicationDBContext _db;
+        private readonly IUsersRepository _usersRepository;
         private readonly IDataLogger _logger;
 
-		public LogInController(ApplicationDBContext db, IDataLogger logger)
+		public LogInController(IDataLogger logger, IUsersRepository usersRepository)
         {
-            _db = db;
+            _usersRepository = usersRepository;
             _logger = logger;
         }
 
@@ -29,17 +30,16 @@ namespace TeamWebApplication.Controllers
         }
 
         [HttpPost]
-        public IActionResult Login(LoginDetails login)
+        public async Task<IActionResult> Login(LoginDetails login)
         {
             try
             {
-				var user = _db.Users.FirstOrDefault(user => user.UserId == login.UserId && user.Password == login.Password);
+                var user = await _usersRepository.GetUserByCredentials(login.UserId, login.Password);
 				if (user == null)
 					return RedirectToAction("Index", "Login");
 
 				HttpContext.Session.SetInt32("LoggedInUserId", user.UserId);
 				HttpContext.Session.SetInt32("LoggedInUserRole", (int)user.Role);
-				_db.SaveChanges();
 				return RedirectToAction("Index", "Course");
 			}
             catch (SessionCredentialException ex)

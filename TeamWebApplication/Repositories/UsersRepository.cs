@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using NuGet.Protocol.Plugins;
 using TeamWebApplication.Data.Database;
 using TeamWebApplication.Models;
 using TeamWebApplication.Repositories.Interfaces;
@@ -34,6 +35,15 @@ namespace TeamWebApplication.Repositories
                 where course.CourseId == courseId
                 select user
             ).ToListAsync();
+        }
+
+        public async Task<User?> GetUserByCredentials(int? userId, string? password)
+        {
+            if (userId == null)
+                throw new ArgumentNullException(nameof(userId));
+            if (password == null)
+                throw new ArgumentNullException(nameof(password));
+            return await _db.Users.FirstOrDefaultAsync(user => user.UserId == userId && user.Password == password);
         }
 
         public async Task InsertUserAsync(User user)
