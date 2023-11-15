@@ -20,7 +20,7 @@ namespace TeamWebApplicationTests.DataTests.DataLoggerTests
         }
 
         [Fact]
-        public void LogException_LogsExceptionCorrectly()
+        public void LogException_PassingException_LogsExceptionCorrectly()
         {
             var exception = new Exception();
             var logger = new DataLogger(TestDirectory);
@@ -31,7 +31,7 @@ namespace TeamWebApplicationTests.DataTests.DataLoggerTests
         }
 
         [Fact]
-        public void LogMessage_LogsMessageCorrectly()
+        public void LogMessage_PassingException_LogsMessageCorrectly()
         {
             var logMessage = "Log message!";
             var logger = new DataLogger(TestDirectory);
@@ -41,7 +41,7 @@ namespace TeamWebApplicationTests.DataTests.DataLoggerTests
         }
 
         [Fact]
-        public void CheckDirectory_CreatesDirectoryIfDoesntExist()
+        public void CheckDirectory_DirectoryDoesntExist_CreatesDirectory()
         {
             var logger = new DataLogger(relativePath);
             logger.CheckDirectory(logger.relativePath);
@@ -49,7 +49,7 @@ namespace TeamWebApplicationTests.DataTests.DataLoggerTests
         }
 
         [Fact]
-        public void CheckPath_CreatesFileIfDoesntExist()
+        public void CheckPath_FileDoesntExist_CreatesFile()
         {
             var logger = new DataLogger(TestDirectory);
             logger.CheckPath(logger.filePath);

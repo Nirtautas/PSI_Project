@@ -17,5 +17,6 @@ namespace TeamWebApplication.Models.Enums
 		EnglishFilology,
 		[Display(Name = "Lithuanian filology")]
 		LithuanianFilology,
+		None
 	}
 }
