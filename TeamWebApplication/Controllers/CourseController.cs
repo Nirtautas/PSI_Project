@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Collections.Concurrent;
+using System.Threading;
 using TeamWebApplication.Controllers.ControllerEventArgs;
 using TeamWebApplication.Data.Database;
 using TeamWebApplication.Data.ExceptionLogger;
@@ -17,7 +19,9 @@ namespace TeamWebApplication.Controllers
         private readonly ICourseUserRepository _courseUserRepository;
         private readonly IDataLogger _logger;
         private readonly IMailService _mailService;
-        private readonly object objectLock = new Object();
+        
+        private static SemaphoreSlim semaphoreSlim = new SemaphoreSlim(0, 1);
+        private static ConcurrentQueue<int> userQueue = new ConcurrentQueue<int>();
 
         public event EventHandler<AttendanceEventArgs> Attendance;
 
@@ -126,7 +130,16 @@ namespace TeamWebApplication.Controllers
         {
             try
             {
-                await _coursesRepository.UpdateCourseAsync(course);
+                userQueue.Enqueue((int)HttpContext.Session.GetInt32Ex("LoggedInUserId"));
+                semaphoreSlim.Wait();
+                if (userQueue.TryDequeue(out int queuedUserId))
+                {
+                    if (queuedUserId == (int)HttpContext.Session.GetInt32Ex("LoggedInUserId"))
+                    {
+                        await _coursesRepository.UpdateCourseAsync(course);
+                    }
+                }
+                semaphoreSlim.Release();
                 return RedirectToAction("Index");
             }
             catch (Exception ex)
@@ -187,41 +200,44 @@ namespace TeamWebApplication.Controllers
         }
 
         [HttpPost]
-        // public async Task<IActionResult> AddUser(String userIdString)
-        //
-        // Monitor doesn't work with await
-        // could try using Semaphore Class, but it isn't a concurrent collection nor a monitor.
-        public IActionResult AddUser(String userIdString)
+        public async Task<IActionResult> AddUser(string userIdString)
         {
             try
             {
                 int? loggedInUserId = HttpContext.Session.GetInt32Ex("LoggedInUserId");
                 int? currentCourseId = HttpContext.Session.GetInt32Ex("CurrentCourseId");
-                String[] userIdList = userIdString.Split(';');
-                Course? currentCourse = _coursesRepository.GetCourseByIdAsync(currentCourseId).Result;
-
-                Monitor.Enter(objectLock);
-                try
+                userQueue.Enqueue((int)loggedInUserId);
+                semaphoreSlim.Wait();
+                if (userQueue.TryDequeue(out int queuedUserId))
                 {
-                    foreach (var word in userIdList)
+                    if (queuedUserId == loggedInUserId)
                     {
-                        if (Int32.TryParse(word, out int userId) && currentCourse != null)
+                        String[] userIdList = userIdString.Split(';');
+                        Course? currentCourse = await _coursesRepository.GetCourseByIdAsync(currentCourseId);
+                        foreach (var word in userIdList)
                         {
-                            User? user = _usersRepository.GetUserByIdAsync(userId).Result;
-
-                            if (user != null && userId != loggedInUserId &&!_courseUserRepository.CheckIfRelationExistsAsync(currentCourse.CourseId, userId).Result)
+                            if (Int32.TryParse(word, out int userId) != false && currentCourse != null)
                             {
-                                _courseUserRepository.InsertRelationAsync(currentCourseId, userId);
-                                OnAttendanceChange(user, currentCourse, true);
+                                User? user;
+                                if ((user = await _usersRepository.GetUserByIdAsync(userId)) != null && userId != loggedInUserId && 
+                                    !await _courseUserRepository.CheckIfRelationExistsAsync(currentCourse.CourseId, userId))
+                                {
+                                    await _courseUserRepository.InsertRelationAsync(currentCourseId, userId);
+                                    OnAttendanceChange(user, currentCourse, true);
+                                }
                             }
                         }
                     }
+                    else
+                    {
+                        return RedirectToAction("Index");
+                    }
                 }
-                finally
+                else
                 {
-                    Monitor.Exit(objectLock);
+                    return RedirectToAction("Index");
                 }
-
+                semaphoreSlim.Release();
                 return RedirectToAction("Index");
             }
             catch (SessionCredentialException ex)
@@ -265,18 +281,27 @@ namespace TeamWebApplication.Controllers
                 int? currentCourseId = HttpContext.Session.GetInt32Ex("CurrentCourseId");
                 String[] userIdList = userIdString.Split(';');
                 Course? currentCourse = await _coursesRepository.GetCourseByIdAsync(currentCourseId);
-                foreach (var word in userIdList)
+                userQueue.Enqueue((int)loggedInUserId);
+                semaphoreSlim.Wait();
+                if (userQueue.TryDequeue(out int queuedUserId))
                 {
-                    if (Int32.TryParse(word, out int userId) != false && currentCourse != null)
+                    if (queuedUserId == currentCourseId)
                     {
-                        User? user;
-                        if ((user = await _usersRepository.GetUserByIdAsync(userId)) != null && userId != loggedInUserId)
+                        foreach (var word in userIdList)
                         {
-                            await _courseUserRepository.DeleteRelationAsync(currentCourseId, userId);
-                            OnAttendanceChange(user, currentCourse, false);
+                            if (Int32.TryParse(word, out int userId) != false && currentCourse != null)
+                            {
+                                User? user;
+                                if ((user = await _usersRepository.GetUserByIdAsync(userId)) != null && userId != loggedInUserId)
+                                {
+                                    await _courseUserRepository.DeleteRelationAsync(currentCourseId, userId);
+                                    OnAttendanceChange(user, currentCourse, false);
+                                }
+                            }
                         }
                     }
                 }
+                semaphoreSlim.Release(); 
                 return RedirectToAction("Index");
             }
             catch (SessionCredentialException ex)
