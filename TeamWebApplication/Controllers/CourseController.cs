@@ -19,8 +19,9 @@ namespace TeamWebApplication.Controllers
         private readonly ICourseUserRepository _courseUserRepository;
         private readonly IDataLogger _logger;
         private readonly IMailService _mailService;
-        
-        private static SemaphoreSlim semaphoreSlim = new SemaphoreSlim(0, 1);
+
+        // limits the amount of threads that can access a resource or pool of resources concurrently.
+        private static SemaphoreSlim semaphoreSlim = new SemaphoreSlim(1, 1);
         private static ConcurrentQueue<int> userQueue = new ConcurrentQueue<int>();
 
         public event EventHandler<AttendanceEventArgs> Attendance;
