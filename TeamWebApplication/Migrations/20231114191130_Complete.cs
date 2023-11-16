@@ -4,10 +4,14 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace TeamWebApplication.Migrations
 {
+    /// <inheritdoc />
     public partial class Complete : Migration
     {
+        /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
@@ -130,9 +134,9 @@ namespace TeamWebApplication.Migrations
                 columns: new[] { "CourseId", "CreationDate", "Description", "IsPublic", "IsVisible", "Name" },
                 values: new object[,]
                 {
-                    { 10000, new DateTime(2023, 10, 23, 23, 29, 36, 195, DateTimeKind.Local).AddTicks(6746), "Course for computer architecture", false, true, "Computer Architecture" },
-                    { 10001, new DateTime(2023, 10, 23, 23, 29, 36, 195, DateTimeKind.Local).AddTicks(6780), "Course for functional programming", false, false, "Functional Programming" },
-                    { 10002, new DateTime(2023, 10, 23, 23, 29, 36, 195, DateTimeKind.Local).AddTicks(6783), "Course for database systems", true, true, "Database Systems" }
+                    { 10000, new DateTime(2023, 11, 14, 21, 11, 30, 60, DateTimeKind.Local).AddTicks(6566), "Course for computer architecture", false, true, "Computer Architecture" },
+                    { 10001, new DateTime(2023, 11, 14, 21, 11, 30, 60, DateTimeKind.Local).AddTicks(6600), "Course for functional programming", false, false, "Functional Programming" },
+                    { 10002, new DateTime(2023, 11, 14, 21, 11, 30, 60, DateTimeKind.Local).AddTicks(6602), "Course for database systems", true, true, "Database Systems" }
                 });
 
             migrationBuilder.InsertData(
@@ -150,9 +154,9 @@ namespace TeamWebApplication.Migrations
                 columns: new[] { "CommentId", "CommentatorName", "CommentatorSurname", "CourseId", "CreationTime", "UserComment", "UserId" },
                 values: new object[,]
                 {
-                    { 40000, "Jonas", "Paguzinskas", 10000, new DateTime(2023, 10, 23, 23, 29, 36, 197, DateTimeKind.Local).AddTicks(7364), "Sus course", 20000 },
-                    { 40001, "Alita", "Stuknaite", 10001, new DateTime(2023, 10, 23, 23, 29, 36, 197, DateTimeKind.Local).AddTicks(7368), "good", 20002 },
-                    { 40003, "Alita", "Stuknaite", 10000, new DateTime(2023, 10, 23, 23, 29, 36, 197, DateTimeKind.Local).AddTicks(7371), "Cool", 20002 }
+                    { 40000, "Jonas", "Paguzinskas", 10000, new DateTime(2023, 11, 14, 21, 11, 30, 62, DateTimeKind.Local).AddTicks(2875), "Sus course", 20000 },
+                    { 40001, "Alita", "Stuknaite", 10001, new DateTime(2023, 11, 14, 21, 11, 30, 62, DateTimeKind.Local).AddTicks(2880), "good", 20002 },
+                    { 40003, "Alita", "Stuknaite", 10000, new DateTime(2023, 11, 14, 21, 11, 30, 62, DateTimeKind.Local).AddTicks(2884), "Cool", 20002 }
                 });
 
             migrationBuilder.InsertData(
@@ -169,17 +173,17 @@ namespace TeamWebApplication.Migrations
 
             migrationBuilder.InsertData(
                 table: "Posts",
-                columns: new[] { "PostId", "CourseId", "CreationDate", "FileName", "IsVisible", "Name", "PostType" },
-                values: new object[] { 30003, 10001, new DateTime(2023, 10, 23, 23, 29, 36, 197, DateTimeKind.Local).AddTicks(7345), "tvarkarastis.jpg", true, "File", 2 });
-
-            migrationBuilder.InsertData(
-                table: "Posts",
                 columns: new[] { "PostId", "CourseId", "CreationDate", "IsVisible", "Name", "PostType", "TextContent" },
                 values: new object[,]
                 {
-                    { 30000, 10000, new DateTime(2023, 10, 23, 23, 29, 36, 197, DateTimeKind.Local).AddTicks(7286), true, "Introduction", 0, "This is a placeholder" },
-                    { 30001, 10002, new DateTime(2023, 10, 23, 23, 29, 36, 197, DateTimeKind.Local).AddTicks(7310), true, "Knowledge", 0, "This is once more a placeholder" }
+                    { 30000, 10000, new DateTime(2023, 11, 14, 21, 11, 30, 62, DateTimeKind.Local).AddTicks(2815), true, "Introduction", 0, "This is a placeholder" },
+                    { 30001, 10002, new DateTime(2023, 11, 14, 21, 11, 30, 62, DateTimeKind.Local).AddTicks(2833), true, "Knowledge", 0, "This is once more a placeholder https://www.youtube.com/watch?v=dQw4w9WgXcQ" }
                 });
+
+            migrationBuilder.InsertData(
+                table: "Posts",
+                columns: new[] { "PostId", "CourseId", "CreationDate", "FileName", "IsVisible", "Name", "PostType" },
+                values: new object[] { 30003, 10001, new DateTime(2023, 11, 14, 21, 11, 30, 62, DateTimeKind.Local).AddTicks(2858), "tvarkarastis.jpg", true, "File", 2 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Comments_CourseId",
@@ -202,6 +206,7 @@ namespace TeamWebApplication.Migrations
                 column: "CourseId");
         }
 
+        /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(

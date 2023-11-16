@@ -17,7 +17,7 @@ namespace TeamWebApplication.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.21")
+                .HasAnnotation("ProductVersion", "7.0.12")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -66,7 +66,7 @@ namespace TeamWebApplication.Migrations
                             CommentatorName = "Jonas",
                             CommentatorSurname = "Paguzinskas",
                             CourseId = 10000,
-                            CreationTime = new DateTime(2023, 10, 24, 18, 42, 36, 400, DateTimeKind.Local).AddTicks(387),
+                            CreationTime = new DateTime(2023, 11, 14, 21, 11, 30, 62, DateTimeKind.Local).AddTicks(2875),
                             UserComment = "Sus course",
                             UserId = 20000
                         },
@@ -76,7 +76,7 @@ namespace TeamWebApplication.Migrations
                             CommentatorName = "Alita",
                             CommentatorSurname = "Stuknaite",
                             CourseId = 10001,
-                            CreationTime = new DateTime(2023, 10, 24, 18, 42, 36, 400, DateTimeKind.Local).AddTicks(395),
+                            CreationTime = new DateTime(2023, 11, 14, 21, 11, 30, 62, DateTimeKind.Local).AddTicks(2880),
                             UserComment = "good",
                             UserId = 20002
                         },
@@ -86,7 +86,7 @@ namespace TeamWebApplication.Migrations
                             CommentatorName = "Alita",
                             CommentatorSurname = "Stuknaite",
                             CourseId = 10000,
-                            CreationTime = new DateTime(2023, 10, 24, 18, 42, 36, 400, DateTimeKind.Local).AddTicks(402),
+                            CreationTime = new DateTime(2023, 11, 14, 21, 11, 30, 62, DateTimeKind.Local).AddTicks(2884),
                             UserComment = "Cool",
                             UserId = 20002
                         });
@@ -125,7 +125,7 @@ namespace TeamWebApplication.Migrations
                         new
                         {
                             CourseId = 10000,
-                            CreationDate = new DateTime(2023, 10, 24, 18, 42, 36, 397, DateTimeKind.Local).AddTicks(139),
+                            CreationDate = new DateTime(2023, 11, 14, 21, 11, 30, 60, DateTimeKind.Local).AddTicks(6566),
                             Description = "Course for computer architecture",
                             IsPublic = false,
                             IsVisible = true,
@@ -134,7 +134,7 @@ namespace TeamWebApplication.Migrations
                         new
                         {
                             CourseId = 10001,
-                            CreationDate = new DateTime(2023, 10, 24, 18, 42, 36, 397, DateTimeKind.Local).AddTicks(204),
+                            CreationDate = new DateTime(2023, 11, 14, 21, 11, 30, 60, DateTimeKind.Local).AddTicks(6600),
                             Description = "Course for functional programming",
                             IsPublic = false,
                             IsVisible = false,
@@ -143,7 +143,7 @@ namespace TeamWebApplication.Migrations
                         new
                         {
                             CourseId = 10002,
-                            CreationDate = new DateTime(2023, 10, 24, 18, 42, 36, 397, DateTimeKind.Local).AddTicks(211),
+                            CreationDate = new DateTime(2023, 11, 14, 21, 11, 30, 60, DateTimeKind.Local).AddTicks(6602),
                             Description = "Course for database systems",
                             IsPublic = true,
                             IsVisible = true,
@@ -223,6 +223,8 @@ namespace TeamWebApplication.Migrations
                     b.ToTable("Posts");
 
                     b.HasDiscriminator<int>("PostType");
+
+                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("TeamWebApplication.Models.User", b =>
@@ -314,7 +316,7 @@ namespace TeamWebApplication.Migrations
                         {
                             PostId = 30003,
                             CourseId = 10001,
-                            CreationDate = new DateTime(2023, 10, 24, 18, 42, 36, 400, DateTimeKind.Local).AddTicks(348),
+                            CreationDate = new DateTime(2023, 11, 14, 21, 11, 30, 62, DateTimeKind.Local).AddTicks(2858),
                             IsVisible = true,
                             Name = "File",
                             PostType = 0,
@@ -338,7 +340,7 @@ namespace TeamWebApplication.Migrations
                         {
                             PostId = 30000,
                             CourseId = 10000,
-                            CreationDate = new DateTime(2023, 10, 24, 18, 42, 36, 400, DateTimeKind.Local).AddTicks(262),
+                            CreationDate = new DateTime(2023, 11, 14, 21, 11, 30, 62, DateTimeKind.Local).AddTicks(2815),
                             IsVisible = true,
                             Name = "Introduction",
                             PostType = 0,
@@ -348,7 +350,7 @@ namespace TeamWebApplication.Migrations
                         {
                             PostId = 30001,
                             CourseId = 10002,
-                            CreationDate = new DateTime(2023, 10, 24, 18, 42, 36, 400, DateTimeKind.Local).AddTicks(307),
+                            CreationDate = new DateTime(2023, 11, 14, 21, 11, 30, 62, DateTimeKind.Local).AddTicks(2833),
                             IsVisible = true,
                             Name = "Knowledge",
                             PostType = 0,
