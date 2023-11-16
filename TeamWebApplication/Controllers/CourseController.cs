@@ -14,14 +14,14 @@ namespace TeamWebApplication.Controllers
     {
         private readonly ICoursesRepository _coursesRepository;
         private readonly IUsersRepository _usersRepository;
-        private readonly ICourseUserRepository _courseUserRepository;
+        private readonly ICourseUsersRepository _courseUserRepository;
         private readonly IDataLogger _logger;
         private readonly IMailService _mailService;
 
         public event EventHandler<AttendanceEventArgs> Attendance;
 
         public CourseController(IDataLogger logger, IMailService mailService,
-            ICoursesRepository coursesRepository, IUsersRepository usersRepository, ICourseUserRepository courseUserRepository)
+            ICoursesRepository coursesRepository, IUsersRepository usersRepository, ICourseUsersRepository courseUserRepository)
         {
             _logger = logger;
             _mailService = mailService;

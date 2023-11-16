@@ -64,8 +64,11 @@ namespace TeamWebApplication.Repositories
            ).ToListAsync();
         }
 
-        public async Task InsertCourseAsync(Course course)
+        public async Task InsertCourseAsync(Course? course)
         {
+            if (course == null)
+                throw new ArgumentNullException(nameof(course));
+
             await _db.Courses.AddAsync(course);
             await SaveAsync();
         }
@@ -75,9 +78,12 @@ namespace TeamWebApplication.Repositories
              await _db.SaveChangesAsync();
         }
 
-        public async Task UpdateCourseAsync(Course course)
+        public async Task UpdateCourseAsync(Course? course)
         {
-            Course? originalCourse = await _db.Courses.FindAsync(course.CourseId);
+            if (course == null)
+                throw new ArgumentNullException(nameof(course));
+
+            var originalCourse = await _db.Courses.FindAsync(course.CourseId);
             originalCourse.Name = course.Name;
             originalCourse.IsVisible = course.IsVisible;
             originalCourse.IsPublic = course.IsPublic;

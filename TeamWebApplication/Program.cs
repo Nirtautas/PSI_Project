@@ -22,7 +22,7 @@ builder.Services.AddDbContext<ApplicationDBContext>(options => options.UseNpgsql
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 builder.Services.AddScoped<IUsersRepository, UsersRepository>();
 builder.Services.AddScoped<ICoursesRepository, CoursesRepository>();
-builder.Services.AddScoped<ICourseUserRepository, CourseUsersRepository>();
+builder.Services.AddScoped<ICourseUsersRepository, CourseUsersRepository>();
 builder.Services.AddScoped<IPostsRepository, PostsRepository>();
 builder.Services.AddScoped<ICommentsRepository, CommentsRepository>();
 
