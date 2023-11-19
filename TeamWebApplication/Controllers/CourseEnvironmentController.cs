@@ -132,16 +132,7 @@ namespace TeamWebApplication.Controllers
         {
             try
             {
-                var originalComment = await _commentsRepository.GetCommentByIdAsync(commentId);
-                if (originalComment != null)
-                {
-                    if (originalComment.UserComment != userComment)
-                    {
-                        originalComment.CreationTime = DateTime.Now;
-                    }
-                    originalComment.UserComment = userComment;
-                    await _commentsRepository.UpdateCommentAsync(originalComment);
-                }
+                await _commentsRepository.UpdateCommentAsync(commentId, userComment);
                 return RedirectToAction("Index", new { courseId });
             }
             catch (Exception ex)

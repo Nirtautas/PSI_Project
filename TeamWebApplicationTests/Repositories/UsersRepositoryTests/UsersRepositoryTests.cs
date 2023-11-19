@@ -23,6 +23,7 @@ namespace TeamWebApplicationTests.Repositories.UsersRepositoryTests
         {
             var id = 20000;
             var gotUser = await _userRepository.GetUserByIdAsync(id);
+
             Assert.NotNull(gotUser);
             Assert.Equal(id, gotUser.UserId);
         }
@@ -90,6 +91,7 @@ namespace TeamWebApplicationTests.Repositories.UsersRepositoryTests
             Assert.Contains(_fixture.Context.Users, t => t.UserId == id);
             await _userRepository.DeleteUserByIdAsync(id);
 
+            Assert.Equal(2, _fixture.Context.Users.Count());
             Assert.DoesNotContain(_fixture.Context.Users, t => t.UserId == id);
         }
 
@@ -101,6 +103,7 @@ namespace TeamWebApplicationTests.Repositories.UsersRepositoryTests
             var user = await _fixture.Context.Users.SingleOrDefaultAsync(t => t.UserId == id);
             await _userRepository.DeleteUserAsync(user);
 
+            Assert.Equal(2, _fixture.Context.Users.Count());
             Assert.DoesNotContain(_fixture.Context.Users, t => t.UserId == id);
         }
 

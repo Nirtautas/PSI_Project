@@ -9,7 +9,7 @@ namespace TeamWebApplication.Repositories.Interfaces
         Task InsertCommentAsync(Comment? comment);
         Task DeleteCommentByIdAsync(int? id);
         Task DeleteCommentAsync(Comment? comment);
-        Task UpdateCommentAsync(Comment? comment);
+        Task UpdateCommentAsync(int? commentId, string? comment);
         Task SaveAsync();
     }
 }

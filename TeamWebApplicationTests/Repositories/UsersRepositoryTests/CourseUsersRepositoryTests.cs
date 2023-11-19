@@ -81,17 +81,13 @@ namespace TeamWebApplicationTests.Repositories.UsersRepositoryTests
         [Fact]
         public async Task GetUsersByCourseIdAsync_PassingNullValue_ThrowsArgumentNullException()
         {
-            var courseUsersRepository = new CourseUsersRepository(_fixture.Context);
-
-            await Assert.ThrowsAsync<ArgumentNullException>(() => courseUsersRepository.GetUsersByCourseIdAsync(null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _courseUsersRepository.GetUsersByCourseIdAsync(null));
         }
 
         [Fact]
         public async Task GetCoursesByUserIdAsync_PassingNullValue_ThrowsArgumentNullException()
         {
-            var courseUsersRepository = new CourseUsersRepository(_fixture.Context);
-
-            await Assert.ThrowsAsync<ArgumentNullException>(() => courseUsersRepository.GetCoursesByUserIdAsync(null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _courseUsersRepository.GetCoursesByUserIdAsync(null));
         }
 
         [Theory]
@@ -100,9 +96,7 @@ namespace TeamWebApplicationTests.Repositories.UsersRepositoryTests
         [InlineData(null, null)]
         public async Task CheckIfRelationExistsAsync_PassingNullValue_ThrowsArgumentNullException(int? courseId, int? userId)
         {
-            var courseUsersRepository = new CourseUsersRepository(_fixture.Context);
-
-            await Assert.ThrowsAsync<ArgumentNullException>(() => courseUsersRepository.CheckIfRelationExistsAsync(courseId, userId));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _courseUsersRepository.CheckIfRelationExistsAsync(courseId, userId));
         }
 
         [Theory]
@@ -111,9 +105,7 @@ namespace TeamWebApplicationTests.Repositories.UsersRepositoryTests
         [InlineData(null, null)]
         public async Task InsertRelationAsync_PassingNullValue_ThrowsArgumentNullException(int? courseId, int? userId)
         {
-            var courseUsersRepository = new CourseUsersRepository(_fixture.Context);
-
-            await Assert.ThrowsAsync<ArgumentNullException>(() => courseUsersRepository.InsertRelationAsync(courseId, userId));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _courseUsersRepository.InsertRelationAsync(courseId, userId));
         }
 
         [Theory]
@@ -122,9 +114,7 @@ namespace TeamWebApplicationTests.Repositories.UsersRepositoryTests
         [InlineData(null, null)]
         public async Task DeleteRelationAsync_PassingNullValue_ThrowsArgumentNullException(int? courseId, int? userId)
         {
-            var courseUsersRepository = new CourseUsersRepository(_fixture.Context);
-
-            await Assert.ThrowsAsync<ArgumentNullException>(() => courseUsersRepository.DeleteRelationAsync(courseId, userId));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _courseUsersRepository.DeleteRelationAsync(courseId, userId));
         }
     }
 }

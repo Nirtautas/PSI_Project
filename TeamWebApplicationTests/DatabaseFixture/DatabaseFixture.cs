@@ -167,7 +167,7 @@ namespace TeamWebApplicationTests.DatabaseFixture
                 },
                 new Comment
                 {
-                    CommentId = 40003,
+                    CommentId = 40002,
                     CourseId = course1.CourseId,
                     UserId = user3.UserId,
                     CommentatorName = user3.Name,
