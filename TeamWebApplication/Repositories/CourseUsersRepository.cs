@@ -68,7 +68,7 @@ namespace TeamWebApplication.Repositories
             if (courseId == null)
                 throw new ArgumentNullException(nameof(courseId));
 
-            CourseUser courseUser = await _db.CoursesUsers.FirstOrDefaultAsync(cu => cu.CourseId == courseId && cu.UserId == userId);
+            var courseUser = await _db.CoursesUsers.FirstOrDefaultAsync(cu => cu.CourseId == courseId && cu.UserId == userId);
 
             if (courseUser != null)
             {
