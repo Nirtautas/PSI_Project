@@ -5,7 +5,7 @@ using TeamWebApplication.Repositories.Interfaces;
 
 namespace TeamWebApplication.Repositories
 {
-    public class CourseUsersRepository : ICourseUserRepository
+    public class CourseUsersRepository : ICourseUsersRepository
     {
         private readonly ApplicationDBContext _db;
         public CourseUsersRepository(ApplicationDBContext db)

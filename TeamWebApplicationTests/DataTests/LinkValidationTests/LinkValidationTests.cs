@@ -8,7 +8,7 @@ namespace TeamWebApplicationTests.DataTests.LinkValidationTests
         [InlineData("", "", "")]
         [InlineData("Hello, world!;; 1234.", "Hello world!; 1234", ",;.")]
         [InlineData(@"This, is a nice sentence.!\']; /. ;", @"This is a nice sentence.!\'] / ", ",;.;")]
-        public void RemovePunctuation_CorrectlyRemoves(string textData, string expected, string expectedPunctuation)
+        public void RemovePunctuation_GivingDifferentStrings_CorrectlyRemovesPunctuation(string textData, string expected, string expectedPunctuation)
         {
             Assert.Equal(expected, LinkValidation.RemovePunctuation(textData, out string punctuation));
             Assert.Equal(expectedPunctuation, punctuation);
@@ -23,7 +23,7 @@ namespace TeamWebApplicationTests.DataTests.LinkValidationTests
             "The <a href=\"https://www.youtube.com/watch?v=hN5X4kGhAtU&list=RD-hXlRYsHG1Q&index=7\">https://www.youtube.com/watch?v=hN5X4kGhAtU&list=RD-hXlRYsHG1Q&index=7</a>. Fox.")]
         [InlineData("The https://www.youtu. Fox.",
             "The https://www.youtu. Fox.")]
-        public void ValidateAndReplaceLinks_CorrectlyReplaces(string textData, string expected)
+        public void ValidateAndReplaceLinks_GivingDifferentStrings_CorrectlyReplacesString(string textData, string expected)
         {
             Assert.Equal(expected, LinkValidation.ValidateAndReplaceLinks(textData));
         }

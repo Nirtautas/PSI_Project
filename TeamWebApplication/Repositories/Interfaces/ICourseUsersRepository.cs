@@ -2,7 +2,7 @@
 
 namespace TeamWebApplication.Repositories.Interfaces
 {
-    public interface ICourseUserRepository
+    public interface ICourseUsersRepository
     {
         Task<IEnumerable<int>> GetUsersByCourseIdAsync(int? courseId);
         Task<IEnumerable<int>> GetCoursesByUserIdAsync(int? userId);

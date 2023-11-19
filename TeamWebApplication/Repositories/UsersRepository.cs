@@ -15,7 +15,7 @@ namespace TeamWebApplication.Repositories
             _db = db;
         }
 
-        public async Task<User> GetUserByIdAsync(int? userId)
+        public async Task<User?> GetUserByIdAsync(int? userId)
         {
             if (userId == null)
                 throw new ArgumentNullException(nameof(userId));

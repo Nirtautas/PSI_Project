@@ -4,7 +4,7 @@ namespace TeamWebApplication.Repositories.Interfaces
 {
     public interface IUsersRepository
     {
-        Task<User> GetUserByIdAsync(int? id);
+        Task<User?> GetUserByIdAsync(int? id);
         Task<IEnumerable<User>> GetUsersInCourseAsync(int? courseId);
         Task<User?> GetUserByCredentialsAsync(int? userId, string? password);
         Task<bool> UserWithSuchEmailExistsAsync(string? email);

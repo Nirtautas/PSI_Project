@@ -9,6 +9,7 @@ namespace TeamWebApplication.Models.Enums
 		[Display(Name = "Chemistry and Geosciences")]
 		ChemistryAndGeosciences,
 		Physics,
-		Filology
+		Filology,
+		None
 	}
 }

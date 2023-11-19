@@ -26,7 +26,9 @@ namespace TeamWebApplication.Models
 
         }
 
-        public User(int id, string name, string surname, string email, string password, Role role, Faculty faculty, Specialization specialization)
+        public User(int id, string name = "dname", string surname = "dsurname", string email = "demail",
+            string password = "dpassword", Role role = Role.None, Faculty faculty = Faculty.None,
+            Specialization specialization = Specialization.None)
         {
             this.UserId = id;
             this.Name = name;
