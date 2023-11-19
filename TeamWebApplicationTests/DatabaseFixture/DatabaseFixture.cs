@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
-using System.Reflection.Emit;
 using TeamWebApplication.Data.Database;
 using TeamWebApplication.Models.Enums;
 using TeamWebApplication.Models;
@@ -14,7 +13,7 @@ namespace TeamWebApplicationTests.DatabaseFixture
         public DBFixture()
         {
             var options = new DbContextOptionsBuilder<ApplicationDBContext>()
-                .UseInMemoryDatabase("Test")
+                .UseInMemoryDatabase(new Random().Next().ToString())
                 .ConfigureWarnings(b => b.Ignore(InMemoryEventId.TransactionIgnoredWarning))
                 .Options;
 
@@ -188,6 +187,12 @@ namespace TeamWebApplicationTests.DatabaseFixture
             Context.Comments.RemoveRange(Context.Comments);
             Context.CoursesUsers.RemoveRange(Context.CoursesUsers);
             Context.SaveChanges();
+        }
+
+        public void RepopulateData()
+        {
+            ClearData();
+            PopulateData();
         }
 
         public void Dispose()

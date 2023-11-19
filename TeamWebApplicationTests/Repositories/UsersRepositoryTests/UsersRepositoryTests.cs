@@ -14,8 +14,7 @@ namespace TeamWebApplicationTests.Repositories.UsersRepositoryTests
         public UsersRepositoryTests(DBFixture fixture)
         {
             _fixture = fixture;
-            _fixture.ClearData();
-            _fixture.PopulateData();
+            _fixture.RepopulateData();
             _userRepository = new UsersRepository(_fixture.Context);
         }
 
@@ -24,6 +23,7 @@ namespace TeamWebApplicationTests.Repositories.UsersRepositoryTests
         {
             var id = 20000;
             var gotUser = await _userRepository.GetUserByIdAsync(id);
+            Assert.NotNull(gotUser);
             Assert.Equal(id, gotUser.UserId);
         }
 
@@ -43,6 +43,7 @@ namespace TeamWebApplicationTests.Repositories.UsersRepositoryTests
             var id = 20000;
             var user = await _userRepository.GetUserByCredentialsAsync(id, "qweryty1");
 
+            Assert.NotNull(user);
             Assert.Equal(id, user.UserId);
         }
 
@@ -67,6 +68,7 @@ namespace TeamWebApplicationTests.Repositories.UsersRepositoryTests
         {
             var user = await _userRepository.GetUserByEmailAsync("j.paguzinskas@mif.stuf.vu.lt");
 
+            Assert.NotNull(user);
             Assert.Equal(20000, user.UserId);
         }
 
@@ -77,6 +79,7 @@ namespace TeamWebApplicationTests.Repositories.UsersRepositoryTests
             var user = new User(id);
             await _userRepository.InsertUserAsync(user);
 
+            Assert.Equal(4, _fixture.Context.Users.Count());
             Assert.Contains(_fixture.Context.Users, t => t.UserId == id);
         }
 
@@ -110,6 +113,7 @@ namespace TeamWebApplicationTests.Repositories.UsersRepositoryTests
             await _userRepository.UpdateUserAsync(userToUpdate);
             var user = await _fixture.Context.Users.SingleOrDefaultAsync(t => t.UserId == id);
 
+            Assert.NotNull(user);
             Assert.Equal(user.UserId, userToUpdate.UserId);
             Assert.Equal(user.Name, userToUpdate.Name);
             Assert.Equal(user.Surname, userToUpdate.Surname);

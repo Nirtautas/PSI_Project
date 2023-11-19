@@ -24,7 +24,8 @@ namespace TeamWebApplication.Models
 
         }
 
-        public Course(int id, string name, string description, bool IsVisible, bool isPublic)
+        public Course(int id, string name = "dname", string description = "ddescription",
+            bool IsVisible = false, bool isPublic = false)
         {
             this.CourseId = id;
             this.Name = name;
