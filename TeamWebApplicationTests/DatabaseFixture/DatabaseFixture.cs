@@ -135,12 +135,21 @@ namespace TeamWebApplicationTests.DatabaseFixture
                 },
                 new FilePost
                 {
-                    PostId = 30003,
+                    PostId = 30002,
                     CourseId = course2.CourseId,
                     Name = "File",
                     CreationDate = DateTime.Now,
                     IsVisible = true,
                     FileName = "tvarkarastis.jpg"
+                },
+                new FilePost
+                {
+                    PostId = 30003,
+                    CourseId = course1.CourseId,
+                    Name = "File1",
+                    CreationDate = DateTime.Now,
+                    IsVisible = true,
+                    FileName = "test.jpg"
                 }
             );
 
