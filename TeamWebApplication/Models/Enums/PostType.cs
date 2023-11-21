@@ -4,6 +4,7 @@
 	{
 		Text,
 		Link,
-		File
+		File,
+		None
 	}
 }

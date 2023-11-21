@@ -5,14 +5,15 @@ namespace TeamWebApplication.Models
     public class TextPost : Post
     {
         public string? TextContent { get; set; } = null;
-        public TextPost(int id, int courseId, string name, DateTime creationDate, bool IsVisible, PostType PostType, string textContent)
+        public TextPost(int id, int courseId, string name = "dname",
+            bool IsVisible = true, string textContent = "dcontent")
         {
             base.PostId = id;
             base.CourseId = courseId;
             base.Name = name;
-            base.CreationDate = creationDate;
+            base.CreationDate = DateTime.Now;
             base.IsVisible = IsVisible;
-            base.PostType = PostType;
+            base.PostType = PostType.Text;
             this.TextContent = textContent;
         }
 

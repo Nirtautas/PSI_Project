@@ -27,7 +27,7 @@ namespace TeamWebApplication.Repositories
             }
         }
 
-        public async Task<Course> GetCourseByIdAsync(int? id)
+        public async Task<Course?> GetCourseByIdAsync(int? id)
         {
             if (id == null)
                 throw new ArgumentNullException(nameof(id));
@@ -73,11 +73,6 @@ namespace TeamWebApplication.Repositories
             await SaveAsync();
         }
 
-        public async Task SaveAsync()
-        {
-             await _db.SaveChangesAsync();
-        }
-
         public async Task UpdateCourseAsync(Course? course)
         {
             if (course == null)
@@ -90,6 +85,11 @@ namespace TeamWebApplication.Repositories
             originalCourse.Description = course.Description;
             _db.Update(originalCourse);
             await SaveAsync();
+        }
+
+        public async Task SaveAsync()
+        {
+             await _db.SaveChangesAsync();
         }
     }
 }

@@ -103,7 +103,7 @@ namespace TeamWebApplication.Repositories
             if (existingUser != null)
             {
                 existingUser.Name = user.Name;
-                existingUser.Surname = user.Email;
+                existingUser.Surname = user.Surname;
                 existingUser.Email = user.Email;
                 existingUser.Password = user.Password;
                 existingUser.Role = user.Role;
