@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
 using TeamWebApplication.Data.Database;
 using TeamWebApplication.Models;
-using TeamWebApplication.Models.Enums;
 using TeamWebApplication.Repositories.Interfaces;
 
 namespace TeamWebApplication.Repositories
@@ -9,10 +9,17 @@ namespace TeamWebApplication.Repositories
     public class PostsRepository : IPostsRepository
     {
         private readonly ApplicationDBContext _db;
+        public ActionDelegate<Post> UpdateAndSaveDelegate { get; set; }
         public PostsRepository(ApplicationDBContext db)
         {
             _db = db;
+
+            UpdateAndSaveDelegate = async (originalPost, post) =>
+            {
+                await UpdatePostAsync(originalPost, post);
+            };
         }
+
         public async Task<IEnumerable<Post>> GetPostsByCourseAsync(int? courseId)
         {
             if (courseId == null)
@@ -79,6 +86,5 @@ namespace TeamWebApplication.Repositories
         {
             await _db.SaveChangesAsync();
         }
-
     }
 }

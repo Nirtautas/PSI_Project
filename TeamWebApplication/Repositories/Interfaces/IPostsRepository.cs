@@ -2,6 +2,7 @@
 
 namespace TeamWebApplication.Repositories.Interfaces
 {
+    public delegate Task ActionDelegate<T>(T originalPost, T post) where T : Post?;
     public interface IPostsRepository
     {
         Task<IEnumerable<Post>> GetPostsByCourseAsync(int? id);
@@ -11,5 +12,6 @@ namespace TeamWebApplication.Repositories.Interfaces
         Task DeletePostAsync<T>(T post) where T : Post?;
         Task UpdatePostAsync<T>(T originalPost, T post) where T : Post?;
         Task SaveAsync();
+        ActionDelegate<Post> UpdateAndSaveDelegate { get; set; }
     }
 }

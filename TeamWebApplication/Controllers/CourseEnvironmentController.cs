@@ -227,7 +227,7 @@ namespace TeamWebApplication.Controllers
                 if (originalPost != null && (originalPost.TextContent != post.TextContent || originalPost.Name != post.Name))
                 {
                     originalPost.TextContent = post.TextContent;
-                    await _postsRepository.UpdatePostAsync(originalPost, post);
+                    await _postsRepository.UpdateAndSaveDelegate(originalPost, post);
                 }
                 return RedirectToAction("Index", new { courseId });
             }
