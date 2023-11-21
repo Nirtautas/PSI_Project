@@ -4,7 +4,7 @@ using TeamWebApplicationTests.DatabaseFixture;
 
 namespace TeamWebApplicationTests.Repositories.UsersRepositoryTests
 {
-    public  class PostsRepositoryTests : IClassFixture<DBFixture>
+    public class PostsRepositoryTests : IClassFixture<DBFixture>
     {
         private readonly DBFixture _fixture;
 
@@ -60,7 +60,7 @@ namespace TeamWebApplicationTests.Repositories.UsersRepositoryTests
         {
             var postRepository = new PostsRepository(_fixture.Context);
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => postRepository.UpdateTextPostAsync(null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => postRepository.UpdatePostAsync<TextPost>(null, null));
         }
 
         [Fact]
@@ -68,7 +68,7 @@ namespace TeamWebApplicationTests.Repositories.UsersRepositoryTests
         {
             var postRepository = new PostsRepository(_fixture.Context);
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => postRepository.UpdateFilePostAsync(null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => postRepository.UpdatePostAsync<FilePost>(null, null));
         }
     }
 }
