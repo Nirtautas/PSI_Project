@@ -8,6 +8,8 @@ namespace TeamWebApplication.Data.MailService
     public class MailService : IMailService
     {
         private readonly IDataLogger _logger;
+        public string MailSubject { get; private set; }
+        public string MailBody { get; private set; }
 
         public MailService(IDataLogger logger)
         {
@@ -31,6 +33,8 @@ namespace TeamWebApplication.Data.MailService
 
             try
             {
+                MailSubject = mailMessage.Subject;
+                MailBody = mailMessage.Body;
                 smtpClient.Send(mailMessage);
             }
             catch (Exception ex)
@@ -64,6 +68,8 @@ namespace TeamWebApplication.Data.MailService
 
             try
             {
+                MailSubject = mailMessage.Subject;
+                MailBody = mailMessage.Body;
                 smtpClient.Send(mailMessage);
             }
             catch (Exception ex)
