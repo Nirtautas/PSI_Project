@@ -1,5 +1,6 @@
 ﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.Design;
 using TeamWebApplication.Data.Database;
 using TeamWebApplication.Models;
 using TeamWebApplication.Repositories.Interfaces;
@@ -66,12 +67,23 @@ namespace TeamWebApplication.Repositories
             await SaveAsync();
         }
 
-        public async Task UpdateCommentAsync(Comment? comment)
+        public async Task UpdateCommentAsync(int? commentId, string? comment)
         {
+            if (commentId == null)
+                throw new ArgumentNullException(nameof(commentId));
             if (comment == null)
                 throw new ArgumentNullException(nameof(comment));
 
-            _db.Comments.Update(comment);
+            var existingComment = await _db.Comments.FirstOrDefaultAsync(u => u.CommentId == commentId);
+            if (existingComment != null)
+            {
+                if (existingComment.UserComment != comment)
+                {
+                    existingComment.CreationTime = DateTime.Now;
+                }
+                existingComment.UserComment = comment;
+                _db.Comments.Update(existingComment);
+            }
             await SaveAsync();
         }
 

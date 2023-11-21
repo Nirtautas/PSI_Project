@@ -132,16 +132,7 @@ namespace TeamWebApplication.Controllers
         {
             try
             {
-                var originalComment = await _commentsRepository.GetCommentByIdAsync(commentId);
-                if (originalComment != null)
-                {
-                    if (originalComment.UserComment != userComment)
-                    {
-                        originalComment.CreationTime = DateTime.Now;
-                    }
-                    originalComment.UserComment = userComment;
-                    await _commentsRepository.UpdateCommentAsync(originalComment);
-                }
+                await _commentsRepository.UpdateCommentAsync(commentId, userComment);
                 return RedirectToAction("Index", new { courseId });
             }
             catch (Exception ex)
@@ -226,7 +217,6 @@ namespace TeamWebApplication.Controllers
                 var originalPost = (TextPost?) await _postsRepository.GetPostByIdAsync(post.PostId);
                 if (originalPost != null && (originalPost.TextContent != post.TextContent || originalPost.Name != post.Name))
                 {
-                    originalPost.TextContent = post.TextContent;
                     await _postsRepository.UpdateAndSaveDelegate(originalPost, post);
                 }
                 return RedirectToAction("Index", new { courseId });
@@ -359,7 +349,6 @@ namespace TeamWebApplication.Controllers
                     {
                         await file.CopyToAsync(stream);
                     }
-                    originalPost.FileName = fileName;
                     await _postsRepository.UpdatePostAsync(originalPost, post);
                 }
                 return RedirectToAction("Index", new { courseId });

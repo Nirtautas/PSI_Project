@@ -6,20 +6,21 @@ namespace TeamWebApplication.Models
     {
         public string? FileName { get; set; } = null;
 
-        public FilePost(int id, int courseId, string name, DateTime creationDate, bool IsVisible, PostType PostType, string fileName)
+        public FilePost()
+        {
+
+        }
+
+        public FilePost(int id, int courseId, string name = "dname",
+            bool IsVisible = true, string fileName = "dname")
         {
             base.PostId = id;
             base.CourseId = courseId;
             base.Name = name;
-            base.CreationDate = creationDate;
+            base.CreationDate = DateTime.Now;
             base.IsVisible = IsVisible;
-            base.PostType = PostType;
+            base.PostType = PostType.File;
             this.FileName = fileName;
-        }
-
-        public FilePost()
-        {
-
         }
 
         public override string ToString()

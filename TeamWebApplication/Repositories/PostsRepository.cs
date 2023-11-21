@@ -79,6 +79,15 @@ namespace TeamWebApplication.Repositories
             originalPost.Name = post.Name;
             originalPost.IsVisible = post.IsVisible;
             originalPost.PostType = post.PostType;
+
+            if (originalPost is TextPost textPost && post is TextPost textPostToUpdate)
+            {
+                textPost.TextContent = textPostToUpdate.TextContent;
+            }
+            if (originalPost is FilePost filePost && post is FilePost filePostToUpdate)
+            {
+                filePost.FileName = filePostToUpdate.FileName;
+            }
             await SaveAsync();
         }
 

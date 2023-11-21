@@ -20,13 +20,8 @@ namespace TeamWebApplication.Models
 
         }
 
-        public Comment(
-        int commentId,
-        int courseId,
-        int userId,
-        string usersNameThatCommented,
-        string usersSurnameThatCommented,
-        string userComment)
+        public Comment(int commentId, int courseId, int userId, string usersNameThatCommented = "dname",
+            string usersSurnameThatCommented = "dsurname", string userComment = "dcomment")
         {
             CommentId = commentId;
             CourseId = courseId;
