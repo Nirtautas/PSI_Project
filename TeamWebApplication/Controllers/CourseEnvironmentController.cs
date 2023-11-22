@@ -217,8 +217,7 @@ namespace TeamWebApplication.Controllers
                 var originalPost = (TextPost?) await _postsRepository.GetPostByIdAsync(post.PostId);
                 if (originalPost != null && (originalPost.TextContent != post.TextContent || originalPost.Name != post.Name))
                 {
-                    originalPost.TextContent = post.TextContent;
-                    await _postsRepository.UpdatePostAsync(originalPost, post);
+                    await _postsRepository.UpdateAndSaveDelegate(originalPost, post);
                 }
                 return RedirectToAction("Index", new { courseId });
             }
@@ -350,7 +349,6 @@ namespace TeamWebApplication.Controllers
                     {
                         await file.CopyToAsync(stream);
                     }
-                    originalPost.FileName = fileName;
                     await _postsRepository.UpdatePostAsync(originalPost, post);
                 }
                 return RedirectToAction("Index", new { courseId });

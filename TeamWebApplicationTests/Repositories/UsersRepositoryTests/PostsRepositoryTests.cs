@@ -6,7 +6,7 @@ using TeamWebApplicationTests.DatabaseFixture;
 
 namespace TeamWebApplicationTests.Repositories.UsersRepositoryTests
 {
-    public  class PostsRepositoryTests : IClassFixture<DBFixture>
+    public class PostsRepositoryTests : IClassFixture<DBFixture>
     {
         private readonly DBFixture _fixture;
         private readonly PostsRepository _postRepository;
@@ -88,10 +88,10 @@ namespace TeamWebApplicationTests.Repositories.UsersRepositoryTests
             var id = 30000;
             Assert.Contains(_fixture.Context.Posts, t => t.PostId == id);
             var postToUpdate = new TextPost(id, 1, "TestName", true, "TestContent");
-            await _postRepository.UpdateTextPostAsync(postToUpdate);
-            var post = (TextPost?) _fixture.Context.Posts.FirstOrDefault(t => t.PostId == id);
-
+            var post = (TextPost?)_fixture.Context.Posts.FirstOrDefault(t => t.PostId == id);
             Assert.NotNull(post);
+            await _postRepository.UpdatePostAsync(post, postToUpdate);
+
             Assert.Equal(post.PostId, postToUpdate.PostId);
             Assert.Equal(post.Name, postToUpdate.Name);
             Assert.Equal(post.IsVisible, postToUpdate.IsVisible);
@@ -104,10 +104,10 @@ namespace TeamWebApplicationTests.Repositories.UsersRepositoryTests
             var id = 30003;
             Assert.Contains(_fixture.Context.Posts, t => t.PostId == id);
             var postToUpdate = new FilePost(id, 1, "TestName", true, "TestName");
-            await _postRepository.UpdateFilePostAsync(postToUpdate);
-            var post = (FilePost?) _fixture.Context.Posts.FirstOrDefault(t => t.PostId == id);
-
+            var post = (FilePost?)_fixture.Context.Posts.FirstOrDefault(t => t.PostId == id);
             Assert.NotNull(post);
+            await _postRepository.UpdatePostAsync(post, postToUpdate);
+
             Assert.Equal(post.PostId, postToUpdate.PostId);
             Assert.Equal(post.Name, postToUpdate.Name);
             Assert.Equal(post.IsVisible, postToUpdate.IsVisible);
@@ -151,13 +151,14 @@ namespace TeamWebApplicationTests.Repositories.UsersRepositoryTests
         [Fact]
         public async Task UpdateTextPostAsync_PassingNullValue_ThrowsArgumentNullException()
         {
-            await Assert.ThrowsAsync<ArgumentNullException>(() => _postRepository.UpdateTextPostAsync(null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _postRepository.UpdatePostAsync<TextPost>(null, null));
         }
 
         [Fact]
         public async Task UpdateFilePostAsync_PassingNullValue_ThrowsArgumentNullException()
         {
-            await Assert.ThrowsAsync<ArgumentNullException>(() => _postRepository.UpdateFilePostAsync(null));
+
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _postRepository.UpdatePostAsync<FilePost>(null, null));
         }
     }
 }
