@@ -20,6 +20,7 @@ namespace TeamWebApplication.Models
         //Database links
         public ICollection<CourseUser> Courses { get; set; }
         public ICollection<Comment> Comments { get; set; }
+        public ICollection<Rating> Ratings { get; set; }
 
         public User()
         {
