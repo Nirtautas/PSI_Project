@@ -1,7 +1,10 @@
-@using TeamWebApplication.Models.Enums;
+@using TeamWebApplication.Models.Enums
+@inject TeamWebApplication.Repositories.Interfaces.ICourseUsersRepository _courseUserRepository
 @model CourseAndComment
 @{
     ViewData["Title"] = "Course Environment";
+    bool isLecturer = Model.User.Role == Role.Lecturer;
+    bool lecturerCourseRelationExists = await _courseUserRepository.CheckIfRelationExistsAsync(Model.comment.CourseId, Model.LoggedInUser);
 }
 
 <!DOCTYPE html>
@@ -46,7 +49,7 @@
             <div class="container-bg">
                 <div class="add-post-container">
                     <h1>Posts</h1>
-                    @if (Model.User.Role == Role.Lecturer)
+                    @if (isLecturer && lecturerCourseRelationExists)
                     {
                         <a href="#popup2" class="add-post">
                             <span class="icon">+</span>
@@ -87,7 +90,7 @@
                             }
                             <div class="delete-and-edit-container" id="@post.PostId">
                                 <!-- post editing and deletion for different types are the same and could be shortened-->
-                                @if (Model.User.Role == Role.Lecturer)
+                                @if (isLecturer && lecturerCourseRelationExists)
                                 {
                                     @switch (post.PostType)
                                     {
