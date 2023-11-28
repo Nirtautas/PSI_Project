@@ -25,6 +25,7 @@ builder.Services.AddScoped<ICoursesRepository, CoursesRepository>();
 builder.Services.AddScoped<ICourseUsersRepository, CourseUsersRepository>();
 builder.Services.AddScoped<IPostsRepository, PostsRepository>();
 builder.Services.AddScoped<ICommentsRepository, CommentsRepository>();
+builder.Services.AddScoped<IRatingsRepository, RatingsRepository>();
 
 var app = builder.Build();
 
