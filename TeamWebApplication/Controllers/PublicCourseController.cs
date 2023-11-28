@@ -54,32 +54,5 @@ namespace TeamWebApplication.Controllers
                 throw;
 			}
 		}
-
-        public async Task<IActionResult> TeacherIndex()
-        {
-            try
-            {
-                HttpContext.Session.GetInt32Ex("LoggedInUserId");
-
-                var searchString = Request.Query["searchString"];
-                IEnumerable<Course> publicCourses = await _coursesRepository.GetPublicCoursesAsync();
-                if (!String.IsNullOrEmpty(searchString))
-                {
-                    publicCourses = publicCourses.Where(course => course.Name!.Contains(searchString, StringComparison.InvariantCultureIgnoreCase)).ToList();
-                }
-
-                return View(publicCourses);
-			}
-			catch (SessionCredentialException ex)
-			{
-				_logger.Log(ex);
-				return RedirectToAction("Index", "Home");
-			}
-			catch (Exception ex1)
-			{
-				_logger.Log(ex1);
-				throw;
-			}
-        }
     }
 }

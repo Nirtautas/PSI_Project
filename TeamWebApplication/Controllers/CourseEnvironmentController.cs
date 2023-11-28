@@ -63,42 +63,6 @@ namespace TeamWebApplication.Controllers
             }
         }
 
-        public async Task<IActionResult> TeacherVisitorIndex(int courseId)
-        {
-            try
-            {
-                var loggedInUserId = HttpContext.Session.GetInt32Ex("LoggedInUserId");
-                HttpContext.Session.SetInt32("CurrentCourseId", courseId);
-
-                var coursePosts = await _postsRepository.GetPostsByCourseAsync(courseId);
-
-                Comment comment1 = new();
-                comment1.CourseId = courseId;
-                var courseComments = await _commentsRepository.GetCommentsByCourseIdAsync(courseId);
-                var currentUser = await _usersRepository.GetUserByIdAsync(loggedInUserId);
-
-                var viewModel = new CourseAndComment
-                {
-                    PostData = coursePosts,
-                    CommentData = courseComments,
-                    comment = comment1,
-                    LoggedInUser = (int)loggedInUserId,
-                    User = currentUser
-                };
-                return View(viewModel);
-            }
-            catch (SessionCredentialException ex)
-            {
-                _logger.Log(ex);
-                return RedirectToAction("Index", "Home");
-            }
-            catch (Exception ex1)
-            {
-                _logger.Log(ex1);
-                throw;
-            }
-        }
-
         [HttpPost]
         public async Task<IActionResult> AddComment(int courseId, Comment comment)
         {
