@@ -8,8 +8,8 @@ namespace TeamWebApplication.Repositories.Interfaces
         Task InsertRatingAsync(Rating? rating);
         Task DeleteRatingAsync(int? userId, int? courseId);
         Task DeleteRatingAsync(Rating? rating);
-        Task UpdateRatingsAsync(Rating? rating);
-        Task UpdateRatingsAsync(Rating? originalRating, Rating? rating);
+        Task UpdateRatingAsync(Rating? rating);
+        Task UpdateRatingAsync(Rating? originalRating, Rating? rating);
         Task<double> GetCourseRatingAsync(int? courseId);
     }
 }

@@ -58,7 +58,7 @@ namespace TeamWebApplication.Repositories
                 await SaveAsync();
         }
 
-        public async Task UpdateRatingsAsync(Rating? rating)
+        public async Task UpdateRatingAsync(Rating? rating)
         {
             if (rating == null)
                 throw new ArgumentNullException(nameof(rating));
@@ -72,7 +72,7 @@ namespace TeamWebApplication.Repositories
             }
         }
 
-        public async Task UpdateRatingsAsync(Rating? originalRating, Rating? rating)
+        public async Task UpdateRatingAsync(Rating? originalRating, Rating? rating)
         {
             if (originalRating == null)
                 throw new ArgumentNullException(nameof(originalRating));

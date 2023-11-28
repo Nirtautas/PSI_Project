@@ -185,6 +185,13 @@ namespace TeamWebApplicationTests.DatabaseFixture
                     UserComment = "Cool"
                 }
             );
+
+            Context.Ratings.AddRange(
+                new Rating(user1.UserId, course1.CourseId, 3),
+                new Rating(user1.UserId, course2.CourseId, 5),
+                new Rating(user2.UserId, course1.CourseId, 4),
+                new Rating(user3.UserId, course1.CourseId, 3)
+            );
             Context.SaveChanges();
         }
 
@@ -195,6 +202,7 @@ namespace TeamWebApplicationTests.DatabaseFixture
             Context.Posts.RemoveRange(Context.Posts);
             Context.Comments.RemoveRange(Context.Comments);
             Context.CoursesUsers.RemoveRange(Context.CoursesUsers);
+            Context.Ratings.RemoveRange(Context.Ratings);
             Context.SaveChanges();
         }
 
