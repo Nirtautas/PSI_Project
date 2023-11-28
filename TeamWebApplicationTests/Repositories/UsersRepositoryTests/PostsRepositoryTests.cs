@@ -1,6 +1,4 @@
-﻿using System.Linq;
-using TeamWebApplication.Models;
-using TeamWebApplication.Models.Enums;
+﻿using TeamWebApplication.Models;
 using TeamWebApplication.Repositories;
 using TeamWebApplicationTests.DatabaseFixture;
 

@@ -33,7 +33,7 @@ namespace TeamWebApplication.Repositories
             await SaveAsync();
         }
 
-        public async Task DeleteRating(int? userId, int? courseId)
+        public async Task DeleteRatingAsync(int? userId, int? courseId)
         {
             if (userId == null)
                 throw new ArgumentNullException(nameof(userId));
@@ -49,7 +49,7 @@ namespace TeamWebApplication.Repositories
             }
         }
 
-        public async Task DeleteRating(Rating? rating)
+        public async Task DeleteRatingAsync(Rating? rating)
         {
             if (rating == null)
                 throw new ArgumentNullException(nameof(rating));
