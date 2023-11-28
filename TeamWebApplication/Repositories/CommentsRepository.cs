@@ -1,6 +1,4 @@
-﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.Design;
+﻿using Microsoft.EntityFrameworkCore;
 using TeamWebApplication.Data.Database;
 using TeamWebApplication.Models;
 using TeamWebApplication.Repositories.Interfaces;

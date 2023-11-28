@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Hosting;
 using TeamWebApplication.Data.Database;
 using TeamWebApplication.Models;
 using TeamWebApplication.Repositories.Interfaces;
