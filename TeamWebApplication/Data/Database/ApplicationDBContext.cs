@@ -11,6 +11,7 @@ namespace TeamWebApplication.Data.Database
         public DbSet<Post> Posts { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<CourseUser> CoursesUsers { get; set; }
+        public DbSet<Rating> Ratings { get; set; }
 
         public ApplicationDBContext(DbContextOptions<ApplicationDBContext> options) : base(options)
         {
@@ -200,6 +201,27 @@ namespace TeamWebApplication.Data.Database
                     CreationTime = DateTime.Now,
                     UserComment = "Cool"
                 }
+            );
+
+            //Rating seeding
+            modelBuilder.Entity<Rating>()
+                .HasKey(t => new { t.UserId, t.CourseId });
+
+            modelBuilder.Entity<Rating>()
+                .HasOne(t => t.User)
+                .WithMany(t => t.Ratings)
+                .HasForeignKey(t => t.UserId);
+
+            modelBuilder.Entity<Rating>()
+                .HasOne(t => t.Course)
+                .WithMany(t => t.Ratings)
+                .HasForeignKey(t => t.CourseId);
+
+            modelBuilder.Entity<Rating>().HasData(
+                new Rating(user1.UserId, course1.CourseId, 3),
+                new Rating(user1.UserId, course2.CourseId, 5),
+                new Rating(user2.UserId, course1.CourseId, 4),
+                new Rating(user3.UserId, course1.CourseId, 3)
             );
 
             base.OnModelCreating(modelBuilder);

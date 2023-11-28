@@ -18,6 +18,7 @@ namespace TeamWebApplication.Models
         public ICollection<CourseUser> Users { get; set; }
         public ICollection<Post> Posts { get; set; }
         public ICollection<Comment> Comments { get; set; }
+        public ICollection<Rating> Ratings { get; set; }
 
         public Course()
         {
