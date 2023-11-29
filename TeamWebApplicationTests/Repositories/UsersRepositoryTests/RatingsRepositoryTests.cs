@@ -25,7 +25,7 @@ namespace TeamWebApplicationTests.Repositories.UsersRepositoryTests
         {
             var uid = 20000;
             var cid = 10000;
-            var expected = 3;
+            var expected = 3m;
             var rating = await _ratingRepository.GetRatingAsync(uid, cid);
 
             Assert.NotNull(rating);
@@ -34,13 +34,17 @@ namespace TeamWebApplicationTests.Repositories.UsersRepositoryTests
             Assert.Equal(rating.UserRating, expected);
         }
 
-        [Fact]
-        public async Task InsertRatingAsync_PassingPost_InsertsRating()
+        [Theory]
+        [InlineData(5, 5)]
+        [InlineData(4.35, 4.5)]
+        [InlineData(1.75, 2)]
+        [InlineData(6.5, 5)]
+        [InlineData(-5, 0)]
+        public async Task InsertRatingAsync_PassingPost_InsertsRating(decimal passed, decimal expected)
         {
             var uid = 2;
             var cid = 1;
-            var expected = 5;
-            var rating = new Rating(uid, cid, expected);
+            var rating = new Rating(uid, cid, passed);
             await _ratingRepository.InsertRatingAsync(rating);
 
             Assert.Equal(5, _fixture.Context.Ratings.Count());

@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TeamWebApplication.Models
 {
@@ -9,19 +8,21 @@ namespace TeamWebApplication.Models
         public int UserId { get; set; }
         public int CourseId { get; set; }
 
-        private int userRating;
-        public int UserRating {
+        //Increments of 0.5. Min: 0, Max: 5 stars
+        private decimal userRating;
+        public decimal UserRating {
             get
             {
                 return userRating;
             }
             set
             {
-                if (value > 5)
-                    userRating = 5;
-                if (value < 1)
-                    userRating = 1;
-                userRating = value;
+                if (value >= 5m)
+                    userRating = 5m;
+                else if (value <= 0m)
+                    userRating = 0m;
+                else
+                    userRating = Math.Round(value * 2, MidpointRounding.AwayFromZero) / 2;
             }
         }
 
@@ -29,11 +30,11 @@ namespace TeamWebApplication.Models
         public User User { get; set; }
         public Course Course { get; set; }
 
-        public Rating(int userId, int courseId, int userRating = 5)
+        public Rating(int userId, int courseId, decimal userRating = 5m)
         {
             UserId = userId;
             CourseId = courseId;
-            this.userRating = userRating;
+            UserRating = userRating;
         }
 
         public int CompareTo(Rating? other)

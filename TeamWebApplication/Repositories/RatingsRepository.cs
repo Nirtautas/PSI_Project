@@ -82,13 +82,13 @@ namespace TeamWebApplication.Repositories
             await SaveAsync();
         }
 
-        public async Task<double> GetCourseRatingAsync(int? courseId)
+        public async Task<decimal> GetCourseRatingAsync(int? courseId)
         {
             if (courseId == null)
                 throw new ArgumentNullException(nameof(courseId));
 
-            return await _db.Ratings.Where(t => t.CourseId == courseId)
-                .AverageAsync(t => t.UserRating);
+            return (Decimal) await _db.Ratings.Where(t => t.CourseId == courseId)
+                .AverageAsync(t => Decimal.ToDouble(t.UserRating));
         }
 
         public async Task SaveAsync()
