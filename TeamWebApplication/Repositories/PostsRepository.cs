@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Hosting;
 using TeamWebApplication.Data.Database;
 using TeamWebApplication.Models;
+using TeamWebApplication.Models.Enums;
 using TeamWebApplication.Repositories.Interfaces;
 
 namespace TeamWebApplication.Repositories
@@ -18,6 +19,19 @@ namespace TeamWebApplication.Repositories
             {
                 await UpdatePostAsync(originalPost, post);
             };
+        }
+        public async Task<bool> IsFileUsedInOtherPostsAsync(string fileName, int PostId)
+        {
+            var FilePosts = await _db.Posts.AsNoTracking().Where(p => p.PostType == PostType.File).OfType<FilePost>().ToListAsync();
+            bool isFileUsedInOtherPosts = FilePosts.Any(p => (p.FileName == fileName) && p.PostId != PostId);
+            if (isFileUsedInOtherPosts)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         public async Task<IEnumerable<Post>> GetPostsByCourseAsync(int? courseId)

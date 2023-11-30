@@ -5,6 +5,7 @@ namespace TeamWebApplication.Repositories.Interfaces
     public delegate Task ActionDelegate<T>(T originalPost, T post) where T : Post?;
     public interface IPostsRepository
     {
+        Task<bool> IsFileUsedInOtherPostsAsync(string fileName, int PostId);
         Task<IEnumerable<Post>> GetPostsByCourseAsync(int? id);
         Task<Post?> GetPostByIdAsync(int? id);
         Task InsertPostAsync<T>(T post) where T : Post?;

@@ -224,7 +224,6 @@ namespace TeamWebApplication.Controllers
                 throw;
             }
         }
-        /////////////////////////////////////////////////////////////////////////
         public IActionResult CreateFilePost()
         {
             try
@@ -282,8 +281,6 @@ namespace TeamWebApplication.Controllers
             }
         }
 
-
-        //* File editing implementation will be finished in the future *
         public async Task<IActionResult> EditFilePost(int postId)
         {
             try
@@ -323,7 +320,8 @@ namespace TeamWebApplication.Controllers
                     var OriginalFilePath = Path.Combine("wwwroot/uploads", originalPost.FileName);
                     await _postsRepository.UpdatePostAsync(originalPost, post);
                     await Task.Delay(100);
-                    if (System.IO.File.Exists(OriginalFilePath))
+                    bool FileIsUsed = await _postsRepository.IsFileUsedInOtherPostsAsync(originalPost.FileName, originalPost.PostId);
+                    if (System.IO.File.Exists(OriginalFilePath) && !FileIsUsed)
                     {
                         System.IO.File.Delete(OriginalFilePath);
                     }
@@ -336,7 +334,6 @@ namespace TeamWebApplication.Controllers
                 throw;
             }
         }
-        ///////////////////////////////////////////////////////////////////////
         public async Task<IActionResult> DownloadFile(IFormFile file, FilePost post)
         {
             try
@@ -381,7 +378,10 @@ namespace TeamWebApplication.Controllers
             try
             {
                 var filePath = Path.Combine("wwwroot/uploads", post.FileName);
-                if (System.IO.File.Exists(filePath))
+                var fileName = post.FileName;
+                var Id = post.PostId;
+                bool FileIsUsed = await _postsRepository.IsFileUsedInOtherPostsAsync(fileName, Id);
+                if (System.IO.File.Exists(filePath) && !FileIsUsed)
                 {
                     System.IO.File.Delete(filePath);
                 }
