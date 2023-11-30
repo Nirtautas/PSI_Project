@@ -187,10 +187,10 @@ namespace TeamWebApplicationTests.DatabaseFixture
             );
 
             Context.Ratings.AddRange(
-                new Rating(user1.UserId, course1.CourseId, 3),
-                new Rating(user1.UserId, course2.CourseId, 5),
-                new Rating(user2.UserId, course1.CourseId, 4),
-                new Rating(user3.UserId, course1.CourseId, 3)
+                new Rating(user1.UserId, course1.CourseId, 3m),
+                new Rating(user1.UserId, course2.CourseId, 5m),
+                new Rating(user2.UserId, course1.CourseId, 4m),
+                new Rating(user3.UserId, course1.CourseId, 3m)
             );
             Context.SaveChanges();
         }

@@ -10,6 +10,6 @@ namespace TeamWebApplication.Repositories.Interfaces
         Task DeleteRatingAsync(Rating? rating);
         Task UpdateRatingAsync(Rating? rating);
         Task UpdateRatingAsync(Rating? originalRating, Rating? rating);
-        Task<double> GetCourseRatingAsync(int? courseId);
+        Task<decimal> GetCourseRatingAsync(int? courseId);
     }
 }
