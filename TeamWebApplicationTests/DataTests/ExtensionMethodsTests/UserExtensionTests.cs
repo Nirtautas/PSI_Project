@@ -1,6 +1,6 @@
-﻿using TeamWebApplication.Data.ExtensionMethods;
-using TeamWebApplication.Models;
-using TeamWebApplication.Models.Enums;
+﻿using TeamWebApplicationAPI.Data.ExtensionMethods;
+using TeamWebApplicationAPI.Models;
+using TeamWebApplicationAPI.Models.Enums;
 
 namespace TeamWebApplicationTests.DataTests.ExtensionMethodsTests
 {

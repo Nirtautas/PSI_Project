@@ -4,10 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TeamWebApplication.Controllers.ControllerEventArgs;
-using TeamWebApplication.Data.ExceptionLogger;
-using TeamWebApplication.Data.MailService;
-using TeamWebApplication.Models;
+using TeamWebApplicationAPI.Controllers.ControllerEventArgs;
+using TeamWebApplicationAPI.Data.ExceptionLogger;
+using TeamWebApplicationAPI.Data.MailService;
+using TeamWebApplicationAPI.Models;
 
 namespace TeamWebApplicationTests.DataTests.MailServiceTests
 {

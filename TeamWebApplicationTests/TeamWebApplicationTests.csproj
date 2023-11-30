@@ -25,7 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TeamWebApplication\TeamWebApplication.csproj" />
+    <ProjectReference Include="..\TeamWebApplicationAPI\TeamWebApplicationAPI.csproj" />
   </ItemGroup>
 
 </Project>
