@@ -163,7 +163,7 @@ namespace TeamWebApplication.Controllers
             {
                 HttpContext.Session.GetInt32Ex("LoggedInUserId");
                 HttpContext.Session.GetInt32Ex("CurrentCourseId");
-                var post = (TextPost?) await _postsRepository.GetPostByIdAsync(postId);
+                var post = (TextPost?)await _postsRepository.GetPostByIdAsync(postId);
                 return View(post);
             }
             catch (SessionCredentialException ex)
@@ -178,7 +178,7 @@ namespace TeamWebApplication.Controllers
         {
             try
             {
-                var originalPost = (TextPost?) await _postsRepository.GetPostByIdAsync(post.PostId);
+                var originalPost = (TextPost?)await _postsRepository.GetPostByIdAsync(post.PostId);
                 if (originalPost != null && (originalPost.TextContent != post.TextContent || originalPost.Name != post.Name))
                 {
                     await _postsRepository.UpdateAndSaveDelegate(originalPost, post);
@@ -213,7 +213,7 @@ namespace TeamWebApplication.Controllers
         {
             try
             {
-                var originalPost = (TextPost?) await _postsRepository.GetPostByIdAsync(post.PostId);
+                var originalPost = (TextPost?)await _postsRepository.GetPostByIdAsync(post.PostId);
                 await _postsRepository.DeletePostAsync(originalPost);
                 return RedirectToAction("Index", new { courseId });
             }
@@ -223,7 +223,7 @@ namespace TeamWebApplication.Controllers
                 throw;
             }
         }
-
+        /////////////////////////////////////////////////////////////////////////
         public IActionResult CreateFilePost()
         {
             try
@@ -281,15 +281,15 @@ namespace TeamWebApplication.Controllers
             }
         }
 
-       /* 
-        * File editing implementation will be finished in the future *
+
+        //* File editing implementation will be finished in the future *
         public async Task<IActionResult> EditFilePost(int postId)
         {
             try
             {
                 HttpContext.Session.GetInt32Ex("LoggedInUserId");
                 HttpContext.Session.GetInt32Ex("CurrentCourseId");
-                var post = (FilePost?) await _postsRepository.GetPostByIdAsync(postId);
+                var post = (FilePost?)await _postsRepository.GetPostByIdAsync(postId);
                 return View(post);
             }
             catch (SessionCredentialException ex)
@@ -304,8 +304,8 @@ namespace TeamWebApplication.Controllers
         {
             try
             {
-                var originalPost = (FilePost?) await _postsRepository.GetPostByIdAsync(post.PostId);
-                if (originalPost!= null && (originalPost.FileName != post.FileName || originalPost.Name != post.Name))
+                var originalPost = (FilePost?)await _postsRepository.GetPostByIdAsync(post.PostId);
+                if (originalPost != null && (originalPost.FileName != post.FileName || originalPost.Name != post.Name))
                 {
                     var fileName = Path.GetFileName(file.FileName);
                     var filePath = Path.Combine("wwwroot/uploads", fileName);
@@ -322,13 +322,13 @@ namespace TeamWebApplication.Controllers
                 _logger.Log(ex);
                 throw;
             }
-        }*/
-
+        }
+        ///////////////////////////////////////////////////////////////////////
         public async Task<IActionResult> DownloadFile(IFormFile file, FilePost post)
         {
             try
             {
-                var originalPost = (FilePost?) await _postsRepository.GetPostByIdAsync(post.PostId);
+                var originalPost = (FilePost?)await _postsRepository.GetPostByIdAsync(post.PostId);
                 var fileName = originalPost.FileName;
 
                 var filePath = Path.Combine("wwwroot/uploads", fileName);
@@ -367,8 +367,7 @@ namespace TeamWebApplication.Controllers
         {
             try
             {
-                var originalPost = (FilePost?) await _postsRepository.GetPostByIdAsync(post.PostId);
-                var filePath = Path.Combine("wwwroot/uploads", originalPost.FileName);
+                var filePath = Path.Combine("wwwroot/uploads", post.FileName);
                 if (System.IO.File.Exists(filePath))
                 {
                     System.IO.File.Delete(filePath);
