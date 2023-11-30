@@ -8,6 +8,7 @@ using TeamWebApplication.Models;
 using TeamWebApplication.Models.Enums;
 using TeamWebApplication.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+using Microsoft.Extensions.Hosting;
 
 namespace TeamWebApplication.Controllers
 {
@@ -304,16 +305,28 @@ namespace TeamWebApplication.Controllers
         {
             try
             {
+                var fileName = Path.GetFileName(file.FileName);
+                var fileExtension = Path.GetExtension(fileName);
+                var filePath = Path.Combine("wwwroot/uploads", fileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    Task fileCopy = file.CopyToAsync(stream);
+                    post.FileName = fileName;
+                    await fileCopy;
+                }
                 var originalPost = (FilePost?)await _postsRepository.GetPostByIdAsync(post.PostId);
                 if (originalPost != null && (originalPost.FileName != post.FileName || originalPost.Name != post.Name))
                 {
-                    var fileName = Path.GetFileName(file.FileName);
-                    var filePath = Path.Combine("wwwroot/uploads", fileName);
-                    using (var stream = new FileStream(filePath, FileMode.Create))
-                    {
-                        await file.CopyToAsync(stream);
-                    }
+                    var OriginalFileName = Path.GetFileName(file.FileName);
+                    var OriginalFileExtension = Path.GetExtension(fileName);
+                    var OriginalFilePath = Path.Combine("wwwroot/uploads", originalPost.FileName);
                     await _postsRepository.UpdatePostAsync(originalPost, post);
+                    await Task.Delay(100);
+                    if (System.IO.File.Exists(OriginalFilePath))
+                    {
+                        System.IO.File.Delete(OriginalFilePath);
+                    }
                 }
                 return RedirectToAction("Index", new { courseId });
             }
