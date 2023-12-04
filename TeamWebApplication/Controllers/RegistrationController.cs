@@ -3,7 +3,7 @@ using TeamWebApplication.Controllers.ControllerEventArgs;
 using TeamWebApplication.Data.Database;
 using TeamWebApplication.Data.ExceptionLogger;
 using TeamWebApplication.Data.MailService;
-using TeamWebApplication.Models;
+using TeamWebApplicationAPI.Models;
 using TeamWebApplication.Repositories.Interfaces;
 
 namespace TeamWebApplication.Controllers

@@ -4,8 +4,8 @@ using TeamWebApplication.Data.Database;
 using TeamWebApplication.Data.ExceptionLogger;
 using TeamWebApplication.Data.Exceptions;
 using TeamWebApplication.Data.ExtensionMethods;
-using TeamWebApplication.Models;
-using TeamWebApplication.Models.Enums;
+using TeamWebApplicationAPI.Models;
+using TeamWebApplicationAPI.Models.Enums;
 using TeamWebApplication.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 

@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using TeamWebApplication.Data.Database;
 using TeamWebApplication.Data.ExceptionLogger;
-using TeamWebApplication.Models;
+using TeamWebApplicationAPI.Models;
 
 namespace TeamWebApplication.Controllers
 {

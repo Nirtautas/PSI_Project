@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TeamWebApplication.Data.Database;
-using TeamWebApplication.Models;
+using TeamWebApplicationAPI.Models;
 using TeamWebApplication.Repositories.Interfaces;
 
 namespace TeamWebApplication.Repositories
