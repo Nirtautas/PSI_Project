@@ -1,14 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections.Concurrent;
-using System.Threading;
-using TeamWebApplication.Controllers.ControllerEventArgs;
-using TeamWebApplication.Data.Database;
-using TeamWebApplication.Data.ExceptionLogger;
-using TeamWebApplication.Data.Exceptions;
-using TeamWebApplication.Data.ExtensionMethods;
-using TeamWebApplication.Data.MailService;
+using TeamWebApplicationAPI.Controllers.ControllerEventArgs;
+using TeamWebApplicationAPI.Data.ExceptionLogger;
+using TeamWebApplicationAPI.Data.Exceptions;
+using TeamWebApplicationAPI.Data.ExtensionMethods;
+using TeamWebApplicationAPI.Data.MailService;
 using TeamWebApplicationAPI.Models;
-using TeamWebApplication.Repositories.Interfaces;
+using TeamWebApplicationAPI.Repositories.Interfaces;
 
 namespace TeamWebApplication.Controllers
 {

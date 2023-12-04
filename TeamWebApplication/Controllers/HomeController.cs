@@ -1,43 +1,48 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System.Diagnostics;
-using TeamWebApplication.Data.Database;
-using TeamWebApplication.Data.ExceptionLogger;
+using System.Net;
 using TeamWebApplicationAPI.Models;
 
 namespace TeamWebApplication.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly IDataLogger _logger;
-
-        public HomeController(ApplicationDBContext db, IDataLogger logger)
+        public async Task<IActionResult> Index()
         {
-            _logger = logger;
-        }
-
-        public IActionResult Index()
-        {
-            try
-            {
-                HttpContext.Session.Clear();
+            HttpContext.Session.Clear();
+            var http = new HttpClient();
+            var response = await http.GetAsync("https://localhost:7107/api/ApiHome/ApiIndex");
+            Debug.WriteLine(response.StatusCode);
+            if (response.StatusCode == HttpStatusCode.OK)
                 return View();
-            }
-            catch (Exception ex)
-            {
-                _logger.Log(ex);
-                throw;
-            }
+            else
+                return RedirectToAction("Error", "Home");
         }
 
-        public IActionResult Registration()
+        public async Task<IActionResult> Registration()
         {
-            return View();
+            var http = new HttpClient();
+            var response = await http.GetAsync("https://localhost:7107/api/ApiHome/ApiRegistration");
+            if (response.IsSuccessStatusCode)
+                return View();
+            else
+                return RedirectToAction("Error", "Home");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        public async Task<IActionResult> Error()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            HttpContext.Session.Clear();
+            var http = new HttpClient();
+            var response = await http.GetAsync("https://localhost:7107/api/ApiHome/ApiError");
+            if (response.IsSuccessStatusCode)
+            {
+                var error = JsonConvert.DeserializeObject<ErrorViewModel>(await response.Content.ReadAsStringAsync());
+                return View(error);
+            } 
+            else
+                return View();
         }
     }
 }

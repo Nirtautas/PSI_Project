@@ -8,10 +8,25 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Controllers\ControllerEventArgs\**" />
     <Compile Remove="Views\Course\NewFolder\**" />
+    <Content Remove="Controllers\ControllerEventArgs\**" />
     <Content Remove="Views\Course\NewFolder\**" />
+    <EmbeddedResource Remove="Controllers\ControllerEventArgs\**" />
     <EmbeddedResource Remove="Views\Course\NewFolder\**" />
+    <None Remove="Controllers\ControllerEventArgs\**" />
     <None Remove="Views\Course\NewFolder\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Controllers\CourseController.cs" />
+    <Compile Remove="Controllers\CourseEnvironmentController.cs" />
+    <Compile Remove="Controllers\PublicCourseController.cs" />
+    <Compile Remove="Controllers\RegistrationController.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Controllers\CourseController.cs.orig" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,13 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
-using TeamWebApplication.Data.Database;
-using TeamWebApplication.Data.ExceptionLogger;
-using TeamWebApplication.Data.Exceptions;
-using TeamWebApplication.Data.ExtensionMethods;
+using TeamWebApplicationAPI.Data.ExceptionLogger;
+using TeamWebApplicationAPI.Data.Exceptions;
+using TeamWebApplicationAPI.Data.ExtensionMethods;
 using TeamWebApplicationAPI.Models;
 using TeamWebApplicationAPI.Models.Enums;
-using TeamWebApplication.Repositories.Interfaces;
-using Microsoft.EntityFrameworkCore.Diagnostics;
+using TeamWebApplicationAPI.Repositories.Interfaces;
 
 namespace TeamWebApplication.Controllers
 {

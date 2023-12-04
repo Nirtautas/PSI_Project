@@ -5,7 +5,7 @@
         public string filePath { get; }
         public string relativePath { get; }
 
-        public DataLogger(string relativePath)
+        public DataLogger(string relativePath = @".\Logs\")
         {
             this.relativePath = relativePath;
             filePath = FormatFileName(relativePath);

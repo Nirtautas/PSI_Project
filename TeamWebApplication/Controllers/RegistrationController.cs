@@ -1,10 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using TeamWebApplication.Controllers.ControllerEventArgs;
-using TeamWebApplication.Data.Database;
-using TeamWebApplication.Data.ExceptionLogger;
-using TeamWebApplication.Data.MailService;
+using TeamWebApplicationAPI.Controllers.ControllerEventArgs;
+using TeamWebApplicationAPI.Data.ExceptionLogger;
+using TeamWebApplicationAPI.Data.MailService;
 using TeamWebApplicationAPI.Models;
-using TeamWebApplication.Repositories.Interfaces;
+using TeamWebApplicationAPI.Repositories.Interfaces;
 
 namespace TeamWebApplication.Controllers
 {
@@ -14,14 +13,11 @@ namespace TeamWebApplication.Controllers
         private readonly IDataLogger _logger;
         private readonly IMailService _mailService;
 
-        public event EventHandler<RegistrationEventArgs> Registration;
-
         public RegistrationController(IDataLogger logger, IMailService mailService, IUsersRepository usersRepository)
         {
             _logger = logger;
             _mailService = mailService;
             _usersRepository = usersRepository;
-            Registration += _mailService.OnRegistration;
         }
 
         public IActionResult Index()
@@ -49,15 +45,6 @@ namespace TeamWebApplication.Controllers
                 await _usersRepository.DeleteUserAsync(user);
                 _logger.Log(ex);
                 throw;
-            }
-        }
-
-        protected virtual void OnUserRegistration(User? user)
-        {
-            if (Registration != null && user != null)
-            {
-                _logger.Log(DateTime.Now + $": Registered {user.Name} with an id of {user.UserId}.");
-                Registration.Invoke(this, new RegistrationEventArgs(user));
             }
         }
     }

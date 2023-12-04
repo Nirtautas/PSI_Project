@@ -1,10 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using TeamWebApplication.Data.Database;
-using TeamWebApplication.Data.ExceptionLogger;
-using TeamWebApplication.Data.Exceptions;
-using TeamWebApplication.Data.ExtensionMethods;
+using TeamWebApplicationAPI.Data.ExceptionLogger;
+using TeamWebApplicationAPI.Data.Exceptions;
+using TeamWebApplicationAPI.Data.ExtensionMethods;
 using TeamWebApplicationAPI.Models;
-using TeamWebApplication.Repositories.Interfaces;
+using TeamWebApplicationAPI.Repositories.Interfaces;
 
 namespace TeamWebApplication.Controllers
 {
