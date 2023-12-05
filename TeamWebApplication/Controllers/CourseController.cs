@@ -18,7 +18,6 @@ namespace TeamWebApplication.Controllers
 
         public async Task<IActionResult> Index()
         {
-            //Getting session variables
             int? loggedInUserId = HttpContext.Session.GetInt32Ex("LoggedInUserId");
             HttpContext.Session.Remove("CurrentCourseId");
             string? searchString = Request.Query["searchString"];
@@ -32,7 +31,7 @@ namespace TeamWebApplication.Controllers
                 return View(viewModel);
             }
             else
-                return RedirectToAction("Index", "LogIn");
+                return RedirectToAction("Error", "Home");
         }
 
         public async Task<IActionResult> Create()

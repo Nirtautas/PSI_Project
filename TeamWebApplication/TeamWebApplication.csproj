@@ -20,7 +20,6 @@
 
   <ItemGroup>
     <Compile Remove="Controllers\CourseEnvironmentController.cs" />
-    <Compile Remove="Controllers\PublicCourseController.cs" />
   </ItemGroup>
 
   <ItemGroup>
