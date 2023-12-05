@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Runtime.Serialization;
+using System.Text.Json.Serialization;
 
 namespace TeamWebApplicationAPI.Models
 {
@@ -15,10 +17,10 @@ namespace TeamWebApplicationAPI.Models
         public bool IsPublic { get; set; }
 
         //Database links
-        public ICollection<CourseUser> Users { get; set; }
-        public ICollection<Post> Posts { get; set; }
-        public ICollection<Comment> Comments { get; set; }
-        public ICollection<Rating> Ratings { get; set; }
+        public virtual ICollection<CourseUser> Users { get; set; }
+        public virtual ICollection<Post> Posts { get; set; }
+        public virtual ICollection<Comment> Comments { get; set; }
+        public virtual ICollection<Rating> Ratings { get; set; }
 
         public Course()
         {

@@ -3,12 +3,14 @@ using TeamWebApplicationAPI.Repositories;
 using TeamWebApplicationAPI.Data.ExceptionLogger;
 using TeamWebApplicationAPI.Data.Database;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddNewtonsoftJson();
+builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddScoped<IDataLogger, DataLogger>();
 //Established connection with PostgreSQL database

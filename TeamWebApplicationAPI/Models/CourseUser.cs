@@ -1,4 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Runtime.Serialization;
+using System.Text.Json.Serialization;
 
 namespace TeamWebApplicationAPI.Models
 {
@@ -8,8 +10,8 @@ namespace TeamWebApplicationAPI.Models
 		public int CourseId { get; set; }
 		public int UserId { get; set; }
 
-		//Database links
-		public Course Course { get; set; }
-		public User User { get; set; }
+        //Database links
+        public virtual Course Course { get; set; }
+        public virtual User User { get; set; }
 	}
 }

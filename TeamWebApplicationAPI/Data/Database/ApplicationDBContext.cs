@@ -15,7 +15,7 @@ namespace TeamWebApplicationAPI.Data.Database
 
         public ApplicationDBContext(DbContextOptions<ApplicationDBContext> options) : base(options)
         {
-
+            //this.ChangeTracker.LazyLoadingEnabled = false;
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

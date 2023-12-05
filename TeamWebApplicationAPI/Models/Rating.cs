@@ -9,7 +9,9 @@ namespace TeamWebApplicationAPI.Models
         public int CourseId { get; set; }
 
         //Increments of 0.5. Min: 0, Max: 5 stars
+        [Newtonsoft.Json.JsonProperty]
         private decimal userRating;
+        [Newtonsoft.Json.JsonProperty]
         public decimal UserRating {
             get
             {
@@ -27,8 +29,10 @@ namespace TeamWebApplicationAPI.Models
         }
 
         //Database links
-        public User User { get; set; }
-        public Course Course { get; set; }
+        [Newtonsoft.Json.JsonIgnore]
+        public virtual User User { get; set; }
+        [Newtonsoft.Json.JsonIgnore]
+        public virtual Course Course { get; set; }
 
         public Rating(int userId, int courseId, decimal userRating = 5m)
         {

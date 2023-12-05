@@ -1,6 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 using System.ComponentModel.DataAnnotations.Schema;
 using TeamWebApplicationAPI.Models.Enums;
+using System.Runtime.Serialization;
 
 namespace TeamWebApplicationAPI.Models
 {
@@ -16,7 +18,7 @@ namespace TeamWebApplicationAPI.Models
         public PostType PostType { get; set; }
 
         //Database links
-        public Course Course { get; set; }
+        public virtual Course Course { get; set; }
 
         //Abstract definitions
         public abstract void ApplyData(string? textData);

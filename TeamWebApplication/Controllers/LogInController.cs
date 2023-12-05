@@ -34,7 +34,6 @@ namespace TeamWebApplication.Controllers
             var http = new HttpClient();
             var content = new StringContent(JsonConvert.SerializeObject(login), Encoding.UTF8, "application/json");
             var response = await http.PostAsync("https://localhost:7107/api/ApiLogIn/ApiLogin", content);
-            Debug.WriteLine(response.StatusCode);
             if (response.IsSuccessStatusCode)
             {
                 var user = JsonConvert.DeserializeObject<User>(await response.Content.ReadAsStringAsync());

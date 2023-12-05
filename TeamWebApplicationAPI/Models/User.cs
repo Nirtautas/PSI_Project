@@ -1,11 +1,14 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Runtime.Serialization;
+using System.Text.Json.Serialization;
 using TeamWebApplicationAPI.Models.Enums;
 
 namespace TeamWebApplicationAPI.Models
 {
 	[Table("Users")]
-	public class User : IComparable<User>
+    public class User : IComparable<User>
     {
         [Key]
         public int UserId { get; set; }
@@ -18,9 +21,9 @@ namespace TeamWebApplicationAPI.Models
         public Specialization Specialization { get; set; }
 
         //Database links
-        public ICollection<CourseUser> Courses { get; set; }
-        public ICollection<Comment> Comments { get; set; }
-        public ICollection<Rating> Ratings { get; set; }
+        public virtual ICollection<CourseUser> Courses { get; set; }
+        public virtual ICollection<Comment> Comments { get; set; }
+        public virtual ICollection<Rating> Ratings { get; set; }
 
         public User()
         {

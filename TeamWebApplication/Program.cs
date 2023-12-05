@@ -8,6 +8,7 @@ using TeamWebApplicationAPI.Repositories;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
+builder.Services.AddAutoMapper(typeof(Program), typeof(TeamWebApplicationAPI.Data.Mapping.MappingProfile));
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
 {
