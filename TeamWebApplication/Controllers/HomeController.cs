@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Diagnostics;
-using System.Net;
 using TeamWebApplicationAPI.Models;
 
 namespace TeamWebApplication.Controllers
@@ -14,7 +13,7 @@ namespace TeamWebApplication.Controllers
             var http = new HttpClient();
             var response = await http.GetAsync("https://localhost:7107/api/ApiHome/ApiIndex");
             Debug.WriteLine(response.StatusCode);
-            if (response.StatusCode == HttpStatusCode.OK)
+            if (response.IsSuccessStatusCode)
                 return View();
             else
                 return RedirectToAction("Error", "Home");

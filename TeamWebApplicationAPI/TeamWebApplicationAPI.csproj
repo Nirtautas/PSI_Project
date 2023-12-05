@@ -7,18 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Controllers\ControllerEventArgs\**" />
-    <Content Remove="Controllers\ControllerEventArgs\**" />
-    <EmbeddedResource Remove="Controllers\ControllerEventArgs\**" />
-    <None Remove="Controllers\ControllerEventArgs\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Include="Controllers\ControllerEventArgs\AttendanceEventArgs.cs" />
-    <Compile Include="Controllers\ControllerEventArgs\RegistrationEventArgs.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="12.0.1" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.25" />

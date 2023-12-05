@@ -19,7 +19,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="Controllers\CourseController.cs" />
     <Compile Remove="Controllers\CourseEnvironmentController.cs" />
     <Compile Remove="Controllers\PublicCourseController.cs" />
   </ItemGroup>

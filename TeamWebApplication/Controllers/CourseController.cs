@@ -1,353 +1,183 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.Collections.Concurrent;
-using TeamWebApplicationAPI.Controllers.ControllerEventArgs;
-using TeamWebApplicationAPI.Data.ExceptionLogger;
-using TeamWebApplicationAPI.Data.Exceptions;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using System.Text;
 using TeamWebApplicationAPI.Data.ExtensionMethods;
-using TeamWebApplicationAPI.Data.MailService;
 using TeamWebApplicationAPI.Models;
-using TeamWebApplicationAPI.Repositories.Interfaces;
 
 namespace TeamWebApplication.Controllers
 {
     public class CourseController : Controller
     {
-        private readonly ICoursesRepository _coursesRepository;
-        private readonly IUsersRepository _usersRepository;
-        private readonly ICourseUsersRepository _courseUserRepository;
-        private readonly IDataLogger _logger;
-        private readonly IMailService _mailService;
+        private readonly IMapper _mapper;
 
-        // limits the amount of threads that can access a resource or pool of resources concurrently.
-        private static SemaphoreSlim semaphoreSlim = new SemaphoreSlim(1, 1);
-        private static ConcurrentQueue<int> userQueue = new ConcurrentQueue<int>();
-
-        public event EventHandler<AttendanceEventArgs> Attendance;
-
-        public CourseController(IDataLogger logger, IMailService mailService,
-            ICoursesRepository coursesRepository, IUsersRepository usersRepository, ICourseUsersRepository courseUserRepository)
+        public CourseController(IMapper mapper)
         {
-            _logger = logger;
-            _mailService = mailService;
-            _coursesRepository = coursesRepository;
-            _usersRepository = usersRepository;
-            _courseUserRepository = courseUserRepository;
-            Attendance = _mailService.OnAttendanceChange;
+            _mapper = mapper;
         }
 
         public async Task<IActionResult> Index()
         {
-            try
+            //Getting session variables
+            int? loggedInUserId = HttpContext.Session.GetInt32Ex("LoggedInUserId");
+            HttpContext.Session.Remove("CurrentCourseId");
+            string? searchString = Request.Query["searchString"];
+
+            var http = new HttpClient();
+            var response = await http.GetAsync($"https://localhost:7107/api/ApiCourse/ApiIndex?loggedInUserId={loggedInUserId}&searchString={searchString}");
+            if (response.IsSuccessStatusCode)
             {
-                var loggedInUserId = HttpContext.Session.GetInt32Ex("LoggedInUserId");
-                HttpContext.Session.Remove("CurrentCourseId");
-
-                var searchString = Request.Query["searchString"];
-                var coursesTaken = await _coursesRepository.GetCoursesByUserIdAsync(loggedInUserId);
-                if (!String.IsNullOrEmpty(searchString))
-                {
-                    coursesTaken = coursesTaken.Where(course => course.Name.Contains(searchString, StringComparison.InvariantCultureIgnoreCase)).ToList();
-                }
-
-                var currentUser = await _usersRepository.GetUserByIdAsync(loggedInUserId);
-
-                var viewModel = new CourseViewModel
-                {
-                    Courses = coursesTaken,
-                    User = currentUser
-                };
-
+                var viewModelDto = JsonConvert.DeserializeObject<CourseViewModelDto>(await response.Content.ReadAsStringAsync());
+                var viewModel = _mapper.Map<CourseViewModel>(viewModelDto);
                 return View(viewModel);
             }
-            catch (SessionCredentialException ex)
-            {
-                _logger.Log(ex);
-                return RedirectToAction("Index", "Home");
-            }
-            catch (Exception ex1)
-            {
-                _logger.Log(ex1);
-                throw;
-            }
+            else
+                return RedirectToAction("Index", "LogIn");
         }
 
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            try
+            HttpContext.Session.GetInt32Ex("LoggedInUserId");
+            var http = new HttpClient();
+            var response = await http.GetAsync($"https://localhost:7107/api/ApiCourse/ApiCreate");
+            if (response.IsSuccessStatusCode)
             {
-                HttpContext.Session.GetInt32Ex("LoggedInUserId");
-                Course course = new Course();
+                var courseDto = JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync());
+                var course = _mapper.Map<Course>(courseDto);
                 return View(course);
             }
-            catch (SessionCredentialException ex)
-            {
-                _logger.Log(ex);
-                return RedirectToAction("Index", "Home");
-            }
+            else
+                return RedirectToAction("Error", "Home");
         }
 
         [HttpPost]
         public async Task<IActionResult> Create(Course course)
         {
-            try
-            {
-                int? loggedInUserId = HttpContext.Session.GetInt32Ex("LoggedInUserId");
-                course.CreationDate = DateTime.Now;
-                await _coursesRepository.InsertCourseAsync(course);
-                await _courseUserRepository.InsertRelationAsync(course.CourseId, loggedInUserId);
+            int? loggedInUserId = HttpContext.Session.GetInt32Ex("LoggedInUserId");
+            var http = new HttpClient();
+            var map = _mapper.Map<CourseDto>(course);
+            var content = new StringContent(JsonConvert.SerializeObject(map), Encoding.UTF8, "application/json");
+            var response = await http.PostAsync($"https://localhost:7107/api/ApiCourse/ApiCreate?loggedInUserId={loggedInUserId}", content);
+            if (response.IsSuccessStatusCode)
                 return RedirectToAction("Index");
-            }
-            catch (SessionCredentialException ex)
-            {
-                _logger.Log(ex);
-                return RedirectToAction("Index", "Home");
-            }
-            catch (Exception ex1)
-            {
-                _logger.Log(ex1);
-                throw;
-            }
+            else
+                return RedirectToAction("Error", "Home");
         }
 
         public async Task<IActionResult> Edit(int courseId)
         {
-            try
+            HttpContext.Session.GetInt32Ex("LoggedInUserId");
+            var http = new HttpClient();
+            var response = await http.GetAsync($"https://localhost:7107/api/ApiCourse/ApiEdit?courseId={courseId}");
+            if (response.IsSuccessStatusCode)
             {
-                HttpContext.Session.GetInt32Ex("LoggedInUserId");
-                Course? course = await _coursesRepository.GetCourseByIdAsync(courseId);
+                var courseDto = JsonConvert.DeserializeObject<CourseDto?>(await response.Content.ReadAsStringAsync());
+                var course = _mapper.Map<Course>(courseDto);
                 return View(course);
             }
-            catch (SessionCredentialException ex)
-            {
-                _logger.Log(ex);
-                return RedirectToAction("Index", "Home");
-            }
+            else
+                return RedirectToAction("Error", "Home");
         }
 
         [HttpPost]
         public async Task<IActionResult> Edit(Course course)
         {
-            try
-            {
-                userQueue.Enqueue((int)HttpContext.Session.GetInt32Ex("LoggedInUserId"));
-                semaphoreSlim.Wait();
-                if (userQueue.TryDequeue(out int queuedUserId))
-                {
-                    if (queuedUserId == (int)HttpContext.Session.GetInt32Ex("LoggedInUserId"))
-                    {
-                        await _coursesRepository.UpdateCourseAsync(course);
-                    }
-                }
-                semaphoreSlim.Release();
+            int? loggedInUserId = HttpContext.Session.GetInt32Ex("LoggedInUserId");
+            var http = new HttpClient();
+            var map = _mapper.Map<CourseDto>(course);
+            var content = new StringContent(JsonConvert.SerializeObject(map), Encoding.UTF8, "application/json");
+            var response = await http.PutAsync($"https://localhost:7107/api/ApiCourse/ApiEdit", content);
+            if (response.IsSuccessStatusCode)
                 return RedirectToAction("Index");
-            }
-            catch (Exception ex)
-            {
-                _logger.Log(ex);
-                throw;
-            }
+            else
+                return RedirectToAction("Error", "Home");
         }
 
         public async Task<IActionResult> Delete(int courseId)
         {
-            try
+            HttpContext.Session.GetInt32Ex("LoggedInUserId");
+            var http = new HttpClient();
+            var response = await http.GetAsync($"https://localhost:7107/api/ApiCourse/ApiDelete?courseId={courseId}");
+            if (response.IsSuccessStatusCode)
             {
-                HttpContext.Session.GetInt32Ex("LoggedInUserId");
-                Course? course = await _coursesRepository.GetCourseByIdAsync(courseId);
+                var courseDto = JsonConvert.DeserializeObject<CourseDto?>(await response.Content.ReadAsStringAsync());
+                var course = _mapper.Map<Course>(courseDto);
                 return View(course);
             }
-            catch (SessionCredentialException ex)
-            {
-                _logger.Log(ex);
-                return RedirectToAction("Index", "Home");
-            }
+            else
+                return RedirectToAction("Error", "Home");
         }
 
         [HttpPost, ActionName("Delete")]
         public async Task<IActionResult> DeleteCourse(int courseId)
         {
-            try
-            {
-                await _coursesRepository.DeleteCourseByIdAsync(courseId);
+            int? loggedInUserId = HttpContext.Session.GetInt32Ex("LoggedInUserId");
+            var http = new HttpClient();
+            var response = await http.DeleteAsync($"https://localhost:7107/api/ApiCourse/ApiDelete?courseId={courseId}");
+            if (response.IsSuccessStatusCode)
                 return RedirectToAction("Index");
-            }
-            catch (Exception ex)
-            {
-                _logger.Log(ex);
-                throw;
-            }
+            else
+                return RedirectToAction("Error", "Home");
         }
 
-        public IActionResult AddUser(int courseId)
+        public async Task<IActionResult> AddUser(int courseId)
         {
-            try
-            {
-                HttpContext.Session.GetInt32Ex("LoggedInUserId");
-                HttpContext.Session.SetInt32("CurrentCourseId", courseId);
+            HttpContext.Session.GetInt32Ex("LoggedInUserId");
+            HttpContext.Session.SetInt32("CurrentCourseId", courseId);
+            var http = new HttpClient();
+            var response = await http.GetAsync($"https://localhost:7107/api/ApiCourse/ApiAddUser?courseId={courseId}");
+            if (response.IsSuccessStatusCode)
                 return View();
-            }
-            catch (SessionCredentialException ex)
-            {
-                _logger.Log(ex);
-                return RedirectToAction("Index", "Home");
-            }
-            catch (Exception ex1)
-            {
-                _logger.Log(ex1);
-                throw;
-            }
+            return RedirectToAction("Error", "Home");
         }
 
         [HttpPost]
         public async Task<IActionResult> AddUser(string userIdString)
         {
-            try
-            {
-                int? loggedInUserId = HttpContext.Session.GetInt32Ex("LoggedInUserId");
-                int? currentCourseId = HttpContext.Session.GetInt32Ex("CurrentCourseId");
-                userQueue.Enqueue((int)loggedInUserId);
-                semaphoreSlim.Wait();
-                if (userQueue.TryDequeue(out int queuedUserId))
-                {
-                    if (queuedUserId == loggedInUserId)
-                    {
-                        String[] userIdList = userIdString.Split(';');
-                        Course? currentCourse = await _coursesRepository.GetCourseByIdAsync(currentCourseId);
-                        foreach (var word in userIdList)
-                        {
-                            if (Int32.TryParse(word, out int userId) != false && currentCourse != null)
-                            {
-                                User? user;
-                                if ((user = await _usersRepository.GetUserByIdAsync(userId)) != null && userId != loggedInUserId && 
-                                    !await _courseUserRepository.CheckIfRelationExistsAsync(currentCourse.CourseId, userId))
-                                {
-                                    await _courseUserRepository.InsertRelationAsync(currentCourseId, userId);
-                                    OnAttendanceChange(user, currentCourse, true);
-                                }
-                            }
-                        }
-                    }
-                    else
-                    {
-                        return RedirectToAction("Index");
-                    }
-                }
-                else
-                {
-                    return RedirectToAction("Index");
-                }
-                semaphoreSlim.Release();
+            var loggedInUserId = HttpContext.Session.GetInt32Ex("LoggedInUserId");
+            var currentCourseId = HttpContext.Session.GetInt32Ex("CurrentCourseId");
+            var http = new HttpClient();
+            var content = new StringContent(JsonConvert.SerializeObject(userIdString), Encoding.UTF8, "application/json");
+            var response = await http.PostAsync($"https://localhost:7107/api/ApiCourse/ApiAddUser?currentCourseId={currentCourseId}&loggedInUserId={loggedInUserId}", content);
+            if (response.IsSuccessStatusCode)
                 return RedirectToAction("Index");
-            }
-            catch (SessionCredentialException ex)
-            {
-                _logger.Log(ex);
-                return RedirectToAction("Index", "Home");
-            }
-            catch (Exception ex1)
-            {
-                _logger.Log(ex1);
-                throw;
-            }
+            return RedirectToAction("Error", "Home");
         }
 
-        public IActionResult RemoveUser(int courseId)
+        public async Task<IActionResult> RemoveUser(int courseId)
         {
-            try
-            {
-                HttpContext.Session.GetInt32Ex("LoggedInUserId");
-                HttpContext.Session.SetInt32("CurrentCourseId", courseId);
+            HttpContext.Session.GetInt32Ex("LoggedInUserId");
+            HttpContext.Session.SetInt32("CurrentCourseId", courseId);
+            var http = new HttpClient();
+            var response = await http.GetAsync($"https://localhost:7107/api/ApiCourse/ApiRemoveUser?courseId={courseId}");
+            if (response.IsSuccessStatusCode)
                 return View();
-            }
-            catch (SessionCredentialException ex)
-            {
-                _logger.Log(ex);
-                return RedirectToAction("Index", "Home");
-            }
-            catch (Exception ex1)
-            {
-                _logger.Log(ex1);
-                throw;
-            }
+            return RedirectToAction("Error", "Home");
         }
 
         [HttpPost]
-        public async Task<IActionResult> RemoveUser(String userIdString)
+        public async Task<IActionResult> RemoveUser(string userIdString)
         {
-            try
-            {
-                int? loggedInUserId = HttpContext.Session.GetInt32Ex("LoggedInUserId");
-                int? currentCourseId = HttpContext.Session.GetInt32Ex("CurrentCourseId");
-                String[] userIdList = userIdString.Split(';');
-                Course? currentCourse = await _coursesRepository.GetCourseByIdAsync(currentCourseId);
-                userQueue.Enqueue((int)loggedInUserId);
-                semaphoreSlim.Wait();
-                if (userQueue.TryDequeue(out int queuedUserId))
-                {
-                    if (queuedUserId == currentCourseId)
-                    {
-                        foreach (var word in userIdList)
-                        {
-                            if (Int32.TryParse(word, out int userId) != false && currentCourse != null)
-                            {
-                                User? user;
-                                if ((user = await _usersRepository.GetUserByIdAsync(userId)) != null && userId != loggedInUserId)
-                                {
-                                    await _courseUserRepository.DeleteRelationAsync(currentCourseId, userId);
-                                    OnAttendanceChange(user, currentCourse, false);
-                                }
-                            }
-                        }
-                    }
-                }
-                semaphoreSlim.Release(); 
+            var loggedInUserId = HttpContext.Session.GetInt32Ex("LoggedInUserId");
+            var currentCourseId = HttpContext.Session.GetInt32Ex("CurrentCourseId");
+            var http = new HttpClient();
+            var response = await http.DeleteAsync($"https://localhost:7107/api/ApiCourse/ApiRemoveUser?currentCourseId={currentCourseId}&loggedInUserId={loggedInUserId}&userIdString={userIdString}");
+            if (response.IsSuccessStatusCode)
                 return RedirectToAction("Index");
-            }
-            catch (SessionCredentialException ex)
-            {
-                _logger.Log(ex);
-                return RedirectToAction("Index", "Home");
-            }
-            catch (Exception ex1)
-            {
-                _logger.Log(ex1);
-                throw;
-            }
+            return RedirectToAction("Error", "Home");
         }
 
         public async Task<IActionResult> CheckUsers(int courseId)
         {
-            try
+            HttpContext.Session.SetInt32("CurrentCourseId", courseId);
+            var http = new HttpClient();
+            var response = await http.GetAsync($"https://localhost:7107/api/ApiCourse/ApiCheckUsers?currentCourseId={(int?)courseId}");
+            if (response.IsSuccessStatusCode)
             {
-                HttpContext.Session.SetInt32("CurrentCourseId", courseId);
-                int? currentCourseId = HttpContext.Session.GetInt32Ex("CurrentCourseId");
-                var userInCourseList = await _usersRepository.GetUsersInCourseAsync(currentCourseId);
-                return View(userInCourseList);
+                var list = JsonConvert.DeserializeObject<IEnumerable<User>>(await response.Content.ReadAsStringAsync());
+                return View(list);
             }
-            catch (SessionCredentialException ex)
-            {
-                _logger.Log(ex);
-                //would be nice if it explained what its catching instead of just SessionCredentialException :((
-                return RedirectToAction("Index", "Home");
-            }
-            catch (Exception ex1)
-            {
-                //same here
-                _logger.Log(ex1);
-                throw;
-            }
-        }
-
-        protected virtual void OnAttendanceChange(User user, Course course, bool addedOrRemoved)
-        {
-            if (Attendance != null)
-            {
-                if (addedOrRemoved)
-                    _logger.Log(DateTime.Now + $": Added {user.Name} to course {course.Name}.");
-                else
-                    _logger.Log(DateTime.Now + $": Removed {user.Name} from course {course.Name}.");
-                Attendance.Invoke(this, new AttendanceEventArgs(user, course, addedOrRemoved));
-            }
+            return RedirectToAction("Error", "Home");
         }
     }
 }

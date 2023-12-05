@@ -9,6 +9,10 @@ namespace TeamWebApplicationAPI.Data.Mapping
         {
             CreateMap<User, UserDto>();
             CreateMap<UserDto, User>();
+            CreateMap<Course, CourseDto>();
+            CreateMap<CourseDto, Course>();
+            CreateMap<CourseViewModelDto, CourseViewModel>();
+            CreateMap<CourseViewModel, CourseViewModelDto>();
         }
     }
 }

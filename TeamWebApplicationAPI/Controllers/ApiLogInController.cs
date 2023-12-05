@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using System.Diagnostics;
 using TeamWebApplicationAPI.Data.ExceptionLogger;
 using TeamWebApplicationAPI.Models;
 using TeamWebApplicationAPI.Repositories.Interfaces;
@@ -9,7 +8,7 @@ namespace TeamWebApplicationAPI.Controllers
 {
     [ApiController]
     [Route("api/ApiLogIn")]
-    public class ApiLogInController : Controller
+    public class ApiLogInController : ControllerBase
     {
         private readonly IUsersRepository _usersRepository;
         private readonly IDataLogger _logger;

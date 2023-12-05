@@ -1,10 +1,3 @@
-using Microsoft.EntityFrameworkCore;
-using TeamWebApplicationAPI.Data.Database;
-using TeamWebApplicationAPI.Data.ExceptionLogger;
-using TeamWebApplicationAPI.Data.MailService;
-using TeamWebApplicationAPI.Repositories.Interfaces;
-using TeamWebApplicationAPI.Repositories;
-
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
