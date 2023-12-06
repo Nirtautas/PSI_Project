@@ -83,9 +83,9 @@ namespace TeamWebApplicationAPI.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     CourseId = table.Column<int>(type: "integer", nullable: false),
                     UserId = table.Column<int>(type: "integer", nullable: false),
-                    CommentatorName = table.Column<string>(type: "text", nullable: false),
-                    CommentatorSurname = table.Column<string>(type: "text", nullable: false),
-                    UserComment = table.Column<string>(type: "text", nullable: false),
+                    CommentatorName = table.Column<string>(type: "text", nullable: true),
+                    CommentatorSurname = table.Column<string>(type: "text", nullable: true),
+                    UserComment = table.Column<string>(type: "text", nullable: true),
                     CreationTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
                 },
                 constraints: table =>
@@ -159,9 +159,9 @@ namespace TeamWebApplicationAPI.Migrations
                 columns: new[] { "CourseId", "CreationDate", "Description", "IsPublic", "IsVisible", "Name" },
                 values: new object[,]
                 {
-                    { 10000, new DateTime(2023, 12, 5, 22, 4, 7, 150, DateTimeKind.Local).AddTicks(3240), "Course for computer architecture", false, true, "Computer Architecture" },
-                    { 10001, new DateTime(2023, 12, 5, 22, 4, 7, 150, DateTimeKind.Local).AddTicks(3274), "Course for functional programming", false, false, "Functional Programming" },
-                    { 10002, new DateTime(2023, 12, 5, 22, 4, 7, 150, DateTimeKind.Local).AddTicks(3276), "Course for database systems", true, true, "Database Systems" }
+                    { 10000, new DateTime(2023, 12, 6, 21, 0, 25, 190, DateTimeKind.Local).AddTicks(8834), "Course for computer architecture", false, true, "Computer Architecture" },
+                    { 10001, new DateTime(2023, 12, 6, 21, 0, 25, 190, DateTimeKind.Local).AddTicks(8865), "Course for functional programming", false, false, "Functional Programming" },
+                    { 10002, new DateTime(2023, 12, 6, 21, 0, 25, 190, DateTimeKind.Local).AddTicks(8867), "Course for database systems", true, true, "Database Systems" }
                 });
 
             migrationBuilder.InsertData(
@@ -179,9 +179,9 @@ namespace TeamWebApplicationAPI.Migrations
                 columns: new[] { "CommentId", "CommentatorName", "CommentatorSurname", "CourseId", "CreationTime", "UserComment", "UserId" },
                 values: new object[,]
                 {
-                    { 40000, "Jonas", "Paguzinskas", 10000, new DateTime(2023, 12, 5, 22, 4, 7, 151, DateTimeKind.Local).AddTicks(7869), "Sus course", 20000 },
-                    { 40001, "Alita", "Stuknaite", 10001, new DateTime(2023, 12, 5, 22, 4, 7, 151, DateTimeKind.Local).AddTicks(7873), "good", 20002 },
-                    { 40003, "Alita", "Stuknaite", 10000, new DateTime(2023, 12, 5, 22, 4, 7, 151, DateTimeKind.Local).AddTicks(7876), "Cool", 20002 }
+                    { 40000, "Jonas", "Paguzinskas", 10000, new DateTime(2023, 12, 6, 21, 0, 25, 192, DateTimeKind.Local).AddTicks(3691), "Sus course", 20000 },
+                    { 40001, "Alita", "Stuknaite", 10001, new DateTime(2023, 12, 6, 21, 0, 25, 192, DateTimeKind.Local).AddTicks(3694), "good", 20002 },
+                    { 40003, "Alita", "Stuknaite", 10000, new DateTime(2023, 12, 6, 21, 0, 25, 192, DateTimeKind.Local).AddTicks(3697), "Cool", 20002 }
                 });
 
             migrationBuilder.InsertData(
@@ -201,14 +201,14 @@ namespace TeamWebApplicationAPI.Migrations
                 columns: new[] { "PostId", "CourseId", "CreationDate", "IsVisible", "Name", "PostType", "TextContent" },
                 values: new object[,]
                 {
-                    { 30000, 10000, new DateTime(2023, 12, 5, 22, 4, 7, 151, DateTimeKind.Local).AddTicks(7788), true, "Introduction", 0, "This is a placeholder" },
-                    { 30001, 10002, new DateTime(2023, 12, 5, 22, 4, 7, 151, DateTimeKind.Local).AddTicks(7800), true, "Knowledge", 0, "This is once more a placeholder https://www.youtube.com/watch?v=dQw4w9WgXcQ" }
+                    { 30000, 10000, new DateTime(2023, 12, 6, 21, 0, 25, 192, DateTimeKind.Local).AddTicks(3634), true, "Introduction", 0, "This is a placeholder" },
+                    { 30001, 10002, new DateTime(2023, 12, 6, 21, 0, 25, 192, DateTimeKind.Local).AddTicks(3648), true, "Knowledge", 0, "This is once more a placeholder https://www.youtube.com/watch?v=dQw4w9WgXcQ" }
                 });
 
             migrationBuilder.InsertData(
                 table: "Posts",
                 columns: new[] { "PostId", "CourseId", "CreationDate", "FileName", "IsVisible", "Name", "PostType" },
-                values: new object[] { 30003, 10001, new DateTime(2023, 12, 5, 22, 4, 7, 151, DateTimeKind.Local).AddTicks(7820), "tvarkarastis.jpg", true, "File", 1 });
+                values: new object[] { 30003, 10001, new DateTime(2023, 12, 6, 21, 0, 25, 192, DateTimeKind.Local).AddTicks(3669), "tvarkarastis.jpg", true, "File", 1 });
 
             migrationBuilder.InsertData(
                 table: "Ratings",

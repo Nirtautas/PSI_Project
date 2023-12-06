@@ -1,6 +1,11 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.StaticFiles;
+using Newtonsoft.Json;
 using System.Diagnostics;
+using System.Net;
+using System.Net.Http.Headers;
+using System.Text;
 using TeamWebApplicationAPI.Data.ExceptionLogger;
 using TeamWebApplicationAPI.Data.Exceptions;
 using TeamWebApplicationAPI.Data.ExtensionMethods;
@@ -241,6 +246,22 @@ namespace TeamWebApplicationAPI.Controllers
             }
         }
 
+        [HttpPost("ApiCreateFilePost")]
+        public async Task<IActionResult> ApiCreateFilePost([FromBody] FilePostDto postDto)
+        {
+            try
+            {
+                var post = _mapper.Map<FilePost>(postDto);
+                await _postsRepository.InsertPostAsync(post);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                _logger.Log(ex);
+                return Unauthorized();
+            }
+        }
+
         [HttpGet("ApiEditFilePost")]
         public async Task<IActionResult> ApiEditFilePost([FromQuery] int? postId)
         {
@@ -249,6 +270,32 @@ namespace TeamWebApplicationAPI.Controllers
                 var post = (FilePost?)await _postsRepository.GetPostByIdAsync(postId);
                 var map = _mapper.Map<FilePostDto>(post);
                 return Ok(map);
+            }
+            catch (Exception ex)
+            {
+                _logger.Log(ex);
+                return Unauthorized();
+            }
+        }
+
+        [HttpPost("ApiEditFilePost")]
+        public async Task<IActionResult> ApiEditFilePost([FromBody] FilePostDto filePostDto)
+        {
+            try
+            {
+                var post = _mapper.Map<FilePost>(filePostDto);
+                var originalPost = (FilePost?)await _postsRepository.GetPostByIdAsync(post.PostId);
+                if (originalPost != null && (originalPost.FileName != post.FileName || originalPost.Name != post.Name))
+                {
+                    var OriginalFileName = Path.GetFileName(originalPost.FileName);
+                    var OriginalFileExtension = Path.GetExtension(originalPost.FileName);
+                    var OriginalFilePath = Path.Combine(@"..\TeamWebApplication\wwwroot\uploads", originalPost.FileName);
+                    await _postsRepository.UpdatePostAsync(originalPost, post);
+                    bool FileIsUsed = await _postsRepository.IsFileUsedInOtherPostsAsync(originalPost.FileName, originalPost.PostId);
+                    if (System.IO.File.Exists(OriginalFilePath) && !FileIsUsed)
+                        System.IO.File.Delete(OriginalFilePath);
+                }
+                return Ok();
             }
             catch (Exception ex)
             {
@@ -271,6 +318,60 @@ namespace TeamWebApplicationAPI.Controllers
                     _logger.Log(ex);
                     return Unauthorized(ex);
                 }
+        }
+
+        [HttpDelete("ApiDeleteFilePost")]
+        public async Task<IActionResult> ApiDeleteFilePost([FromQuery] int postId)
+        {
+            try
+            {
+                var post = (FilePost?)await _postsRepository.GetPostByIdAsync(postId);
+                if (post != null)
+                {
+                    var fileName = post.FileName;
+                    var filePath = Path.Combine(@"..\TeamWebApplication\wwwroot\uploads", fileName);
+                    bool FileIsUsed = await _postsRepository.IsFileUsedInOtherPostsAsync(fileName, post.PostId);
+                    if (System.IO.File.Exists(filePath) && !FileIsUsed)
+                    {
+                        System.IO.File.Delete(filePath);
+                    }
+                    await _postsRepository.DeletePostAsync(post);
+                    return Ok();
+                }
+                return BadRequest();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                _logger.Log(ex);
+                return Unauthorized();
+            }
+        }
+
+        [HttpGet("ApiDownloadFile")]
+        public async Task<IActionResult> ApiDownloadFile([FromQuery] int postId)
+        {
+            try
+            {
+                var post = (FilePost?)await _postsRepository.GetPostByIdAsync(postId);
+                if (post != null && post.FileName != null)
+                {
+                    var filePath = Path.Combine(@"..\TeamWebApplication\wwwroot\uploads", post.FileName);
+                    var provider = new FileExtensionContentTypeProvider();
+                    provider.TryGetContentType(filePath, out string? contentType);
+                    var bytes = await System.IO.File.ReadAllBytesAsync(filePath);
+
+                    var file = new FileDto { Data = bytes, FileName = post.FileName, FileType = contentType};
+                    var serialized = JsonConvert.SerializeObject(file);
+                    return Ok(file);
+                }
+                return BadRequest();
+            }
+            catch (Exception ex)
+            {
+                _logger.Log(ex);
+                return Unauthorized();
+            }
         }
     }
 }

@@ -11,6 +11,7 @@ using TeamWebApplicationAPI.Models.Enums;
 using Microsoft.Extensions.Hosting;
 using System.Collections.Specialized;
 using System.Reflection.PortableExecutable;
+using Microsoft.AspNetCore.StaticFiles;
 
 namespace TeamWebApplication.Controllers
 {
@@ -185,6 +186,39 @@ namespace TeamWebApplication.Controllers
                 return RedirectToAction("Error", "Home");
         }
 
+        [HttpPost]
+        public async Task<IActionResult> CreateFilePost(int courseId, IFormFile file, FilePost post)
+        {
+            string? fileName, filePath = null;
+
+            if (file != null && file.Length > 0)
+            {
+                fileName = Path.GetFileName(file.FileName);
+                filePath = Path.Combine(@"..\TeamWebApplication\wwwroot\uploads", fileName);
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    Task fileCopy = file.CopyToAsync(stream);
+                    post.PostType = PostType.File;
+                    post.CreationDate = DateTime.Now;
+                    post.FileName = fileName;
+                    await fileCopy;
+                }
+            }
+
+            var postDto = _mapper.Map<FilePostDto>(post);
+            var http = new HttpClient();
+            var content = new StringContent(JsonConvert.SerializeObject(postDto), Encoding.UTF8, "application/json");
+            var response = await http.PostAsync($"https://localhost:7107/api/ApiCourseEnvironment/ApiCreateFilePost", content);
+            if (response.IsSuccessStatusCode)
+                return RedirectToAction("Index", new { courseId });
+            else
+            {
+                if (System.IO.File.Exists(filePath))
+                    System.IO.File.Delete(filePath);
+                return RedirectToAction("Error", "Home");
+            }
+        }
+
         public async Task<IActionResult> EditFilePost(int postId)
         {
             HttpContext.Session.GetInt32Ex("LoggedInUserId");
@@ -199,6 +233,33 @@ namespace TeamWebApplication.Controllers
             }
             else
                 return RedirectToAction("Error", "Home");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditFilePost(FilePost post, int courseId, IFormFile file)
+        {
+            var fileName = Path.GetFileName(file.FileName);
+            var filePath = Path.Combine(@"..\TeamWebApplication\wwwroot\uploads", fileName);
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                Task fileCopy = file.CopyToAsync(stream);
+                post.FileName = fileName;
+                await fileCopy;
+            }
+
+            var postDto = _mapper.Map<FilePostDto>(post);
+            var http = new HttpClient();
+            var content = new StringContent(JsonConvert.SerializeObject(postDto), Encoding.UTF8, "application/json");
+            var response = await http.PostAsync($"https://localhost:7107/api/ApiCourseEnvironment/ApiEditFilePost", content);
+            if (response.IsSuccessStatusCode)
+                return RedirectToAction("Index", new { courseId });
+            else
+            {
+                if (System.IO.File.Exists(filePath))
+                    System.IO.File.Delete(filePath);
+                return RedirectToAction("Error", "Home");
+            }
         }
 
         public async Task<IActionResult> DeleteFilePost(int postId)
@@ -217,131 +278,28 @@ namespace TeamWebApplication.Controllers
                 return RedirectToAction("Error", "Home");
         }
 
-        /*
-        [HttpPost]
-        public async Task<IActionResult> CreateFilePost(int courseId, IFormFile file, FilePost post)
-        {
-            try
-            {
-                if (file != null && file.Length > 0)
-                {
-                    var fileName = Path.GetFileName(file.FileName);
-                    var fileExtension = Path.GetExtension(fileName);
-
-                    // creates a new file name to avoid having several files with the same name
-                    // (NOT IMPLEMENTED)
-                    var uniqueFileName = Guid.NewGuid().ToString() + fileExtension;
-
-                    // change 'fileName' to 'uniqueFileName' when unique file name recognition is implemented
-                    var filePath = Path.Combine("wwwroot/uploads", fileName);
-
-                    using (var stream = new FileStream(filePath, FileMode.Create))
-                    {
-                        Task fileCopy = file.CopyToAsync(stream);
-
-                        post.PostType = PostType.File;
-                        post.CreationDate = DateTime.Now;
-
-                        // change 'fileName' to 'uniqueFileName' when unique file name recognition is implemented
-                        post.FileName = fileName;
-
-                        await fileCopy;
-                        await _postsRepository.InsertPostAsync(post);
-                    }
-                }
-                return RedirectToAction("Index", new { courseId });
-            }
-            catch (Exception ex)
-            {
-                _logger.Log(ex);
-                throw;
-            }
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> EditFilePost(FilePost post, int courseId, IFormFile file)
-        {
-            try
-            {
-                var fileName = Path.GetFileName(file.FileName);
-                var fileExtension = Path.GetExtension(fileName);
-                var filePath = Path.Combine("wwwroot/uploads", fileName);
-
-                using (var stream = new FileStream(filePath, FileMode.Create))
-                {
-                    Task fileCopy = file.CopyToAsync(stream);
-                    post.FileName = fileName;
-                    await fileCopy;
-                }
-                var originalPost = (FilePost?)await _postsRepository.GetPostByIdAsync(post.PostId);
-                if (originalPost != null && (originalPost.FileName != post.FileName || originalPost.Name != post.Name))
-                {
-        var OriginalFileName = Path.GetFileName(file.FileName);
-                    var OriginalFileExtension = Path.GetExtension(fileName);
-                    var OriginalFilePath = Path.Combine("wwwroot/uploads", originalPost.FileName);
-                    await _postsRepository.UpdatePostAsync(originalPost, post);
-                    await Task.Delay(100);
-                    bool FileIsUsed = await _postsRepository.IsFileUsedInOtherPostsAsync(originalPost.FileName, originalPost.PostId);
-                    if (System.IO.File.Exists(OriginalFilePath) && !FileIsUsed)
-                    {
-         System.IO.File.Delete(OriginalFilePath);
-                    }
-         }
-                return RedirectToAction("Index", new { courseId });
-            }
-        catch (Exception ex)
-            {
-                _logger.Log(ex);
-                throw;
-            }
-        }*/
-
-        /*
-        public async Task<IActionResult> DownloadFile(IFormFile file, FilePost post)
-        {
-            try
-            {
-                var originalPost = (FilePost?) await _postsRepository.GetPostByIdAsync(post.PostId);
-                var fileName = originalPost.FileName;
-
-                var filePath = Path.Combine("wwwroot/uploads", fileName);
-
-                var provider = new FileExtensionContentTypeProvider();
-                provider.TryGetContentType(filePath, out string? contentType);
-                var bytes = await System.IO.File.ReadAllBytesAsync(filePath);
-
-                return File(bytes, contentType, fileName);
-            }
-            catch (Exception ex)
-            {
-                _logger.Log(ex);
-                throw;
-            }
-        }
-
         [HttpPost]
         public async Task<IActionResult> DeleteFilePost(FilePost post, int courseId)
         {
-            try
-            {
-                var originalPost = (FilePost?) await _postsRepository.GetPostByIdAsync(post.PostId);
-                var filePath = Path.Combine("wwwroot/uploads", post.FileName);
-                var fileName = post.FileName;
-                var Id = post.PostId;
-                bool FileIsUsed = await _postsRepository.IsFileUsedInOtherPostsAsync(fileName, Id);
-                if (System.IO.File.Exists(filePath) && !FileIsUsed)
-                {
-                    System.IO.File.Delete(filePath);
-                }
-                await _postsRepository.DeletePostAsync(post);
+            var http = new HttpClient();
+            var response = await http.DeleteAsync($"https://localhost:7107/api/ApiCourseEnvironment/ApiDeleteFilePost?postId={post.PostId}");
+            if (response.IsSuccessStatusCode)
                 return RedirectToAction("Index", new { courseId });
-            }
-            catch (Exception ex)
-            {
-                _logger.Log(ex);
-                throw;
-            }
+            else
+                return RedirectToAction("Error", "Home");
         }
-        */
+
+        public async Task<IActionResult> DownloadFile(IFormFile file, FilePost post)
+        {
+            var http = new HttpClient();
+            var response = await http.GetAsync($"https://localhost:7107/api/ApiCourseEnvironment/ApiDownloadFile?postId={post.PostId}");
+            if (response.IsSuccessStatusCode)
+            {
+                var fileDto = JsonConvert.DeserializeObject<FileDto>(await response.Content.ReadAsStringAsync());
+                return File(fileDto.Data, fileDto.FileType, fileDto.FileName);
+            }
+            else
+                return RedirectToAction("Error", "Home");
+        }
     }
 }
