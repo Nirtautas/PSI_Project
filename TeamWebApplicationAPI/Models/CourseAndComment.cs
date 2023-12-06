@@ -2,12 +2,13 @@
 {
     public class CourseAndComment
     {
-        public IEnumerable<Post> PostData { get; set; }
+        public ICollection<Post> PostData { get; set; } = new List<Post>();
+        public ICollection<TextPost> TextPostData { get; set; }
+        public ICollection<FilePost> FilePostData { get; set; }
         public IEnumerable<Comment> CommentData { get; set; }
-        public ICollection<Course> CourseData { get; set; }
-        public ICollection<User> UserData { get; set; }
+        public IEnumerable<CourseUser> CourseUserData { get; set; }
         public int LoggedInUser { get; set; }
-        public Comment comment { get; set; }
+        public Comment Comment { get; set; }
         public User User { get; set; }
     }
 }

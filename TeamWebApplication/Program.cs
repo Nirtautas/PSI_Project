@@ -1,3 +1,6 @@
+using TeamWebApplicationAPI.Repositories.Interfaces;
+using TeamWebApplicationAPI.Repositories;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();

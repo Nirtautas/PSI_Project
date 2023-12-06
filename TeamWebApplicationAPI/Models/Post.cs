@@ -2,7 +2,6 @@
 using System.Text.Json.Serialization;
 using System.ComponentModel.DataAnnotations.Schema;
 using TeamWebApplicationAPI.Models.Enums;
-using System.Runtime.Serialization;
 
 namespace TeamWebApplicationAPI.Models
 {

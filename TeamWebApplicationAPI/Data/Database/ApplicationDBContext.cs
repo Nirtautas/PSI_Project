@@ -128,11 +128,11 @@ namespace TeamWebApplicationAPI.Data.Database
                 }
             );
 
-			//Post seeding
-			modelBuilder.Entity<Post>()
-				.HasDiscriminator(t => t.PostType)
-				.HasValue<TextPost>(PostType.Text)
-				.HasValue<FilePost>(PostType.File);
+            //Post seeding
+            modelBuilder.Entity<Post>()
+                .HasDiscriminator(t => t.PostType)
+                .HasValue<TextPost>(PostType.Text)
+                .HasValue<FilePost>(PostType.File);
 
             modelBuilder.Entity<TextPost>().HasData(
                 new TextPost

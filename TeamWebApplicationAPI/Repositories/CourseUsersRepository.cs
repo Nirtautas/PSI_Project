@@ -36,6 +36,17 @@ namespace TeamWebApplicationAPI.Repositories
             return courseIds;
         }
 
+        public async Task<IEnumerable<CourseUser>> GetRelationsByUserIdAsync(int? userId)
+        {
+            if (userId == null)
+                throw new ArgumentNullException(nameof(userId));
+
+            var courseIds = await _db.CoursesUsers
+                .Where(uc => uc.UserId == userId)
+                .ToListAsync();
+            return courseIds;
+        }
+
         public async Task<bool> CheckIfRelationExistsAsync(int? courseId, int? userId)
         {
             if (userId == null)

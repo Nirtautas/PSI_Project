@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Hosting;
 using TeamWebApplicationAPI.Data.Database;
 using TeamWebApplicationAPI.Models;
+using TeamWebApplicationAPI.Models.Enums;
 using TeamWebApplicationAPI.Repositories.Interfaces;
 
 namespace TeamWebApplicationAPI.Repositories
@@ -89,6 +90,16 @@ namespace TeamWebApplicationAPI.Repositories
                 filePost.FileName = filePostToUpdate.FileName;
             }
             await SaveAsync();
+        }
+
+        public async Task<bool> IsFileUsedInOtherPostsAsync(string fileName, int PostId)
+        {
+            var FilePosts = await _db.Posts.AsNoTracking().Where(p => p.PostType == PostType.File).OfType<FilePost>().ToListAsync();
+            bool isFileUsedInOtherPosts = FilePosts.Any(p => (p.FileName == fileName) && p.PostId != PostId);
+            if (isFileUsedInOtherPosts)
+                return true;
+            else
+                return false;
         }
 
         public async Task SaveAsync()

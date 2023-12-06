@@ -73,9 +73,9 @@ namespace TeamWebApplicationAPI.Controllers
                 await _courseUserRepository.InsertRelationAsync(course.CourseId, loggedInUserId);
                 return Ok();
             }
-            catch (Exception ex1)
+            catch (Exception ex)
             {
-                _logger.Log(ex1);
+                _logger.Log(ex);
                 return Unauthorized();
             }
         }

@@ -8,7 +8,7 @@ using TeamWebApplicationAPI.Data.Database;
 
 #nullable disable
 
-namespace TeamWebApplication.Migrations
+namespace TeamWebApplicationAPI.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
     partial class ApplicationDBContextModelSnapshot : ModelSnapshot
@@ -66,7 +66,7 @@ namespace TeamWebApplication.Migrations
                             CommentatorName = "Jonas",
                             CommentatorSurname = "Paguzinskas",
                             CourseId = 10000,
-                            CreationTime = new DateTime(2023, 12, 5, 10, 57, 30, 687, DateTimeKind.Local).AddTicks(6812),
+                            CreationTime = new DateTime(2023, 12, 5, 22, 4, 7, 151, DateTimeKind.Local).AddTicks(7869),
                             UserComment = "Sus course",
                             UserId = 20000
                         },
@@ -76,7 +76,7 @@ namespace TeamWebApplication.Migrations
                             CommentatorName = "Alita",
                             CommentatorSurname = "Stuknaite",
                             CourseId = 10001,
-                            CreationTime = new DateTime(2023, 12, 5, 10, 57, 30, 687, DateTimeKind.Local).AddTicks(6844),
+                            CreationTime = new DateTime(2023, 12, 5, 22, 4, 7, 151, DateTimeKind.Local).AddTicks(7873),
                             UserComment = "good",
                             UserId = 20002
                         },
@@ -86,7 +86,7 @@ namespace TeamWebApplication.Migrations
                             CommentatorName = "Alita",
                             CommentatorSurname = "Stuknaite",
                             CourseId = 10000,
-                            CreationTime = new DateTime(2023, 12, 5, 10, 57, 30, 687, DateTimeKind.Local).AddTicks(6847),
+                            CreationTime = new DateTime(2023, 12, 5, 22, 4, 7, 151, DateTimeKind.Local).AddTicks(7876),
                             UserComment = "Cool",
                             UserId = 20002
                         });
@@ -125,7 +125,7 @@ namespace TeamWebApplication.Migrations
                         new
                         {
                             CourseId = 10000,
-                            CreationDate = new DateTime(2023, 12, 5, 10, 57, 30, 686, DateTimeKind.Local).AddTicks(2204),
+                            CreationDate = new DateTime(2023, 12, 5, 22, 4, 7, 150, DateTimeKind.Local).AddTicks(3240),
                             Description = "Course for computer architecture",
                             IsPublic = false,
                             IsVisible = true,
@@ -134,7 +134,7 @@ namespace TeamWebApplication.Migrations
                         new
                         {
                             CourseId = 10001,
-                            CreationDate = new DateTime(2023, 12, 5, 10, 57, 30, 686, DateTimeKind.Local).AddTicks(2234),
+                            CreationDate = new DateTime(2023, 12, 5, 22, 4, 7, 150, DateTimeKind.Local).AddTicks(3274),
                             Description = "Course for functional programming",
                             IsPublic = false,
                             IsVisible = false,
@@ -143,7 +143,7 @@ namespace TeamWebApplication.Migrations
                         new
                         {
                             CourseId = 10002,
-                            CreationDate = new DateTime(2023, 12, 5, 10, 57, 30, 686, DateTimeKind.Local).AddTicks(2236),
+                            CreationDate = new DateTime(2023, 12, 5, 22, 4, 7, 150, DateTimeKind.Local).AddTicks(3276),
                             Description = "Course for database systems",
                             IsPublic = true,
                             IsVisible = true,
@@ -353,14 +353,14 @@ namespace TeamWebApplication.Migrations
 
                     b.ToTable("Posts");
 
-                    b.HasDiscriminator().HasValue(2);
+                    b.HasDiscriminator().HasValue(1);
 
                     b.HasData(
                         new
                         {
                             PostId = 30003,
                             CourseId = 10001,
-                            CreationDate = new DateTime(2023, 12, 5, 10, 57, 30, 687, DateTimeKind.Local).AddTicks(6794),
+                            CreationDate = new DateTime(2023, 12, 5, 22, 4, 7, 151, DateTimeKind.Local).AddTicks(7820),
                             IsVisible = true,
                             Name = "File",
                             PostType = 0,
@@ -384,7 +384,7 @@ namespace TeamWebApplication.Migrations
                         {
                             PostId = 30000,
                             CourseId = 10000,
-                            CreationDate = new DateTime(2023, 12, 5, 10, 57, 30, 687, DateTimeKind.Local).AddTicks(6764),
+                            CreationDate = new DateTime(2023, 12, 5, 22, 4, 7, 151, DateTimeKind.Local).AddTicks(7788),
                             IsVisible = true,
                             Name = "Introduction",
                             PostType = 0,
@@ -394,7 +394,7 @@ namespace TeamWebApplication.Migrations
                         {
                             PostId = 30001,
                             CourseId = 10002,
-                            CreationDate = new DateTime(2023, 12, 5, 10, 57, 30, 687, DateTimeKind.Local).AddTicks(6775),
+                            CreationDate = new DateTime(2023, 12, 5, 22, 4, 7, 151, DateTimeKind.Local).AddTicks(7800),
                             IsVisible = true,
                             Name = "Knowledge",
                             PostType = 0,
