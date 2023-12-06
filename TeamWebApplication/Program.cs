@@ -1,31 +1,15 @@
-using Microsoft.EntityFrameworkCore;
-using TeamWebApplication.Data.Database;
-using TeamWebApplication.Data.ExceptionLogger;
-using TeamWebApplication.Data.MailService;
-using TeamWebApplication.Repositories;
-using TeamWebApplication.Repositories.Interfaces;
+using TeamWebApplicationAPI.Repositories.Interfaces;
+using TeamWebApplicationAPI.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
+builder.Services.AddAutoMapper(typeof(Program), typeof(TeamWebApplicationAPI.Data.Mapping.MappingProfile));
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
 {
     options.IdleTimeout = TimeSpan.FromMinutes(10);
 });
-
-builder.Services.AddSingleton<IMailService, MailService>();
-builder.Services.AddSingleton<IDataLogger>(new DataLogger(@".\Logs\"));
-//Established connection with PostgreSQL database
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddDbContext<ApplicationDBContext>(options => options.UseNpgsql(connectionString));
-AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
-builder.Services.AddScoped<IUsersRepository, UsersRepository>();
-builder.Services.AddScoped<ICoursesRepository, CoursesRepository>();
-builder.Services.AddScoped<ICourseUsersRepository, CourseUsersRepository>();
-builder.Services.AddScoped<IPostsRepository, PostsRepository>();
-builder.Services.AddScoped<ICommentsRepository, CommentsRepository>();
-builder.Services.AddScoped<IRatingsRepository, RatingsRepository>();
 
 var app = builder.Build();
 
@@ -61,16 +45,16 @@ app.UseEndpoints(endpoints =>
     );
 
     endpoints.MapControllerRoute(
-     name: "CourseEnvironmentEditFilePost",
-     pattern: "CourseEnvironment/EditFilePost/{postId}",
-     defaults: new { controller = "CourseEnvironment", action = "EditFilePost" }
- );
+        name: "CourseEnvironmentEditFilePost",
+        pattern: "CourseEnvironment/EditFilePost/{postId}",
+        defaults: new { controller = "CourseEnvironment", action = "EditFilePost" }
+    );
 
     endpoints.MapControllerRoute(
-    name: "CourseEnvironmentCreateTextPost",
-    pattern: "CourseEnvironment/CreateTextPost/{courseId}",
-    defaults: new { controller = "CourseEnvironment", action = "CreateTextPost" }
-);
+        name: "CourseEnvironmentCreateTextPost",
+        pattern: "CourseEnvironment/CreateTextPost/{courseId}",
+        defaults: new { controller = "CourseEnvironment", action = "CreateTextPost" }
+    );
 
     endpoints.MapControllerRoute(
         name: "CourseEnvironmentEditTextPost",
@@ -126,7 +110,7 @@ app.UseEndpoints(endpoints =>
         pattern: "RemoveUser/{courseId}",
         defaults: new { controller = "Course", action = "RemoveUser" }
     );
-
+    
     //Default
     endpoints.MapControllerRoute(
         name: "default",

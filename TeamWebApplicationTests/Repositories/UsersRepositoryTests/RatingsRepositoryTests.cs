@@ -1,9 +1,6 @@
-﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.EntityFrameworkCore;
-using System.Security.Cryptography;
-using TeamWebApplication.Models;
-using TeamWebApplication.Repositories;
-using TeamWebApplication.Repositories.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using TeamWebApplicationAPI.Models;
+using TeamWebApplicationAPI.Repositories;
 using TeamWebApplicationTests.DatabaseFixture;
 
 namespace TeamWebApplicationTests.Repositories.UsersRepositoryTests

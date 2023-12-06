@@ -1,4 +1,4 @@
-﻿using TeamWebApplication.Repositories;
+﻿using TeamWebApplicationAPI.Repositories;
 using TeamWebApplicationTests.DatabaseFixture;
 
 namespace TeamWebApplicationTests.Repositories.UsersRepositoryTests

@@ -1,5 +1,5 @@
-﻿using TeamWebApplication.Models;
-using TeamWebApplication.Repositories;
+﻿using TeamWebApplicationAPI.Models;
+using TeamWebApplicationAPI.Repositories;
 using TeamWebApplicationTests.DatabaseFixture;
 
 namespace TeamWebApplicationTests.Repositories.UsersRepositoryTests

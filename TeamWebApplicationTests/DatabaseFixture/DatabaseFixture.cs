@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
-using TeamWebApplication.Data.Database;
-using TeamWebApplication.Models.Enums;
-using TeamWebApplication.Models;
+using TeamWebApplicationAPI.Data.Database;
+using TeamWebApplicationAPI.Models.Enums;
+using TeamWebApplicationAPI.Models;
 
 namespace TeamWebApplicationTests.DatabaseFixture
 {

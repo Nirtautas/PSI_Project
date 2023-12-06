@@ -8,10 +8,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Controllers\ControllerEventArgs\**" />
     <Compile Remove="Views\Course\NewFolder\**" />
+    <Content Remove="Controllers\ControllerEventArgs\**" />
     <Content Remove="Views\Course\NewFolder\**" />
+    <EmbeddedResource Remove="Controllers\ControllerEventArgs\**" />
     <EmbeddedResource Remove="Views\Course\NewFolder\**" />
+    <None Remove="Controllers\ControllerEventArgs\**" />
     <None Remove="Views\Course\NewFolder\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Controllers\CourseController.cs.orig" />
   </ItemGroup>
 
   <ItemGroup>
@@ -31,6 +39,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.16" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.11" />
   </ItemGroup>
 
@@ -42,4 +51,7 @@
     <Folder Include="Logs\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\TeamWebApplicationAPI\TeamWebApplicationAPI.csproj" />
+  </ItemGroup>
 </Project>
