@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using TeamWebApplication.Models;
-using TeamWebApplication.Models.Enums;
-using TeamWebApplication.Repositories;
+using TeamWebApplicationAPI.Models;
+using TeamWebApplicationAPI.Models.Enums;
+using TeamWebApplicationAPI.Repositories;
 using TeamWebApplicationTests.DatabaseFixture;
 
 namespace TeamWebApplicationTests.Repositories.UsersRepositoryTests

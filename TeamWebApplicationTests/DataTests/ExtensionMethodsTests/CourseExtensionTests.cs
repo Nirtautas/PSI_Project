@@ -1,5 +1,5 @@
-﻿using TeamWebApplication.Data.ExtensionMethods;
-using TeamWebApplication.Models;
+﻿using TeamWebApplicationAPI.Data.ExtensionMethods;
+using TeamWebApplicationAPI.Models;
 
 namespace TeamWebApplicationTests.DataTests.ExtensionMethodsTests
 {

@@ -1,58 +1,38 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using TeamWebApplication.Data.Database;
-using TeamWebApplication.Data.ExceptionLogger;
-using TeamWebApplication.Data.Exceptions;
-using TeamWebApplication.Data.ExtensionMethods;
-using TeamWebApplication.Models;
-using TeamWebApplication.Repositories.Interfaces;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using System.Diagnostics;
+using TeamWebApplicationAPI.Data.ExtensionMethods;
+using TeamWebApplicationAPI.Models;
 
 namespace TeamWebApplication.Controllers
 {
     public class PublicCourseController : Controller
     {
-        private readonly IDataLogger _logger;
-        private readonly IUsersRepository _usersRepository;
-        private readonly ICoursesRepository _coursesRepository;
+        private readonly IMapper _mapper;
 
-        public PublicCourseController(IDataLogger logger, IUsersRepository usersRepository, ICoursesRepository coursesRepository)
+        public PublicCourseController(IMapper mapper)
         {
-            _logger = logger;
-            _usersRepository = usersRepository;
-            _coursesRepository = coursesRepository;
+            _mapper = mapper;
         }
 
         public async Task<IActionResult> Index()
         {
-            try
+            int? loggedInUserId = HttpContext.Session.GetInt32Ex("LoggedInUserId");
+            HttpContext.Session.Remove("CurrentCourseId");
+            string? searchString = Request.Query["searchString"];
+
+            var http = new HttpClient();
+            var response = await http.GetAsync($"https://localhost:7107/api/ApiPublicCourse/ApiIndex?loggedInUserId={loggedInUserId}&searchString={searchString}");
+            Debug.WriteLine("THE FUUUUUUUUUUUUUUUUUUUUUUUUCK" + response.StatusCode);
+            if (response.IsSuccessStatusCode)
             {
-                var loggedInUserId = HttpContext.Session.GetInt32Ex("LoggedInUserId");
-                var currentUser = await _usersRepository.GetUserByIdAsync(loggedInUserId);
-
-                var searchString = Request.Query["searchString"];
-                var publicCourses = await _coursesRepository.GetPublicCoursesAsync();
-                if (!String.IsNullOrEmpty(searchString))
-                {
-                    publicCourses = publicCourses.Where(course => course.Name!.Contains(searchString, StringComparison.InvariantCultureIgnoreCase)).ToList();
-                }
-
-                var viewModel = new CourseViewModel
-                {
-                    Courses = publicCourses,
-                    User = currentUser
-                };
-
-				return View(viewModel);
-			}
-            catch (SessionCredentialException ex)
-            {
-                _logger.Log(ex);
-                return RedirectToAction("Index", "Home");
+                var viewModelDto = JsonConvert.DeserializeObject<CourseViewModelDto>(await response.Content.ReadAsStringAsync());
+                var viewModel = _mapper.Map<CourseViewModel>(viewModelDto);
+                return View(viewModel);
             }
-            catch (Exception ex1)
-            {
-                _logger.Log(ex1);
-                throw;
-			}
-		}
+            else
+                return RedirectToAction("Error", "Home");
+        }
     }
 }

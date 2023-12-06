@@ -1,64 +1,41 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using TeamWebApplication.Controllers.ControllerEventArgs;
-using TeamWebApplication.Data.Database;
-using TeamWebApplication.Data.ExceptionLogger;
-using TeamWebApplication.Data.MailService;
-using TeamWebApplication.Models;
-using TeamWebApplication.Repositories.Interfaces;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using System.Text;
+using TeamWebApplicationAPI.Models;
 
 namespace TeamWebApplication.Controllers
 {
     public class RegistrationController : Controller
     {
-        private readonly IUsersRepository _usersRepository;
-        private readonly IDataLogger _logger;
-        private readonly IMailService _mailService;
+        private readonly IMapper _mapper;
 
-        public event EventHandler<RegistrationEventArgs> Registration;
-
-        public RegistrationController(IDataLogger logger, IMailService mailService, IUsersRepository usersRepository)
+        public RegistrationController(IMapper mapper)
         {
-            _logger = logger;
-            _mailService = mailService;
-            _usersRepository = usersRepository;
-            Registration += _mailService.OnRegistration;
+            _mapper = mapper;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var user = new User();
-            return View(user);
+            var http = new HttpClient();
+            var response = await http.GetAsync("https://localhost:7107/api/ApiRegistration/ApiIndex");
+            if (response.IsSuccessStatusCode)
+            {
+                var user = JsonConvert.DeserializeObject<User>(await response.Content.ReadAsStringAsync());
+                return View(user);
+            }
+            return RedirectToAction("Error", "Home");
         }
 
-        [HttpPost]
         public async Task<IActionResult> Login(User user)
         {
-            try
-            {
-                if (!await _usersRepository.UserWithSuchEmailExistsAsync(user.Email))
-                {
-                    await _usersRepository.InsertUserAsync(user);
-                    var placedUser = await _usersRepository.GetUserByEmailAsync(user.Email);
-                    OnUserRegistration(placedUser);
-                    return RedirectToAction("Index", "Login");
-                }
-                return RedirectToAction("Index", "Login");
-            }
-            catch (Exception ex)
-            {
-                await _usersRepository.DeleteUserAsync(user);
-                _logger.Log(ex);
-                throw;
-            }
-        }
-
-        protected virtual void OnUserRegistration(User? user)
-        {
-            if (Registration != null && user != null)
-            {
-                _logger.Log(DateTime.Now + $": Registered {user.Name} with an id of {user.UserId}.");
-                Registration.Invoke(this, new RegistrationEventArgs(user));
-            }
+            var userDto = _mapper.Map<UserDto>(user);
+            var http = new HttpClient();
+            var content = new StringContent(JsonConvert.SerializeObject(userDto), Encoding.UTF8, "application/json");
+            var response = await http.PostAsync("https://localhost:7107/api/ApiRegistration/ApiLogin", content);
+            if (response.IsSuccessStatusCode)
+                return RedirectToAction("Index", "LogIn");
+            return RedirectToAction("Index", "Registration");
         }
     }
 }
