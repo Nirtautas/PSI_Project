@@ -1,386 +1,305 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using TeamWebApplicationAPI.Data.ExtensionMethods;
+using TeamWebApplicationAPI.Models;
+using Newtonsoft.Json;
+using AutoMapper;
+using System.Diagnostics;
+using TeamWebApplicationAPI.Data.Exceptions;
+using System.Text;
+using System.ComponentModel.Design;
+using TeamWebApplicationAPI.Models.Enums;
+using Microsoft.Extensions.Hosting;
+using System.Collections.Specialized;
+using System.Reflection.PortableExecutable;
 using Microsoft.AspNetCore.StaticFiles;
-using TeamWebApplication.Data.Database;
-using TeamWebApplication.Data.ExceptionLogger;
-using TeamWebApplication.Data.Exceptions;
-using TeamWebApplication.Data.ExtensionMethods;
-using TeamWebApplication.Models;
-using TeamWebApplication.Models.Enums;
-using TeamWebApplication.Repositories.Interfaces;
-using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace TeamWebApplication.Controllers
 {
     public class CourseEnvironmentController : Controller
     {
-        private readonly IUsersRepository _usersRepository;
-        private readonly IPostsRepository _postsRepository;
-        private readonly ICommentsRepository _commentsRepository;
-        private readonly IDataLogger _logger;
+        private readonly IMapper _mapper;
 
-        public CourseEnvironmentController(IDataLogger logger, IUsersRepository usersRepository,
-            IPostsRepository postsRepository, ICommentsRepository commentsRepository)
+        public CourseEnvironmentController(IMapper mapper)
         {
-            _logger = logger;
-            _usersRepository = usersRepository;
-            _postsRepository = postsRepository;
-            _commentsRepository = commentsRepository;
+            _mapper = mapper;
         }
 
         public async Task<IActionResult> Index(int courseId)
         {
-            try
+            int? loggedInUserId = HttpContext.Session.GetInt32Ex("LoggedInUserId");
+            HttpContext.Session.SetInt32("CurrentCourseId", courseId);
+
+            var http = new HttpClient();
+            var response = await http.GetAsync($"https://localhost:7107/api/ApiCourseEnvironment/ApiIndex?courseId={courseId}&loggedInUserId={loggedInUserId}");
+            if (response.IsSuccessStatusCode)
             {
-                var loggedInUserId = HttpContext.Session.GetInt32Ex("LoggedInUserId");
-                HttpContext.Session.SetInt32("CurrentCourseId", courseId);
-
-                var coursePosts = await _postsRepository.GetPostsByCourseAsync(courseId);
-
-                Comment comment1 = new();
-                comment1.CourseId = courseId;
-                var courseComments = await _commentsRepository.GetCommentsByCourseIdAsync(courseId);
-                var currentUser = await _usersRepository.GetUserByIdAsync(loggedInUserId);
-
-                var viewModel = new CourseAndComment
-                {
-                    PostData = coursePosts,
-                    CommentData = courseComments,
-                    comment = comment1,
-                    LoggedInUser = (int)loggedInUserId,
-                    User = currentUser
-                };
+                var viewModelDto = JsonConvert.DeserializeObject<CourseAndCommentDto>(await response.Content.ReadAsStringAsync());
+                var viewModel = _mapper.Map<CourseAndComment>(viewModelDto);
+                //If you figure out a better way to do this I will literally buy you drinks
+                //I dare you to map this fat ass model with abstract Post list
+                //int hoursOfLifeWasted = 4;
+                foreach (var tpost in viewModel.TextPostData)
+                    viewModel.PostData.Add(tpost);
+                foreach (var fpost in viewModel.FilePostData)
+                    viewModel.PostData.Add(fpost);
                 return View(viewModel);
             }
-            catch (SessionCredentialException ex)
-            {
-                _logger.Log(ex);
-                return RedirectToAction("Index", "Home");
-            }
-            catch (Exception ex1)
-            {
-                _logger.Log(ex1);
-                throw;
-            }
+            else
+                return RedirectToAction("Error", "Home");
         }
 
         [HttpPost]
         public async Task<IActionResult> AddComment(int courseId, Comment comment)
         {
-            try
-            {
-                var loggedInUserId = HttpContext.Session.GetInt32Ex("LoggedInUserId");
-                var user = await _usersRepository.GetUserByIdAsync(loggedInUserId);
-
-                comment.CourseId = courseId;
-                comment.UserId = user.UserId;
-                comment.CommentatorName = user.Name;
-                comment.CommentatorSurname = user.Surname;
-
-                await _commentsRepository.InsertCommentAsync(comment);
+            int? loggedInUserId = HttpContext.Session.GetInt32Ex("LoggedInUserId");
+            var commentDto = _mapper.Map<CommentDto>(comment);
+            var http = new HttpClient();
+            var content = new StringContent(JsonConvert.SerializeObject(commentDto), Encoding.UTF8, "application/json");
+            var response = await http.PostAsync($"https://localhost:7107/api/ApiCourseEnvironment/ApiAddComment?courseId={courseId}&loggedInUserId={loggedInUserId}", content);
+            if (response.IsSuccessStatusCode)
                 return RedirectToAction("Index", new { courseId });
-            }
-            catch (SessionCredentialException ex)
-            {
-                _logger.Log(ex);
-                return RedirectToAction("Index", "Home");
-            }
-            catch (Exception ex1)
-            {
-                _logger.Log(ex1);
-                throw;
-            }
+            else
+                return RedirectToAction("Error", "Home");
         }
 
         [HttpPost]
-        public async Task<IActionResult> EditComment(int courseId, int commentId, String userComment)
+        public async Task<IActionResult> EditComment(int courseId, int commentId, string userComment)
         {
-            try
-            {
-                await _commentsRepository.UpdateCommentAsync(commentId, userComment);
+            var http = new HttpClient();
+            var content = new StringContent(JsonConvert.SerializeObject(userComment), Encoding.UTF8, "application/json");
+            var response = await http.PutAsync($"https://localhost:7107/api/ApiCourseEnvironment/ApiEditComment?courseId={courseId}&commentId={commentId}", content);
+            if (response.IsSuccessStatusCode)
                 return RedirectToAction("Index", new { courseId });
-            }
-            catch (Exception ex)
-            {
-                _logger.Log(ex);
-                throw;
-            }
+            else
+                return RedirectToAction("Error", "Home");
         }
 
         [HttpPost]
         public async Task<IActionResult> Delete(int courseId, int commentId)
         {
-            try
-            {
-                var comment = await _commentsRepository.GetCommentByIdAsync(commentId);
-                await _commentsRepository.DeleteCommentAsync(comment);
-                return RedirectToAction("Index", new { courseId });
-            }
-            catch (Exception ex)
-            {
-                _logger.Log(ex);
-                throw;
-            }
+                var http = new HttpClient();
+                var response = await http.DeleteAsync($"https://localhost:7107/api/ApiCourseEnvironment/ApiDelete?commentId={commentId}");
+                if (response.IsSuccessStatusCode)
+                    return RedirectToAction("Index", new { courseId });
+                else
+                    return RedirectToAction("Error", "Home");
         }
 
-        public IActionResult CreateTextPost()
+        public async Task<IActionResult> CreateTextPost()
         {
-            try
+            HttpContext.Session.GetInt32Ex("LoggedInUserId");
+            int? currentCourseId = HttpContext.Session.GetInt32Ex("CurrentCourseId");
+            var http = new HttpClient();
+            var response = await http.GetAsync($"https://localhost:7107/api/ApiCourseEnvironment/ApiCreateTextPost?currentCourseId={currentCourseId}");
+            if (response.IsSuccessStatusCode)
             {
-                HttpContext.Session.GetInt32Ex("LoggedInUserId");
-                var currentCourseId = HttpContext.Session.GetInt32Ex("CurrentCourseId");
-                Post post = new TextPost();
-                post.CourseId = currentCourseId;
-                return View(post);
+                var post = JsonConvert.DeserializeObject<TextPostDto>(await response.Content.ReadAsStringAsync());
+                var demapped = _mapper.Map<TextPost>(post);
+                return View(demapped);
             }
-            catch (SessionCredentialException ex)
-            {
-                _logger.Log(ex);
-                return RedirectToAction("Index", "Home");
-            }
+            else
+                return RedirectToAction("Error", "Home");
         }
 
         [HttpPost]
         public async Task<IActionResult> CreateTextPost(TextPost post, int courseId)
         {
-            try
-            {
-                post.PostType = PostType.Text;
-                post.CourseId = courseId;
-                await _postsRepository.InsertPostAsync(post);
-
+            var postDto = _mapper.Map<TextPostDto>(post);
+            var http = new HttpClient();
+            var content = new StringContent(JsonConvert.SerializeObject(postDto), Encoding.UTF8, "application/json");
+            var response = await http.PostAsync($"https://localhost:7107/api/ApiCourseEnvironment/ApiCreateTextPost?courseId={courseId}", content);
+            if (response.IsSuccessStatusCode)
                 return RedirectToAction("Index", new { courseId });
-            }
-            catch (Exception ex)
-            {
-                _logger.Log(ex);
-                throw;
-            }
+            else
+                return RedirectToAction("Error", "Home");
         }
 
         public async Task<IActionResult> EditTextPost(int postId)
         {
-            try
+            HttpContext.Session.GetInt32Ex("LoggedInUserId");
+            HttpContext.Session.GetInt32Ex("CurrentCourseId");
+            var http = new HttpClient();
+            var response = await http.GetAsync($"https://localhost:7107/api/ApiCourseEnvironment/ApiEditTextPost?postId={postId}");
+            if (response.IsSuccessStatusCode)
             {
-                HttpContext.Session.GetInt32Ex("LoggedInUserId");
-                HttpContext.Session.GetInt32Ex("CurrentCourseId");
-                var post = (TextPost?) await _postsRepository.GetPostByIdAsync(postId);
-                return View(post);
+                var post = JsonConvert.DeserializeObject<TextPostDto>(await response.Content.ReadAsStringAsync());
+                var demapped = _mapper.Map<TextPost>(post);
+                return View(demapped);
             }
-            catch (SessionCredentialException ex)
-            {
-                _logger.Log(ex);
-                return RedirectToAction("Index", "Home");
-            }
+            else
+                return RedirectToAction("Error", "Home");
         }
 
         [HttpPost]
         public async Task<IActionResult> EditTextPost(TextPost post, int courseId)
         {
-            try
-            {
-                var originalPost = (TextPost?) await _postsRepository.GetPostByIdAsync(post.PostId);
-                if (originalPost != null && (originalPost.TextContent != post.TextContent || originalPost.Name != post.Name))
-                {
-                    await _postsRepository.UpdateAndSaveDelegate(originalPost, post);
-                }
+            var postDto = _mapper.Map<TextPostDto>(post);
+            var http = new HttpClient();
+            var content = new StringContent(JsonConvert.SerializeObject(postDto), Encoding.UTF8, "application/json");
+            var response = await http.PutAsync($"https://localhost:7107/api/ApiCourseEnvironment/ApiEditTextPost", content);
+            if (response.IsSuccessStatusCode)
                 return RedirectToAction("Index", new { courseId });
-            }
-            catch (Exception ex)
-            {
-                _logger.Log(ex);
-                throw;
-            }
+            else
+                return RedirectToAction("Error", "Home");
         }
 
         public async Task<IActionResult> DeleteTextPost(int postId)
         {
-            try
+            HttpContext.Session.GetInt32Ex("LoggedInUserId");
+            HttpContext.Session.GetInt32Ex("CurrentCourseId");
+            var http = new HttpClient();
+            var response = await http.GetAsync($"https://localhost:7107/api/ApiCourseEnvironment/ApiDeleteTextPost?postId={postId}");
+            if (response.IsSuccessStatusCode)
             {
-                HttpContext.Session.GetInt32Ex("LoggedInUserId");
-                HttpContext.Session.GetInt32Ex("CurrentCourseId");
-                var post = await _postsRepository.GetPostByIdAsync(postId);
-                return View(post);
+                var post = JsonConvert.DeserializeObject<TextPostDto>(await response.Content.ReadAsStringAsync());
+                var demapped = _mapper.Map<TextPost>(post);
+                return View(demapped);
             }
-            catch (SessionCredentialException ex)
-            {
-                _logger.Log(ex);
-                return RedirectToAction("Index", "Home");
-            }
+            else
+                return RedirectToAction("Error", "Home");
         }
 
         [HttpPost]
         public async Task<IActionResult> DeleteTextPost(TextPost post, int courseId)
         {
-            try
-            {
-                var originalPost = (TextPost?) await _postsRepository.GetPostByIdAsync(post.PostId);
-                await _postsRepository.DeletePostAsync(originalPost);
-                return RedirectToAction("Index", new { courseId });
-            }
-            catch (Exception ex)
-            {
-                _logger.Log(ex);
-                throw;
-            }
+                var http = new HttpClient();
+                var response = await http.DeleteAsync($"https://localhost:7107/api/ApiCourseEnvironment/ApiDeleteTextPost?postId={post.PostId}");
+                if (response.IsSuccessStatusCode)
+                    return RedirectToAction("Index", new { courseId });
+                else
+                    return RedirectToAction("Error", "Home");
         }
 
-        public IActionResult CreateFilePost()
+        public async Task<IActionResult> CreateFilePost()
         {
-            try
+            HttpContext.Session.GetInt32Ex("LoggedInUserId");
+            int? currentCourseId = HttpContext.Session.GetInt32Ex("CurrentCourseId");
+            var http = new HttpClient();
+            var response = await http.GetAsync($"https://localhost:7107/api/ApiCourseEnvironment/ApiCreateFilePost?currentCourseId={currentCourseId}");
+            if (response.IsSuccessStatusCode)
             {
-                HttpContext.Session.GetInt32Ex("LoggedInUserId");
-                var currentCourseId = HttpContext.Session.GetInt32Ex("CurrentCourseId");
-                Post post = new FilePost();
-                post.CourseId = currentCourseId;
-                return View(post);
+                var post = JsonConvert.DeserializeObject<FilePostDto>(await response.Content.ReadAsStringAsync());
+                var demapped = _mapper.Map<FilePost>(post);
+                return View(demapped);
             }
-            catch (SessionCredentialException ex)
-            {
-                _logger.Log(ex);
-                return RedirectToAction("Index", "Home");
-            }
+            else
+                return RedirectToAction("Error", "Home");
         }
 
         [HttpPost]
         public async Task<IActionResult> CreateFilePost(int courseId, IFormFile file, FilePost post)
         {
-            try
+            string? fileName, filePath = null;
+
+            if (file != null && file.Length > 0)
             {
-                if (file != null && file.Length > 0)
+                fileName = Path.GetFileName(file.FileName);
+                filePath = Path.Combine(@"..\TeamWebApplication\wwwroot\uploads", fileName);
+                using (var stream = new FileStream(filePath, FileMode.Create))
                 {
-                    var fileName = Path.GetFileName(file.FileName);
-                    var fileExtension = Path.GetExtension(fileName);
-
-                    // creates a new file name to avoid having several files with the same name
-                    // (NOT IMPLEMENTED)
-                    var uniqueFileName = Guid.NewGuid().ToString() + fileExtension;
-
-                    // change 'fileName' to 'uniqueFileName' when unique file name recognition is implemented
-                    var filePath = Path.Combine("wwwroot/uploads", fileName);
-
-                    using (var stream = new FileStream(filePath, FileMode.Create))
-                    {
-                        Task fileCopy = file.CopyToAsync(stream);
-
-                        post.PostType = PostType.File;
-                        post.CreationDate = DateTime.Now;
-
-                        // change 'fileName' to 'uniqueFileName' when unique file name recognition is implemented
-                        post.FileName = fileName;
-
-                        await fileCopy;
-                        await _postsRepository.InsertPostAsync(post);
-                    }
+                    Task fileCopy = file.CopyToAsync(stream);
+                    post.PostType = PostType.File;
+                    post.CreationDate = DateTime.Now;
+                    post.FileName = fileName;
+                    await fileCopy;
                 }
-                return RedirectToAction("Index", new { courseId });
             }
-            catch (Exception ex)
+
+            var postDto = _mapper.Map<FilePostDto>(post);
+            var http = new HttpClient();
+            var content = new StringContent(JsonConvert.SerializeObject(postDto), Encoding.UTF8, "application/json");
+            var response = await http.PostAsync($"https://localhost:7107/api/ApiCourseEnvironment/ApiCreateFilePost", content);
+            if (response.IsSuccessStatusCode)
+                return RedirectToAction("Index", new { courseId });
+            else
             {
-                _logger.Log(ex);
-                throw;
+                if (System.IO.File.Exists(filePath))
+                    System.IO.File.Delete(filePath);
+                return RedirectToAction("Error", "Home");
             }
         }
 
-       /* 
-        * File editing implementation will be finished in the future *
         public async Task<IActionResult> EditFilePost(int postId)
         {
-            try
+            HttpContext.Session.GetInt32Ex("LoggedInUserId");
+            HttpContext.Session.GetInt32Ex("CurrentCourseId");
+            var http = new HttpClient();
+            var response = await http.GetAsync($"https://localhost:7107/api/ApiCourseEnvironment/ApiEditFilePost?postId={postId}");
+            if (response.IsSuccessStatusCode)
             {
-                HttpContext.Session.GetInt32Ex("LoggedInUserId");
-                HttpContext.Session.GetInt32Ex("CurrentCourseId");
-                var post = (FilePost?) await _postsRepository.GetPostByIdAsync(postId);
-                return View(post);
+                var post = JsonConvert.DeserializeObject<FilePostDto>(await response.Content.ReadAsStringAsync());
+                var demapped = _mapper.Map<FilePost>(post);
+                return View(demapped);
             }
-            catch (SessionCredentialException ex)
-            {
-                _logger.Log(ex);
-                return RedirectToAction("Index", "Home");
-            }
+            else
+                return RedirectToAction("Error", "Home");
         }
 
         [HttpPost]
         public async Task<IActionResult> EditFilePost(FilePost post, int courseId, IFormFile file)
         {
-            try
+            var fileName = Path.GetFileName(file.FileName);
+            var filePath = Path.Combine(@"..\TeamWebApplication\wwwroot\uploads", fileName);
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
             {
-                var originalPost = (FilePost?) await _postsRepository.GetPostByIdAsync(post.PostId);
-                if (originalPost!= null && (originalPost.FileName != post.FileName || originalPost.Name != post.Name))
-                {
-                    var fileName = Path.GetFileName(file.FileName);
-                    var filePath = Path.Combine("wwwroot/uploads", fileName);
-                    using (var stream = new FileStream(filePath, FileMode.Create))
-                    {
-                        await file.CopyToAsync(stream);
-                    }
-                    await _postsRepository.UpdatePostAsync(originalPost, post);
-                }
+                Task fileCopy = file.CopyToAsync(stream);
+                post.FileName = fileName;
+                await fileCopy;
+            }
+
+            var postDto = _mapper.Map<FilePostDto>(post);
+            var http = new HttpClient();
+            var content = new StringContent(JsonConvert.SerializeObject(postDto), Encoding.UTF8, "application/json");
+            var response = await http.PostAsync($"https://localhost:7107/api/ApiCourseEnvironment/ApiEditFilePost", content);
+            if (response.IsSuccessStatusCode)
                 return RedirectToAction("Index", new { courseId });
-            }
-            catch (Exception ex)
+            else
             {
-                _logger.Log(ex);
-                throw;
-            }
-        }*/
-
-        public async Task<IActionResult> DownloadFile(IFormFile file, FilePost post)
-        {
-            try
-            {
-                var originalPost = (FilePost?) await _postsRepository.GetPostByIdAsync(post.PostId);
-                var fileName = originalPost.FileName;
-
-                var filePath = Path.Combine("wwwroot/uploads", fileName);
-
-                var provider = new FileExtensionContentTypeProvider();
-                provider.TryGetContentType(filePath, out string? contentType);
-                var bytes = await System.IO.File.ReadAllBytesAsync(filePath);
-
-                return File(bytes, contentType, fileName);
-            }
-            catch (Exception ex)
-            {
-                _logger.Log(ex);
-                throw;
+                if (System.IO.File.Exists(filePath))
+                    System.IO.File.Delete(filePath);
+                return RedirectToAction("Error", "Home");
             }
         }
 
         public async Task<IActionResult> DeleteFilePost(int postId)
         {
-            try
+            HttpContext.Session.GetInt32Ex("LoggedInUserId");
+            HttpContext.Session.GetInt32Ex("CurrentCourseId");
+            var http = new HttpClient();
+            var response = await http.GetAsync($"https://localhost:7107/api/ApiCourseEnvironment/ApiDeleteFilePost?postId={postId}");
+            if (response.IsSuccessStatusCode)
             {
-                HttpContext.Session.GetInt32Ex("LoggedInUserId");
-                HttpContext.Session.GetInt32Ex("CurrentCourseId");
-                var post = await _postsRepository.GetPostByIdAsync(postId);
-                return View(post);
+                var post = JsonConvert.DeserializeObject<FilePostDto>(await response.Content.ReadAsStringAsync());
+                var demapped = _mapper.Map<FilePost>(post);
+                return View(demapped);
             }
-            catch (SessionCredentialException ex)
-            {
-                _logger.Log(ex);
-                return RedirectToAction("Index", "Home");
-            }
+            else
+                return RedirectToAction("Error", "Home");
         }
 
         [HttpPost]
         public async Task<IActionResult> DeleteFilePost(FilePost post, int courseId)
         {
-            try
-            {
-                var originalPost = (FilePost?) await _postsRepository.GetPostByIdAsync(post.PostId);
-                var filePath = Path.Combine("wwwroot/uploads", originalPost.FileName);
-                if (System.IO.File.Exists(filePath))
-                {
-                    System.IO.File.Delete(filePath);
-                }
-                await _postsRepository.DeletePostAsync(post);
+            var http = new HttpClient();
+            var response = await http.DeleteAsync($"https://localhost:7107/api/ApiCourseEnvironment/ApiDeleteFilePost?postId={post.PostId}");
+            if (response.IsSuccessStatusCode)
                 return RedirectToAction("Index", new { courseId });
-            }
-            catch (Exception ex)
+            else
+                return RedirectToAction("Error", "Home");
+        }
+
+        public async Task<IActionResult> DownloadFile(IFormFile file, FilePost post)
+        {
+            var http = new HttpClient();
+            var response = await http.GetAsync($"https://localhost:7107/api/ApiCourseEnvironment/ApiDownloadFile?postId={post.PostId}");
+            if (response.IsSuccessStatusCode)
             {
-                _logger.Log(ex);
-                throw;
+                var fileDto = JsonConvert.DeserializeObject<FileDto>(await response.Content.ReadAsStringAsync());
+                return File(fileDto.Data, fileDto.FileType, fileDto.FileName);
             }
+            else
+                return RedirectToAction("Error", "Home");
         }
     }
 }

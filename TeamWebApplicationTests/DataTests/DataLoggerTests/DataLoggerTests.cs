@@ -1,4 +1,4 @@
-﻿using TeamWebApplication.Data.ExceptionLogger;
+﻿using TeamWebApplicationAPI.Data.ExceptionLogger;
 
 namespace TeamWebApplicationTests.DataTests.DataLoggerTests
 {
