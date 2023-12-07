@@ -49,19 +49,25 @@
                         <td data-th="Faculty">@user.Faculty.ToString()</td>
                         <td data-th="Specialization">@user.Specialization.ToString()</td>
                         <td class="remove-user-column">
-                            <a class="add-post">
-                                <span class="icon">-</span>
-                            </a>
+                            <form onsubmit="return confirm('Are you sure you want to remove @(user.Name + " " + user.Surname) from this course?');" method="post" asp-action="RemoveUser" asp-controller="Course">
+                                <button type="submit" class="add-post" name="userIdString" value="@user.UserId">
+                                    <span class="icon">-</span>
+                                </button>
+                            </form>
                         </td>
                     </tr>
                 }
                 <tr>
                     <td class="add-user-cell">
-                        <a class="add-post">
+                        <a class="add-post" href="/AddUser/@ViewBag.CurrentCourseId">
                             <span class="icon">+</span>
                         </a>
                     </td>
-                    <td></td>
+                    <td class="add-user-cell">
+                        <a class="add-post" href="/RemoveUser/@ViewBag.CurrentCourseId">
+                            <span class="icon">-</span>
+                        </a>
+                    </td>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -70,7 +76,7 @@
                 </tr>
             </tbody>
         </table>
-        <a class="back-btn" style="text-decoration: none; color: #ffffff;">Back</a>
+        <a asp-action="Index" asp-controller="Course" class="back-btn" style="text-decoration: none; color: #ffffff;">Back</a>
     </div>
 </body>
 </html>

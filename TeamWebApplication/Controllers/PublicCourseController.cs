@@ -24,7 +24,6 @@ namespace TeamWebApplication.Controllers
 
             var http = new HttpClient();
             var response = await http.GetAsync($"https://localhost:7107/api/ApiPublicCourse/ApiIndex?loggedInUserId={loggedInUserId}&searchString={searchString}");
-            Debug.WriteLine("THE FUUUUUUUUUUUUUUUUUUUUUUUUCK" + response.StatusCode);
             if (response.IsSuccessStatusCode)
             {
                 var viewModelDto = JsonConvert.DeserializeObject<CourseViewModelDto>(await response.Content.ReadAsStringAsync());
