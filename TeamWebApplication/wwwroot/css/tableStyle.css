@@ -10,6 +10,19 @@
     --lighter-background: #170e15;
 }
 
+.back-btn {
+    color: #f5eff5;
+    text-decoration: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.5s, color 0.5s;
+}
+
+    .back-btn:hover {
+        background-color: #51314e;
+    }
+
 .rwd-table {
     margin: 1em auto;
     min-width: 300px;
@@ -25,7 +38,6 @@
 
     .rwd-table tr {
         border-top: 1px solid #ddd;
-        border-bottom: 1px solid #ddd;
         background-color: var(--secondary);
     }
 
@@ -78,6 +90,25 @@
         padding: .5em 1em;
     }
 
+    .rwd-table .remove-user-column {
+        border-left: 1px solid #bfbfbf;
+    }
+
+    .rwd-table .add-post {
+        height: 30px;
+        width: 30px;
+    }
+
+        .rwd-table .add-post:hover {
+            background-color: var(--primary);
+            color: var(--background);
+        }
+
+        .rwd-table .add-post:active {
+            background-color: var(--secondary);
+            color: var(--text);
+        }
+
 @media screen and (max-width: 801px) {
     .rwd-table tr:nth-child(2) {
         border-top: none;
@@ -113,6 +144,11 @@
     .rwd-table td {
         padding: 1em !important;
     }
+
+        .rwd-table td:last-child,
+        .rwd-table .add-user-cell {
+            padding: 0.8em !important;
+        }
 }
 
 
@@ -121,6 +157,7 @@
     display: block;
     text-align: center;
 }
+
 @-webkit-keyframes leftRight {
     0% {
         -webkit-transform: translateX(0)

@@ -37,20 +37,40 @@
                     <th>Role</th>
                     <th>Faculty</th>
                     <th>Specialization</th>
+                    <th></th>
                 </tr>
                 @foreach (User user in Model)
                 {
-                <tr>
-                    <td data-th="Id">@user.UserId</td>
-                    <td data-th="Name">@(user.Name + " " + user.Surname)</td>
-                    <td data-th="Email">@user.Email</td>
-                    <td data-th="Role">@user.Role.ToString()</td>
-                    <td data-th="Faculty">@user.Faculty.ToString()</td>
-                    <td data-th="Specialization">@user.Specialization.ToString()</td>
-                </tr>
+                    <tr>
+                        <td data-th="Id">@user.UserId</td>
+                        <td data-th="Name">@(user.Name + " " + user.Surname)</td>
+                        <td data-th="Email">@user.Email</td>
+                        <td data-th="Role">@user.Role.ToString()</td>
+                        <td data-th="Faculty">@user.Faculty.ToString()</td>
+                        <td data-th="Specialization">@user.Specialization.ToString()</td>
+                        <td class="remove-user-column">
+                            <a class="add-post">
+                                <span class="icon">-</span>
+                            </a>
+                        </td>
+                    </tr>
                 }
+                <tr>
+                    <td class="add-user-cell">
+                        <a class="add-post">
+                            <span class="icon">+</span>
+                        </a>
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
             </tbody>
         </table>
+        <a class="back-btn" style="text-decoration: none; color: #ffffff;">Back</a>
     </div>
 </body>
 </html>
