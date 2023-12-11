@@ -4,6 +4,8 @@ using TeamWebApplicationAPI.Data.ExceptionLogger;
 using TeamWebApplicationAPI.Data.Database;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using TeamWebApplicationAPI.Repositories.Interceptors;
+using TeamWebApplicationAPI.Repositories.Interceptors.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,6 +25,8 @@ builder.Services.AddScoped<ICourseUsersRepository, CourseUsersRepository>();
 builder.Services.AddScoped<IPostsRepository, PostsRepository>();
 builder.Services.AddScoped<ICommentsRepository, CommentsRepository>();
 builder.Services.AddScoped<IRatingsRepository, RatingsRepository>();
+builder.Services.AddScoped<INullCheckInterceptor, NullCheckInterceptor>();
+builder.Services.AddScoped<IUpdateNeededInterceptor, UpdateNeededInterceptor>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 

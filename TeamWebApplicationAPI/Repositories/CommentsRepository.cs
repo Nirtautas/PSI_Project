@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TeamWebApplicationAPI.Data.Database;
 using TeamWebApplicationAPI.Models;
+using TeamWebApplicationAPI.Repositories.Interceptors.Interfaces;
 using TeamWebApplicationAPI.Repositories.Interfaces;
 
 namespace TeamWebApplicationAPI.Repositories
@@ -8,30 +9,30 @@ namespace TeamWebApplicationAPI.Repositories
     public class CommentsRepository : ICommentsRepository
     {
         private readonly ApplicationDBContext _db;
+        private readonly INullCheckInterceptor _nullCheckInterceptor;
+        private readonly IUpdateNeededInterceptor _updateNeededInterceptor;
 
-        public CommentsRepository(ApplicationDBContext db)
+        public CommentsRepository(ApplicationDBContext db, INullCheckInterceptor nullCheckInterceptor, IUpdateNeededInterceptor updateNeededInterceptor)
         {
             _db = db;
+            _nullCheckInterceptor = nullCheckInterceptor;
+            _updateNeededInterceptor = updateNeededInterceptor;
         }
 
         public async Task DeleteCommentByIdAsync(int? commentId)
         {
-            if (commentId == null)
-                throw new ArgumentNullException(nameof(commentId));
+            _nullCheckInterceptor.CheckId(commentId);
 
             var comment = await _db.Comments.FindAsync(commentId);
+            _nullCheckInterceptor.CheckForNullValues(comment);
 
-            if (comment != null)
-            {
-                _db.Comments.Remove(comment);
-                await SaveAsync();
-            }
+            _db.Comments.Remove(comment);
+            await SaveAsync();
         }
 
         public async Task DeleteCommentAsync(Comment? comment)
         {
-            if (comment == null)
-                throw new ArgumentNullException(nameof(comment));
+            _nullCheckInterceptor.CheckForNullValues(comment);
 
             _db.Comments.Remove(comment);
             await SaveAsync();
@@ -39,16 +40,14 @@ namespace TeamWebApplicationAPI.Repositories
 
         public async Task<Comment?> GetCommentByIdAsync(int? commentId)
         {
-            if (commentId == null)
-                throw new ArgumentNullException(nameof(commentId));
+            _nullCheckInterceptor.CheckId(commentId);
 
             return await _db.Comments.FindAsync(commentId);
         }
 
         public async Task<IEnumerable<Comment>> GetCommentsByCourseIdAsync(int? courseId)
         {
-            if (courseId == null)
-                throw new ArgumentNullException(nameof(courseId));
+            _nullCheckInterceptor.CheckId(courseId);
 
             return await _db.Comments
                 .Where(comment => comment.CourseId == courseId)
@@ -58,8 +57,7 @@ namespace TeamWebApplicationAPI.Repositories
 
         public async Task InsertCommentAsync(Comment? comment)
         {
-            if (comment == null)
-                throw new ArgumentNullException(nameof(comment));
+            _nullCheckInterceptor.CheckForNullValues(comment);
 
             await _db.Comments.AddAsync(comment);
             await SaveAsync();
@@ -67,18 +65,15 @@ namespace TeamWebApplicationAPI.Repositories
 
         public async Task UpdateCommentAsync(int? commentId, string? comment)
         {
-            if (commentId == null)
-                throw new ArgumentNullException(nameof(commentId));
-            if (comment == null)
-                throw new ArgumentNullException(nameof(comment));
+            _nullCheckInterceptor.CheckId(commentId);
+            _nullCheckInterceptor.CheckString(comment);
 
             var existingComment = await _db.Comments.FirstOrDefaultAsync(u => u.CommentId == commentId);
-            if (existingComment != null)
+            _nullCheckInterceptor.CheckForNullValues(existingComment);
+
+            if (_updateNeededInterceptor.IsCommentUpdateNeeded(existingComment, comment))
             {
-                if (existingComment.UserComment != comment)
-                {
-                    existingComment.CreationTime = DateTime.Now;
-                }
+                existingComment.CreationTime = DateTime.Now;
                 existingComment.UserComment = comment;
                 _db.Comments.Update(existingComment);
             }
