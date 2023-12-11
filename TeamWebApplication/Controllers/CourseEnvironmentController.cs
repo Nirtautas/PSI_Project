@@ -173,11 +173,11 @@ namespace TeamWebApplication.Controllers
         {
             HttpContext.Session.GetInt32Ex("LoggedInUserId");
             int? currentCourseId = HttpContext.Session.GetInt32Ex("CurrentCourseId");
-            var http = new HttpClient();
+            HttpClient http = new HttpClient();
             var response = await http.GetAsync($"https://localhost:7107/api/ApiCourseEnvironment/ApiCreateFilePost?currentCourseId={currentCourseId}");
             if (response.IsSuccessStatusCode)
             {
-                var post = JsonConvert.DeserializeObject<FilePostDto>(await response.Content.ReadAsStringAsync());
+                FilePostDto? post = JsonConvert.DeserializeObject<FilePostDto>(await response.Content.ReadAsStringAsync());
                 var demapped = _mapper.Map<FilePost>(post);
                 return View(demapped);
             }
@@ -225,17 +225,17 @@ namespace TeamWebApplication.Controllers
             {
                 if (file != null && file.Length > 0)
                 {
-                    var fileName = Path.GetFileName(file.FileName);
-                    var fileExtension = Path.GetExtension(fileName);
+                    String fileName = Path.GetFileName(file.FileName);
+                    String fileExtension = Path.GetExtension(fileName);
 
                     // creates a new file name to avoid having several files with the same name
                     // (NOT IMPLEMENTED)
-                    var uniqueFileName = Guid.NewGuid().ToString() + fileExtension;
+                    String uniqueFileName = Guid.NewGuid().ToString() + fileExtension;
 
                     // change 'fileName' to 'uniqueFileName' when unique file name recognition is implemented
-                    var filePath = Path.Combine("wwwroot/uploads", fileName);
+                    String filePath = Path.Combine("wwwroot/uploads", fileName);
 
-                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    using (FileStream stream = new FileStream(filePath, FileMode.Create))
                     {
                         Task fileCopy = file.CopyToAsync(stream);
 
