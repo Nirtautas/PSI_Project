@@ -121,6 +121,7 @@ namespace TeamWebApplication.Controllers
 
         public async Task<IActionResult> AddUser(int courseId)
         {
+            ViewBag.CurrentCourseId = courseId;
             HttpContext.Session.GetInt32Ex("LoggedInUserId");
             HttpContext.Session.SetInt32("CurrentCourseId", courseId);
             var http = new HttpClient();
@@ -139,12 +140,13 @@ namespace TeamWebApplication.Controllers
             var content = new StringContent(JsonConvert.SerializeObject(userIdString), Encoding.UTF8, "application/json");
             var response = await http.PostAsync($"https://localhost:7107/api/ApiCourse/ApiAddUser?currentCourseId={currentCourseId}&loggedInUserId={loggedInUserId}", content);
             if (response.IsSuccessStatusCode)
-                return RedirectToAction("Index");
+                return RedirectToAction("CheckUsers", new { courseId = currentCourseId });
             return RedirectToAction("Error", "Home");
         }
 
         public async Task<IActionResult> RemoveUser(int courseId)
         {
+            ViewBag.CurrentCourseId = courseId;
             HttpContext.Session.GetInt32Ex("LoggedInUserId");
             HttpContext.Session.SetInt32("CurrentCourseId", courseId);
             var http = new HttpClient();
@@ -157,17 +159,19 @@ namespace TeamWebApplication.Controllers
         [HttpPost]
         public async Task<IActionResult> RemoveUser(string userIdString)
         {
+            ViewBag.UserId = userIdString;
             var loggedInUserId = HttpContext.Session.GetInt32Ex("LoggedInUserId");
             var currentCourseId = HttpContext.Session.GetInt32Ex("CurrentCourseId");
             var http = new HttpClient();
             var response = await http.DeleteAsync($"https://localhost:7107/api/ApiCourse/ApiRemoveUser?currentCourseId={currentCourseId}&loggedInUserId={loggedInUserId}&userIdString={userIdString}");
             if (response.IsSuccessStatusCode)
-                return RedirectToAction("Index");
+                return RedirectToAction("CheckUsers", new { courseId = currentCourseId });
             return RedirectToAction("Error", "Home");
         }
 
         public async Task<IActionResult> CheckUsers(int courseId)
         {
+            ViewBag.CurrentCourseId = courseId;
             HttpContext.Session.SetInt32("CurrentCourseId", courseId);
             var http = new HttpClient();
             var response = await http.GetAsync($"https://localhost:7107/api/ApiCourse/ApiCheckUsers?currentCourseId={(int?)courseId}");

@@ -1,17 +1,16 @@
 ﻿@{
-    ViewData["Title"] = "Add User";
+    ViewData["Title"] = "Add Users";
 }
 <!DOCTYPE html>
 <html>
 
 <head>
     <meta name="viewport" content="width=device-width" />
-    <title>Add User</title>
+    <title>Add Users</title>
     <link rel="stylesheet" href="~/css/CreateCourseStyle.css" asp-append-version="true" />
 </head>
 
 <body>
-
     <div class="ribbon">
         <div class="Name">
             <a>Mudli</a>
@@ -28,7 +27,7 @@
         </div>
 
         <button type="submit" class="btn-primary">Add Users</button>
-        <a asp-action="Index" asp-controller="Course" class="text-style" style="text-decoration: none; color: #ffffff;">Back</a>
+        <a href="/Course/CheckUsers?courseId=@ViewBag.CurrentCourseId" class="text-style" style="text-decoration: none; color: #ffffff;">Back</a>
     </form>
 </body>
 </html>
