@@ -325,3 +325,18 @@ main h2 {
     .submit-button:hover {
         background-color: var(--accent); /* Change to the hover color you prefer */
     }
+
+.full-star, .half-star{
+    color: var(--primary); 
+}
+
+.half-star::before {
+    position: absolute;
+    left: 4.2px;
+}
+
+.star-container-name {
+    position: relative;
+    font-size: 24px;
+    overflow: hidden;
+}

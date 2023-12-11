@@ -87,8 +87,17 @@ namespace TeamWebApplicationAPI.Repositories
             if (courseId == null)
                 throw new ArgumentNullException(nameof(courseId));
 
-            return (Decimal) await _db.Ratings.Where(t => t.CourseId == courseId)
-                .AverageAsync(t => Decimal.ToDouble(t.UserRating));
+            var averageRating = await _db.Ratings
+                .Where(t => t.CourseId == courseId)
+                .Select(t => t.UserRating)
+                .ToListAsync();
+
+            if (averageRating.Count == 0)
+            {
+                return 0; // or another default value
+            }
+
+            return (decimal)averageRating.Average();
         }
 
         public async Task SaveAsync()
