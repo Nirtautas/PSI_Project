@@ -2,10 +2,8 @@
 
 namespace TeamWebApplicationAPI.Repositories.Interceptors.Interfaces
 {
-    public interface INullCheckInterceptor
+    public interface INullCheckInterceptor<T>
     {
-        void CheckId(int? Id);
-        void CheckString(string? input);
-        void CheckForNullValues(Comment? comment);
+        void CheckIfNotNull<T>(T? input);
     }
 }

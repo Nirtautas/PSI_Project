@@ -25,7 +25,7 @@ builder.Services.AddScoped<ICourseUsersRepository, CourseUsersRepository>();
 builder.Services.AddScoped<IPostsRepository, PostsRepository>();
 builder.Services.AddScoped<ICommentsRepository, CommentsRepository>();
 builder.Services.AddScoped<IRatingsRepository, RatingsRepository>();
-builder.Services.AddScoped<INullCheckInterceptor, NullCheckInterceptor>();
+builder.Services.AddScoped(typeof(INullCheckInterceptor<>), typeof(NullCheckInterceptor<>));
 builder.Services.AddScoped<IUpdateNeededInterceptor, UpdateNeededInterceptor>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

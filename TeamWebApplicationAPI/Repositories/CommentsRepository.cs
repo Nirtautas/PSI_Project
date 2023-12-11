@@ -9,22 +9,26 @@ namespace TeamWebApplicationAPI.Repositories
     public class CommentsRepository : ICommentsRepository
     {
         private readonly ApplicationDBContext _db;
-        private readonly INullCheckInterceptor _nullCheckInterceptor;
+        private readonly INullCheckInterceptor<int> _nullCheckInterceptorForInt;
+        private readonly INullCheckInterceptor<Comment> _nullCheckInterceptorForComment;
+        private readonly INullCheckInterceptor<string> _nullCheckInterceptorForString;
         private readonly IUpdateNeededInterceptor _updateNeededInterceptor;
 
-        public CommentsRepository(ApplicationDBContext db, INullCheckInterceptor nullCheckInterceptor, IUpdateNeededInterceptor updateNeededInterceptor)
+        public CommentsRepository(ApplicationDBContext db, INullCheckInterceptor<int> nullCheckInterceptorForInt, INullCheckInterceptor<Comment> nullCheckInterceptorForComment, INullCheckInterceptor<string> nullCheckInterceptorForString, IUpdateNeededInterceptor updateNeededInterceptor)
         {
             _db = db;
-            _nullCheckInterceptor = nullCheckInterceptor;
+            _nullCheckInterceptorForInt = nullCheckInterceptorForInt;
+            _nullCheckInterceptorForComment = nullCheckInterceptorForComment;
+            _nullCheckInterceptorForString = nullCheckInterceptorForString;
             _updateNeededInterceptor = updateNeededInterceptor;
         }
 
         public async Task DeleteCommentByIdAsync(int? commentId)
         {
-            _nullCheckInterceptor.CheckId(commentId);
+            _nullCheckInterceptorForInt.CheckIfNotNull(commentId);
 
             var comment = await _db.Comments.FindAsync(commentId);
-            _nullCheckInterceptor.CheckForNullValues(comment);
+            _nullCheckInterceptorForComment.CheckIfNotNull(comment);
 
             _db.Comments.Remove(comment);
             await SaveAsync();
@@ -32,7 +36,7 @@ namespace TeamWebApplicationAPI.Repositories
 
         public async Task DeleteCommentAsync(Comment? comment)
         {
-            _nullCheckInterceptor.CheckForNullValues(comment);
+            _nullCheckInterceptorForComment.CheckIfNotNull(comment);
 
             _db.Comments.Remove(comment);
             await SaveAsync();
@@ -40,14 +44,14 @@ namespace TeamWebApplicationAPI.Repositories
 
         public async Task<Comment?> GetCommentByIdAsync(int? commentId)
         {
-            _nullCheckInterceptor.CheckId(commentId);
+            _nullCheckInterceptorForInt.CheckIfNotNull(commentId);
 
             return await _db.Comments.FindAsync(commentId);
         }
 
         public async Task<IEnumerable<Comment>> GetCommentsByCourseIdAsync(int? courseId)
         {
-            _nullCheckInterceptor.CheckId(courseId);
+            _nullCheckInterceptorForInt.CheckIfNotNull(courseId);
 
             return await _db.Comments
                 .Where(comment => comment.CourseId == courseId)
@@ -57,7 +61,7 @@ namespace TeamWebApplicationAPI.Repositories
 
         public async Task InsertCommentAsync(Comment? comment)
         {
-            _nullCheckInterceptor.CheckForNullValues(comment);
+            _nullCheckInterceptorForComment.CheckIfNotNull(comment);
 
             await _db.Comments.AddAsync(comment);
             await SaveAsync();
@@ -65,11 +69,11 @@ namespace TeamWebApplicationAPI.Repositories
 
         public async Task UpdateCommentAsync(int? commentId, string? comment)
         {
-            _nullCheckInterceptor.CheckId(commentId);
-            _nullCheckInterceptor.CheckString(comment);
+            _nullCheckInterceptorForInt.CheckIfNotNull(commentId);
+            _nullCheckInterceptorForString.CheckIfNotNull(comment);
 
             var existingComment = await _db.Comments.FirstOrDefaultAsync(u => u.CommentId == commentId);
-            _nullCheckInterceptor.CheckForNullValues(existingComment);
+            _nullCheckInterceptorForComment.CheckIfNotNull(existingComment);
 
             if (_updateNeededInterceptor.IsCommentUpdateNeeded(existingComment, comment))
             {
