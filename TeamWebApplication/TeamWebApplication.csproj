@@ -5,6 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>e5bad029-eea6-4fc5-ae91-969e927b76a7</UserSecretsId>
+    <StartupObject></StartupObject>
   </PropertyGroup>
 
   <ItemGroup>
@@ -27,6 +28,10 @@
   </ItemGroup>
 
   <ItemGroup>
+
+    <PackageReference Include="Castle.Core" Version="5.1.1" />
+
+    <PackageReference Include="Castle.DynamicProxy" Version="2.2.0" />
 
     <PackageReference Include="coverlet.collector" Version="6.0.0">
       <PrivateAssets>all</PrivateAssets>
