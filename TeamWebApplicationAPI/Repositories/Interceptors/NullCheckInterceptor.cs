@@ -1,5 +1,4 @@
-﻿using System;
-using System.Reflection;
+﻿using System.Reflection;
 using Castle.DynamicProxy;
 
 namespace TeamWebApplicationAPI.Repositories.Interceptors
@@ -16,7 +15,7 @@ namespace TeamWebApplicationAPI.Repositories.Interceptors
 
                 if (parameterValue == null)
                 {
-                    string parameterName = parameters[i].Name;
+                    var parameterName = parameters[i].Name;
                     throw new ArgumentNullException(parameterName);
                 }
             }

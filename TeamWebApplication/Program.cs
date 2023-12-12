@@ -1,7 +1,4 @@
-using TeamWebApplicationAPI.Repositories.Interfaces;
-using TeamWebApplicationAPI.Repositories;
 using TeamWebApplicationAPI.Data.ExceptionLogger;
-using Microsoft.Extensions.Logging;
 
 var builder = WebApplication.CreateBuilder(args);
 
