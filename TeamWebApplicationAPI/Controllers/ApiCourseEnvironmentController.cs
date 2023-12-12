@@ -390,7 +390,7 @@ namespace TeamWebApplicationAPI.Controllers
 
                 Rating rating = new Rating((int)loggedInUserId, courseId, (decimal)score / 2);
 
-                if (await _ratingsRepository.ScoreExists(courseId, loggedInUserId))
+                if (await _ratingsRepository.ScoreExistsAsync(courseId, loggedInUserId))
                 {
                     await _ratingsRepository.UpdateRatingAsync(rating);
                 }

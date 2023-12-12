@@ -100,6 +100,26 @@ namespace TeamWebApplicationTests.Repositories.UsersRepositoryTests
             Assert.Contains(_fixture.Context.Ratings, t => t.UserId == uid && t.CourseId == cid && t.UserRating == nurating);
         }
 
+        [Fact]
+        public async Task ScoreExistsAsync_PassingCourseIdUserId_ScoreExists()
+        {
+            var uid = 20000;
+            var cid = 10000;
+
+            var exists = await _ratingRepository.ScoreExistsAsync(cid, uid);
+            Assert.True(exists);
+        }
+
+        [Fact]
+        public async Task ScoreExistsAsync_PassingCourseIdUserId_ScoreDoesntExist()
+        {
+            var uid = 2;
+            var cid = 1;
+
+            var exists = await _ratingRepository.ScoreExistsAsync(cid, uid);
+            Assert.False(exists);
+        }
+
         [Theory]
         [InlineData(null, 1)]
         [InlineData(1, null)]
@@ -149,6 +169,15 @@ namespace TeamWebApplicationTests.Repositories.UsersRepositoryTests
         public async Task GetCourseRatingAsync_PassingNullValue_ThrowsArgumentNullException()
         {
             await Assert.ThrowsAsync<ArgumentNullException>(() => _ratingRepository.GetCourseRatingAsync(null));
+        }
+
+        [Theory]
+        [InlineData(null, 1)]
+        [InlineData(1, null)]
+        [InlineData(null, null)]
+        public async Task ScoreExistsAsync_PassingNullValue_ThrowsArgumentNullException(int? courseId, int? userId)
+        {
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _ratingRepository.ScoreExistsAsync(courseId, userId));
         }
     }
 }

@@ -40,6 +40,18 @@ namespace TeamWebApplicationTests.Repositories.UsersRepositoryTests
         }
 
         [Fact]
+        public async Task GetRelationsByUserIdAsync_PassingUserId_ReturnsCourseIdListWithUser()
+        {
+            var id = 20001;
+            Assert.Contains(_fixture.Context.Users, t => t.UserId == id);
+            var courseIdList = await _courseUsersRepository.GetRelationsByUserIdAsync(id);
+
+            Assert.Equal(2, courseIdList.Count());
+            Assert.Contains(courseIdList, t => t.UserId == id && t.CourseId == 10000);
+            Assert.Contains(courseIdList, t => t.UserId == id && t.CourseId == 10002);
+        }
+
+        [Fact]
         public async Task CheckIfRelationExistsAsync_PassingCourseIdUserId_ReturnsTrue()
         {
             var cid = 10000; var uid = 20000;
@@ -88,6 +100,12 @@ namespace TeamWebApplicationTests.Repositories.UsersRepositoryTests
         public async Task GetCoursesByUserIdAsync_PassingNullValue_ThrowsArgumentNullException()
         {
             await Assert.ThrowsAsync<ArgumentNullException>(() => _courseUsersRepository.GetCoursesByUserIdAsync(null));
+        }
+
+        [Fact]
+        public async Task GetRelationsByUserIdAsync_PassingNullValue_ThrowsArgumentNullException()
+        {
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _courseUsersRepository.GetRelationsByUserIdAsync(null));
         }
 
         [Theory]

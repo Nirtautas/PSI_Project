@@ -101,21 +101,23 @@ namespace TeamWebApplicationAPI.Repositories
             return (decimal)averageRating.Average();
         }
 
-        public async Task SaveAsync()
-        {
-            await _db.SaveChangesAsync();
-        }
-
-        public async Task<bool> ScoreExists(int? courseId, int? userId)
+        public async Task<bool> ScoreExistsAsync(int? courseId, int? userId)
         {
             if (courseId == null)
                 throw new ArgumentNullException(nameof(courseId));
             if (userId == null)
                 throw new ArgumentNullException(nameof(userId));
-            if(await GetRatingAsync(userId, courseId) == null){
+
+            if (await GetRatingAsync(userId, courseId) == null)
+            {
                 return false;
             }
             return true;
+        }
+
+        public async Task SaveAsync()
+        {
+            await _db.SaveChangesAsync();
         }
     }
 }
