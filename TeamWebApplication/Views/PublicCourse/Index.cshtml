@@ -31,7 +31,7 @@
         <div class="course-navigation-array">
             <form method="get" class="searchForm">
                 <input type="text" name="searchString" value="" placeholder="Search..." />
-                <button type="submit" class="btn-primary">Search</button>
+                <button type="submit" class="search-button">Search</button>
             </form>
         </div>
 
@@ -41,8 +41,9 @@
                 {
                     @if (course.IsVisible)
                     {
-                        <a asp-action="Index" asp-controller="CourseEnvironment" asp-route-courseId="@course.CourseId" style="text-decoration: none; color: #ffffff;">
-                            <div class="card">
+                        <div class="card">
+                            <a asp-action="Index" asp-controller="CourseEnvironment" asp-route-courseId="@course.CourseId" style="text-decoration: none; color: #ffffff;">
+                            
                                 <div class="card-image">
                                     <img src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8d3JpdGluZyUyMGElMjBib29rfGVufDB8fDB8fHww&w=1000&q=80">
                                 </div>
@@ -55,8 +56,8 @@
                                         <p>@course.Description</p>
                                     </div>
                                 </div>
-                            </div>
-                        </a>
+                            </a>
+                        </div>
                     }
                 }
             </div>
