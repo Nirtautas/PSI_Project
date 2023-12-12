@@ -3,15 +3,8 @@ using TeamWebApplicationAPI.Data.ExtensionMethods;
 using TeamWebApplicationAPI.Models;
 using Newtonsoft.Json;
 using AutoMapper;
-using System.Diagnostics;
-using TeamWebApplicationAPI.Data.Exceptions;
 using System.Text;
-using System.ComponentModel.Design;
 using TeamWebApplicationAPI.Models.Enums;
-using Microsoft.Extensions.Hosting;
-using System.Collections.Specialized;
-using System.Reflection.PortableExecutable;
-using Microsoft.AspNetCore.StaticFiles;
 
 namespace TeamWebApplication.Controllers
 {

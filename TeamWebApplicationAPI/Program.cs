@@ -3,8 +3,6 @@ using TeamWebApplicationAPI.Repositories;
 using TeamWebApplicationAPI.Data.ExceptionLogger;
 using TeamWebApplicationAPI.Data.Database;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
-using TeamWebApplicationAPI.Repositories.Interceptors;
 
 var builder = WebApplication.CreateBuilder(args);
 

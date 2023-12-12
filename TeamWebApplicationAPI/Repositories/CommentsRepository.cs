@@ -17,10 +17,11 @@ namespace TeamWebApplicationAPI.Repositories
         [NullCheckInterceptor]
         public async Task DeleteCommentByIdAsync(int? commentId)
         {
-            var comment = await _db.Comments.FindAsync(commentId);
+                var comment = await _db.Comments.FindAsync(commentId);
 
-            _db.Comments.Remove(comment);
-            await SaveAsync();
+                _db.Comments.Remove(comment);
+                await SaveAsync();
+
         }
 
         [NullCheckInterceptor]
@@ -30,31 +31,41 @@ namespace TeamWebApplicationAPI.Repositories
             await SaveAsync();
         }
 
-        [NullCheckInterceptor]
         public async Task<Comment?> GetCommentByIdAsync(int? commentId)
         {
+            if (commentId == null)
+                throw new ArgumentNullException(nameof(commentId));
+
             return await _db.Comments.FindAsync(commentId);
         }
 
-        [NullCheckInterceptor]
         public async Task<IEnumerable<Comment>> GetCommentsByCourseIdAsync(int? courseId)
         {
+            if (courseId == null)
+                throw new ArgumentNullException(nameof(courseId));
+
             return await _db.Comments
                 .Where(comment => comment.CourseId == courseId)
                 .OrderByDescending(comment => comment.CreationTime)
                 .ToListAsync();
         }
 
-        [NullCheckInterceptor]
         public async Task InsertCommentAsync(Comment? comment)
         {
+            if (comment == null)
+                throw new ArgumentNullException(nameof(comment));
+
             await _db.Comments.AddAsync(comment);
             await SaveAsync();
         }
 
-        [NullCheckInterceptor]
         public async Task UpdateCommentAsync(int? commentId, string? comment)
         {
+            if (commentId == null)
+                throw new ArgumentNullException(nameof(commentId));
+            if (comment == null)
+                throw new ArgumentNullException(nameof(comment));
+
             var existingComment = await _db.Comments.FirstOrDefaultAsync(u => u.CommentId == commentId);
             
             if (existingComment.UserComment != comment)
