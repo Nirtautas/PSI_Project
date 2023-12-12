@@ -5,10 +5,10 @@
     ViewData["Title"] = "Course Environment";
     bool isLecturer = Model.User.Role == Role.Lecturer;
     bool lecturerCourseRelationExists = Model.CourseUserData.Any(t => t.CourseId == Model.Comment.CourseId && t.UserId == Model.LoggedInUser);
-    
-    double roundedEval = Math.Round(Model.CourseEval * 2, MidpointRounding.AwayFromZero) / 2;
-    int numberOfFullStars = (int)roundedEval;
-    bool hasHalfStar = roundedEval - numberOfFullStars == 0.5;
+
+    double eval = Model.CourseEval;
+    int numberOfFullStars = (int)Math.Truncate(eval);
+    bool hasHalfStar = eval - numberOfFullStars >= 0.5;
 
 }
 
@@ -45,7 +45,7 @@
                             <span class="text-link">@post.Name</span>
                         </a>
                     </li>
-                }s
+                }
             </ul>
         </nav>
         <main>
@@ -53,7 +53,7 @@
             <div class="star-container-name">
                 @for (int i = 0; i < numberOfFullStars; i++)
                 {
-                    <span class="full-star">&#9733;</span> 
+                    <span class="full-star">&#9733;</span>
                 }
                 @if (hasHalfStar)
                 {
@@ -65,18 +65,18 @@
 
             <h2 class="star-rating">
                 <i>Give the course a rating</i>
-                <form method="post">
+                <form method="post" asp-action="SubmitScore" asp-route-courseId="@Model.Comment.CourseId" asp-controller="CourseEnvironment">
                     <div class="star-container">
-                        <input type="radio" name="rating">
-                        <input type="radio" name="rating">
-                        <input type="radio" name="rating">
-                        <input type="radio" name="rating">
-                        <input type="radio" name="rating">
-                        <input type="radio" name="rating">
-                        <input type="radio" name="rating">
-                        <input type="radio" name="rating">
-                        <input type="radio" name="rating">
-                        <input type="radio" name="rating">
+                        <input type="radio" name="rating" value="10">
+                        <input type="radio" name="rating" value="9">
+                        <input type="radio" name="rating" value="8">
+                        <input type="radio" name="rating" value="7">
+                        <input type="radio" name="rating" value="6">
+                        <input type="radio" name="rating" value="5">
+                        <input type="radio" name="rating" value="4">
+                        <input type="radio" name="rating" value="3">
+                        <input type="radio" name="rating" value="2">
+                        <input type="radio" name="rating" value="1">
                     </div>
                     <button type="submit" class="submit-button">submit</button>
                 </form>

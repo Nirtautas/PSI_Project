@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel;
 using TeamWebApplicationAPI.Data.Database;
 using TeamWebApplicationAPI.Models;
 using TeamWebApplicationAPI.Repositories.Interfaces;
@@ -103,6 +104,18 @@ namespace TeamWebApplicationAPI.Repositories
         public async Task SaveAsync()
         {
             await _db.SaveChangesAsync();
+        }
+
+        public async Task<bool> ScoreExists(int? courseId, int? userId)
+        {
+            if (courseId == null)
+                throw new ArgumentNullException(nameof(courseId));
+            if (userId == null)
+                throw new ArgumentNullException(nameof(userId));
+            if(await GetRatingAsync(userId, courseId) == null){
+                return false;
+            }
+            return true;
         }
     }
 }

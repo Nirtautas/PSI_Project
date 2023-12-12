@@ -380,5 +380,31 @@ namespace TeamWebApplicationAPI.Controllers
                 return Unauthorized();
             }
         }
+
+        [HttpPost("ApiSubmitScore")]
+        public async Task<IActionResult> ApiSubmitScore([FromBody] int score, [FromQuery] int courseId, [FromQuery] int? loggedInUserId)
+        {
+            try
+            {
+                var user = await _usersRepository.GetUserByIdAsync(loggedInUserId);
+
+                Rating rating = new Rating((int)loggedInUserId, courseId, (decimal)score / 2);
+
+                if (await _ratingsRepository.ScoreExists(courseId, loggedInUserId))
+                {
+                    await _ratingsRepository.UpdateRatingAsync(rating);
+                }
+                else
+                {
+                    await _ratingsRepository.InsertRatingAsync(rating);
+                }
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                _logger.Log(ex);
+                return Unauthorized();
+            }
+        }
     }
 }

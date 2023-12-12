@@ -11,5 +11,6 @@ namespace TeamWebApplicationAPI.Repositories.Interfaces
         Task UpdateRatingAsync(Rating? rating);
         Task UpdateRatingAsync(Rating? originalRating, Rating? rating);
         Task<decimal> GetCourseRatingAsync(int? courseId);
+        Task<bool> ScoreExists(int? courseId, int? userId);
     }
 }

@@ -301,5 +301,27 @@ namespace TeamWebApplication.Controllers
             else
                 return RedirectToAction("Error", "Home");
         }
+
+        [HttpPost]
+        public async Task<IActionResult> SubmitScore(int courseId)
+        {
+            int? loggedInUserId = HttpContext.Session.GetInt32Ex("LoggedInUserId");
+            HttpContext.Session.SetInt32("CurrentCourseId", courseId);
+            int selectedRating;
+
+            string? rating = Request.Form["rating"];
+            if (rating == null)
+                selectedRating = 0;
+            else
+                selectedRating = Int32.Parse(rating);
+
+            var http = new HttpClient();
+            var content = new StringContent(JsonConvert.SerializeObject(selectedRating), Encoding.UTF8, "application/json");
+            var response = await http.PostAsync($"https://localhost:7107/api/ApiCourseEnvironment/ApiSubmitScore?courseId={courseId}&loggedInUserId={loggedInUserId}", content);
+            if (response.IsSuccessStatusCode)
+                return RedirectToAction("Index", new { courseId });
+            else
+                return RedirectToAction("Error", "Home");
+        }
     }
 }
