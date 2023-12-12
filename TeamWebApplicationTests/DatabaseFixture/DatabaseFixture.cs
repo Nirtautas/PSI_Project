@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 using TeamWebApplicationAPI.Data.Database;
 using TeamWebApplicationAPI.Models.Enums;
 using TeamWebApplicationAPI.Models;
+using System.Reflection.Emit;
 
 namespace TeamWebApplicationTests.DatabaseFixture
 {
@@ -192,6 +193,7 @@ namespace TeamWebApplicationTests.DatabaseFixture
                 new Rating(user2.UserId, course1.CourseId, 4m),
                 new Rating(user3.UserId, course1.CourseId, 3m)
             );
+
             Context.SaveChanges();
         }
 
