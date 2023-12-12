@@ -1,9 +1,12 @@
 using TeamWebApplicationAPI.Repositories.Interfaces;
 using TeamWebApplicationAPI.Repositories;
+using TeamWebApplicationAPI.Data.ExceptionLogger;
+using Microsoft.Extensions.Logging;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
+builder.Services.AddScoped<IDataLogger, DataLogger>();
 builder.Services.AddAutoMapper(typeof(Program), typeof(TeamWebApplicationAPI.Data.Mapping.MappingProfile));
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
@@ -22,6 +25,7 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseMiddleware<SessionCredentialExceptionHandlerMiddleware>();
 app.UseStaticFiles();
 
 app.UseRouting();
