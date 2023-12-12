@@ -25,9 +25,12 @@ namespace TeamWebApplicationAPI.Controllers
         private readonly IPostsRepository _postsRepository;
         private readonly ICommentsRepository _commentsRepository;
         private readonly ICourseUsersRepository _courseUsersRepository;
-
+        private readonly ICoursesRepository _coursesRepossitory;
+        private readonly IRatingsRepository _ratingsRepository;
         public ApiCourseEnvironmentController(IDataLogger logger, IMapper mapper,
-            IUsersRepository usersRepository, IPostsRepository postsRepository, ICommentsRepository commentsRepository, ICourseUsersRepository courseUsersRepository)
+            IUsersRepository usersRepository, IPostsRepository postsRepository, 
+            ICommentsRepository commentsRepository, ICourseUsersRepository courseUsersRepository, 
+            ICoursesRepository coursesRepository, IRatingsRepository ratingsRepository)
         {
             _logger = logger;
             _mapper = mapper;
@@ -35,6 +38,8 @@ namespace TeamWebApplicationAPI.Controllers
             _postsRepository = postsRepository;
             _commentsRepository = commentsRepository;
             _courseUsersRepository = courseUsersRepository;
+            _coursesRepossitory = coursesRepository;
+            _ratingsRepository = ratingsRepository;
         }
 
         [HttpGet("ApiIndex")]
@@ -43,11 +48,11 @@ namespace TeamWebApplicationAPI.Controllers
             try
             {
                 var coursePosts = await _postsRepository.GetPostsByCourseAsync(courseId);
-
+                var currentCourse = await _coursesRepossitory.GetCourseByIdAsync(courseId);
                 var courseComments = await _commentsRepository.GetCommentsByCourseIdAsync(courseId);
                 var currentUser = await _usersRepository.GetUserByIdAsync(loggedInUserId);
                 var courseUserData = await _courseUsersRepository.GetRelationsByUserIdAsync(loggedInUserId);
-
+                var CourseEval = await _ratingsRepository.GetCourseRatingAsync(courseId);
                 var viewModel = new CourseAndComment
                 {
                     TextPostData = new List<TextPost>(),
@@ -56,7 +61,9 @@ namespace TeamWebApplicationAPI.Controllers
                     Comment = new Comment(courseId),
                     LoggedInUser = (int)loggedInUserId,
                     User = currentUser,
-                    CourseUserData = courseUserData
+                    CourseUserData = courseUserData,
+                    CourseName = currentCourse.Name,
+                    CourseEval = (Double)CourseEval
                 };
                 foreach (var post in coursePosts)
                 {
@@ -366,6 +373,32 @@ namespace TeamWebApplicationAPI.Controllers
                     return Ok(file);
                 }
                 return BadRequest();
+            }
+            catch (Exception ex)
+            {
+                _logger.Log(ex);
+                return Unauthorized();
+            }
+        }
+
+        [HttpPost("ApiSubmitScore")]
+        public async Task<IActionResult> ApiSubmitScore([FromBody] int score, [FromQuery] int courseId, [FromQuery] int? loggedInUserId)
+        {
+            try
+            {
+                var user = await _usersRepository.GetUserByIdAsync(loggedInUserId);
+
+                Rating rating = new Rating((int)loggedInUserId, courseId, (decimal)score / 2);
+
+                if (await _ratingsRepository.ScoreExists(courseId, loggedInUserId))
+                {
+                    await _ratingsRepository.UpdateRatingAsync(rating);
+                }
+                else
+                {
+                    await _ratingsRepository.InsertRatingAsync(rating);
+                }
+                return Ok();
             }
             catch (Exception ex)
             {

@@ -10,5 +10,7 @@
         public int LoggedInUser { get; set; }
         public Comment Comment { get; set; }
         public User User { get; set; }
+        public String CourseName { get; set; }
+        public Double CourseEval { get; set; }
     }
 }

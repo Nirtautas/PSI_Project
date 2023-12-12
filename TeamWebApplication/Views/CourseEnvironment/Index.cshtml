@@ -5,6 +5,11 @@
     ViewData["Title"] = "Course Environment";
     bool isLecturer = Model.User.Role == Role.Lecturer;
     bool lecturerCourseRelationExists = Model.CourseUserData.Any(t => t.CourseId == Model.Comment.CourseId && t.UserId == Model.LoggedInUser);
+
+    double eval = Model.CourseEval;
+    int numberOfFullStars = (int)Math.Truncate(eval);
+    bool hasHalfStar = eval - numberOfFullStars >= 0.5;
+
 }
 
 <!DOCTYPE html>
@@ -44,8 +49,39 @@
             </ul>
         </nav>
         <main>
-            <h1 class="course-name">Course name</h1>
-            <h2 class="star-value"><i>Show course evaluation here</i></h2>
+            <h1 class="course-name">@Model.CourseName</h1>
+            <div class="star-container-name">
+                @for (int i = 0; i < numberOfFullStars; i++)
+                {
+                    <span class="full-star">&#9733;</span>
+                }
+                @if (hasHalfStar)
+                {
+                    <span class="half-star">&#9734;</span> 
+                    <!-- cant for the life of me figure out how to show half a star so empty star will be a replacement-->
+                }
+            </div>
+
+
+            <h2 class="star-rating">
+                <i>Give the course a rating</i>
+                <form method="post" asp-action="SubmitScore" asp-route-courseId="@Model.Comment.CourseId" asp-controller="CourseEnvironment">
+                    <div class="star-container">
+                        <input type="radio" name="rating" value="10">
+                        <input type="radio" name="rating" value="9">
+                        <input type="radio" name="rating" value="8">
+                        <input type="radio" name="rating" value="7">
+                        <input type="radio" name="rating" value="6">
+                        <input type="radio" name="rating" value="5">
+                        <input type="radio" name="rating" value="4">
+                        <input type="radio" name="rating" value="3">
+                        <input type="radio" name="rating" value="2">
+                        <input type="radio" name="rating" value="1">
+                    </div>
+                    <button type="submit" class="submit-button">submit</button>
+                </form>
+            </h2>
+
             <div class="container-bg">
                 <div class="add-post-container">
                     <h1>Posts</h1>
@@ -224,3 +260,4 @@
 
 </script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://kit.fontawesome.com/d5cb7f48d5.js" crossorigin="anonymous"></script>

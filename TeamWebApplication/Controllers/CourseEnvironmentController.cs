@@ -174,11 +174,11 @@ namespace TeamWebApplication.Controllers
         {
             HttpContext.Session.GetInt32Ex("LoggedInUserId");
             int? currentCourseId = HttpContext.Session.GetInt32Ex("CurrentCourseId");
-            var http = new HttpClient();
+            HttpClient http = new HttpClient();
             var response = await http.GetAsync($"https://localhost:7107/api/ApiCourseEnvironment/ApiCreateFilePost?currentCourseId={currentCourseId}");
             if (response.IsSuccessStatusCode)
             {
-                var post = JsonConvert.DeserializeObject<FilePostDto>(await response.Content.ReadAsStringAsync());
+                FilePostDto? post = JsonConvert.DeserializeObject<FilePostDto>(await response.Content.ReadAsStringAsync());
                 var demapped = _mapper.Map<FilePost>(post);
                 return View(demapped);
             }
@@ -298,6 +298,28 @@ namespace TeamWebApplication.Controllers
                 var fileDto = JsonConvert.DeserializeObject<FileDto>(await response.Content.ReadAsStringAsync());
                 return File(fileDto.Data, fileDto.FileType, fileDto.FileName);
             }
+            else
+                return RedirectToAction("Error", "Home");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SubmitScore(int courseId)
+        {
+            int? loggedInUserId = HttpContext.Session.GetInt32Ex("LoggedInUserId");
+            HttpContext.Session.SetInt32("CurrentCourseId", courseId);
+            int selectedRating;
+
+            string? rating = Request.Form["rating"];
+            if (rating == null)
+                selectedRating = 0;
+            else
+                selectedRating = Int32.Parse(rating);
+
+            var http = new HttpClient();
+            var content = new StringContent(JsonConvert.SerializeObject(selectedRating), Encoding.UTF8, "application/json");
+            var response = await http.PostAsync($"https://localhost:7107/api/ApiCourseEnvironment/ApiSubmitScore?courseId={courseId}&loggedInUserId={loggedInUserId}", content);
+            if (response.IsSuccessStatusCode)
+                return RedirectToAction("Index", new { courseId });
             else
                 return RedirectToAction("Error", "Home");
         }
