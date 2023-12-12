@@ -49,11 +49,14 @@
                         <td data-th="Faculty">@user.Faculty.ToString()</td>
                         <td data-th="Specialization">@user.Specialization.ToString()</td>
                         <td class="remove-user-column">
-                            <form onsubmit="return confirm('Are you sure you want to remove @(user.Name + " " + user.Surname) from this course?');" method="post" asp-action="RemoveUser" asp-controller="Course">
-                                <button type="submit" class="add-post" name="userIdString" value="@user.UserId">
-                                    <span class="icon">-</span>
-                                </button>
-                            </form>
+                            @if(user.Role != Role.Lecturer)
+                            {
+                                 <form onsubmit="return confirm('Are you sure you want to remove @(user.Name + " " + user.Surname) from this course?');" method="post" asp-action="RemoveUser" asp-controller="Course">
+                                    <button type="submit" class="add-post" name="userIdString" value="@user.UserId">
+                                        <span class="icon">-</span>
+                                    </button>
+                                </form>
+                            }
                         </td>
                     </tr>
                 }

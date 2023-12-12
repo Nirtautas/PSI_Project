@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel;
 using TeamWebApplicationAPI.Data.Database;
 using TeamWebApplicationAPI.Models;
 using TeamWebApplicationAPI.Repositories.Interfaces;
@@ -87,13 +88,34 @@ namespace TeamWebApplicationAPI.Repositories
             if (courseId == null)
                 throw new ArgumentNullException(nameof(courseId));
 
-            return (Decimal) await _db.Ratings.Where(t => t.CourseId == courseId)
-                .AverageAsync(t => Decimal.ToDouble(t.UserRating));
+            var averageRating = await _db.Ratings
+                .Where(t => t.CourseId == courseId)
+                .Select(t => t.UserRating)
+                .ToListAsync();
+
+            if (averageRating.Count == 0)
+            {
+                return 0; // or another default value
+            }
+
+            return (decimal)averageRating.Average();
         }
 
         public async Task SaveAsync()
         {
             await _db.SaveChangesAsync();
+        }
+
+        public async Task<bool> ScoreExists(int? courseId, int? userId)
+        {
+            if (courseId == null)
+                throw new ArgumentNullException(nameof(courseId));
+            if (userId == null)
+                throw new ArgumentNullException(nameof(userId));
+            if(await GetRatingAsync(userId, courseId) == null){
+                return false;
+            }
+            return true;
         }
     }
 }

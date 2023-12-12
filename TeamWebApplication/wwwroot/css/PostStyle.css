@@ -237,23 +237,6 @@ main h2 {
         overflow: auto;
     }
 
-.submit-button {
-    height: 35px;
-    display: inline-block;
-    padding: 10px 20px;
-    background-color: var(--secondary);
-    color: var(--text);
-    text-decoration: none;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-    .submit-button:hover {
-        background-color: var(--secondary-darker);
-    }
-
 .content textarea {
     width: 100%;
     height: 4rem;
@@ -269,4 +252,91 @@ main h2 {
 .type-choice{
     display: flex;
     flex-direction: column;
+}
+
+.star-rating {
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 10px;
+}
+
+.star-container {
+    position: relative;
+    display: flex;
+    margin: 0px 7px;
+    flex-direction: row-reverse;
+}
+
+    .star-container input {
+        position: relative;
+        margin: 0;
+        width: 20px;
+        height: 40px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        -webkit-appearance: none;
+        appearance: none;
+        overflow: hidden;
+    }
+
+.star-rating form, .comment-input-container form {
+    display: flex;
+    align-items: center;
+    margin: 0;
+}
+
+.star-rating .star-container input::before {
+    content: '\2605';
+    font-size: 37px;
+    position: absolute;
+    left: 4.2px;
+    color: #ccc;
+    transition: 0.5s;
+}
+
+.star-container input:nth-child(2n+1)::before {
+    right: 4px;
+    left: initial;
+}
+
+.star-container input:hover ~ input::before,
+.star-container input:hover::before,
+.star-container input:checked ~ input::before,
+.star-container input:checked::before {
+    color: var(--primary);
+}
+
+.submit-button {
+    height: 35px;
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: var(--primary);
+    color: var(--text);
+    text-decoration: none;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease; /* Smooth hover effect */
+}
+
+    .submit-button:hover {
+        background-color: var(--accent); /* Change to the hover color you prefer */
+    }
+
+.full-star, .half-star{
+    color: var(--primary); 
+}
+
+.half-star::before {
+    position: absolute;
+    left: 4.2px;
+}
+
+.star-container-name {
+    position: relative;
+    font-size: 24px;
+    overflow: hidden;
 }
