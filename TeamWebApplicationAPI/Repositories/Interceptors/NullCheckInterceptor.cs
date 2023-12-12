@@ -1,17 +1,26 @@
-﻿using TeamWebApplicationAPI.Models;
-using TeamWebApplicationAPI.Repositories.Interceptors.Interfaces;
+﻿using System;
+using System.Reflection;
+using Castle.DynamicProxy;
 
 namespace TeamWebApplicationAPI.Repositories.Interceptors
 {
-
-    public class NullCheckInterceptor<T>: INullCheckInterceptor<T>
+    public class NullCheckInterceptor : IInterceptor
     {
-        public void CheckIfNotNull<T>(T? input)
+        public void Intercept(IInvocation invocation)
         {
-            if (input == null)
+            ParameterInfo[] parameters = invocation.Method.GetParameters();
+
+            for (int i = 0; i < parameters.Length; i++)//checking each parameter for null
             {
-                throw new ArgumentNullException(nameof(input));
+                object parameterValue = invocation.Arguments[i];
+
+                if (parameterValue == null)
+                {
+                    string parameterName = parameters[i].Name;
+                    throw new ArgumentNullException(parameterName);
+                }
             }
+            invocation.Proceed();//invoking original method
         }
     }
 }
